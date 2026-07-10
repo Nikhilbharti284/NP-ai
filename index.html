@@ -15,17 +15,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #0B0F14;
-    --panel: #121822;
-    --panel-2: #161E2A;
-    --line: #212B38;
-    --text: #E8EDF2;
-    --muted: #7B8894;
-    --signal: #4FD1C5;
-    --signal-dim: rgba(79,209,197,0.15);
-    --amber: #F2A65A;
-    --amber-dim: rgba(242,166,90,0.15);
-    --danger: #E06B6B;
+    --bg: #060202;
+    --panel: #12070a;
+    --panel-2: #1a0b0f;
+    --line: #3a1017;
+    --text: #F3E6E7;
+    --muted: #8c6167;
+    --signal: #FF1E3C;
+    --signal-dim: rgba(255,30,60,0.15);
+    --amber: #FF7A3D;
+    --amber-dim: rgba(255,122,61,0.15);
+    --danger: #FF4757;
   }
   *{box-sizing:border-box;}
   html,body{height:100%;}
@@ -43,10 +43,55 @@
     content:"";
     position:fixed; inset:0;
     background:
-      radial-gradient(circle at 15% 0%, rgba(79,209,197,0.06), transparent 40%),
-      radial-gradient(circle at 85% 100%, rgba(242,166,90,0.05), transparent 40%);
+      radial-gradient(circle at 15% 0%, rgba(255,30,60,0.10), transparent 40%),
+      radial-gradient(circle at 85% 100%, rgba(255,122,61,0.07), transparent 40%);
     pointer-events:none;
     z-index:0;
+  }
+
+  #matrixRain{
+    position:fixed; inset:0;
+    z-index:0;
+    opacity:0.16;
+    pointer-events:none;
+  }
+
+  .glitch{
+    position:relative;
+    display:inline-block;
+  }
+  .glitch::before, .glitch::after{
+    content:attr(data-text);
+    position:absolute;
+    left:0; top:0;
+    width:100%; height:100%;
+    overflow:hidden;
+    opacity:0.75;
+  }
+  .glitch::before{
+    color:#00e5ff;
+    animation:glitchTop 3.2s infinite linear alternate-reverse;
+    clip-path:inset(0 0 60% 0);
+  }
+  .glitch::after{
+    color:var(--amber);
+    animation:glitchBottom 2.6s infinite linear alternate-reverse;
+    clip-path:inset(60% 0 0 0);
+  }
+  @keyframes glitchTop{
+    0%{ transform:translate(0,0); }
+    20%{ transform:translate(-1px,-1px); }
+    40%{ transform:translate(1px,1px); }
+    60%{ transform:translate(-1px,1px); }
+    80%{ transform:translate(1px,-1px); }
+    100%{ transform:translate(0,0); }
+  }
+  @keyframes glitchBottom{
+    0%{ transform:translate(0,0); }
+    25%{ transform:translate(1px,1px); }
+    50%{ transform:translate(-1px,0); }
+    75%{ transform:translate(1px,-1px); }
+    100%{ transform:translate(0,0); }
   }
 
   header{
@@ -308,6 +353,8 @@
 </head>
 <body>
 
+<canvas id="matrixRain"></canvas>
+
 <header>
   <div class="brand">
     <div class="mark">
@@ -318,7 +365,7 @@
       </svg>
     </div>
     <div class="brand-text">
-      <div class="name">Nishant<span>AP</span> ai</div>
+      <div class="name"><span class="glitch" data-text="NishantAP ai">Nishant<span>AP</span> ai</span></div>
       <div class="tag">signal / response engine</div>
     </div>
   </div>
@@ -335,6 +382,9 @@
     </button>
     <button class="icon-btn" id="settingsBtn" title="Persona / system instructions">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <button class="icon-btn" id="exportBtn" title="Export this chat as .txt">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     </button>
     <button class="icon-btn" id="newChatBtn" title="Start a new chat">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -379,8 +429,41 @@
       <svg viewBox="0 0 24 24" fill="none"><path d="M4 12L20 4L13 20L11 13L4 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>
     </button>
   </div>
-  <div class="footnote" id="footnote">powered by puter.js · deepseek models · remembers this chat's context · voice uses your browser's built-in speech engine</div>
+  <div class="footnote" id="footnote">powered by puter.js · deepseek models · remembers this chat's context · Ctrl+K for new chat</div>
 </footer>
+
+<script>
+  // ---------- Matrix rain background ----------
+  (function(){
+    const canvas = document.getElementById('matrixRain');
+    const ctx = canvas.getContext('2d');
+    let cols, drops;
+    const chars = 'アイウエオカキクケコサシスセソ01デNISHANTAP$#@';
+
+    function resize(){
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      cols = Math.floor(canvas.width / 16);
+      drops = new Array(cols).fill(1);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function draw(){
+      ctx.fillStyle = 'rgba(6,2,2,0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#FF1E3C';
+      ctx.font = '14px monospace';
+      for(let i = 0; i < drops.length; i++){
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * 16, drops[i] * 16);
+        if(drops[i] * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    setInterval(draw, 55);
+  })();
+</script>
 
 <script>
   marked.setOptions({
@@ -412,6 +495,31 @@
   const settingsSaveBtn = document.getElementById('settingsSaveBtn');
   const settingsClearBtn = document.getElementById('settingsClearBtn');
   const newChatBtn = document.getElementById('newChatBtn');
+  const exportBtn = document.getElementById('exportBtn');
+
+  // ---------- Export chat as .txt ----------
+  exportBtn.addEventListener('click', () => {
+    if(conversation.length === 0) return;
+    let out = 'NishantAP ai — chat export\n' + new Date().toString() + '\n\n';
+    conversation.forEach(m => {
+      out += (m.role === 'user' ? 'YOU' : 'NISHANTAP') + ':\n' + m.content + '\n\n';
+    });
+    const blob = new Blob([out], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'nishantap-chat-' + Date.now() + '.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // ---------- Keyboard shortcut: Ctrl/Cmd + K = new chat ----------
+  document.addEventListener('keydown', (e) => {
+    if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'){
+      e.preventDefault();
+      newChatBtn.click();
+    }
+  });
 
   let busy = false;
   let autoSpeak = false;
