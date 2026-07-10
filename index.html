@@ -566,7 +566,6 @@
   input.addEventListener('keydown', (e) => {
     if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); }
   });
-  sendBtn.addEventListener('click', send);
 
   // ---------- Speech-to-Text (mic input) ----------
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -649,7 +648,6 @@
   // ---------- Chat logic ----------
   function setBusy(state){
     busy = state;
-    sendBtn.disabled = state;
     statusLed.classList.toggle('busy', state);
     statusText.textContent = state ? 'transmitting…' : 'ready';
   }
@@ -749,6 +747,8 @@
     }
   }
 
+  // Single click handler for the send/stop button — handles both
+  // "send a message" and "stop the current stream" depending on mode.
   sendBtn.addEventListener('click', () => {
     if(sendBtn.classList.contains('stop-mode')){
       stopRequested = true;
@@ -862,4 +862,4 @@
 </script>
 
 </body>
-</html>
+          </html>
