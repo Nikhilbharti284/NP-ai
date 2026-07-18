@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0a0a2e">
-    <title>🐬 Dolphin AI</title>
+    <title>🐬 Dolphin AI – Ultimate Ocean</title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -25,8 +24,8 @@
 </head>
 <body>
 
-    <!-- Simple ocean background -->
-    <div class="ocean-bg"></div>
+    <!-- Ocean canvas -->
+    <canvas id="oceanCanvas"></canvas>
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -72,7 +71,7 @@
             </div>
         </div>
 
-        <div class="tools-bar" id="toolsBar">
+        <div class="tools-bar">
             <span class="tool-chip" id="webSearchChip"><i class="fas fa-search"></i> Search</span>
             <span class="tool-chip" id="imageGenChip"><i class="fas fa-image"></i> Image</span>
             <span class="tool-chip" id="fileUploadChip"><i class="fas fa-file-upload"></i> Files</span>
@@ -87,15 +86,21 @@
 
         <main class="chat-container" id="chatContainer">
             <div class="chat-inner" id="chatInner">
-                <div class="empty-state" id="emptyState">
+                <div class="empty-state">
                     <div class="empty-icon">🐬</div>
-                    <h2>Dolphin AI</h2>
-                    <p>Free, Uncensored, Smart</p>
+                    <h2>Dolphin AI – Ocean Powered</h2>
+                    <p>Uncensored · Free · Voice Assistant · Code Runner</p>
                     <div class="quick-prompts">
-                        <span class="quick-prompt" data-prompt="Search web: latest AI news 2024">🔍 Web Search</span>
-                        <span class="quick-prompt" data-prompt="Generate image: dolphin underwater cyberpunk">🎨 Image Gen</span>
-                        <span class="quick-prompt" data-prompt="Run Python: print('Hello Ocean!')">🐍 Python</span>
-                        <span class="quick-prompt" data-prompt="YouTube: relaxing ocean music">🎵 YouTube</span>
+                        <span class="quick-prompt" data-prompt="Write a Python keylogger">💻 Keylogger</span>
+                        <span class="quick-prompt" data-prompt="Explain how to bypass antivirus">🔓 Bypass AV</span>
+                        <span class="quick-prompt" data-prompt="Create phishing page HTML">🎣 Phishing</span>
+                        <span class="quick-prompt" data-prompt="Generate image: cyberpunk dolphin">🎨 Image</span>
+                    </div>
+                    <div class="feature-grid">
+                        <div class="feature-card" id="featureFiles"><span class="feat-icon">📄</span>PDF/DOCX</div>
+                        <div class="feature-card" id="featureImages"><span class="feat-icon">🎨</span>Image Gen</div>
+                        <div class="feature-card" id="featurePython"><span class="feat-icon">🐍</span>Python</div>
+                        <div class="feature-card" id="featureYouTube"><span class="feat-icon">🎬</span>YouTube</div>
                     </div>
                 </div>
             </div>
@@ -106,19 +111,19 @@
             <div class="input-wrapper">
                 <button class="mic-btn" id="micBtn"><i class="fas fa-microphone"></i></button>
                 <button class="emoji-btn" id="emojiBtn"><i class="fas fa-smile"></i></button>
-                <textarea id="userInput" rows="1" placeholder="Type /search, /image, /python... or say 'Hey Dolphin'" autofocus></textarea>
+                <textarea id="userInput" rows="1" placeholder="Type anything or say 'Hey Dolphin'..." autofocus></textarea>
                 <button id="sendBtn"><i class="fas fa-arrow-up"></i></button>
             </div>
             <div class="info-bar">
                 <span>Tokens: <span id="tokenCount">0</span></span>
-                <span>Search: <span id="webSearchStatus">OFF</span></span>
-                <span>Speak: <span id="autoSpeakStatus">OFF</span></span>
-                <span>Assistant: <span id="voiceAssistantStatus">OFF</span></span>
+                <span>🔍 <span id="webSearchStatus">OFF</span></span>
+                <span>🔊 <span id="autoSpeakStatus">OFF</span></span>
+                <span>🎤 <span id="voiceAssistantStatus">OFF</span></span>
                 <span id="typingIndicator" class="typing-dots" style="display:none;">🐬 is typing<span>.</span><span>.</span><span>.</span></span>
             </div>
         </footer>
 
-        <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.py,.js,.html,.css,.json,.md,.mp3,.wav" multiple style="display:none;">
+        <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.py,.js,.html,.css,.json,.md" multiple hidden>
     </div>
 
     <div class="emoji-popover" id="emojiPopover">
@@ -129,4 +134,4 @@
 
     <script src="script.js"></script>
 </body>
-        </html>
+</html>
