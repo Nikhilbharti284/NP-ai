@@ -569,7 +569,6 @@ function showEmptyState() {
   updateTokenCount();
 }
 
-// Renders message and returns the bubble element
 function renderMessage(role, content, timestamp=null, animate=true) {
   const empty = document.querySelector('.empty-state');
   if (empty) empty.remove();
@@ -586,8 +585,6 @@ function renderMessage(role, content, timestamp=null, animate=true) {
         <div class="message-time">${timeStr}</div>
       </div>
     `;
-    // Add edit button on hover
-    const bubble = msgDiv.querySelector('.message-content');
     const editBtn = document.createElement('button');
     editBtn.className = 'user-edit-btn';
     editBtn.innerHTML = '<i class="fas fa-pencil-alt"></i>';
@@ -595,11 +592,9 @@ function renderMessage(role, content, timestamp=null, animate=true) {
     editBtn.addEventListener('click', () => {
       DOM.userInput.value = content;
       DOM.userInput.focus();
-      // Remove this user message and subsequent AI response from conversation
       const idx = state.conversation.findIndex(m => m.role === 'user' && m.content === content && m.timestamp === timestamp);
       if (idx !== -1) {
         state.conversation = state.conversation.slice(0, idx);
-        // Remove DOM messages from this point
         const allMessages = [...document.querySelectorAll('.message')];
         for (let i = allMessages.length-1; i >= 0; i--) {
           if (allMessages[i] === msgDiv || allMessages[i].dataset.msgIdx >= idx) {
@@ -612,8 +607,7 @@ function renderMessage(role, content, timestamp=null, animate=true) {
       }
     });
     msgDiv.querySelector('.message-content').appendChild(editBtn);
-    // Store index for deletion
-    msgDiv.dataset.msgIdx = state.conversation.length; // will be updated after push
+    msgDiv.dataset.msgIdx = state.conversation.length;
   } else {
     msgDiv.innerHTML = `
       <div class="message-avatar">🐬</div>
@@ -623,9 +617,7 @@ function renderMessage(role, content, timestamp=null, animate=true) {
       </div>
     `;
     const bubble = msgDiv.querySelector('.message-bubble');
-    // Highlight code
     bubble.querySelectorAll('pre code').forEach(block => { try { hljs.highlightElement(block); } catch(e) {} });
-    // Add copy button to each code block
     bubble.querySelectorAll('pre').forEach(pre => {
       const wrapper = document.createElement('div');
       wrapper.className = 'code-block-wrapper';
@@ -638,7 +630,6 @@ function renderMessage(role, content, timestamp=null, animate=true) {
       wrapper.appendChild(copyBtn);
     });
 
-    // Add action buttons (speak, copy, regenerate)
     const contentDiv = msgDiv.querySelector('.message-content');
     const actions = document.createElement('div');
     actions.className = 'message-actions';
@@ -669,6 +660,13 @@ function renderMessage(role, content, timestamp=null, animate=true) {
 
   DOM.chatInner.appendChild(msgDiv);
   return msgDiv.querySelector('.message-bubble');
+}
+
+function addThinkingBlock(contentDiv, thinkingText) {
+  const thinkingDiv = document.createElement('div');
+  thinkingDiv.className = 'thinking-block';
+  thinkingDiv.innerHTML = `<strong>🧠 Deep Think:</strong> ${escapeHtml(thinkingText)}`;
+  contentDiv.insertBefore(thinkingDiv, contentDiv.querySelector('.message-bubble'));
 }
 
 function scrollToBottom() {
@@ -765,7 +763,6 @@ async function sendMessage() {
     searchCtx = '\n\n[Web results for context:]\n' + await searchWeb(text) + '\n\nUse these to answer.';
   }
 
-  // Add user message
   const userMsgIdx = state.conversation.length;
   state.conversation.push({role:'user',content:text,timestamp:Date.now()});
   renderMessage('user', text, Date.now());
@@ -773,7 +770,6 @@ async function sendMessage() {
 
   DOM.userInput.value = ''; DOM.userInput.style.height = 'auto';
 
-  // Placeholder assistant message
   const assistantBubble = renderMessage('assistant','',Date.now(),false);
   assistantBubble.innerHTML = '<span class="cursor-blink"></span>';
 
@@ -784,20 +780,32 @@ async function sendMessage() {
     ...state.conversation.filter(m=>m.role!=='system')
   ];
   let fullText = '';
+  let fullThinking = '';
   try {
     const response = await puter.ai.chat(messages, {model:state.currentModel,stream:true});
     for await (const part of response) {
       if (state.stopFlag) break;
+      if (part?.reasoning) fullThinking += part.reasoning;
       if (part?.text) fullText += part.text;
       assistantBubble.innerHTML = marked.parse(fullText||'') + '<span class="cursor-blink"></span>';
+      if (fullThinking) {
+        const msgDiv = assistantBubble.closest('.message');
+        if (!msgDiv.querySelector('.thinking-block')) {
+          addThinkingBlock(msgDiv.querySelector('.message-content'), fullThinking);
+        } else {
+          msgDiv.querySelector('.thinking-block').innerHTML = `<strong>🧠 Deep Think:</strong> ${escapeHtml(fullThinking)}`;
+        }
+      }
       scrollToBottom();
     }
     assistantBubble.innerHTML = marked.parse(fullText||'');
     assistantBubble.querySelectorAll('pre code').forEach(block => { try { hljs.highlightElement(block); } catch(e) {} });
 
-    // Replace the placeholder with a final rendered message
     const msgDiv = assistantBubble.closest('.message');
     const finalBubble = renderMessage('assistant', fullText, Date.now(), false);
+    if (fullThinking) {
+      addThinkingBlock(finalBubble.closest('.message').querySelector('.message-content'), fullThinking);
+    }
     msgDiv.replaceWith(finalBubble.closest('.message'));
 
     if (fullText) {
