@@ -23,7 +23,8 @@ const state = {
   pyodideReady: false,
   voiceAssistantActive: false,
   listening: false,
-  wakeDetected: false
+  wakeDetected: false,
+  isSpeaking: false          // track TTS state
 };
 
 // ==================== DOM ELEMENTS ====================
@@ -518,25 +519,70 @@ function encryptCurrentChat() {
   saveCurrentChat(); saveData(); scrollToBottom();
 }
 
-// ==================== TTS ====================
+// ==================== TTS (with stop toggle) ====================
 function toggleAutoSpeak() {
   state.autoSpeakEnabled = !state.autoSpeakEnabled;
   updateToolChips(); updateStatusBar(); saveData();
   showToast(state.autoSpeakEnabled?'Auto-speak ON':'Auto-speak OFF','info');
 }
+
+function stopSpeaking() {
+  const synth = window.speechSynthesis;
+  if (synth) {
+    synth.cancel();
+  }
+  state.isSpeaking = false;
+  // Remove speaking class from all action buttons
+  document.querySelectorAll('.action-btn.speaking').forEach(btn => btn.classList.remove('speaking'));
+}
+
 function speakText(text, btn) {
   const synth = window.speechSynthesis;
   if (!synth) return;
-  synth.cancel();
-  document.querySelectorAll('.action-btn.speaking').forEach(b=>b.classList.remove('speaking'));
-  const clean = text.replace(/```[\s\S]*?```/g,'Code omitted.').replace(/[`*_#>\[\]()]/g,'').substring(0,2000);
+
+  // If already speaking, stop it
+  if (state.isSpeaking) {
+    stopSpeaking();
+    return;
+  }
+
+  stopSpeaking(); // cancel any previous utterance
+
+  const clean = text
+    .replace(/```[\s\S]*?```/g, 'Code omitted.')
+    .replace(/[`*_#>\[\]()]/g, '')
+    .substring(0, 2000);
+
   const utter = new SpeechSynthesisUtterance(clean);
   const voices = synth.getVoices();
-  if (voices.length===0) { setTimeout(()=>speakText(text,btn),100); return; }
-  const female = voices.find(v=>v.name.includes('Female')||v.name.includes('Google UK English')||v.name.includes('Samantha')||v.name.includes('Zira')) || voices.find(v=>v.lang.includes('en'));
+  if (voices.length === 0) {
+    setTimeout(() => speakText(text, btn), 100);
+    return;
+  }
+  const female = voices.find(v =>
+    v.name.includes('Female') ||
+    v.name.includes('Google UK English') ||
+    v.name.includes('Samantha') ||
+    v.name.includes('Zira')
+  ) || voices.find(v => v.lang.includes('en'));
   if (female) utter.voice = female;
-  utter.rate = 0.95; utter.pitch = 1.15;
-  if (btn) { btn.classList.add('speaking'); utter.onend = () => btn.classList.remove('speaking'); utter.onerror = () => btn.classList.remove('speaking'); }
+  utter.rate = 0.95;
+  utter.pitch = 1.15;
+
+  state.isSpeaking = true;
+  if (btn) {
+    btn.classList.add('speaking');
+  }
+
+  utter.onend = () => {
+    state.isSpeaking = false;
+    if (btn) btn.classList.remove('speaking');
+  };
+  utter.onerror = () => {
+    state.isSpeaking = false;
+    if (btn) btn.classList.remove('speaking');
+  };
+
   synth.speak(utter);
 }
 
@@ -634,11 +680,18 @@ function renderMessage(role, content, timestamp=null, animate=true) {
     const actions = document.createElement('div');
     actions.className = 'message-actions';
 
+    // Speak button with toggle
     const speakBtn = document.createElement('button');
     speakBtn.className = 'action-btn';
-    speakBtn.title = '🔊 Read aloud';
+    speakBtn.title = '🔊 Speak / Stop';
     speakBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-    speakBtn.addEventListener('click', () => speakText(content, speakBtn));
+    speakBtn.addEventListener('click', () => {
+      if (state.isSpeaking) {
+        stopSpeaking();
+      } else {
+        speakText(content, speakBtn);
+      }
+    });
 
     const copyBtn = document.createElement('button');
     copyBtn.className = 'action-btn';
@@ -663,10 +716,13 @@ function renderMessage(role, content, timestamp=null, animate=true) {
 }
 
 function addThinkingBlock(contentDiv, thinkingText) {
-  const thinkingDiv = document.createElement('div');
-  thinkingDiv.className = 'thinking-block';
+  let thinkingDiv = contentDiv.querySelector('.thinking-block');
+  if (!thinkingDiv) {
+    thinkingDiv = document.createElement('div');
+    thinkingDiv.className = 'thinking-block';
+    contentDiv.insertBefore(thinkingDiv, contentDiv.querySelector('.message-bubble'));
+  }
   thinkingDiv.innerHTML = `<strong>🧠 Deep Think:</strong> ${escapeHtml(thinkingText)}`;
-  contentDiv.insertBefore(thinkingDiv, contentDiv.querySelector('.message-bubble'));
 }
 
 function scrollToBottom() {
@@ -789,12 +845,7 @@ async function sendMessage() {
       if (part?.text) fullText += part.text;
       assistantBubble.innerHTML = marked.parse(fullText||'') + '<span class="cursor-blink"></span>';
       if (fullThinking) {
-        const msgDiv = assistantBubble.closest('.message');
-        if (!msgDiv.querySelector('.thinking-block')) {
-          addThinkingBlock(msgDiv.querySelector('.message-content'), fullThinking);
-        } else {
-          msgDiv.querySelector('.thinking-block').innerHTML = `<strong>🧠 Deep Think:</strong> ${escapeHtml(fullThinking)}`;
-        }
+        addThinkingBlock(assistantBubble.closest('.message').querySelector('.message-content'), fullThinking);
       }
       scrollToBottom();
     }
