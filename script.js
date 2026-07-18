@@ -70,7 +70,6 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// Create bubbles
 for (let i = 0; i < 40; i++) {
   bubbles.push({
     x: Math.random() * canvas.width,
@@ -83,8 +82,6 @@ for (let i = 0; i < 40; i++) {
 
 function drawOcean() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  // Water gradient
   const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
   gradient.addColorStop(0, 'rgba(0,20,60,0.95)');
   gradient.addColorStop(0.3, 'rgba(0,40,90,0.8)');
@@ -92,47 +89,41 @@ function drawOcean() {
   gradient.addColorStop(1, 'rgba(0,100,160,0.3)');
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  // Bubbles
+
   bubbles.forEach(b => {
     b.y -= b.speed;
     if (b.y < -10) { b.y = canvas.height + 10; b.x = Math.random() * canvas.width; }
     ctx.beginPath();
-    ctx.arc(b.x, b.y, b.radius, 0, Math.PI*2);
+    ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
     ctx.fillStyle = `rgba(255,255,255,${b.opacity})`;
     ctx.fill();
   });
-  
-  // Dolphin
+
   drawDolphin();
-  
-  // Splash particles
+
   splashParticles = splashParticles.filter(p => { p.life--; return p.life > 0; });
   splashParticles.forEach(p => {
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2);
-    ctx.fillStyle = `rgba(255,255,255,${p.life/30})`;
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${p.life / 30})`;
     ctx.fill();
   });
-  
+
   requestAnimationFrame(drawOcean);
 }
 
 function drawDolphin() {
   const { x, y, vy, jumping, frame } = dolphin;
-  
-  // Update dolphin position
   if (jumping) {
-    dolphin.vy += 0.5; // gravity
+    dolphin.vy += 0.5;
     dolphin.y += dolphin.vy;
     if (dolphin.y >= canvas.height * 0.6) {
-      // Hit water, create splash
-      for (let i=0; i<20; i++) {
+      for (let i = 0; i < 20; i++) {
         splashParticles.push({
-          x: x + 50 + Math.random()*40,
-          y: canvas.height*0.6 - 10 + Math.random()*20,
-          radius: Math.random()*4+2,
-          life: 30 + Math.random()*20
+          x: x + 50 + Math.random() * 40,
+          y: canvas.height * 0.6 - 10 + Math.random() * 20,
+          radius: Math.random() * 4 + 2,
+          life: 30 + Math.random() * 20
         });
       }
       dolphin.y = canvas.height * 0.6;
@@ -140,12 +131,10 @@ function drawDolphin() {
       dolphin.vy = 0;
     }
   } else {
-    // Swim left to right
     dolphin.x += 2;
     dolphin.y = canvas.height * 0.6 + Math.sin(frame * 0.05) * 5;
     if (dolphin.x > canvas.width + 200) {
       dolphin.x = -200;
-      // Occasionally jump
       if (Math.random() < 0.3) {
         dolphin.jumping = true;
         dolphin.vy = -12;
@@ -153,31 +142,26 @@ function drawDolphin() {
     }
   }
   dolphin.frame++;
-  
-  // Draw dolphin shape
+
   ctx.save();
   ctx.translate(x, y);
-  const scaleX = jumping ? 1 : (x < canvas.width/2 ? 1 : -1);
+  const scaleX = jumping ? 1 : (x < canvas.width / 2 ? 1 : -1);
   ctx.scale(scaleX, 1);
-  
-  // Body
+
   ctx.beginPath();
-  ctx.ellipse(55, 0, 45, 18, 0, 0, Math.PI*2);
+  ctx.ellipse(55, 0, 45, 18, 0, 0, Math.PI * 2);
   ctx.fillStyle = '#00b4d8';
   ctx.fill();
-  // Snout
   ctx.beginPath();
   ctx.moveTo(95, -5);
   ctx.quadraticCurveTo(115, 0, 95, 5);
   ctx.fill();
-  // Dorsal fin
   ctx.beginPath();
   ctx.moveTo(55, -18);
   ctx.lineTo(45, -30);
   ctx.lineTo(40, -18);
   ctx.fillStyle = '#0077b6';
   ctx.fill();
-  // Tail
   ctx.beginPath();
   ctx.moveTo(10, 0);
   ctx.lineTo(-5, -15);
@@ -185,24 +169,21 @@ function drawDolphin() {
   ctx.lineTo(-5, 15);
   ctx.closePath();
   ctx.fill();
-  // Eye
   ctx.beginPath();
-  ctx.arc(85, -5, 4, 0, Math.PI*2);
+  ctx.arc(85, -5, 4, 0, Math.PI * 2);
   ctx.fillStyle = 'white';
   ctx.fill();
-  ctx.arc(86, -5, 2, 0, Math.PI*2);
+  ctx.arc(86, -5, 2, 0, Math.PI * 2);
   ctx.fillStyle = '#0a0a2e';
   ctx.fill();
-  // Smile
   ctx.beginPath();
   ctx.arc(88, 0, 4, 0, Math.PI);
   ctx.strokeStyle = '#003366';
   ctx.lineWidth = 1.5;
   ctx.stroke();
-  
+
   ctx.restore();
 }
-
 drawOcean();
 
 // ==================== PDFJS Worker ====================
@@ -229,7 +210,7 @@ function init() {
   setupScrollButton();
 }
 
-// ==================== DATA (unchanged, same as previous) ====================
+// ==================== DATA PERSISTENCE ====================
 function loadData() {
   try {
     const saved = localStorage.getItem('dolphin_data');
@@ -278,12 +259,11 @@ function resetAllData() {
 async function initPyodide() {
   try {
     const pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/' });
-    window.pyodide = pyodide;
-    state.pyodideReady = true;
+    window.pyodide = pyodide; state.pyodideReady = true;
   } catch(e) {}
 }
 
-// ==================== SIDEBAR (same as before) ====================
+// ==================== SIDEBAR ====================
 function openSidebar() { DOM.sidebar.classList.add('open'); DOM.sidebarOverlay.classList.add('open'); }
 function closeSidebar() { DOM.sidebar.classList.remove('open'); DOM.sidebarOverlay.classList.remove('open'); }
 function renderSidebar() {
@@ -350,7 +330,7 @@ function clearAllChats() {
   showToast('All chats cleared','success');
 }
 
-// ==================== EXPORT (same) ====================
+// ==================== EXPORT ====================
 function exportCurrentChat() {
   if (state.conversation.length===0) { showToast('Nothing to export','error'); return; }
   let text = '🐬 Dolphin AI Export\n'+new Date().toISOString()+'\n\n';
@@ -375,7 +355,7 @@ function downloadFile(content, filename) {
   showToast('Exported!','success');
 }
 
-// ==================== WEB SEARCH (same) ====================
+// ==================== WEB SEARCH ====================
 async function searchWeb(query) {
   try {
     const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent('https://api.duckduckgo.com/?q='+encodeURIComponent(query)+'&format=json&no_html=1')}`);
@@ -393,7 +373,7 @@ function toggleWebSearch() {
   showToast(state.webSearchEnabled?'Web search ON':'Web search OFF','info');
 }
 
-// ==================== IMAGE GEN (same) ====================
+// ==================== IMAGE GEN ====================
 function generateImageUrl(prompt, w=768, h=768) {
   return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${w}&height=${h}&nologo=true&seed=${Math.floor(Math.random()*10000)}`;
 }
@@ -408,7 +388,7 @@ function showImageGen() {
   saveCurrentChat(); saveData(); updateTokenCount(); scrollToBottom();
 }
 
-// ==================== CODE EXECUTION (same) ====================
+// ==================== CODE EXECUTION ====================
 async function runPythonCode(code) {
   if (!state.pyodideReady || !window.pyodide) return 'Python engine loading... wait.';
   try {
@@ -450,7 +430,7 @@ async function runAndDisplayCode(code, lang) {
   saveCurrentChat(); saveData(); updateTokenCount(); scrollToBottom();
 }
 
-// ==================== YOUTUBE / SCRAPER / FILES (same) ====================
+// ==================== YOUTUBE / SCRAPER / FILES ====================
 function searchYouTube() {
   const query = prompt('Search YouTube:','ocean waves');
   if (query) window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`,'_blank');
@@ -538,7 +518,7 @@ function encryptCurrentChat() {
   saveCurrentChat(); saveData(); scrollToBottom();
 }
 
-// ==================== TTS (same) ====================
+// ==================== TTS ====================
 function toggleAutoSpeak() {
   state.autoSpeakEnabled = !state.autoSpeakEnabled;
   updateToolChips(); updateStatusBar(); saveData();
@@ -589,6 +569,7 @@ function showEmptyState() {
   updateTokenCount();
 }
 
+// Renders message and returns the bubble element
 function renderMessage(role, content, timestamp=null, animate=true) {
   const empty = document.querySelector('.empty-state');
   if (empty) empty.remove();
@@ -596,15 +577,52 @@ function renderMessage(role, content, timestamp=null, animate=true) {
   msgDiv.className = `message ${role}`;
   if (!animate) msgDiv.style.animation = 'none';
   const timeStr = timestamp ? new Date(timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '';
-  msgDiv.innerHTML = `
-    <div class="message-avatar">${role==='user'?'U':'🐬'}</div>
-    <div class="message-content">
-      <div class="message-bubble">${role==='user'?escapeHtml(content):marked.parse(content||'')}</div>
-      <div class="message-time">${timeStr}</div>
-    </div>
-  `;
-  const bubble = msgDiv.querySelector('.message-bubble');
-  if (role==='assistant' && content) {
+
+  if (role === 'user') {
+    msgDiv.innerHTML = `
+      <div class="message-avatar">U</div>
+      <div class="message-content">
+        <div class="message-bubble">${escapeHtml(content)}</div>
+        <div class="message-time">${timeStr}</div>
+      </div>
+    `;
+    // Add edit button on hover
+    const bubble = msgDiv.querySelector('.message-content');
+    const editBtn = document.createElement('button');
+    editBtn.className = 'user-edit-btn';
+    editBtn.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+    editBtn.title = 'Edit & resend';
+    editBtn.addEventListener('click', () => {
+      DOM.userInput.value = content;
+      DOM.userInput.focus();
+      // Remove this user message and subsequent AI response from conversation
+      const idx = state.conversation.findIndex(m => m.role === 'user' && m.content === content && m.timestamp === timestamp);
+      if (idx !== -1) {
+        state.conversation = state.conversation.slice(0, idx);
+        // Remove DOM messages from this point
+        const allMessages = [...document.querySelectorAll('.message')];
+        for (let i = allMessages.length-1; i >= 0; i--) {
+          if (allMessages[i] === msgDiv || allMessages[i].dataset.msgIdx >= idx) {
+            allMessages[i].remove();
+          }
+        }
+        saveCurrentChat();
+        saveData();
+        updateTokenCount();
+      }
+    });
+    msgDiv.querySelector('.message-content').appendChild(editBtn);
+    // Store index for deletion
+    msgDiv.dataset.msgIdx = state.conversation.length; // will be updated after push
+  } else {
+    msgDiv.innerHTML = `
+      <div class="message-avatar">🐬</div>
+      <div class="message-content">
+        <div class="message-bubble">${marked.parse(content||'')}</div>
+        <div class="message-time">${timeStr}</div>
+      </div>
+    `;
+    const bubble = msgDiv.querySelector('.message-bubble');
     // Highlight code
     bubble.querySelectorAll('pre code').forEach(block => { try { hljs.highlightElement(block); } catch(e) {} });
     // Add copy button to each code block
@@ -616,26 +634,41 @@ function renderMessage(role, content, timestamp=null, animate=true) {
       const copyBtn = document.createElement('button');
       copyBtn.className = 'code-copy-btn';
       copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
-      copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(pre.textContent).then(() => showToast('Code copied!','success'));
-      });
+      copyBtn.addEventListener('click', () => navigator.clipboard.writeText(pre.textContent).then(() => showToast('Code copied!','success')));
       wrapper.appendChild(copyBtn);
     });
-    // Action buttons
+
+    // Add action buttons (speak, copy, regenerate)
     const contentDiv = msgDiv.querySelector('.message-content');
     const actions = document.createElement('div');
     actions.className = 'message-actions';
-    const speakBtn = document.createElement('button'); speakBtn.className='action-btn'; speakBtn.title='🔊 Read aloud'; speakBtn.innerHTML='<i class="fas fa-volume-up"></i>';
-    speakBtn.addEventListener('click',()=>speakText(content,speakBtn));
-    const copyBtn = document.createElement('button'); copyBtn.className='action-btn'; copyBtn.title='📋 Copy'; copyBtn.innerHTML='<i class="fas fa-copy"></i>';
-    copyBtn.addEventListener('click',()=>{ navigator.clipboard.writeText(content).then(()=>showToast('Copied!','success')); });
-    const regenBtn = document.createElement('button'); regenBtn.className='action-btn'; regenBtn.title='🔄 Regenerate'; regenBtn.innerHTML='<i class="fas fa-redo"></i>';
-    regenBtn.addEventListener('click',regenerateResponse);
-    actions.appendChild(speakBtn); actions.appendChild(copyBtn); actions.appendChild(regenBtn);
+
+    const speakBtn = document.createElement('button');
+    speakBtn.className = 'action-btn';
+    speakBtn.title = '🔊 Read aloud';
+    speakBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+    speakBtn.addEventListener('click', () => speakText(content, speakBtn));
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'action-btn';
+    copyBtn.title = '📋 Copy';
+    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+    copyBtn.addEventListener('click', () => navigator.clipboard.writeText(content).then(() => showToast('Copied!','success')));
+
+    const regenBtn = document.createElement('button');
+    regenBtn.className = 'action-btn';
+    regenBtn.title = '🔄 Regenerate';
+    regenBtn.innerHTML = '<i class="fas fa-redo"></i>';
+    regenBtn.addEventListener('click', regenerateResponse);
+
+    actions.appendChild(speakBtn);
+    actions.appendChild(copyBtn);
+    actions.appendChild(regenBtn);
     contentDiv.appendChild(actions);
   }
+
   DOM.chatInner.appendChild(msgDiv);
-  return bubble;
+  return msgDiv.querySelector('.message-bubble');
 }
 
 function scrollToBottom() {
@@ -663,7 +696,7 @@ function updateStatusBar() {
   DOM.voiceAssistantStatus.textContent = state.voiceAssistantActive?'ON':'OFF';
 }
 
-// ==================== SETTINGS (same) ====================
+// ==================== SETTINGS ====================
 function toggleSettings() { DOM.settingsPanel.classList.toggle('open'); }
 function applySettings() {
   state.systemPrompt = DOM.systemPromptInput.value.trim() || DEFAULT_JAILBREAK;
@@ -693,6 +726,7 @@ async function sendMessage() {
   const text = DOM.userInput.value.trim();
   if (!text || state.busy) return;
   if (!state.activeChatId) createNewChat();
+
   const cmd = text.split(' ')[0].toLowerCase();
   if (['/search','/s'].includes(cmd)) {
     DOM.userInput.value = '';
@@ -731,10 +765,18 @@ async function sendMessage() {
     searchCtx = '\n\n[Web results for context:]\n' + await searchWeb(text) + '\n\nUse these to answer.';
   }
 
-  renderMessage('user', text);
+  // Add user message
+  const userMsgIdx = state.conversation.length;
   state.conversation.push({role:'user',content:text,timestamp:Date.now()});
+  renderMessage('user', text, Date.now());
+  document.querySelector('.message.user:last-child').dataset.msgIdx = userMsgIdx;
+
   DOM.userInput.value = ''; DOM.userInput.style.height = 'auto';
-  const bubble = renderMessage('assistant',''); bubble.innerHTML = '<span class="cursor-blink"></span>';
+
+  // Placeholder assistant message
+  const assistantBubble = renderMessage('assistant','',Date.now(),false);
+  assistantBubble.innerHTML = '<span class="cursor-blink"></span>';
+
   state.stopFlag = false; state.busy = true; updateSendButton(true); setTypingIndicator(true);
 
   const messages = [
@@ -747,17 +789,23 @@ async function sendMessage() {
     for await (const part of response) {
       if (state.stopFlag) break;
       if (part?.text) fullText += part.text;
-      bubble.innerHTML = marked.parse(fullText||'') + '<span class="cursor-blink"></span>';
+      assistantBubble.innerHTML = marked.parse(fullText||'') + '<span class="cursor-blink"></span>';
       scrollToBottom();
     }
-    bubble.innerHTML = marked.parse(fullText||'');
-    bubble.querySelectorAll('pre code').forEach(block => { try { hljs.highlightElement(block); } catch(e) {} });
+    assistantBubble.innerHTML = marked.parse(fullText||'');
+    assistantBubble.querySelectorAll('pre code').forEach(block => { try { hljs.highlightElement(block); } catch(e) {} });
+
+    // Replace the placeholder with a final rendered message
+    const msgDiv = assistantBubble.closest('.message');
+    const finalBubble = renderMessage('assistant', fullText, Date.now(), false);
+    msgDiv.replaceWith(finalBubble.closest('.message'));
+
     if (fullText) {
       state.conversation.push({role:'assistant',content:fullText,timestamp:Date.now()});
       if (state.autoSpeakEnabled) speakText(fullText);
     }
   } catch(e) {
-    bubble.innerHTML = `<span style="color:var(--danger);">❌ Error: ${escapeHtml(e.message)}</span>`;
+    assistantBubble.innerHTML = `<span style="color:var(--danger);">❌ Error: ${escapeHtml(e.message)}</span>`;
   } finally {
     state.busy = false; updateSendButton(false); setTypingIndicator(false);
     saveCurrentChat(); saveData(); renderSidebar(); updateHeaderTitle(); updateTokenCount(); scrollToBottom();
@@ -788,7 +836,7 @@ function updateScrollButtonVisibility() {
   DOM.scrollBottomBtn.classList.toggle('visible', (scrollHeight - scrollTop - clientHeight) > 100);
 }
 
-// ==================== EMOJI (same) ====================
+// ==================== EMOJI ====================
 function buildEmojiGrid() {
   DOM.emojiGrid.innerHTML = EMOJIS.map(e=>`<span class="emoji-item">${e}</span>`).join('');
   DOM.emojiGrid.addEventListener('click', e => {
@@ -804,7 +852,7 @@ function insertEmoji(emoji) {
 function toggleEmojiPicker() { DOM.emojiPopover.classList.toggle('open'); }
 function setTypingIndicator(show) { DOM.typingIndicator.style.display = show ? 'inline' : 'none'; }
 
-// ==================== VOICE ASSISTANT (same) ====================
+// ==================== VOICE ASSISTANT ====================
 let recognition=null, assistantTimer=null;
 function toggleVoiceAssistant() { state.voiceAssistantActive ? stopVoiceAssistant() : startVoiceAssistant(); }
 function startVoiceAssistant() {
