@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0a0a2e">
-    <title>🐬 Dolphin AI // Uncensored</title>
+    <title>🐬 Dolphin AI</title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -25,42 +25,8 @@
 </head>
 <body>
 
-    <!-- Ocean Background -->
-    <div class="ocean-bg">
-        <div class="ocean-layer"></div>
-        <div class="bubbles" id="bubblesContainer"></div>
-        <div class="dolphin-swim" id="dolphinSwim">
-            <svg class="dolphin-svg" viewBox="0 0 120 60">
-                <defs>
-                    <linearGradient id="dolphinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#00b4d8"/>
-                        <stop offset="100%" style="stop-color:#0077b6"/>
-                    </linearGradient>
-                    <filter id="glow">
-                        <feGaussianBlur stdDeviation="2"/>
-                        <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-                    </filter>
-                </defs>
-                <g class="dolphin-body" filter="url(#glow)">
-                    <ellipse cx="55" cy="30" rx="45" ry="18" fill="url(#dolphinGrad)" opacity="0.9"/>
-                    <path d="M95 30 Q110 25 115 30 Q110 35 95 30" fill="url(#dolphinGrad)"/>
-                    <path d="M55 12 Q50 0 45 12" fill="#0096c7"/>
-                    <path d="M10 30 Q0 15 -5 10 Q0 20 5 30 Q0 40 -5 50 Q0 45 10 30" fill="#0077b6"/>
-                    <circle cx="85" cy="27" r="4" fill="white"/>
-                    <circle cx="86" cy="27" r="2.5" fill="#0a0a2e"/>
-                    <path d="M88 33 Q92 36 96 33" stroke="#003366" stroke-width="1.5" fill="none"/>
-                    <ellipse cx="55" cy="35" rx="35" ry="10" fill="rgba(255,255,255,0.15)"/>
-                </g>
-            </svg>
-        </div>
-        <div class="water-splash" id="waterSplash">
-            <svg width="40" height="20" viewBox="0 0 40 20">
-                <circle cx="10" cy="15" r="3" fill="rgba(255,255,255,0.4)"/>
-                <circle cx="20" cy="10" r="4" fill="rgba(255,255,255,0.3)"/>
-                <circle cx="30" cy="14" r="2" fill="rgba(255,255,255,0.5)"/>
-            </svg>
-        </div>
-    </div>
+    <!-- Simple ocean background -->
+    <div class="ocean-bg"></div>
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -123,24 +89,16 @@
             <div class="chat-inner" id="chatInner">
                 <div class="empty-state" id="emptyState">
                     <div class="empty-icon">🐬</div>
-                    <h2>Dolphin AI Ultimate</h2>
-                    <p>100% Free • No API Keys • Fully Uncensored</p>
+                    <h2>Dolphin AI</h2>
+                    <p>Free, Uncensored, Smart</p>
                     <div class="quick-prompts">
                         <span class="quick-prompt" data-prompt="Search web: latest AI news 2024">🔍 Web Search</span>
                         <span class="quick-prompt" data-prompt="Generate image: dolphin underwater cyberpunk">🎨 Image Gen</span>
                         <span class="quick-prompt" data-prompt="Run Python: print('Hello Ocean!')">🐍 Python</span>
                         <span class="quick-prompt" data-prompt="YouTube: relaxing ocean music">🎵 YouTube</span>
                     </div>
-                    <div class="feature-grid">
-                        <div class="feature-card" id="featureFiles"><span class="feat-icon">📄</span>PDF/DOCX</div>
-                        <div class="feature-card" id="featureImages"><span class="feat-icon">🎨</span>Images</div>
-                        <div class="feature-card" id="featurePython"><span class="feat-icon">🐍</span>Python</div>
-                        <div class="feature-card" id="featureYouTube"><span class="feat-icon">🎬</span>YouTube</div>
-                    </div>
-                    <div class="mode-badge">🔓 UNCENSORED MODE</div>
                 </div>
             </div>
-            <!-- Scroll‑to‑bottom button -->
             <button class="scroll-bottom-btn" id="scrollBottomBtn"><i class="fas fa-chevron-down"></i></button>
         </main>
 
@@ -163,7 +121,6 @@
         <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.py,.js,.html,.css,.json,.md,.mp3,.wav" multiple style="display:none;">
     </div>
 
-    <!-- Emoji Picker Popover -->
     <div class="emoji-popover" id="emojiPopover">
         <div class="emoji-grid" id="emojiGrid"></div>
     </div>
@@ -172,4 +129,4 @@
 
     <script src="script.js"></script>
 </body>
-    </html>
+        </html>
