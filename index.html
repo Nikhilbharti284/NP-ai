@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0a0a2e">
-    <title>🐬 Dolphin AI // Uncensored + Voice Assistant</title>
+    <title>🐬 Dolphin AI // Uncensored</title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -124,7 +124,7 @@
                 <div class="empty-state" id="emptyState">
                     <div class="empty-icon">🐬</div>
                     <h2>Dolphin AI Ultimate</h2>
-                    <p>100% Free • No API Keys • Fully Uncensored • Voice Assistant</p>
+                    <p>100% Free • No API Keys • Fully Uncensored</p>
                     <div class="quick-prompts">
                         <span class="quick-prompt" data-prompt="Search web: latest AI news 2024">🔍 Web Search</span>
                         <span class="quick-prompt" data-prompt="Generate image: dolphin underwater cyberpunk">🎨 Image Gen</span>
@@ -140,11 +140,14 @@
                     <div class="mode-badge">🔓 UNCENSORED MODE</div>
                 </div>
             </div>
+            <!-- Scroll‑to‑bottom button -->
+            <button class="scroll-bottom-btn" id="scrollBottomBtn"><i class="fas fa-chevron-down"></i></button>
         </main>
 
         <footer class="input-area">
             <div class="input-wrapper">
                 <button class="mic-btn" id="micBtn"><i class="fas fa-microphone"></i></button>
+                <button class="emoji-btn" id="emojiBtn"><i class="fas fa-smile"></i></button>
                 <textarea id="userInput" rows="1" placeholder="Type /search, /image, /python... or say 'Hey Dolphin'" autofocus></textarea>
                 <button id="sendBtn"><i class="fas fa-arrow-up"></i></button>
             </div>
@@ -153,10 +156,16 @@
                 <span>Search: <span id="webSearchStatus">OFF</span></span>
                 <span>Speak: <span id="autoSpeakStatus">OFF</span></span>
                 <span>Assistant: <span id="voiceAssistantStatus">OFF</span></span>
+                <span id="typingIndicator" class="typing-dots" style="display:none;">🐬 is typing<span>.</span><span>.</span><span>.</span></span>
             </div>
         </footer>
 
         <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.py,.js,.html,.css,.json,.md,.mp3,.wav" multiple style="display:none;">
+    </div>
+
+    <!-- Emoji Picker Popover -->
+    <div class="emoji-popover" id="emojiPopover">
+        <div class="emoji-grid" id="emojiGrid"></div>
     </div>
 
     <div class="toast-container" id="toastContainer"></div>
