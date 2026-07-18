@@ -19,7 +19,7 @@ const state = {
   webSearchEnabled: false,
   autoSpeakEnabled: false,
   pyodideReady: false,
-  voiceAssistantActive: false,  // separate toggle
+  voiceAssistantActive: false,
   listening: false,
   wakeDetected: false
 };
@@ -43,8 +43,16 @@ const DOM = {
   fileInput: document.getElementById('fileInput'),
   toastContainer: document.getElementById('toastContainer'),
   micBtn: document.getElementById('micBtn'),
-  modelSelect: document.getElementById('modelSelect')
+  modelSelect: document.getElementById('modelSelect'),
+  scrollBottomBtn: document.getElementById('scrollBottomBtn'),
+  emojiBtn: document.getElementById('emojiBtn'),
+  emojiPopover: document.getElementById('emojiPopover'),
+  emojiGrid: document.getElementById('emojiGrid'),
+  typingIndicator: document.getElementById('typingIndicator')
 };
+
+// Emoji list
+const EMOJIS = ['😀','😂','🤣','😍','🥰','😘','😜','🤪','😎','🤩','😇','🤗','😴','🥱','😈','👿','💀','👻','🎃','🐬','🐳','🐋','🐟','🌊','💧','🔥','⚡','⭐','✨','🌈','🍕','🍔','🍟','🌮','🍩','🍪','🎂','☕','🍺','🎸','🎮','🎯','🏆','⚽','🚀','✈️','🏖️','🗺️'];
 
 // ==================== INITIALIZATION ====================
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -68,6 +76,8 @@ function init() {
   DOM.systemPromptInput.value = state.systemPrompt;
   updateSplashPosition();
   setInterval(updateSplashPosition, 12000);
+  buildEmojiGrid();
+  setupScrollButton();
 }
 
 // ==================== OCEAN ANIMATIONS ====================
@@ -251,7 +261,7 @@ function loadChat(id) {
   if (state.conversation.length === 0) {
     showEmptyState();
   } else {
-    state.conversation.forEach(msg => renderMessage(msg.role, msg.content, false));
+    state.conversation.forEach(msg => renderMessage(msg.role, msg.content, msg.timestamp || null, false));
     scrollToBottom();
   }
   
@@ -315,7 +325,7 @@ function exportCurrentChat() {
   
   let text = '🐬 Dolphin AI Export\n' + new Date().toISOString() + '\n\n';
   state.conversation.forEach(msg => {
-    text += `[${msg.role.toUpperCase()}]\n${msg.content}\n\n`;
+    text += `[${msg.role.toUpperCase()}] ${msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString() : ''}\n${msg.content}\n\n`;
   });
   
   downloadFile(text, 'dolphin-chat-' + Date.now() + '.txt');
@@ -333,7 +343,7 @@ function exportAllChats() {
   allChats.forEach(chat => {
     text += `=== ${chat.title} ===\n\n`;
     chat.messages.forEach(msg => {
-      text += `[${msg.role}]: ${msg.content}\n\n`;
+      text += `[${msg.role}] ${msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString() : ''}: ${msg.content}\n\n`;
     });
     text += '---\n\n';
   });
@@ -397,9 +407,9 @@ function showImageGen() {
   
   const imgUrl = generateImageUrl(prompt);
   renderMessage('user', '🎨 ' + prompt);
-  state.conversation.push({ role: 'user', content: '🎨 ' + prompt });
+  state.conversation.push({ role: 'user', content: '🎨 ' + prompt, timestamp: Date.now() });
   renderMessage('assistant', `**🎨 Generated Image:**\n\n![Image](${imgUrl})\n\n[Open in new tab](${imgUrl})`);
-  state.conversation.push({ role: 'assistant', content: 'Image: ' + imgUrl });
+  state.conversation.push({ role: 'assistant', content: 'Image: ' + imgUrl, timestamp: Date.now() });
   saveCurrentChat();
   saveData();
   updateTokenCount();
@@ -442,9 +452,9 @@ function showCodeRunner() {
     if (!code) return;
     
     renderMessage('user', '🌐 HTML Preview');
-    state.conversation.push({ role: 'user', content: 'HTML Preview' });
+    state.conversation.push({ role: 'user', content: 'HTML Preview', timestamp: Date.now() });
     renderMessage('assistant', `<div class="html-preview"><iframe srcdoc="${escapeHtml(code)}"></iframe></div>\n\n\`\`\`html\n${code}\n\`\`\``);
-    state.conversation.push({ role: 'assistant', content: 'HTML rendered' });
+    state.conversation.push({ role: 'assistant', content: 'HTML rendered', timestamp: Date.now() });
     saveCurrentChat();
     saveData();
     scrollToBottom();
@@ -462,13 +472,13 @@ function showCodeRunner() {
 
 async function runAndDisplayCode(code, lang) {
   renderMessage('user', `💻 Run ${lang}:\n\`\`\`${lang}\n${code}\n\`\`\``);
-  state.conversation.push({ role: 'user', content: `Run ${lang} code` });
+  state.conversation.push({ role: 'user', content: `Run ${lang} code`, timestamp: Date.now() });
   
   const output = lang === 'python' ? await runPythonCode(code) : runJavaScriptCode(code);
   const isError = output.toLowerCase().includes('error');
   
   renderMessage('assistant', `<div class="code-output ${isError ? 'error' : ''}">${escapeHtml(output)}</div>`);
-  state.conversation.push({ role: 'assistant', content: output });
+  state.conversation.push({ role: 'assistant', content: output, timestamp: Date.now() });
   
   saveCurrentChat();
   saveData();
@@ -512,9 +522,9 @@ async function scrapeWebsite() {
     if (images.length) result += `**🖼️ Images (${images.length}):**\n${images.map(i => '• ' + i).join('\n')}`;
     
     renderMessage('user', '🌐 Scrape: ' + url);
-    state.conversation.push({ role: 'user', content: 'Scrape: ' + url });
+    state.conversation.push({ role: 'user', content: 'Scrape: ' + url, timestamp: Date.now() });
     renderMessage('assistant', result);
-    state.conversation.push({ role: 'assistant', content: result });
+    state.conversation.push({ role: 'assistant', content: result, timestamp: Date.now() });
     saveCurrentChat();
     saveData();
     scrollToBottom();
@@ -553,9 +563,9 @@ async function handleFileUpload(event) {
         const truncated = text.substring(0, 3000) + (text.length > 3000 ? '\n... (truncated)' : '');
         
         renderMessage('user', `📄 ${file.name} (${(file.size / 1024).toFixed(1)}KB)`);
-        state.conversation.push({ role: 'user', content: `File: ${file.name}` });
+        state.conversation.push({ role: 'user', content: `File: ${file.name}`, timestamp: Date.now() });
         renderMessage('assistant', `**📄 ${file.name}**\n\n\`\`\`\n${escapeHtml(truncated)}\n\`\`\``);
-        state.conversation.push({ role: 'assistant', content: text.substring(0, 3000) });
+        state.conversation.push({ role: 'assistant', content: text.substring(0, 3000), timestamp: Date.now() });
         
         saveCurrentChat();
         saveData();
@@ -621,9 +631,9 @@ function encryptCurrentChat() {
   ).toString();
   
   renderMessage('user', '🔐 Chat encrypted');
-  state.conversation.push({ role: 'user', content: 'Chat encrypted' });
+  state.conversation.push({ role: 'user', content: 'Chat encrypted', timestamp: Date.now() });
   renderMessage('assistant', `**🔐 Encrypted Data:**\n\`\`\`\n${encrypted}\n\`\`\`\n\nTo decrypt: Use CryptoJS.AES.decrypt with password`);
-  state.conversation.push({ role: 'assistant', content: encrypted });
+  state.conversation.push({ role: 'assistant', content: encrypted, timestamp: Date.now() });
   
   saveCurrentChat();
   saveData();
@@ -727,7 +737,7 @@ function bindEmptyStateButtons() {
   if (featureYouTube) featureYouTube.addEventListener('click', searchYouTube);
 }
 
-function renderMessage(role, content, animate = true) {
+function renderMessage(role, content, timestamp = null, animate = true) {
   const empty = document.querySelector('.empty-state');
   if (empty) empty.remove();
   
@@ -735,10 +745,13 @@ function renderMessage(role, content, animate = true) {
   msgDiv.className = `message ${role}`;
   if (!animate) msgDiv.style.animation = 'none';
   
+  const timeStr = timestamp ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+  
   msgDiv.innerHTML = `
     <div class="message-avatar">${role === 'user' ? 'U' : '🐬'}</div>
     <div class="message-content">
       <div class="message-bubble">${role === 'user' ? escapeHtml(content) : marked.parse(content || '')}</div>
+      <div class="message-time">${timeStr}</div>
     </div>
   `;
   
@@ -753,14 +766,12 @@ function renderMessage(role, content, animate = true) {
     const actions = document.createElement('div');
     actions.className = 'message-actions';
     
-    // Speak button
     const speakBtn = document.createElement('button');
     speakBtn.className = 'action-btn';
     speakBtn.title = '🔊 Read aloud';
     speakBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
     speakBtn.addEventListener('click', () => speakText(content, speakBtn));
     
-    // Copy button
     const copyBtn = document.createElement('button');
     copyBtn.className = 'action-btn';
     copyBtn.title = '📋 Copy';
@@ -769,7 +780,6 @@ function renderMessage(role, content, animate = true) {
       navigator.clipboard.writeText(content).then(() => showToast('Copied!', 'success'));
     });
     
-    // Regenerate button
     const regenBtn = document.createElement('button');
     regenBtn.className = 'action-btn';
     regenBtn.title = '🔄 Regenerate';
@@ -789,9 +799,67 @@ function renderMessage(role, content, animate = true) {
 function scrollToBottom() {
   requestAnimationFrame(() => {
     DOM.chatContainer.scrollTop = DOM.chatContainer.scrollHeight;
+    updateScrollButtonVisibility();
   });
 }
 
+// ==================== SCROLL-TO-BOTTOM BUTTON ====================
+function setupScrollButton() {
+  DOM.chatContainer.addEventListener('scroll', updateScrollButtonVisibility);
+  DOM.scrollBottomBtn.addEventListener('click', () => {
+    DOM.chatContainer.scrollTo({ top: DOM.chatContainer.scrollHeight, behavior: 'smooth' });
+  });
+}
+
+function updateScrollButtonVisibility() {
+  const { scrollTop, scrollHeight, clientHeight } = DOM.chatContainer;
+  const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+  DOM.scrollBottomBtn.classList.toggle('visible', !isNearBottom);
+}
+
+// ==================== EMOJI PICKER ====================
+function buildEmojiGrid() {
+  DOM.emojiGrid.innerHTML = EMOJIS.map(emoji =>
+    `<span class="emoji-item">${emoji}</span>`
+  ).join('');
+  
+  DOM.emojiGrid.addEventListener('click', (e) => {
+    if (e.target.classList.contains('emoji-item')) {
+      insertEmoji(e.target.textContent);
+      DOM.emojiPopover.classList.remove('open');
+    }
+  });
+}
+
+function insertEmoji(emoji) {
+  const textarea = DOM.userInput;
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const before = textarea.value.substring(0, start);
+  const after = textarea.value.substring(end);
+  textarea.value = before + emoji + after;
+  textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
+  textarea.focus();
+  textarea.dispatchEvent(new Event('input'));
+}
+
+function toggleEmojiPicker() {
+  DOM.emojiPopover.classList.toggle('open');
+}
+
+// Close emoji picker when clicking outside
+document.addEventListener('click', (e) => {
+  if (!DOM.emojiPopover.contains(e.target) && e.target !== DOM.emojiBtn) {
+    DOM.emojiPopover.classList.remove('open');
+  }
+});
+
+// ==================== TYPING INDICATOR ====================
+function setTypingIndicator(show) {
+  DOM.typingIndicator.style.display = show ? 'inline' : 'none';
+}
+
+// ==================== MESSAGE HEADER & UTILS ====================
 function updateHeaderTitle() {
   DOM.headerTitle.textContent = (state.activeChatId && state.conversations[state.activeChatId]) 
     ? state.conversations[state.activeChatId].title 
@@ -871,11 +939,11 @@ async function sendMessage() {
     DOM.userInput.value = '';
     
     renderMessage('user', '🔍 ' + q);
-    state.conversation.push({ role: 'user', content: text });
+    state.conversation.push({ role: 'user', content: text, timestamp: Date.now() });
     
     const results = await searchWeb(q);
     renderMessage('assistant', '**🔍 Search Results:**\n\n' + results);
-    state.conversation.push({ role: 'assistant', content: results });
+    state.conversation.push({ role: 'assistant', content: results, timestamp: Date.now() });
     
     saveCurrentChat();
     saveData();
@@ -890,9 +958,9 @@ async function sendMessage() {
     
     const imgUrl = generateImageUrl(p);
     renderMessage('user', '🎨 ' + p);
-    state.conversation.push({ role: 'user', content: text });
+    state.conversation.push({ role: 'user', content: text, timestamp: Date.now() });
     renderMessage('assistant', `![Generated Image](${imgUrl})\n\n[Open in new tab](${imgUrl})`);
-    state.conversation.push({ role: 'assistant', content: 'Image: ' + imgUrl });
+    state.conversation.push({ role: 'assistant', content: 'Image: ' + imgUrl, timestamp: Date.now() });
     
     saveCurrentChat();
     saveData();
@@ -934,7 +1002,7 @@ async function sendMessage() {
   }
   
   renderMessage('user', text);
-  state.conversation.push({ role: 'user', content: text });
+  state.conversation.push({ role: 'user', content: text, timestamp: Date.now() });
   
   DOM.userInput.value = '';
   DOM.userInput.style.height = 'auto';
@@ -945,6 +1013,7 @@ async function sendMessage() {
   state.stopFlag = false;
   state.busy = true;
   updateSendButton(true);
+  setTypingIndicator(true);
   
   const messages = [
     { role: 'system', content: state.systemPrompt + searchContext },
@@ -974,7 +1043,7 @@ async function sendMessage() {
     });
     
     if (fullText) {
-      state.conversation.push({ role: 'assistant', content: fullText });
+      state.conversation.push({ role: 'assistant', content: fullText, timestamp: Date.now() });
       
       if (state.autoSpeakEnabled) speakText(fullText);
     }
@@ -983,6 +1052,7 @@ async function sendMessage() {
   } finally {
     state.busy = false;
     updateSendButton(false);
+    setTypingIndicator(false);
     saveCurrentChat();
     saveData();
     renderSidebar();
@@ -1329,8 +1399,11 @@ function setupEventListeners() {
     }
   });
   
-  // Mic button now toggles voice assistant (separate feature)
+  // Mic button toggles voice assistant
   DOM.micBtn.addEventListener('click', toggleVoiceAssistant);
+  
+  // Emoji button
+  DOM.emojiBtn.addEventListener('click', toggleEmojiPicker);
   
   if (window.speechSynthesis) {
     window.speechSynthesis.getVoices();
