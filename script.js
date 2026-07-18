@@ -976,8 +976,11 @@ async function sendMessage() {
       
       if (state.autoSpeakEnabled) speakText(fullText);
       
-      if (Notification.permission === 'granted') {
-        new Notification('🐬 Dolphin AI', { body: fullText.substring(0, 100) + '...' });
+      // Safe notification - wrapped in try/catch and feature detection
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          new Notification('🐬 Dolphin AI', { body: fullText.substring(0, 100) + '...' });
+        } catch(e) {}
       }
     }
   } catch(e) {
@@ -1187,6 +1190,9 @@ function setupVoiceInput() {
 // ==================== STARTUP ====================
 document.addEventListener('DOMContentLoaded', init);
 
+// Safe notification permission request
 if ('Notification' in window && Notification.permission === 'default') {
-  Notification.requestPermission();
-}
+  try {
+    Notification.requestPermission();
+  } catch(e) {}
+                    }
