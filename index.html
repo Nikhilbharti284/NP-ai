@@ -6,12 +6,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0a0a2e">
-    <title>🐬 Dolphin AI // Uncensored</title>
+    <title>🐬 Dolphin AI // Uncensored + Voice Assistant</title>
 
-    <!-- Local CSS -->
     <link rel="stylesheet" href="style.css">
-    
-    <!-- External CDNs -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
@@ -65,10 +62,8 @@
         </div>
     </div>
 
-    <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">🐬 Dolphin AI</div>
@@ -83,9 +78,7 @@
         </div>
     </aside>
 
-    <!-- Main Area -->
     <div class="main-area">
-        <!-- Header -->
         <header class="header">
             <div class="header-left">
                 <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
@@ -102,7 +95,6 @@
             </div>
         </header>
 
-        <!-- Settings Panel -->
         <div class="settings-panel" id="settingsPanel">
             <div class="settings-inner">
                 <label class="settings-label">🔓 Jailbreak System Prompt</label>
@@ -114,7 +106,6 @@
             </div>
         </div>
 
-        <!-- Tools Bar -->
         <div class="tools-bar" id="toolsBar">
             <span class="tool-chip" id="webSearchChip"><i class="fas fa-search"></i> Search</span>
             <span class="tool-chip" id="imageGenChip"><i class="fas fa-image"></i> Image</span>
@@ -125,15 +116,15 @@
             <span class="tool-chip" id="autoSpeakChip"><i class="fas fa-volume-up"></i> Speak</span>
             <span class="tool-chip" id="screenshotChip"><i class="fas fa-camera"></i> Snap</span>
             <span class="tool-chip" id="encryptChip"><i class="fas fa-lock"></i> Encrypt</span>
+            <span class="tool-chip" id="voiceAssistantChip"><i class="fas fa-headset"></i> Assistant</span>
         </div>
 
-        <!-- Chat Area -->
         <main class="chat-container" id="chatContainer">
             <div class="chat-inner" id="chatInner">
                 <div class="empty-state" id="emptyState">
                     <div class="empty-icon">🐬</div>
                     <h2>Dolphin AI Ultimate</h2>
-                    <p>100% Free • No API Keys • Fully Uncensored</p>
+                    <p>100% Free • No API Keys • Fully Uncensored • Voice Assistant</p>
                     <div class="quick-prompts">
                         <span class="quick-prompt" data-prompt="Search web: latest AI news 2024">🔍 Web Search</span>
                         <span class="quick-prompt" data-prompt="Generate image: dolphin underwater cyberpunk">🎨 Image Gen</span>
@@ -151,28 +142,25 @@
             </div>
         </main>
 
-        <!-- Input Area -->
         <footer class="input-area">
             <div class="input-wrapper">
                 <button class="mic-btn" id="micBtn"><i class="fas fa-microphone"></i></button>
-                <textarea id="userInput" rows="1" placeholder="Type /search, /image, /python, /youtube, /scrape..." autofocus></textarea>
+                <textarea id="userInput" rows="1" placeholder="Type /search, /image, /python... or say 'Hey Dolphin'" autofocus></textarea>
                 <button id="sendBtn"><i class="fas fa-arrow-up"></i></button>
             </div>
             <div class="info-bar">
                 <span>Tokens: <span id="tokenCount">0</span></span>
                 <span>Search: <span id="webSearchStatus">OFF</span></span>
                 <span>Speak: <span id="autoSpeakStatus">OFF</span></span>
+                <span>Assistant: <span id="voiceAssistantStatus">OFF</span></span>
             </div>
         </footer>
 
-        <!-- Hidden File Input -->
         <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.py,.js,.html,.css,.json,.md,.mp3,.wav" multiple style="display:none;">
     </div>
 
-    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Local JavaScript -->
     <script src="script.js"></script>
 </body>
-                                                                                            </html>
+    </html>
