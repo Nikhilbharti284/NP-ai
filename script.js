@@ -975,13 +975,7 @@ async function sendMessage() {
       state.conversation.push({ role: 'assistant', content: fullText });
       
       if (state.autoSpeakEnabled) speakText(fullText);
-      
-      // Safe notification - wrapped in try/catch and feature detection
-      if ('Notification' in window && Notification.permission === 'granted') {
-        try {
-          new Notification('🐬 Dolphin AI', { body: fullText.substring(0, 100) + '...' });
-        } catch(e) {}
-      }
+      // (All Notification code permanently removed)
     }
   } catch(e) {
     bubble.innerHTML = `<span style="color:var(--danger);">❌ Error: ${escapeHtml(e.message)}</span>`;
@@ -1189,10 +1183,3 @@ function setupVoiceInput() {
 
 // ==================== STARTUP ====================
 document.addEventListener('DOMContentLoaded', init);
-
-// Safe notification permission request
-if ('Notification' in window && Notification.permission === 'default') {
-  try {
-    Notification.requestPermission();
-  } catch(e) {}
-                    }
