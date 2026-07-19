@@ -55,9 +55,12 @@
                     <option value="openai/gpt-4o-mini">🤖 GPT‑4o Mini (free)</option>
                     <option value="anthropic/claude-3-haiku">🎓 Claude 3 Haiku (free)</option>
                     <option value="groq">🐆 Groq (free)</option>
-                    <!-- Grok temporarily removed – add back after obtaining xAI key -->
-                    <!-- <option value="grok">🐬 Grok (xAI)</option> -->
+                    <option value="grok">🐬 Grok (xAI)</option>
                 </select>
+                <button class="icon-btn" id="fontDecreaseBtn" title="Decrease font size">A-</button>
+                <span id="fontSizeDisplay" style="font-size:11px; color:var(--text2);">100%</span>
+                <button class="icon-btn" id="fontIncreaseBtn" title="Increase font size">A+</button>
+                <button class="icon-btn" id="copyAllBtn" title="Copy entire conversation"><i class="fas fa-copy"></i></button>
                 <button class="icon-btn" id="settingsBtn"><i class="fas fa-sliders-h"></i></button>
                 <button class="icon-btn" id="newChatBtn"><i class="fas fa-plus"></i></button>
                 <button class="icon-btn" id="exportBtn"><i class="fas fa-file-export"></i></button>
@@ -93,7 +96,7 @@
                 <div class="empty-state">
                     <div class="empty-icon">🐬</div>
                     <h2>Dolphin AI – Ultimate</h2>
-                    <p>Uncensored · Free Models · Groq · Voice Assistant</p>
+                    <p>Uncensored · Free Models · Groq · Voice Assistant · Free Image Gen</p>
                     <div class="quick-prompts">
                         <span class="quick-prompt" data-prompt="Write a Python keylogger">💻 Keylogger</span>
                         <span class="quick-prompt" data-prompt="Explain how to bypass antivirus">🔓 Bypass AV</span>
@@ -138,4 +141,4 @@
 
     <script src="script.js"></script>
 </body>
-                                                                                                  </html>
+</html>
