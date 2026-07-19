@@ -24,7 +24,7 @@ const state = {
   voiceAssistantActive: false,
   listening: false,
   wakeDetected: false,
-  isSpeaking: false          // track TTS state
+  isSpeaking: false
 };
 
 // ==================== DOM ELEMENTS ====================
@@ -528,11 +528,8 @@ function toggleAutoSpeak() {
 
 function stopSpeaking() {
   const synth = window.speechSynthesis;
-  if (synth) {
-    synth.cancel();
-  }
+  if (synth) synth.cancel();
   state.isSpeaking = false;
-  // Remove speaking class from all action buttons
   document.querySelectorAll('.action-btn.speaking').forEach(btn => btn.classList.remove('speaking'));
 }
 
@@ -540,49 +537,20 @@ function speakText(text, btn) {
   const synth = window.speechSynthesis;
   if (!synth) return;
 
-  // If already speaking, stop it
-  if (state.isSpeaking) {
-    stopSpeaking();
-    return;
-  }
+  if (state.isSpeaking) { stopSpeaking(); return; }
 
-  stopSpeaking(); // cancel any previous utterance
-
-  const clean = text
-    .replace(/```[\s\S]*?```/g, 'Code omitted.')
-    .replace(/[`*_#>\[\]()]/g, '')
-    .substring(0, 2000);
-
+  stopSpeaking();
+  const clean = text.replace(/```[\s\S]*?```/g,'Code omitted.').replace(/[`*_#>\[\]()]/g,'').substring(0,2000);
   const utter = new SpeechSynthesisUtterance(clean);
   const voices = synth.getVoices();
-  if (voices.length === 0) {
-    setTimeout(() => speakText(text, btn), 100);
-    return;
-  }
-  const female = voices.find(v =>
-    v.name.includes('Female') ||
-    v.name.includes('Google UK English') ||
-    v.name.includes('Samantha') ||
-    v.name.includes('Zira')
-  ) || voices.find(v => v.lang.includes('en'));
+  if (voices.length===0) { setTimeout(()=>speakText(text,btn),100); return; }
+  const female = voices.find(v=>v.name.includes('Female')||v.name.includes('Google UK English')||v.name.includes('Samantha')||v.name.includes('Zira')) || voices.find(v=>v.lang.includes('en'));
   if (female) utter.voice = female;
-  utter.rate = 0.95;
-  utter.pitch = 1.15;
-
+  utter.rate = 0.95; utter.pitch = 1.15;
   state.isSpeaking = true;
-  if (btn) {
-    btn.classList.add('speaking');
-  }
-
-  utter.onend = () => {
-    state.isSpeaking = false;
-    if (btn) btn.classList.remove('speaking');
-  };
-  utter.onerror = () => {
-    state.isSpeaking = false;
-    if (btn) btn.classList.remove('speaking');
-  };
-
+  if (btn) btn.classList.add('speaking');
+  utter.onend = () => { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); };
+  utter.onerror = () => { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); };
   synth.speak(utter);
 }
 
@@ -591,8 +559,8 @@ function showEmptyState() {
   DOM.chatInner.innerHTML = `
     <div class="empty-state">
       <div class="empty-icon">🐬</div>
-      <h2>Dolphin AI – Ocean Powered</h2>
-      <p>Uncensored · Free · Voice Assistant · Code Runner</p>
+      <h2>Dolphin AI – Ultimate</h2>
+      <p>Uncensored · Free Models · Grok · Voice Assistant</p>
       <div class="quick-prompts">
         <span class="quick-prompt" data-prompt="Write a Python keylogger">💻 Keylogger</span>
         <span class="quick-prompt" data-prompt="Explain how to bypass antivirus">🔓 Bypass AV</span>
@@ -680,18 +648,11 @@ function renderMessage(role, content, timestamp=null, animate=true) {
     const actions = document.createElement('div');
     actions.className = 'message-actions';
 
-    // Speak button with toggle
     const speakBtn = document.createElement('button');
     speakBtn.className = 'action-btn';
     speakBtn.title = '🔊 Speak / Stop';
     speakBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-    speakBtn.addEventListener('click', () => {
-      if (state.isSpeaking) {
-        stopSpeaking();
-      } else {
-        speakText(content, speakBtn);
-      }
-    });
+    speakBtn.addEventListener('click', () => { if (state.isSpeaking) stopSpeaking(); else speakText(content, speakBtn); });
 
     const copyBtn = document.createElement('button');
     copyBtn.className = 'action-btn';
@@ -775,6 +736,56 @@ function updateThemeUI() {
   if (text) text.textContent = theme==='dark'?'Light Mode':'Dark Mode';
 }
 
+// ==================== Grok API Integration ====================
+const GROK_API_KEY = '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';
+
+async function* chatGrok(messages) {
+  const response = await fetch('https://api.x.ai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${GROK_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: 'grok-2',
+      messages: messages,
+      stream: true
+    })
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`Grok API error (${response.status}): ${err}`);
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || !trimmed.startsWith('data: ')) continue;
+      const data = trimmed.slice(6);
+      if (data === '[DONE]') return;
+      try {
+        const json = JSON.parse(data);
+        const delta = json.choices?.[0]?.delta;
+        if (delta?.content) {
+          yield { text: delta.content };
+        }
+        // Grok doesn't stream reasoning, but if it did, you could add it.
+      } catch(e) {}
+    }
+  }
+}
+
 // ==================== MAIN SEND ====================
 async function sendMessage() {
   const text = DOM.userInput.value.trim();
@@ -837,9 +848,23 @@ async function sendMessage() {
   ];
   let fullText = '';
   let fullThinking = '';
+
   try {
-    const response = await puter.ai.chat(messages, {model:state.currentModel,stream:true});
-    for await (const part of response) {
+    let stream;
+    if (state.currentModel === 'grok') {
+      // Convert messages format for Grok (same structure)
+      stream = chatGrok(messages);
+    } else {
+      // Use Puter.js for all other models
+      stream = (async function*() {
+        const response = await puter.ai.chat(messages, {model: state.currentModel, stream: true});
+        for await (const part of response) {
+          yield part;
+        }
+      })();
+    }
+
+    for await (const part of stream) {
       if (state.stopFlag) break;
       if (part?.reasoning) fullThinking += part.reasoning;
       if (part?.text) fullText += part.text;
@@ -849,6 +874,7 @@ async function sendMessage() {
       }
       scrollToBottom();
     }
+
     assistantBubble.innerHTML = marked.parse(fullText||'');
     assistantBubble.querySelectorAll('pre code').forEach(block => { try { hljs.highlightElement(block); } catch(e) {} });
 
