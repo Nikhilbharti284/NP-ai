@@ -21,6 +21,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -70,7 +71,7 @@
         </div>
     </nav>
 
-    <!-- Sidebar (hidden on mobile) -->
+    <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">🐬 Dolphin AI</div>
@@ -78,8 +79,14 @@
         </div>
         <button class="new-chat-btn" id="newChatSidebarBtn"><i class="fas fa-plus"></i> New Chat</button>
         <div class="chat-list" id="chatList"></div>
+        <div class="prompt-library">
+            <div class="sidebar-label">📚 Prompt Library</div>
+            <div id="promptList"></div>
+            <button class="sidebar-btn" id="addPromptBtn"><i class="fas fa-plus"></i> Add Current Prompt</button>
+        </div>
         <div class="sidebar-footer">
             <button class="sidebar-btn" id="exportAllBtn"><i class="fas fa-download"></i> Export All</button>
+            <button class="sidebar-btn" id="exportPDFBtn"><i class="fas fa-file-pdf"></i> Export as PDF</button>
             <button class="sidebar-btn" id="clearAllBtn"><i class="fas fa-trash-alt"></i> Clear History</button>
         </div>
     </aside>
@@ -90,6 +97,23 @@
         <div class="settings-inner">
             <label class="settings-label">🔓 Jailbreak System Prompt</label>
             <textarea class="settings-textarea" id="systemPromptInput"></textarea>
+            <div class="settings-row">
+                <div>
+                    <label class="settings-label">🎤 Custom Wake Word</label>
+                    <input type="text" id="wakeWordInput" placeholder="Hey Dolphin" class="settings-input">
+                </div>
+                <div>
+                    <label class="settings-label">🔊 TTS Language</label>
+                    <select id="ttsLangSelect" class="settings-select">
+                        <option value="en">English</option>
+                        <option value="hi">Hindi</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="ja">Japanese</option>
+                    </select>
+                </div>
+            </div>
             <div class="settings-actions">
                 <button class="btn-primary" id="applySettingsBtn">Apply</button>
                 <button class="btn-secondary" id="resetSettingsBtn">Reset</button>
@@ -101,10 +125,13 @@
     <main class="main-content">
         <div class="hero-section" id="heroSection">
             <div class="hero-inner">
+                <div class="hero-animation">
+                    <canvas id="heroDolphin"></canvas>
+                </div>
                 <h1>Dolphin AI</h1>
-                <p>The ultimate uncensored AI assistant – free, private, powerful.</p>
+                <p>The ultimate uncensored AI assistant – free, private, powerful.<br>Code, images, voice, search, and much more.</p>
                 <div class="input-wrapper">
-                    <textarea id="userInput" rows="1" placeholder="Ask anything... or use /image, /python, /search..." autofocus></textarea>
+                    <textarea id="userInput" rows="1" placeholder="Ask anything... /image, /python, /search..." autofocus></textarea>
                     <button id="sendBtn"><i class="fas fa-arrow-up"></i></button>
                 </div>
                 <div class="example-prompts">
@@ -116,13 +143,11 @@
             </div>
         </div>
 
-        <!-- Chat container (messages appear here) -->
         <div class="chat-container" id="chatContainer">
             <div class="chat-inner" id="chatInner"></div>
             <button class="scroll-bottom-btn" id="scrollBottomBtn"><i class="fas fa-chevron-down"></i></button>
         </div>
 
-        <!-- Info bar -->
         <div class="info-bar">
             <span>Tokens: <span id="tokenCount">0</span></span>
             <span>🔍 <span id="webSearchStatus">OFF</span></span>
@@ -132,7 +157,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
             <p>🐬 Dolphin AI – 100% free, no API keys needed. Powered by Puter.js, Groq, Pollinations.ai, and open‑source libraries.</p>
@@ -140,15 +164,12 @@
         </div>
     </footer>
 
-    <!-- Hidden file input -->
     <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.py,.js,.html,.css,.json,.md" multiple hidden>
 
-    <!-- Emoji popover -->
     <div class="emoji-popover" id="emojiPopover">
         <div class="emoji-grid" id="emojiGrid"></div>
     </div>
 
-    <!-- Toast container -->
     <div class="toast-container" id="toastContainer"></div>
 
     <script src="script.js"></script>
