@@ -63,7 +63,9 @@ const DOM = {
   copyAllBtn: document.getElementById('copyAllBtn')
 };
 
-// ==================== OCEAN + DOLPHIN ANIMATION (unchanged) ====================
+const EMOJIS = ['😀','😂','🤣','😍','🥰','😘','😜','🤪','😎','🤩','😇','🤗','😴','🥱','😈','👿','💀','👻','🎃','🐬','🐳','🐋','🐟','🌊','💧','🔥','⚡','⭐','✨','🌈','🍕','🍔','🍟','🌮','🍩','🍪','🎂','☕','🍺','🎸','🎮','🎯','🏆','⚽','🚀','✈️','🏖️','🗺️'];
+
+// ==================== OCEAN + DOLPHIN ANIMATION ====================
 const canvas = DOM.oceanCanvas;
 const ctx = canvas.getContext('2d');
 let bubbles = [];
@@ -550,7 +552,7 @@ function encryptCurrentChat() {
   saveCurrentChat(); saveData(); scrollToBottom();
 }
 
-// ==================== TTS – Google Assistant Style (NO SSML) ====================
+// ==================== TTS – Emojis silently removed during speech ====================
 function toggleAutoSpeak() {
   state.autoSpeakEnabled = !state.autoSpeakEnabled;
   updateToolChips(); updateStatusBar(); saveData();
@@ -566,33 +568,32 @@ function stopSpeaking() {
 function speakText(text, btn) {
   const synth = state.speechSynth;
   if (!synth) return;
-
   if (state.isSpeaking) { stopSpeaking(); return; }
-
   stopSpeaking();
 
-  // Clean text for natural speech – no SSML tags
-  let cleanText = text
-    .replace(/```[\s\S]*?```/g, 'Code omitted.')       // code blocks
-    .replace(/`([^`]+)`/g, '$1')                       // inline code
-    .replace(/<\/?[^>]+(>|$)/g, '')                    // any HTML tags
-    .replace(/&[a-z]+;/gi, '')                         // HTML entities like &lt;
-    .replace(/\*\*(.*?)\*\*/g, '$1')                   // bold
+  // Remove code, HTML, markdown, and emojis – but keep the original message untouched
+  let clean = text
+    .replace(/```[\s\S]*?```/g, ' Code omitted ')   // code blocks
+    .replace(/`([^`]+)`/g, ' ')                     // inline code
+    .replace(/<[^>]*>/g, '')                        // any HTML tags
+    .replace(/&[a-z]+;/gi, '')                      // HTML entities
+    .replace(/\*\*(.*?)\*\*/g, '$1')                // bold
     .replace(/__(.*?)__/g, '$1')
-    .replace(/_(.*?)_/g, '$1')                         // italic
-    .replace(/~~(.*?)~~/g, '$1')                       // strikethrough
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')           // links
-    .replace(/^#{1,6}\s+/gm, '')                       // headings
-    .replace(/\n{2,}/g, '. ')                          // multiple newlines -> period
-    .replace(/\n/g, ' ')                               // single newlines -> space
-    .replace(/[<>]/g, '')                              // remove any leftover angle brackets
-    .replace(/\s{2,}/g, ' ')                           // collapse multiple spaces
+    .replace(/_(.*?)_/g, '$1')                      // italic
+    .replace(/~~(.*?)~~/g, '$1')                    // strikethrough
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')        // links
+    .replace(/^#{1,6}\s+/gm, '')                    // headings
+    .replace(/\n{2,}/g, ' ')                        // multiple newlines
+    .replace(/\n/g, ' ')                            // single newlines
+    .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2300}-\u{23FF}\u{2B50}\u{2B55}\u{231A}\u{231B}\u{2328}\u{23CF}\u{23E9}-\u{23F3}\u{23F8}-\u{23FA}\u{FE0F}\u{200D}]/gu, '') // all emojis
+    .replace(/[^a-zA-Z0-9\s]/g, '')                 // remove remaining punctuation/symbols
+    .replace(/\s{2,}/g, ' ')                        // collapse spaces
     .trim()
     .substring(0, 3000);
 
-  if (!cleanText) return;
+  if (!clean) return;
 
-  const utterance = new SpeechSynthesisUtterance(cleanText);
+  const utterance = new SpeechSynthesisUtterance(clean);
 
   const voices = synth.getVoices();
   if (voices.length === 0) {
@@ -604,7 +605,6 @@ function speakText(text, btn) {
   if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Google') && v.name.includes('Female'));
   if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Female') && v.lang.startsWith('en'));
   if (!bestVoice) bestVoice = voices.find(v => v.lang.startsWith('en'));
-
   if (bestVoice) utterance.voice = bestVoice;
 
   utterance.rate = 0.9;
@@ -613,16 +613,8 @@ function speakText(text, btn) {
 
   state.isSpeaking = true;
   if (btn) btn.classList.add('speaking');
-
-  utterance.onend = () => {
-    state.isSpeaking = false;
-    if (btn) btn.classList.remove('speaking');
-  };
-  utterance.onerror = () => {
-    state.isSpeaking = false;
-    if (btn) btn.classList.remove('speaking');
-  };
-
+  utterance.onend = () => { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); };
+  utterance.onerror = () => { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); };
   synth.speak(utterance);
 }
 
