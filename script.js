@@ -28,7 +28,7 @@ const state = {
   isSpeaking: false,
   speechSynth: window.speechSynthesis,
   voicesLoaded: false,
-  fontScale: 1.0   // for font size adjuster
+  fontScale: 1.0
 };
 
 // ==================== DOM ELEMENTS ====================
@@ -63,7 +63,9 @@ const DOM = {
   copyAllBtn: document.getElementById('copyAllBtn')
 };
 
-// ==================== OCEAN + DOLPHIN ANIMATION (unchanged) ====================
+const EMOJIS = ['😀','😂','🤣','😍','🥰','😘','😜','🤪','😎','🤩','😇','🤗','😴','🥱','😈','👿','💀','👻','🎃','🐬','🐳','🐋','🐟','🌊','💧','🔥','⚡','⭐','✨','🌈','🍕','🍔','🍟','🌮','🍩','🍪','🎂','☕','🍺','🎸','🎮','🎯','🏆','⚽','🚀','✈️','🏖️','🗺️'];
+
+// ==================== OCEAN + DOLPHIN ANIMATION ====================
 const canvas = DOM.oceanCanvas;
 const ctx = canvas.getContext('2d');
 let bubbles = [];
@@ -216,7 +218,7 @@ function init() {
   buildEmojiGrid();
   setupScrollButton();
   preloadVoices();
-  applyFontScale(); // apply stored font size
+  applyFontScale();
 }
 
 function preloadVoices() {
@@ -397,61 +399,21 @@ function toggleWebSearch() {
   showToast(state.webSearchEnabled?'Web search ON':'Web search OFF','info');
 }
 
-// ==================== IMAGE GENERATION (Stable Horde + Pollinations fallback) ====================
-async function generateImageHorde(prompt) {
-  const submitResp = await fetch('https://stablehorde.net/api/v2/generate/async', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      prompt: prompt + ', highly detailed, realistic',
-      params: {
-        sampler_name: 'k_euler_a',
-        cfg_scale: 7.5,
-        width: 768,
-        height: 768,
-        steps: 30
-      },
-      nsfw: false,
-      censor_nsfw: false,
-      trusted_workers: false
-    })
-  });
-
-  if (!submitResp.ok) {
-    const err = await submitResp.text();
-    throw new Error('Stable Horde submission failed: ' + err);
-  }
-
-  const { id } = await submitResp.json();
-
-  let attempts = 0;
-  while (attempts < 60) {
-    await new Promise(r => setTimeout(r, 2000));
-    const statusResp = await fetch(`https://stablehorde.net/api/v2/generate/status/${id}`);
-    if (!statusResp.ok) throw new Error('Status check failed');
-    const statusData = await statusResp.json();
-    if (statusData.done) {
-      const imgUrl = statusData.generations?.[0]?.img;
-      if (imgUrl) return imgUrl;
-      throw new Error('No image URL in response');
-    }
-    attempts++;
-  }
-  throw new Error('Stable Horde timed out');
+// ==================== IMAGE GENERATION (Pollinations with retry) ====================
+function generateImageUrl(prompt, w=768, h=768) {
+  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${w}&height=${h}&nologo=true&seed=${Math.floor(Math.random()*10000)}`;
 }
 
-function generateImageUrlPollinations(prompt) {
-  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=768&height=768&nologo=true&seed=${Math.floor(Math.random()*10000)}`;
-}
-
-async function generateImageWithFallback(prompt) {
-  try { return await generateImageHorde(prompt); } catch(e) { console.log('Horde failed, falling back to Pollinations:', e.message); }
+async function generateImageWithRetry(prompt) {
   for (let i=0; i<3; i++) {
-    const url = generateImageUrlPollinations(prompt);
-    try { const resp = await fetch(url); if (resp.ok) return url; } catch(e) {}
+    const url = generateImageUrl(prompt);
+    try {
+      const resp = await fetch(url);
+      if (resp.ok) return url;
+    } catch(e) {}
     await new Promise(r => setTimeout(r, 1500));
   }
-  throw new Error('Both image services failed. Please try again later.');
+  throw new Error('Image generation failed. Please try again later.');
 }
 
 function showImageGen() {
@@ -463,7 +425,7 @@ function showImageGen() {
 
   state.conversation.push({role:'user', content:'🎨 ' + prompt, timestamp: Date.now()});
 
-  generateImageWithFallback(prompt)
+  generateImageWithRetry(prompt)
     .then(imgUrl => {
       const parent = placeBubble.closest('.message');
       if (parent) parent.remove();
@@ -947,7 +909,7 @@ async function sendMessage() {
   }
   if (['/image','/i'].includes(cmd)) {
     DOM.userInput.value = '';
-    showImageGen();   // calls new image gen with fallback
+    showImageGen();   // calls image gen with retry
     return;
   }
   if (['/python','/py'].includes(cmd)) {
@@ -1026,7 +988,7 @@ async function sendMessage() {
     if (fullText) {
       state.conversation.push({role:'assistant',content:fullText,timestamp:Date.now()});
       if (state.autoSpeakEnabled) speakText(fullText);
-      playNotificationSound();   // sound on completion
+      playNotificationSound();
     }
   } catch(e) {
     assistantBubble.innerHTML = `<span style="color:var(--danger);">❌ Error: ${escapeHtml(e.message)}</span>`;
@@ -1193,10 +1155,8 @@ function setupEventListeners() {
   document.getElementById('screenshotChip')?.addEventListener('click', screenshotChat);
   document.getElementById('encryptChip')?.addEventListener('click', encryptCurrentChat);
   document.getElementById('voiceAssistantChip')?.addEventListener('click', toggleVoiceAssistant);
-  // Font size buttons
   if (DOM.fontDecreaseBtn) DOM.fontDecreaseBtn.addEventListener('click', ()=>changeFontSize(-0.1));
   if (DOM.fontIncreaseBtn) DOM.fontIncreaseBtn.addEventListener('click', ()=>changeFontSize(0.1));
-  // Copy all button
   if (DOM.copyAllBtn) DOM.copyAllBtn.addEventListener('click', copyEntireConversation);
   DOM.fileInput.addEventListener('change', handleFileUpload);
   document.addEventListener('keydown', e => {
