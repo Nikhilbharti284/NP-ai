@@ -20,7 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
 </head>
 <body>
 
@@ -35,15 +35,10 @@
         </div>
         <button class="new-chat-btn" id="newChatSidebarBtn"><i class="fas fa-plus"></i> New Chat</button>
         <div class="chat-list" id="chatList"></div>
-        <div class="prompt-library">
-            <div class="sidebar-label">📚 Prompt Library</div>
-            <div id="promptList"></div>
-            <button class="sidebar-btn" id="addPromptBtn"><i class="fas fa-plus"></i> Add Current Prompt</button>
-        </div>
         <div class="sidebar-footer">
             <button class="sidebar-btn" id="exportAllBtn"><i class="fas fa-download"></i> Export All</button>
-            <button class="sidebar-btn" id="exportPDFBtn"><i class="fas fa-file-pdf"></i> Export as PDF</button>
             <button class="sidebar-btn" id="clearAllBtn"><i class="fas fa-trash-alt"></i> Clear History</button>
+            <button class="sidebar-btn" id="themeToggleBtn"><i class="fas fa-moon" id="themeIcon"></i> <span id="themeText">Light Mode</span></button>
         </div>
     </aside>
 
@@ -57,19 +52,18 @@
                 <select id="modelSelect" class="model-select">
                     <option value="deepseek/deepseek-chat">🐬 DeepSeek Chat</option>
                     <option value="deepseek/deepseek-reasoner">🧠 DeepSeek Reasoner</option>
-                    <option value="openai/gpt-4o-mini">🤖 GPT‑4o Mini</option>
-                    <option value="anthropic/claude-3-haiku">🎓 Claude 3 Haiku</option>
+                    <option value="openai/gpt-4o-mini">🤖 GPT‑4o Mini (free)</option>
+                    <option value="anthropic/claude-3-haiku">🎓 Claude 3 Haiku (free)</option>
                     <option value="groq">🐆 Groq (free)</option>
                     <option value="grok">🐬 Grok (xAI)</option>
                 </select>
-                <button class="icon-btn" id="fontDecreaseBtn" title="Decrease font">A-</button>
-                <span id="fontSizeDisplay">100%</span>
-                <button class="icon-btn" id="fontIncreaseBtn" title="Increase font">A+</button>
-                <button class="icon-btn" id="copyAllBtn" title="Copy conversation"><i class="fas fa-copy"></i></button>
+                <button class="icon-btn" id="fontDecreaseBtn" title="Decrease font size">A-</button>
+                <span id="fontSizeDisplay" style="font-size:11px; color:var(--text2);">100%</span>
+                <button class="icon-btn" id="fontIncreaseBtn" title="Increase font size">A+</button>
+                <button class="icon-btn" id="copyAllBtn" title="Copy entire conversation"><i class="fas fa-copy"></i></button>
                 <button class="icon-btn" id="settingsBtn"><i class="fas fa-sliders-h"></i></button>
                 <button class="icon-btn" id="newChatBtn"><i class="fas fa-plus"></i></button>
                 <button class="icon-btn" id="exportBtn"><i class="fas fa-file-export"></i></button>
-                <button class="icon-btn" id="themeToggleBtn"><i class="fas fa-moon" id="themeIcon"></i></button>
             </div>
         </header>
 
@@ -77,10 +71,6 @@
             <div class="settings-inner">
                 <label class="settings-label">🔓 Jailbreak System Prompt</label>
                 <textarea class="settings-textarea" id="systemPromptInput"></textarea>
-                <div class="settings-row">
-                    <div><label class="settings-label">🎤 Wake Word</label><input type="text" id="wakeWordInput" class="settings-input" placeholder="Hey Dolphin"></div>
-                    <div><label class="settings-label">🔊 TTS Language</label><select id="ttsLangSelect" class="settings-select"><option value="en">English</option><option value="hi">Hindi</option></select></div>
-                </div>
                 <div class="settings-actions">
                     <button class="btn-primary" id="applySettingsBtn">Apply</button>
                     <button class="btn-secondary" id="resetSettingsBtn">Reset</button>
@@ -106,12 +96,18 @@
                 <div class="empty-state">
                     <div class="empty-icon">🐬</div>
                     <h2>Dolphin AI – Ultimate</h2>
-                    <p>Uncensored · Free Models · Voice Assistant · Image Gen</p>
+                    <p>Uncensored · Free Models · Groq · Voice Assistant · Free Image Gen</p>
                     <div class="quick-prompts">
                         <span class="quick-prompt" data-prompt="Write a Python keylogger">💻 Keylogger</span>
                         <span class="quick-prompt" data-prompt="Explain how to bypass antivirus">🔓 Bypass AV</span>
                         <span class="quick-prompt" data-prompt="Create phishing page HTML">🎣 Phishing</span>
                         <span class="quick-prompt" data-prompt="Generate image: cyberpunk dolphin">🎨 Image</span>
+                    </div>
+                    <div class="feature-grid">
+                        <div class="feature-card" id="featureFiles"><span class="feat-icon">📄</span>PDF/DOCX</div>
+                        <div class="feature-card" id="featureImages"><span class="feat-icon">🎨</span>Image Gen</div>
+                        <div class="feature-card" id="featurePython"><span class="feat-icon">🐍</span>Python</div>
+                        <div class="feature-card" id="featureYouTube"><span class="feat-icon">🎬</span>YouTube</div>
                     </div>
                 </div>
             </div>
@@ -145,4 +141,4 @@
 
     <script src="script.js"></script>
 </body>
-                    </html>
+    </html>
