@@ -736,11 +736,17 @@ function updateThemeUI() {
   if (text) text.textContent = theme==='dark'?'Light Mode':'Dark Mode';
 }
 
-// ==================== Grok API Integration ====================
-const GROK_API_KEY = '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';
+// ==================== Grok API Integration (xAI) ====================
+// IMPORTANT: Replace with your valid xAI API key (starts with xai-)
+// The key you provided (gsk_...) is NOT a valid xAI key. Get one from https://console.x.ai
+const GROK_API_KEY = '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'; // <- put your valid xai- key here
 
 async function* chatGrok(messages) {
-  const response = await fetch('https://api.x.ai/v1/chat/completions', {
+  // Use a CORS proxy to avoid blocking by GitHub Pages
+  const proxy = 'https://corsproxy.io/?';
+  const url = proxy + encodeURIComponent('https://api.x.ai/v1/chat/completions');
+
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -780,7 +786,6 @@ async function* chatGrok(messages) {
         if (delta?.content) {
           yield { text: delta.content };
         }
-        // Grok doesn't stream reasoning, but if it did, you could add it.
       } catch(e) {}
     }
   }
@@ -852,10 +857,9 @@ async function sendMessage() {
   try {
     let stream;
     if (state.currentModel === 'grok') {
-      // Convert messages format for Grok (same structure)
       stream = chatGrok(messages);
     } else {
-      // Use Puter.js for all other models
+      // Puter.js for free models
       stream = (async function*() {
         const response = await puter.ai.chat(messages, {model: state.currentModel, stream: true});
         for await (const part of response) {
