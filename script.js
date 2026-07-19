@@ -28,10 +28,7 @@ const state = {
   isSpeaking: false,
   speechSynth: window.speechSynthesis,
   voicesLoaded: false,
-  fontScale: 1.0,
-  customWakeWord: 'hey dolphin',
-  ttsLang: 'en',
-  promptLibrary: []
+  fontScale: 1.0
 };
 
 // ==================== DOM ELEMENTS ====================
@@ -43,6 +40,7 @@ const DOM = {
   chatContainer: document.getElementById('chatContainer'),
   userInput: document.getElementById('userInput'),
   sendBtn: document.getElementById('sendBtn'),
+  headerTitle: document.getElementById('headerTitle'),
   tokenCount: document.getElementById('tokenCount'),
   webSearchStatus: document.getElementById('webSearchStatus'),
   autoSpeakStatus: document.getElementById('autoSpeakStatus'),
@@ -62,25 +60,16 @@ const DOM = {
   fontDecreaseBtn: document.getElementById('fontDecreaseBtn'),
   fontSizeDisplay: document.getElementById('fontSizeDisplay'),
   fontIncreaseBtn: document.getElementById('fontIncreaseBtn'),
-  copyAllBtn: document.getElementById('copyAllBtn'),
-  toolsDropdownBtn: document.getElementById('toolsDropdownBtn'),
-  toolsDropdownMenu: document.getElementById('toolsDropdownMenu'),
-  heroSection: document.getElementById('heroSection'),
-  heroDolphin: document.getElementById('heroDolphin'),
-  wakeWordInput: document.getElementById('wakeWordInput'),
-  ttsLangSelect: document.getElementById('ttsLangSelect'),
-  promptList: document.getElementById('promptList'),
-  addPromptBtn: document.getElementById('addPromptBtn'),
-  exportPDFBtn: document.getElementById('exportPDFBtn')
+  copyAllBtn: document.getElementById('copyAllBtn')
 };
 
 const EMOJIS = ['😀','😂','🤣','😍','🥰','😘','😜','🤪','😎','🤩','😇','🤗','😴','🥱','😈','👿','💀','👻','🎃','🐬','🐳','🐋','🐟','🌊','💧','🔥','⚡','⭐','✨','🌈','🍕','🍔','🍟','🌮','🍩','🍪','🎂','☕','🍺','🎸','🎮','🎯','🏆','⚽','🚀','✈️','🏖️','🗺️'];
 
-// ==================== OCEAN + DOLPHIN ANIMATION (Background) ====================
+// ==================== OCEAN + DOLPHIN ANIMATION ====================
 const canvas = DOM.oceanCanvas;
 const ctx = canvas.getContext('2d');
 let bubbles = [];
-let dolphin = { x: -150, y: 0, vy: 0, jumping: false, frame: 0, spin: 0 };
+let dolphin = { x: -150, y: 0, vy: 0, jumping: false, frame: 0 };
 let splashParticles = [];
 
 function resizeCanvas() {
@@ -119,7 +108,7 @@ function drawOcean() {
     ctx.fill();
   });
 
-  drawBackgroundDolphin();
+  drawDolphin();
 
   splashParticles = splashParticles.filter(p => { p.life--; return p.life > 0; });
   splashParticles.forEach(p => {
@@ -132,34 +121,32 @@ function drawOcean() {
   requestAnimationFrame(drawOcean);
 }
 
-function drawBackgroundDolphin() {
-  const { x, y, vy, jumping, frame, spin } = dolphin;
+function drawDolphin() {
+  const { x, y, vy, jumping, frame } = dolphin;
   if (jumping) {
-    dolphin.vy += 0.4;
+    dolphin.vy += 0.5;
     dolphin.y += dolphin.vy;
-    dolphin.spin += 0.05;
     if (dolphin.y >= canvas.height * 0.6) {
-      for (let i = 0; i < 25; i++) {
+      for (let i = 0; i < 20; i++) {
         splashParticles.push({
-          x: x + 50 + Math.random() * 60,
-          y: canvas.height * 0.6 - 10 + Math.random() * 30,
-          radius: Math.random() * 5 + 2,
-          life: 35 + Math.random() * 25
+          x: x + 50 + Math.random() * 40,
+          y: canvas.height * 0.6 - 10 + Math.random() * 20,
+          radius: Math.random() * 4 + 2,
+          life: 30 + Math.random() * 20
         });
       }
       dolphin.y = canvas.height * 0.6;
       dolphin.jumping = false;
       dolphin.vy = 0;
-      dolphin.spin = 0;
     }
   } else {
     dolphin.x += 2;
-    dolphin.y = canvas.height * 0.6 + Math.sin(frame * 0.05) * 8;
+    dolphin.y = canvas.height * 0.6 + Math.sin(frame * 0.05) * 5;
     if (dolphin.x > canvas.width + 200) {
       dolphin.x = -200;
-      if (Math.random() < 0.4) {
+      if (Math.random() < 0.3) {
         dolphin.jumping = true;
-        dolphin.vy = -14;
+        dolphin.vy = -12;
       }
     }
   }
@@ -169,7 +156,6 @@ function drawBackgroundDolphin() {
   ctx.translate(x, y);
   const scaleX = jumping ? 1 : (x < canvas.width / 2 ? 1 : -1);
   ctx.scale(scaleX, 1);
-  if (jumping) ctx.rotate(spin * (scaleX > 0 ? 1 : -1));
 
   ctx.beginPath();
   ctx.ellipse(55, 0, 45, 18, 0, 0, Math.PI * 2);
@@ -209,56 +195,6 @@ function drawBackgroundDolphin() {
 }
 drawOcean();
 
-// Hero dolphin (mini spinning)
-function drawHeroDolphin() {
-  const c = DOM.heroDolphin;
-  if (!c) return;
-  const ctx2 = c.getContext('2d');
-  function animate() {
-    c.width = c.parentElement.clientWidth;
-    c.height = c.parentElement.clientHeight;
-    ctx2.clearRect(0, 0, c.width, c.height);
-    const t = Date.now() / 500;
-    const y = c.height/2 + Math.sin(t) * 10;
-    const spin = Math.sin(t*2) * 0.2;
-    ctx2.save();
-    ctx2.translate(c.width/2, y);
-    ctx2.rotate(spin);
-    ctx2.scale(0.8, 0.8);
-    ctx2.beginPath();
-    ctx2.ellipse(0, 0, 40, 16, 0, 0, Math.PI*2);
-    ctx2.fillStyle = '#00b4d8';
-    ctx2.fill();
-    ctx2.beginPath();
-    ctx2.moveTo(35, -4);
-    ctx2.quadraticCurveTo(50, 0, 35, 4);
-    ctx2.fill();
-    ctx2.beginPath();
-    ctx2.moveTo(0, -16);
-    ctx2.lineTo(-8, -26);
-    ctx2.lineTo(-12, -16);
-    ctx2.fillStyle = '#0077b6';
-    ctx2.fill();
-    ctx2.beginPath();
-    ctx2.moveTo(-30, 0);
-    ctx2.lineTo(-40, -12);
-    ctx2.lineTo(-35, 0);
-    ctx2.lineTo(-40, 12);
-    ctx2.closePath();
-    ctx2.fill();
-    ctx2.beginPath();
-    ctx2.arc(28, -4, 3, 0, Math.PI*2);
-    ctx2.fillStyle = 'white';
-    ctx2.fill();
-    ctx2.arc(28, -4, 1.5, 0, Math.PI*2);
-    ctx2.fillStyle = '#0a0a2e';
-    ctx2.fill();
-    ctx2.restore();
-    requestAnimationFrame(animate);
-  }
-  animate();
-}
-
 // ==================== PDFJS Worker ====================
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
@@ -271,7 +207,7 @@ marked.setOptions({
   }
 });
 
-// ==================== UTILITY ====================
+// ==================== UTILITY FUNCTIONS ====================
 function escapeHtml(str) { const d=document.createElement('div'); d.textContent=str||''; return d.innerHTML; }
 function showToast(msg,type='info') {
   const toast=document.createElement('div'); toast.className=`toast ${type}`; toast.textContent=msg;
@@ -292,18 +228,12 @@ function loadData() {
       state.webSearchEnabled = data.webSearch || false;
       state.autoSpeakEnabled = data.autoSpeak || false;
       state.fontScale = data.fontScale || 1.0;
-      state.customWakeWord = data.customWakeWord || 'hey dolphin';
-      state.ttsLang = data.ttsLang || 'en';
-      state.promptLibrary = data.promptLibrary || [];
     }
   } catch(e) { resetAllData(); }
   DOM.systemPromptInput.value = state.systemPrompt;
   DOM.modelSelect.value = state.currentModel;
-  if (DOM.wakeWordInput) DOM.wakeWordInput.value = state.customWakeWord;
-  if (DOM.ttsLangSelect) DOM.ttsLangSelect.value = state.ttsLang;
   updateToolChips();
   updateStatusBar();
-  renderPromptLibrary();
   if (state.activeChatId && state.conversations[state.activeChatId]) {
     loadChat(state.activeChatId);
   } else {
@@ -321,10 +251,7 @@ function saveData() {
       model: state.currentModel,
       webSearch: state.webSearchEnabled,
       autoSpeak: state.autoSpeakEnabled,
-      fontScale: state.fontScale,
-      customWakeWord: state.customWakeWord,
-      ttsLang: state.ttsLang,
-      promptLibrary: state.promptLibrary || []
+      fontScale: state.fontScale
     }));
   } catch(e) { showToast('Storage full!', 'error'); }
 }
@@ -333,7 +260,6 @@ function resetAllData() {
   state.conversations = {}; state.activeChatId = null; state.conversation = [];
   state.systemPrompt = DEFAULT_JAILBREAK; state.currentModel = 'deepseek/deepseek-chat';
   state.webSearchEnabled = false; state.autoSpeakEnabled = false; state.fontScale = 1.0;
-  state.customWakeWord = 'hey dolphin'; state.ttsLang = 'en'; state.promptLibrary = [];
   saveData();
 }
 
@@ -370,7 +296,7 @@ function createNewChat() {
   const id = 'chat_'+Date.now();
   state.conversations[id] = { id, title:'New Chat', messages:[], timestamp:Date.now() };
   state.activeChatId = id; state.conversation = [];
-  saveData(); renderSidebar(); showEmptyState();
+  saveData(); renderSidebar(); showEmptyState(); updateHeaderTitle();
   DOM.userInput.focus();
   if (window.innerWidth<=768) closeSidebar();
 }
@@ -385,7 +311,7 @@ function loadChat(id) {
   DOM.chatInner.innerHTML = '';
   if (state.conversation.length===0) showEmptyState();
   else { state.conversation.forEach(msg => renderMessage(msg.role, msg.content, msg.timestamp, false)); scrollToBottom(); }
-  renderSidebar(); saveData(); updateTokenCount();
+  updateHeaderTitle(); renderSidebar(); saveData(); updateTokenCount();
 }
 function saveCurrentChat() {
   if (state.activeChatId && state.conversations[state.activeChatId] && state.conversation.length>0) {
@@ -401,13 +327,13 @@ function saveCurrentChat() {
 function deleteChat(id) {
   if (!confirm('Delete this chat?')) return;
   delete state.conversations[id];
-  if (state.activeChatId===id) { state.activeChatId=null; state.conversation=[]; showEmptyState(); }
+  if (state.activeChatId===id) { state.activeChatId=null; state.conversation=[]; showEmptyState(); updateHeaderTitle(); }
   saveData(); renderSidebar();
 }
 function clearAllChats() {
   if (!confirm('Delete ALL chats?')) return;
   state.conversations={}; state.activeChatId=null; state.conversation=[];
-  saveData(); renderSidebar(); showEmptyState();
+  saveData(); renderSidebar(); showEmptyState(); updateHeaderTitle();
   showToast('All chats cleared','success');
 }
 
@@ -436,59 +362,6 @@ function downloadFile(content, filename) {
   showToast('Exported!','success');
 }
 
-// ==================== PROMPT LIBRARY ====================
-function renderPromptLibrary() {
-  if (!DOM.promptList) return;
-  DOM.promptList.innerHTML = (state.promptLibrary||[]).map((p,i) => `
-    <div class="prompt-item">
-      <span onclick="insertPrompt(${i})" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(p)}</span>
-      <button onclick="deletePrompt(${i})" style="background:none;border:none;color:var(--danger);cursor:pointer;"><i class="fas fa-times"></i></button>
-    </div>
-  `).join('');
-}
-function addCurrentPrompt() {
-  const prompt = DOM.userInput.value.trim();
-  if (!prompt) return;
-  state.promptLibrary.push(prompt);
-  saveData();
-  renderPromptLibrary();
-  showToast('Prompt saved!','success');
-}
-function insertPrompt(index) {
-  DOM.userInput.value = state.promptLibrary[index];
-  DOM.userInput.focus();
-}
-function deletePrompt(index) {
-  state.promptLibrary.splice(index,1);
-  saveData();
-  renderPromptLibrary();
-}
-
-// ==================== PDF EXPORT ====================
-function exportChatAsPDF() {
-  if (state.conversation.length === 0) { showToast('Nothing to export','error'); return; }
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  doc.setFontSize(12);
-  let y = 20;
-  doc.text('Dolphin AI Chat Export', 20, y);
-  y += 10;
-  state.conversation.forEach(msg => {
-    const prefix = `[${msg.role.toUpperCase()}]`;
-    doc.setFont('helvetica', 'bold');
-    doc.text(prefix, 20, y);
-    doc.setFont('helvetica', 'normal');
-    const lines = doc.splitTextToSize(msg.content, 170);
-    lines.forEach(line => {
-      y += 7;
-      if (y > 280) { doc.addPage(); y = 20; }
-      doc.text(line, 25, y);
-    });
-    y += 10;
-  });
-  doc.save('dolphin-chat.pdf');
-}
-
 // ==================== WEB SEARCH ====================
 async function searchWeb(query) {
   try {
@@ -507,24 +380,32 @@ function toggleWebSearch() {
   showToast(state.webSearchEnabled?'Web search ON':'Web search OFF','info');
 }
 
-// ==================== IMAGE GENERATION ====================
+// ==================== IMAGE GENERATION (Pollinations with retry) ====================
 function generateImageUrl(prompt, w=768, h=768) {
   return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${w}&height=${h}&nologo=true&seed=${Math.floor(Math.random()*10000)}`;
 }
+
 async function generateImageWithRetry(prompt) {
   for (let i=0; i<3; i++) {
     const url = generateImageUrl(prompt);
-    try { const resp = await fetch(url); if (resp.ok) return url; } catch(e) {}
+    try {
+      const resp = await fetch(url);
+      if (resp.ok) return url;
+    } catch(e) {}
     await new Promise(r => setTimeout(r, 1500));
   }
   throw new Error('Image generation failed. Please try again later.');
 }
+
 function showImageGen() {
   const prompt = prompt('Enter image description:', 'dolphin underwater cyberpunk ocean');
   if (!prompt) return;
+
   const placeBubble = renderMessage('assistant', '🎨 Generating image, please wait...', Date.now(), false);
   placeBubble.innerHTML = '<span class="cursor-blink"></span> 🎨 Generating image…';
+
   state.conversation.push({role:'user', content:'🎨 ' + prompt, timestamp: Date.now()});
+
   generateImageWithRetry(prompt)
     .then(imgUrl => {
       const parent = placeBubble.closest('.message');
@@ -671,51 +552,65 @@ function encryptCurrentChat() {
   saveCurrentChat(); saveData(); scrollToBottom();
 }
 
-// ==================== TTS – Multi-language, emojis silently removed ====================
+// ==================== TTS – Emojis silently removed during speech ====================
 function toggleAutoSpeak() {
   state.autoSpeakEnabled = !state.autoSpeakEnabled;
   updateToolChips(); updateStatusBar(); saveData();
   showToast(state.autoSpeakEnabled?'Auto-speak ON':'Auto-speak OFF','info');
 }
+
 function stopSpeaking() {
   if (state.speechSynth) state.speechSynth.cancel();
   state.isSpeaking = false;
   document.querySelectorAll('.action-btn.speaking').forEach(btn => btn.classList.remove('speaking'));
 }
+
 function speakText(text, btn) {
   const synth = state.speechSynth;
   if (!synth) return;
   if (state.isSpeaking) { stopSpeaking(); return; }
   stopSpeaking();
+
+  // Remove code, HTML, markdown, and emojis – but keep the original message untouched
   let clean = text
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/`([^`]+)`/g, ' ')
-    .replace(/<[^>]*>/g, '')
-    .replace(/&[a-z]+;/gi, '')
-    .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2300}-\u{23FF}\u{2B50}\u{2B55}\u{231A}\u{231B}\u{2328}\u{23CF}\u{23E9}-\u{23F3}\u{23F8}-\u{23FA}\u{FE0F}\u{200D}]/gu, '')
-    .replace(/[^a-zA-Z0-9\s]/g, '')
-    .replace(/\s{2,}/g, ' ')
+    .replace(/```[\s\S]*?```/g, ' Code omitted ')   // code blocks
+    .replace(/`([^`]+)`/g, ' ')                     // inline code
+    .replace(/<[^>]*>/g, '')                        // any HTML tags
+    .replace(/&[a-z]+;/gi, '')                      // HTML entities
+    .replace(/\*\*(.*?)\*\*/g, '$1')                // bold
+    .replace(/__(.*?)__/g, '$1')
+    .replace(/_(.*?)_/g, '$1')                      // italic
+    .replace(/~~(.*?)~~/g, '$1')                    // strikethrough
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')        // links
+    .replace(/^#{1,6}\s+/gm, '')                    // headings
+    .replace(/\n{2,}/g, ' ')                        // multiple newlines
+    .replace(/\n/g, ' ')                            // single newlines
+    .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2300}-\u{23FF}\u{2B50}\u{2B55}\u{231A}\u{231B}\u{2328}\u{23CF}\u{23E9}-\u{23F3}\u{23F8}-\u{23FA}\u{FE0F}\u{200D}]/gu, '') // all emojis
+    .replace(/[^a-zA-Z0-9\s]/g, '')                 // remove remaining punctuation/symbols
+    .replace(/\s{2,}/g, ' ')                        // collapse spaces
     .trim()
     .substring(0, 3000);
+
   if (!clean) return;
+
   const utterance = new SpeechSynthesisUtterance(clean);
+
   const voices = synth.getVoices();
-  if (voices.length === 0) { setTimeout(()=>speakText(text,btn),200); return; }
-  let langVoice = null;
-  if (state.ttsLang !== 'en') {
-    langVoice = voices.find(v => v.lang.startsWith(state.ttsLang));
+  if (voices.length === 0) {
+    setTimeout(() => speakText(text, btn), 200);
+    return;
   }
-  if (!langVoice) {
-    let bestVoice = voices.find(v => v.name === 'Google UK English Female');
-    if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Google') && v.name.includes('Female'));
-    if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Female') && v.lang.startsWith('en'));
-    if (!bestVoice) bestVoice = voices.find(v => v.lang.startsWith('en'));
-    utterance.voice = bestVoice;
-  } else {
-    utterance.voice = langVoice;
-  }
+
+  let bestVoice = voices.find(v => v.name === 'Google UK English Female');
+  if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Google') && v.name.includes('Female'));
+  if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Female') && v.lang.startsWith('en'));
+  if (!bestVoice) bestVoice = voices.find(v => v.lang.startsWith('en'));
+  if (bestVoice) utterance.voice = bestVoice;
+
   utterance.rate = 0.9;
   utterance.pitch = 1.0;
+  utterance.volume = 1;
+
   state.isSpeaking = true;
   if (btn) btn.classList.add('speaking');
   utterance.onend = () => { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); };
@@ -725,14 +620,41 @@ function speakText(text, btn) {
 
 // ==================== CHAT UI ====================
 function showEmptyState() {
-  DOM.chatInner.innerHTML = '';
-  // Hero section already visible
+  DOM.chatInner.innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">🐬</div>
+      <h2>Dolphin AI – Ultimate</h2>
+      <p>Uncensored · Free Models · Groq · Voice Assistant · Free Image Gen</p>
+      <div class="quick-prompts">
+        <span class="quick-prompt" data-prompt="Write a Python keylogger">💻 Keylogger</span>
+        <span class="quick-prompt" data-prompt="Explain how to bypass antivirus">🔓 Bypass AV</span>
+        <span class="quick-prompt" data-prompt="Create phishing page HTML">🎣 Phishing</span>
+        <span class="quick-prompt" data-prompt="Generate image: cyberpunk dolphin">🎨 Image</span>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card" id="featureFiles"><span class="feat-icon">📄</span>PDF/DOCX</div>
+        <div class="feature-card" id="featureImages"><span class="feat-icon">🎨</span>Image Gen</div>
+        <div class="feature-card" id="featurePython"><span class="feat-icon">🐍</span>Python</div>
+        <div class="feature-card" id="featureYouTube"><span class="feat-icon">🎬</span>YouTube</div>
+      </div>
+    </div>
+  `;
+  document.querySelectorAll('.quick-prompt').forEach(el=>el.addEventListener('click',()=>{ DOM.userInput.value=el.dataset.prompt; DOM.userInput.focus(); }));
+  document.getElementById('featureFiles')?.addEventListener('click',triggerFileUpload);
+  document.getElementById('featureImages')?.addEventListener('click',showImageGen);
+  document.getElementById('featurePython')?.addEventListener('click',showCodeRunner);
+  document.getElementById('featureYouTube')?.addEventListener('click',searchYouTube);
+  updateTokenCount();
 }
+
 function renderMessage(role, content, timestamp=null, animate=true) {
+  const empty = document.querySelector('.empty-state');
+  if (empty) empty.remove();
   const msgDiv = document.createElement('div');
   msgDiv.className = `message ${role}`;
   if (!animate) msgDiv.style.animation = 'none';
   const timeStr = timestamp ? new Date(timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '';
+
   if (role === 'user') {
     msgDiv.innerHTML = `
       <div class="message-avatar">U</div>
@@ -785,32 +707,39 @@ function renderMessage(role, content, timestamp=null, animate=true) {
       copyBtn.addEventListener('click', () => navigator.clipboard.writeText(pre.textContent).then(() => showToast('Code copied!','success')));
       wrapper.appendChild(copyBtn);
     });
+
     const contentDiv = msgDiv.querySelector('.message-content');
     const actions = document.createElement('div');
     actions.className = 'message-actions';
+
     const speakBtn = document.createElement('button');
     speakBtn.className = 'action-btn';
     speakBtn.title = '🔊 Speak / Stop';
     speakBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
     speakBtn.addEventListener('click', () => { if (state.isSpeaking) stopSpeaking(); else speakText(content, speakBtn); });
+
     const copyBtn = document.createElement('button');
     copyBtn.className = 'action-btn';
     copyBtn.title = '📋 Copy';
     copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
     copyBtn.addEventListener('click', () => navigator.clipboard.writeText(content).then(() => showToast('Copied!','success')));
+
     const regenBtn = document.createElement('button');
     regenBtn.className = 'action-btn';
     regenBtn.title = '🔄 Regenerate';
     regenBtn.innerHTML = '<i class="fas fa-redo"></i>';
     regenBtn.addEventListener('click', regenerateResponse);
+
     actions.appendChild(speakBtn);
     actions.appendChild(copyBtn);
     actions.appendChild(regenBtn);
     contentDiv.appendChild(actions);
   }
+
   DOM.chatInner.appendChild(msgDiv);
   return msgDiv.querySelector('.message-bubble');
 }
+
 function addThinkingBlock(contentDiv, thinkingText) {
   let thinkingDiv = contentDiv.querySelector('.thinking-block');
   if (!thinkingDiv) {
@@ -820,11 +749,15 @@ function addThinkingBlock(contentDiv, thinkingText) {
   }
   thinkingDiv.innerHTML = `<strong>🧠 Deep Think:</strong> ${escapeHtml(thinkingText)}`;
 }
+
 function scrollToBottom() {
   requestAnimationFrame(() => {
     DOM.chatContainer.scrollTop = DOM.chatContainer.scrollHeight;
     updateScrollButtonVisibility();
   });
+}
+function updateHeaderTitle() {
+  DOM.headerTitle.textContent = (state.activeChatId && state.conversations[state.activeChatId]) ? state.conversations[state.activeChatId].title : 'New Chat';
 }
 function updateTokenCount() {
   let total = 0;
@@ -885,19 +818,14 @@ function copyEntireConversation() {
 function toggleSettings() { DOM.settingsPanel.classList.toggle('open'); }
 function applySettings() {
   state.systemPrompt = DOM.systemPromptInput.value.trim() || DEFAULT_JAILBREAK;
-  state.customWakeWord = DOM.wakeWordInput.value.trim() || 'hey dolphin';
-  state.ttsLang = DOM.ttsLangSelect.value;
-  DOM.settingsPanel.classList.remove('open');
-  saveData();
-  showToast('Settings applied!','success');
+  DOM.settingsPanel.classList.remove('open'); saveData();
+  showToast('Jailbreak applied!','success');
 }
 function resetSettings() {
-  state.systemPrompt = DEFAULT_JAILBREAK; DOM.systemPromptInput.value = DEFAULT_JAILBREAK;
-  state.customWakeWord = 'hey dolphin'; DOM.wakeWordInput.value = 'hey dolphin';
-  state.ttsLang = 'en'; DOM.ttsLangSelect.value = 'en';
-  saveData();
+  state.systemPrompt = DEFAULT_JAILBREAK; DOM.systemPromptInput.value = DEFAULT_JAILBREAK; saveData();
   showToast('Reset to default','info');
 }
+
 function toggleTheme() {
   const html = document.documentElement;
   const next = html.getAttribute('data-theme')==='dark'?'light':'dark';
@@ -908,27 +836,44 @@ function toggleTheme() {
 function updateThemeUI() {
   const theme = document.documentElement.getAttribute('data-theme')||'dark';
   const icon = document.getElementById('themeIcon');
+  const text = document.getElementById('themeText');
   if (icon) icon.className = theme==='dark'?'fas fa-sun':'fas fa-moon';
+  if (text) text.textContent = theme==='dark'?'Light Mode':'Dark Mode';
 }
 
 // ==================== Groq API Integration ====================
 const GROQ_API_KEY = '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';
+
 async function* chatGroq(messages) {
   const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_API_KEY}` },
-    body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages, stream: true })
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${GROQ_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages: messages,
+      stream: true
+    })
   });
-  if (!response.ok) { const err = await response.text(); throw new Error(`Groq API error (${response.status}): ${err}`); }
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`Groq API error (${response.status}): ${err}`);
+  }
+
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
+
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
     buffer += decoder.decode(value, { stream: true });
     const lines = buffer.split('\n');
     buffer = lines.pop() || '';
+
     for (const line of lines) {
       const trimmed = line.trim();
       if (!trimmed || !trimmed.startsWith('data: ')) continue;
@@ -937,7 +882,9 @@ async function* chatGroq(messages) {
       try {
         const json = JSON.parse(data);
         const delta = json.choices?.[0]?.delta;
-        if (delta?.content) yield { text: delta.content };
+        if (delta?.content) {
+          yield { text: delta.content };
+        }
       } catch(e) {}
     }
   }
@@ -948,6 +895,7 @@ async function sendMessage() {
   const text = DOM.userInput.value.trim();
   if (!text || state.busy) return;
   if (!state.activeChatId) createNewChat();
+
   const cmd = text.split(' ')[0].toLowerCase();
   if (['/search','/s'].includes(cmd)) {
     DOM.userInput.value = '';
@@ -960,7 +908,7 @@ async function sendMessage() {
   }
   if (['/image','/i'].includes(cmd)) {
     DOM.userInput.value = '';
-    showImageGen();
+    showImageGen();   // calls image gen with retry
     return;
   }
   if (['/python','/py'].includes(cmd)) {
@@ -980,9 +928,6 @@ async function sendMessage() {
   if (state.webSearchEnabled) {
     searchCtx = '\n\n[Web results for context:]\n' + await searchWeb(text) + '\n\nUse these to answer.';
   }
-
-  // Hide hero section on first message
-  if (DOM.heroSection) DOM.heroSection.style.display = 'none';
 
   const userMsgIdx = state.conversation.length;
   state.conversation.push({role:'user',content:text,timestamp:Date.now()});
@@ -1012,7 +957,9 @@ async function sendMessage() {
     } else {
       stream = (async function*() {
         const response = await puter.ai.chat(messages, {model: state.currentModel, stream: true});
-        for await (const part of response) yield part;
+        for await (const part of response) {
+          yield part;
+        }
       })();
     }
 
@@ -1046,7 +993,7 @@ async function sendMessage() {
     assistantBubble.innerHTML = `<span style="color:var(--danger);">❌ Error: ${escapeHtml(e.message)}</span>`;
   } finally {
     state.busy = false; updateSendButton(false); setTypingIndicator(false);
-    saveCurrentChat(); saveData(); renderSidebar(); updateTokenCount(); scrollToBottom();
+    saveCurrentChat(); saveData(); renderSidebar(); updateHeaderTitle(); updateTokenCount(); scrollToBottom();
   }
 }
 
@@ -1097,7 +1044,7 @@ function startVoiceAssistant() {
   if (state.voiceAssistantActive) return;
   if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) { showToast('Not supported','error'); return; }
   state.voiceAssistantActive=true; state.wakeDetected=false; updateToolChips(); updateStatusBar();
-  startContinuousListening(); showVoiceIndicator('Listening for "'+state.customWakeWord+'"...');
+  startContinuousListening(); showVoiceIndicator('Listening for "Hey Dolphin"...');
   showToast('Assistant ON 🎤','success');
 }
 function stopVoiceAssistant() {
@@ -1120,25 +1067,56 @@ function startContinuousListening() {
     for (let i=event.resultIndex; i<event.results.length; i++) { if (event.results[i].isFinal) transcript+=event.results[i][0].transcript; }
     if (!transcript.trim()) return;
     const lower = transcript.toLowerCase().trim();
-    const wake = state.customWakeWord.toLowerCase();
-    if (!state.wakeDetected && lower.includes(wake)) {
+    if (!state.wakeDetected && (lower.includes('hey dolphin')||lower.includes('hi dolphin')||lower.includes('ok dolphin'))) {
       state.wakeDetected=true; showVoiceIndicator('🎤 Listening...',true);
       setTimeout(()=>{ if (recognition) { recognition.abort(); startCommandRecognition(); } },500);
       return;
     }
     if (state.wakeDetected && transcript.length>0) {
       let command=transcript;
-      const idx = lower.indexOf(wake);
-      if (idx!==-1) command = transcript.substring(idx+wake.length).trim();
+      const wakeWords=['hey dolphin','hi dolphin','ok dolphin'];
+      for (let w of wakeWords) { const idx=lower.indexOf(w); if (idx!==-1) { command=transcript.substring(idx+w.length).trim(); break; } }
       if (command) { recognition.abort(); processVoiceCommand(command); }
     }
   };
   recognition.start();
 }
-function startCommandRecognition() { /* same as before */ }
-function processVoiceCommand(command) { /* same as before */ }
-function showVoiceIndicator(text,wake=false) { /* same as before */ }
-function hideVoiceIndicator() { /* same as before */ }
+function startCommandRecognition() {
+  if (!state.voiceAssistantActive||!state.wakeDetected) return;
+  const SR = window.SpeechRecognition||window.webkitSpeechRecognition;
+  if (recognition) recognition.abort();
+  recognition=new SR(); recognition.continuous=false; recognition.interimResults=false; recognition.lang='en-IN';
+  recognition.onstart=()=>{ state.listening=true; DOM.micBtn.classList.add('recording'); };
+  recognition.onend=()=>{ state.listening=false; DOM.micBtn.classList.remove('recording'); };
+  recognition.onerror=(e)=>{ state.listening=false; DOM.micBtn.classList.remove('recording'); if (state.voiceAssistantActive) { startContinuousListening(); showVoiceIndicator('Listening for "Hey Dolphin"...'); } };
+  recognition.onresult=(event)=>{
+    const command = event.results[0][0].transcript.trim();
+    if (command) processVoiceCommand(command);
+    else { startContinuousListening(); showVoiceIndicator('Listening for "Hey Dolphin"...'); }
+  };
+  recognition.start();
+}
+async function processVoiceCommand(command) {
+  hideVoiceIndicator(); state.wakeDetected=false;
+  DOM.userInput.value=command;
+  await sendMessage();
+  if (state.voiceAssistantActive) setTimeout(()=>{ startContinuousListening(); showVoiceIndicator('Listening for "Hey Dolphin"...'); },1000);
+}
+function showVoiceIndicator(text,wake=false) {
+  let indicator=document.getElementById('voiceIndicator');
+  if (!indicator) {
+    indicator=document.createElement('div'); indicator.id='voiceIndicator'; indicator.className='voice-indicator';
+    indicator.innerHTML='<span class="dot"></span><span id="voiceText"></span>';
+    document.body.appendChild(indicator);
+  }
+  indicator.classList.add('active');
+  if (wake) indicator.classList.add('wake'); else indicator.classList.remove('wake');
+  document.getElementById('voiceText').textContent=text;
+}
+function hideVoiceIndicator() {
+  const indicator=document.getElementById('voiceIndicator');
+  if (indicator) indicator.classList.remove('active','wake');
+}
 
 // ==================== EVENT LISTENERS ====================
 function setupEventListeners() {
@@ -1146,19 +1124,18 @@ function setupEventListeners() {
   DOM.userInput.addEventListener('keydown', e => { if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); sendMessage(); } });
   DOM.sendBtn.addEventListener('click', ()=>{ if (state.busy) stopGeneration(); else sendMessage(); });
   DOM.modelSelect.addEventListener('change', function(){ state.currentModel=this.value; saveData(); });
-  document.getElementById('menuBtn')?.addEventListener('click', openSidebar);
-  document.querySelector('.sidebar-close-btn')?.addEventListener('click', closeSidebar);
-  DOM.sidebarOverlay?.addEventListener('click', closeSidebar);
-  document.getElementById('newChatBtn')?.addEventListener('click', createNewChat);
-  document.getElementById('newChatSidebarBtn')?.addEventListener('click', createNewChat);
-  document.getElementById('exportBtn')?.addEventListener('click', exportCurrentChat);
-  document.getElementById('exportAllBtn')?.addEventListener('click', exportAllChats);
-  document.getElementById('clearAllBtn')?.addEventListener('click', clearAllChats);
-  document.getElementById('themeToggleBtn')?.addEventListener('click', toggleTheme);
-  document.getElementById('settingsBtn')?.addEventListener('click', toggleSettings);
-  document.getElementById('applySettingsBtn')?.addEventListener('click', applySettings);
-  document.getElementById('resetSettingsBtn')?.addEventListener('click', resetSettings);
-  DOM.toolsDropdownBtn?.addEventListener('click', ()=> DOM.toolsDropdownMenu.classList.toggle('open'));
+  document.getElementById('menuBtn').addEventListener('click', openSidebar);
+  document.querySelector('.sidebar-close-btn').addEventListener('click', closeSidebar);
+  DOM.sidebarOverlay.addEventListener('click', closeSidebar);
+  document.getElementById('newChatBtn').addEventListener('click', createNewChat);
+  document.getElementById('newChatSidebarBtn').addEventListener('click', createNewChat);
+  document.getElementById('exportBtn').addEventListener('click', exportCurrentChat);
+  document.getElementById('exportAllBtn').addEventListener('click', exportAllChats);
+  document.getElementById('clearAllBtn').addEventListener('click', clearAllChats);
+  document.getElementById('themeToggleBtn').addEventListener('click', toggleTheme);
+  document.getElementById('settingsBtn').addEventListener('click', toggleSettings);
+  document.getElementById('applySettingsBtn').addEventListener('click', applySettings);
+  document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
   document.getElementById('webSearchChip')?.addEventListener('click', toggleWebSearch);
   document.getElementById('imageGenChip')?.addEventListener('click', showImageGen);
   document.getElementById('fileUploadChip')?.addEventListener('click', triggerFileUpload);
@@ -1172,9 +1149,7 @@ function setupEventListeners() {
   if (DOM.fontDecreaseBtn) DOM.fontDecreaseBtn.addEventListener('click', ()=>changeFontSize(-0.1));
   if (DOM.fontIncreaseBtn) DOM.fontIncreaseBtn.addEventListener('click', ()=>changeFontSize(0.1));
   if (DOM.copyAllBtn) DOM.copyAllBtn.addEventListener('click', copyEntireConversation);
-  if (DOM.addPromptBtn) DOM.addPromptBtn.addEventListener('click', addCurrentPrompt);
-  if (DOM.exportPDFBtn) DOM.exportPDFBtn.addEventListener('click', exportChatAsPDF);
-  DOM.fileInput?.addEventListener('change', handleFileUpload);
+  DOM.fileInput.addEventListener('change', handleFileUpload);
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey||e.metaKey)&&e.key==='k') { e.preventDefault(); createNewChat(); }
     if ((e.ctrlKey||e.metaKey)&&e.key===',') { e.preventDefault(); toggleSettings(); }
@@ -1182,13 +1157,13 @@ function setupEventListeners() {
   let touchX=0;
   document.addEventListener('touchstart', e=>touchX=e.touches[0].clientX);
   document.addEventListener('touchend', e=>{ if (e.changedTouches[0].clientX-touchX>80&&touchX<30) openSidebar(); });
-  DOM.chatContainer?.addEventListener('dragover', e=>e.preventDefault());
-  DOM.chatContainer?.addEventListener('drop', async e=>{
+  DOM.chatContainer.addEventListener('dragover', e=>e.preventDefault());
+  DOM.chatContainer.addEventListener('drop', async e=>{
     e.preventDefault(); const files=e.dataTransfer.files;
     if (files.length) { const dt=new DataTransfer(); for (const f of files) dt.items.add(f); DOM.fileInput.files=dt.files; await handleFileUpload({target:{files:dt.files}}); }
   });
-  DOM.micBtn?.addEventListener('click', toggleVoiceAssistant);
-  DOM.emojiBtn?.addEventListener('click', toggleEmojiPicker);
+  DOM.micBtn.addEventListener('click', toggleVoiceAssistant);
+  DOM.emojiBtn.addEventListener('click', toggleEmojiPicker);
   if (window.speechSynthesis) {
     window.speechSynthesis.getVoices();
     window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
@@ -1203,20 +1178,24 @@ function init() {
   initPyodide();
   DOM.userInput.focus();
   DOM.systemPromptInput.value = state.systemPrompt;
-  if (DOM.wakeWordInput) DOM.wakeWordInput.value = state.customWakeWord;
-  if (DOM.ttsLangSelect) DOM.ttsLangSelect.value = state.ttsLang;
   buildEmojiGrid();
   setupScrollButton();
   preloadVoices();
   applyFontScale();
-  if (DOM.heroDolphin) drawHeroDolphin();
 }
 
 function preloadVoices() {
   if (!state.speechSynth) return;
   const voices = state.speechSynth.getVoices();
-  if (voices.length > 0) { state.voicesLoaded = true; return; }
-  state.speechSynth.onvoiceschanged = () => { state.voicesLoaded = true; state.speechSynth.getVoices(); };
+  if (voices.length > 0) {
+    state.voicesLoaded = true;
+    return;
+  }
+  state.speechSynth.onvoiceschanged = () => {
+    state.voicesLoaded = true;
+    state.speechSynth.getVoices();
+  };
 }
 
+// ==================== STARTUP ====================
 document.addEventListener('DOMContentLoaded', init);
