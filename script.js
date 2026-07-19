@@ -567,7 +567,7 @@ function encryptCurrentChat() {
   saveCurrentChat(); saveData(); scrollToBottom();
 }
 
-// ==================== TTS (Puter.js primary, Web Speech fallback) ====================
+// ==================== TTS (Web Speech primary, instant start) ====================
 function toggleAutoSpeak() {
   state.autoSpeakEnabled = !state.autoSpeakEnabled;
   updateToolChips(); updateStatusBar(); saveData();
@@ -587,40 +587,21 @@ function stopSpeaking() {
   document.querySelectorAll('.action-btn.speaking').forEach(btn => btn.classList.remove('speaking'));
 }
 
-async function speakText(text, btn) {
-  if (state.isSpeaking) { stopSpeaking(); return; }
-  stopSpeaking();
+function speakText(text, btn) {
+  // If already speaking, stop it
+  if (state.isSpeaking) {
+    stopSpeaking();
+    return;
+  }
 
-  // Show speaking state
+  stopSpeaking(); // ensure clean state
+
+  // Show speaking state immediately
   state.isSpeaking = true;
   if (btn) btn.classList.add('speaking');
 
-  // Try Puter TTS first
-  try {
-    const audioBlob = await puter.ai.txt2speech(text);
-    const audioUrl = URL.createObjectURL(audioBlob);
-    const audio = new Audio(audioUrl);
-    state.currentAudio = audio;
-    audio.onended = () => {
-      state.isSpeaking = false;
-      if (btn) btn.classList.remove('speaking');
-      state.currentAudio = null;
-      URL.revokeObjectURL(audioUrl);
-    };
-    audio.onerror = () => {
-      state.isSpeaking = false;
-      if (btn) btn.classList.remove('speaking');
-      state.currentAudio = null;
-      URL.revokeObjectURL(audioUrl);
-      // Fallback to Web Speech if Puter TTS fails
-      speakWithWebSpeech(text, btn);
-    };
-    audio.play();
-  } catch (e) {
-    console.warn('Puter TTS failed, falling back to Web Speech:', e);
-    // Fallback to Web Speech
-    speakWithWebSpeech(text, btn);
-  }
+  // Use Web Speech API as primary for instant feedback
+  speakWithWebSpeech(text, btn);
 }
 
 function speakWithWebSpeech(text, btn) {
@@ -631,6 +612,7 @@ function speakWithWebSpeech(text, btn) {
     return;
   }
 
+  // Clean the text (same as before, removing emojis/code etc.)
   let clean = text
     .replace(/```[\s\S]*?```/g, ' Code omitted ')
     .replace(/`([^`]+)`/g, ' ')
@@ -657,29 +639,69 @@ function speakWithWebSpeech(text, btn) {
   }
 
   const utterance = new SpeechSynthesisUtterance(clean);
+
+  // Voice selection: prefer female, natural Google voice
   const voices = synth.getVoices();
-  if (voices.length === 0) {
-    setTimeout(() => speakWithWebSpeech(text, btn), 200);
-    return;
+  if (voices.length > 0) {
+    let bestVoice = voices.find(v => v.name === 'Google UK English Female');
+    if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Google') && v.name.includes('Female'));
+    if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Female') && v.lang.startsWith('en'));
+    if (!bestVoice) bestVoice = voices.find(v => v.lang.startsWith('en'));
+    if (bestVoice) utterance.voice = bestVoice;
   }
-  let bestVoice = voices.find(v => v.name === 'Google UK English Female');
-  if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Google') && v.name.includes('Female'));
-  if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Female') && v.lang.startsWith('en'));
-  if (!bestVoice) bestVoice = voices.find(v => v.lang.startsWith('en'));
-  if (bestVoice) utterance.voice = bestVoice;
-  utterance.rate = 0.9;
+
+  // Natural speed and pitch (exactly like human)
+  utterance.rate = 1.0;
   utterance.pitch = 1.0;
   utterance.volume = 1;
+
+  utterance.onstart = () => {
+    // Already showing speaking state
+  };
 
   utterance.onend = () => {
     state.isSpeaking = false;
     if (btn) btn.classList.remove('speaking');
   };
-  utterance.onerror = () => {
+
+  utterance.onerror = (e) => {
+    console.warn('Web Speech error:', e);
     state.isSpeaking = false;
     if (btn) btn.classList.remove('speaking');
+    // Fallback to Puter TTS if web speech fails
+    tryPuterTTS(text, btn);
   };
+
   synth.speak(utterance);
+}
+
+// Optional backup using Puter TTS (called if Web Speech fails)
+async function tryPuterTTS(text, btn) {
+  try {
+    const audioBlob = await puter.ai.txt2speech(text);
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const audio = new Audio(audioUrl);
+    state.currentAudio = audio;
+    state.isSpeaking = true;
+    if (btn) btn.classList.add('speaking');
+    audio.onended = () => {
+      state.isSpeaking = false;
+      if (btn) btn.classList.remove('speaking');
+      state.currentAudio = null;
+      URL.revokeObjectURL(audioUrl);
+    };
+    audio.onerror = () => {
+      state.isSpeaking = false;
+      if (btn) btn.classList.remove('speaking');
+      state.currentAudio = null;
+      URL.revokeObjectURL(audioUrl);
+    };
+    audio.play();
+  } catch (e) {
+    console.warn('Puter TTS also failed:', e);
+    state.isSpeaking = false;
+    if (btn) btn.classList.remove('speaking');
+  }
 }
 
 // ==================== CHAT UI ====================
