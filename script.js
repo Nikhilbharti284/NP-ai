@@ -24,7 +24,9 @@ const state = {
   voiceAssistantActive: false,
   listening: false,
   wakeDetected: false,
-  isSpeaking: false
+  isSpeaking: false,
+  speechSynth: window.speechSynthesis,
+  voicesLoaded: false
 };
 
 // ==================== DOM ELEMENTS ====================
@@ -209,6 +211,20 @@ function init() {
   DOM.systemPromptInput.value = state.systemPrompt;
   buildEmojiGrid();
   setupScrollButton();
+  preloadVoices();
+}
+
+function preloadVoices() {
+  if (!state.speechSynth) return;
+  const voices = state.speechSynth.getVoices();
+  if (voices.length > 0) {
+    state.voicesLoaded = true;
+    return;
+  }
+  state.speechSynth.onvoiceschanged = () => {
+    state.voicesLoaded = true;
+    state.speechSynth.getVoices();
+  };
 }
 
 // ==================== DATA PERSISTENCE ====================
@@ -519,7 +535,7 @@ function encryptCurrentChat() {
   saveCurrentChat(); saveData(); scrollToBottom();
 }
 
-// ==================== TTS (with stop toggle) ====================
+// ==================== TTS – Google Assistant Style ====================
 function toggleAutoSpeak() {
   state.autoSpeakEnabled = !state.autoSpeakEnabled;
   updateToolChips(); updateStatusBar(); saveData();
@@ -527,31 +543,71 @@ function toggleAutoSpeak() {
 }
 
 function stopSpeaking() {
-  const synth = window.speechSynthesis;
-  if (synth) synth.cancel();
+  if (state.speechSynth) state.speechSynth.cancel();
   state.isSpeaking = false;
   document.querySelectorAll('.action-btn.speaking').forEach(btn => btn.classList.remove('speaking'));
 }
 
 function speakText(text, btn) {
-  const synth = window.speechSynthesis;
+  const synth = state.speechSynth;
   if (!synth) return;
 
   if (state.isSpeaking) { stopSpeaking(); return; }
 
   stopSpeaking();
-  const clean = text.replace(/```[\s\S]*?```/g,'Code omitted.').replace(/[`*_#>\[\]()]/g,'').substring(0,2000);
-  const utter = new SpeechSynthesisUtterance(clean);
+
+  let cleanText = text
+    .replace(/```[\s\S]*?```/g, 'Code omitted.')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/__(.*?)__/g, '$1')
+    .replace(/_(.*?)_/g, '$1')
+    .replace(/~~(.*?)~~/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\n{2,}/g, '. ')
+    .replace(/\. /g, '.<break time="200ms"/> ')
+    .replace(/\? /g, '?<break time="200ms"/> ')
+    .replace(/\! /g, '!<break time="200ms"/> ')
+    .replace(/\n/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+    .substring(0, 3000);
+
+  if (!cleanText) return;
+
+  const utterance = new SpeechSynthesisUtterance(cleanText);
+
   const voices = synth.getVoices();
-  if (voices.length===0) { setTimeout(()=>speakText(text,btn),100); return; }
-  const female = voices.find(v=>v.name.includes('Female')||v.name.includes('Google UK English')||v.name.includes('Samantha')||v.name.includes('Zira')) || voices.find(v=>v.lang.includes('en'));
-  if (female) utter.voice = female;
-  utter.rate = 0.95; utter.pitch = 1.15;
+  if (voices.length === 0) {
+    setTimeout(() => speakText(text, btn), 200);
+    return;
+  }
+
+  let bestVoice = voices.find(v => v.name === 'Google UK English Female');
+  if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Google') && v.name.includes('Female'));
+  if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Female') && v.lang.startsWith('en'));
+  if (!bestVoice) bestVoice = voices.find(v => v.lang.startsWith('en'));
+
+  if (bestVoice) utterance.voice = bestVoice;
+
+  utterance.rate = 0.9;
+  utterance.pitch = 1.0;
+  utterance.volume = 1;
+
   state.isSpeaking = true;
   if (btn) btn.classList.add('speaking');
-  utter.onend = () => { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); };
-  utter.onerror = () => { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); };
-  synth.speak(utter);
+
+  utterance.onend = () => {
+    state.isSpeaking = false;
+    if (btn) btn.classList.remove('speaking');
+  };
+  utterance.onerror = () => {
+    state.isSpeaking = false;
+    if (btn) btn.classList.remove('speaking');
+  };
+
+  synth.speak(utterance);
 }
 
 // ==================== CHAT UI ====================
@@ -560,7 +616,7 @@ function showEmptyState() {
     <div class="empty-state">
       <div class="empty-icon">🐬</div>
       <h2>Dolphin AI – Ultimate</h2>
-      <p>Uncensored · Free Models · Grok · Voice Assistant</p>
+      <p>Uncensored · Free Models · Groq · Voice Assistant</p>
       <div class="quick-prompts">
         <span class="quick-prompt" data-prompt="Write a Python keylogger">💻 Keylogger</span>
         <span class="quick-prompt" data-prompt="Explain how to bypass antivirus">🔓 Bypass AV</span>
@@ -736,24 +792,18 @@ function updateThemeUI() {
   if (text) text.textContent = theme==='dark'?'Light Mode':'Dark Mode';
 }
 
-// ==================== Grok API Integration (xAI) ====================
-// IMPORTANT: Replace with your valid xAI API key (starts with xai-)
-// The key you provided (gsk_...) is NOT a valid xAI key. Get one from https://console.x.ai
-const GROK_API_KEY = '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'; // <- put your valid xai- key here
+// ==================== Groq API Integration ====================
+const GROQ_API_KEY = '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';
 
-async function* chatGrok(messages) {
-  // Use a CORS proxy to avoid blocking by GitHub Pages
-  const proxy = 'https://corsproxy.io/?';
-  const url = proxy + encodeURIComponent('https://api.x.ai/v1/chat/completions');
-
-  const response = await fetch(url, {
+async function* chatGroq(messages) {
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${GROK_API_KEY}`
+      'Authorization': `Bearer ${GROQ_API_KEY}`
     },
     body: JSON.stringify({
-      model: 'grok-2',
+      model: 'llama-3.3-70b-versatile',
       messages: messages,
       stream: true
     })
@@ -761,7 +811,7 @@ async function* chatGrok(messages) {
 
   if (!response.ok) {
     const err = await response.text();
-    throw new Error(`Grok API error (${response.status}): ${err}`);
+    throw new Error(`Groq API error (${response.status}): ${err}`);
   }
 
   const reader = response.body.getReader();
@@ -857,9 +907,10 @@ async function sendMessage() {
   try {
     let stream;
     if (state.currentModel === 'grok') {
-      stream = chatGrok(messages);
+      throw new Error('Grok model requires an xAI API key. Please select another model.');
+    } else if (state.currentModel === 'groq') {
+      stream = chatGroq(messages);
     } else {
-      // Puter.js for free models
       stream = (async function*() {
         const response = await puter.ai.chat(messages, {model: state.currentModel, stream: true});
         for await (const part of response) {
