@@ -63,9 +63,7 @@ const DOM = {
   copyAllBtn: document.getElementById('copyAllBtn')
 };
 
-const EMOJIS = ['😀','😂','🤣','😍','🥰','😘','😜','🤪','😎','🤩','😇','🤗','😴','🥱','😈','👿','💀','👻','🎃','🐬','🐳','🐋','🐟','🌊','💧','🔥','⚡','⭐','✨','🌈','🍕','🍔','🍟','🌮','🍩','🍪','🎂','☕','🍺','🎸','🎮','🎯','🏆','⚽','🚀','✈️','🏖️','🗺️'];
-
-// ==================== OCEAN + DOLPHIN ANIMATION ====================
+// ==================== OCEAN + DOLPHIN ANIMATION (unchanged) ====================
 const canvas = DOM.oceanCanvas;
 const ctx = canvas.getContext('2d');
 let bubbles = [];
@@ -207,31 +205,12 @@ marked.setOptions({
   }
 });
 
-// ==================== INIT ====================
-function init() {
-  loadData();
-  setupEventListeners();
-  updateThemeUI();
-  initPyodide();
-  DOM.userInput.focus();
-  DOM.systemPromptInput.value = state.systemPrompt;
-  buildEmojiGrid();
-  setupScrollButton();
-  preloadVoices();
-  applyFontScale();
-}
-
-function preloadVoices() {
-  if (!state.speechSynth) return;
-  const voices = state.speechSynth.getVoices();
-  if (voices.length > 0) {
-    state.voicesLoaded = true;
-    return;
-  }
-  state.speechSynth.onvoiceschanged = () => {
-    state.voicesLoaded = true;
-    state.speechSynth.getVoices();
-  };
+// ==================== UTILITY FUNCTIONS ====================
+function escapeHtml(str) { const d=document.createElement('div'); d.textContent=str||''; return d.innerHTML; }
+function showToast(msg,type='info') {
+  const toast=document.createElement('div'); toast.className=`toast ${type}`; toast.textContent=msg;
+  DOM.toastContainer.appendChild(toast);
+  setTimeout(()=>{ toast.style.opacity='0'; toast.style.transition='opacity 0.3s'; setTimeout(()=>toast.remove(),300); },2000);
 }
 
 // ==================== DATA PERSISTENCE ====================
@@ -571,7 +550,7 @@ function encryptCurrentChat() {
   saveCurrentChat(); saveData(); scrollToBottom();
 }
 
-// ==================== TTS – Google Assistant Style ====================
+// ==================== TTS (Google Assistant style, improved cleaning) ====================
 function toggleAutoSpeak() {
   state.autoSpeakEnabled = !state.autoSpeakEnabled;
   updateToolChips(); updateStatusBar(); saveData();
@@ -592,20 +571,24 @@ function speakText(text, btn) {
 
   stopSpeaking();
 
+  // Aggressive cleaning: remove markdown, HTML, code, special characters
   let cleanText = text
-    .replace(/```[\s\S]*?```/g, 'Code omitted.')
-    .replace(/`([^`]+)`/g, '$1')
-    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/```[\s\S]*?```/g, 'Code omitted.')       // code blocks
+    .replace(/`([^`]+)`/g, '$1')                       // inline code
+    .replace(/<\/?[^>]+(>|$)/g, '')                    // any HTML tags
+    .replace(/&[a-z]+;/gi, '')                         // HTML entities like &lt;
+    .replace(/\*\*(.*?)\*\*/g, '$1')                   // bold
     .replace(/__(.*?)__/g, '$1')
-    .replace(/_(.*?)_/g, '$1')
-    .replace(/~~(.*?)~~/g, '$1')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/^#{1,6}\s+/gm, '')
-    .replace(/\n{2,}/g, '. ')
+    .replace(/_(.*?)_/g, '$1')                         // italic
+    .replace(/~~(.*?)~~/g, '$1')                       // strikethrough
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')           // links
+    .replace(/^#{1,6}\s+/gm, '')                       // headings
+    .replace(/\n{2,}/g, '. ')                          // multiple newlines -> pause
     .replace(/\. /g, '.<break time="200ms"/> ')
     .replace(/\? /g, '?<break time="200ms"/> ')
     .replace(/\! /g, '!<break time="200ms"/> ')
     .replace(/\n/g, ' ')
+    .replace(/[<>]/g, '')                              // leftover angle brackets
     .replace(/\s{2,}/g, ' ')
     .trim()
     .substring(0, 3000);
@@ -840,6 +823,33 @@ function copyEntireConversation() {
   let text = '';
   state.conversation.forEach(msg => text += `[${msg.role.toUpperCase()}] ${msg.content}\n\n`);
   navigator.clipboard.writeText(text).then(() => showToast('Conversation copied!', 'success'));
+}
+
+// ==================== SETTINGS (theme, etc.) ====================
+function toggleSettings() { DOM.settingsPanel.classList.toggle('open'); }
+function applySettings() {
+  state.systemPrompt = DOM.systemPromptInput.value.trim() || DEFAULT_JAILBREAK;
+  DOM.settingsPanel.classList.remove('open'); saveData();
+  showToast('Jailbreak applied!','success');
+}
+function resetSettings() {
+  state.systemPrompt = DEFAULT_JAILBREAK; DOM.systemPromptInput.value = DEFAULT_JAILBREAK; saveData();
+  showToast('Reset to default','info');
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',next);
+  localStorage.setItem('dolphin_theme',next);
+  updateThemeUI();
+}
+function updateThemeUI() {
+  const theme = document.documentElement.getAttribute('data-theme')||'dark';
+  const icon = document.getElementById('themeIcon');
+  const text = document.getElementById('themeText');
+  if (icon) icon.className = theme==='dark'?'fas fa-sun':'fas fa-moon';
+  if (text) text.textContent = theme==='dark'?'Light Mode':'Dark Mode';
 }
 
 // ==================== Groq API Integration ====================
@@ -1119,14 +1129,6 @@ function hideVoiceIndicator() {
   if (indicator) indicator.classList.remove('active','wake');
 }
 
-// ==================== UTILITY ====================
-function escapeHtml(str) { const d=document.createElement('div'); d.textContent=str||''; return d.innerHTML; }
-function showToast(msg,type='info') {
-  const toast=document.createElement('div'); toast.className=`toast ${type}`; toast.textContent=msg;
-  DOM.toastContainer.appendChild(toast);
-  setTimeout(()=>{ toast.style.opacity='0'; toast.style.transition='opacity 0.3s'; setTimeout(()=>toast.remove(),300); },2000);
-}
-
 // ==================== EVENT LISTENERS ====================
 function setupEventListeners() {
   DOM.userInput.addEventListener('input', function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,100)+'px'; });
@@ -1177,6 +1179,33 @@ function setupEventListeners() {
     window.speechSynthesis.getVoices();
     window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
   }
+}
+
+// ==================== INIT ====================
+function init() {
+  loadData();
+  setupEventListeners();
+  updateThemeUI();
+  initPyodide();
+  DOM.userInput.focus();
+  DOM.systemPromptInput.value = state.systemPrompt;
+  buildEmojiGrid();
+  setupScrollButton();
+  preloadVoices();
+  applyFontScale();
+}
+
+function preloadVoices() {
+  if (!state.speechSynth) return;
+  const voices = state.speechSynth.getVoices();
+  if (voices.length > 0) {
+    state.voicesLoaded = true;
+    return;
+  }
+  state.speechSynth.onvoiceschanged = () => {
+    state.voicesLoaded = true;
+    state.speechSynth.getVoices();
+  };
 }
 
 // ==================== STARTUP ====================
