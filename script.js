@@ -27,7 +27,8 @@ const state = {
   wakeDetected: false,
   isSpeaking: false,
   speechSynth: window.speechSynthesis,
-  voicesLoaded: false
+  voicesLoaded: false,
+  fontScale: 1.0   // for font size adjuster
 };
 
 // ==================== DOM ELEMENTS ====================
@@ -55,10 +56,12 @@ const DOM = {
   emojiPopover: document.getElementById('emojiPopover'),
   emojiGrid: document.getElementById('emojiGrid'),
   typingIndicator: document.getElementById('typingIndicator'),
-  oceanCanvas: document.getElementById('oceanCanvas')
+  oceanCanvas: document.getElementById('oceanCanvas'),
+  fontDecreaseBtn: document.getElementById('fontDecreaseBtn'),
+  fontSizeDisplay: document.getElementById('fontSizeDisplay'),
+  fontIncreaseBtn: document.getElementById('fontIncreaseBtn'),
+  copyAllBtn: document.getElementById('copyAllBtn')
 };
-
-const EMOJIS = ['😀','😂','🤣','😍','🥰','😘','😜','🤪','😎','🤩','😇','🤗','😴','🥱','😈','👿','💀','👻','🎃','🐬','🐳','🐋','🐟','🌊','💧','🔥','⚡','⭐','✨','🌈','🍕','🍔','🍟','🌮','🍩','🍪','🎂','☕','🍺','🎸','🎮','🎯','🏆','⚽','🚀','✈️','🏖️','🗺️'];
 
 // ==================== OCEAN + DOLPHIN ANIMATION (unchanged) ====================
 const canvas = DOM.oceanCanvas;
@@ -213,6 +216,7 @@ function init() {
   buildEmojiGrid();
   setupScrollButton();
   preloadVoices();
+  applyFontScale(); // apply stored font size
 }
 
 function preloadVoices() {
@@ -240,6 +244,7 @@ function loadData() {
       state.currentModel = data.model || 'deepseek/deepseek-chat';
       state.webSearchEnabled = data.webSearch || false;
       state.autoSpeakEnabled = data.autoSpeak || false;
+      state.fontScale = data.fontScale || 1.0;
     }
   } catch(e) { resetAllData(); }
   DOM.systemPromptInput.value = state.systemPrompt;
@@ -262,7 +267,8 @@ function saveData() {
       systemPrompt: state.systemPrompt,
       model: state.currentModel,
       webSearch: state.webSearchEnabled,
-      autoSpeak: state.autoSpeakEnabled
+      autoSpeak: state.autoSpeakEnabled,
+      fontScale: state.fontScale
     }));
   } catch(e) { showToast('Storage full!', 'error'); }
 }
@@ -270,7 +276,7 @@ function saveData() {
 function resetAllData() {
   state.conversations = {}; state.activeChatId = null; state.conversation = [];
   state.systemPrompt = DEFAULT_JAILBREAK; state.currentModel = 'deepseek/deepseek-chat';
-  state.webSearchEnabled = false; state.autoSpeakEnabled = false;
+  state.webSearchEnabled = false; state.autoSpeakEnabled = false; state.fontScale = 1.0;
   saveData();
 }
 
@@ -391,7 +397,7 @@ function toggleWebSearch() {
   showToast(state.webSearchEnabled?'Web search ON':'Web search OFF','info');
 }
 
-// ==================== IMAGE GENERATION (Stable Horde – free, no API key) ====================
+// ==================== IMAGE GENERATION (Stable Horde + Pollinations fallback) ====================
 async function generateImageHorde(prompt) {
   const submitResp = await fetch('https://stablehorde.net/api/v2/generate/async', {
     method: 'POST',
@@ -431,7 +437,21 @@ async function generateImageHorde(prompt) {
     }
     attempts++;
   }
-  throw new Error('Image generation timed out. Please try again.');
+  throw new Error('Stable Horde timed out');
+}
+
+function generateImageUrlPollinations(prompt) {
+  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=768&height=768&nologo=true&seed=${Math.floor(Math.random()*10000)}`;
+}
+
+async function generateImageWithFallback(prompt) {
+  try { return await generateImageHorde(prompt); } catch(e) { console.log('Horde failed, falling back to Pollinations:', e.message); }
+  for (let i=0; i<3; i++) {
+    const url = generateImageUrlPollinations(prompt);
+    try { const resp = await fetch(url); if (resp.ok) return url; } catch(e) {}
+    await new Promise(r => setTimeout(r, 1500));
+  }
+  throw new Error('Both image services failed. Please try again later.');
 }
 
 function showImageGen() {
@@ -443,7 +463,7 @@ function showImageGen() {
 
   state.conversation.push({role:'user', content:'🎨 ' + prompt, timestamp: Date.now()});
 
-  generateImageHorde(prompt)
+  generateImageWithFallback(prompt)
     .then(imgUrl => {
       const parent = placeBubble.closest('.message');
       if (parent) parent.remove();
@@ -736,7 +756,7 @@ function renderMessage(role, content, timestamp=null, animate=true) {
     msgDiv.innerHTML = `
       <div class="message-avatar">🐬</div>
       <div class="message-content">
-        <div class="message-bubble">${marked.parse(content||'')}</div>
+        <div class="message-bubble" style="font-size:${state.fontScale}em;">${marked.parse(content||'')}</div>
         <div class="message-time">${timeStr}</div>
       </div>
     `;
@@ -821,29 +841,43 @@ function updateStatusBar() {
   DOM.voiceAssistantStatus.textContent = state.voiceAssistantActive?'ON':'OFF';
 }
 
-// ==================== SETTINGS ====================
-function toggleSettings() { DOM.settingsPanel.classList.toggle('open'); }
-function applySettings() {
-  state.systemPrompt = DOM.systemPromptInput.value.trim() || DEFAULT_JAILBREAK;
-  DOM.settingsPanel.classList.remove('open'); saveData();
-  showToast('Jailbreak applied!','success');
+// ==================== FONT SIZE ADJUSTER ====================
+function changeFontSize(delta) {
+  state.fontScale = Math.max(0.7, Math.min(1.5, state.fontScale + delta));
+  applyFontScale();
+  saveData();
 }
-function resetSettings() {
-  state.systemPrompt = DEFAULT_JAILBREAK; DOM.systemPromptInput.value = DEFAULT_JAILBREAK; saveData();
-  showToast('Reset to default','info');
+function applyFontScale() {
+  document.querySelectorAll('.message-bubble').forEach(b => b.style.fontSize = state.fontScale + 'em');
+  if (DOM.fontSizeDisplay) DOM.fontSizeDisplay.textContent = Math.round(state.fontScale * 100) + '%';
 }
-function toggleTheme() {
-  const html = document.documentElement;
-  const next = html.getAttribute('data-theme')==='dark'?'light':'dark';
-  html.setAttribute('data-theme',next);
-  localStorage.setItem('dolphin_theme',next);
-  updateThemeUI();
+
+// ==================== SOUND NOTIFICATION ====================
+function playNotificationSound() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    oscillator.frequency.value = 800;
+    oscillator.type = 'sine';
+    gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+    oscillator.start(audioCtx.currentTime);
+    oscillator.stop(audioCtx.currentTime + 0.15);
+  } catch(e) {}
 }
-function updateThemeUI() {
-  const theme = document.documentElement.getAttribute('data-theme')||'dark';
-  const icon = document.getElementById('themeIcon'); const text = document.getElementById('themeText');
-  if (icon) icon.className = theme==='dark'?'fas fa-sun':'fas fa-moon';
-  if (text) text.textContent = theme==='dark'?'Light Mode':'Dark Mode';
+
+// ==================== COPY ENTIRE CONVERSATION ====================
+function copyEntireConversation() {
+  if (state.conversation.length === 0) {
+    showToast('Nothing to copy', 'error');
+    return;
+  }
+  let text = '';
+  state.conversation.forEach(msg => text += `[${msg.role.toUpperCase()}] ${msg.content}\n\n`);
+  navigator.clipboard.writeText(text).then(() => showToast('Conversation copied!', 'success'));
 }
 
 // ==================== Groq API Integration ====================
@@ -913,7 +947,7 @@ async function sendMessage() {
   }
   if (['/image','/i'].includes(cmd)) {
     DOM.userInput.value = '';
-    showImageGen();   // calls new Stable Horde function
+    showImageGen();   // calls new image gen with fallback
     return;
   }
   if (['/python','/py'].includes(cmd)) {
@@ -992,6 +1026,7 @@ async function sendMessage() {
     if (fullText) {
       state.conversation.push({role:'assistant',content:fullText,timestamp:Date.now()});
       if (state.autoSpeakEnabled) speakText(fullText);
+      playNotificationSound();   // sound on completion
     }
   } catch(e) {
     assistantBubble.innerHTML = `<span style="color:var(--danger);">❌ Error: ${escapeHtml(e.message)}</span>`;
@@ -1158,6 +1193,11 @@ function setupEventListeners() {
   document.getElementById('screenshotChip')?.addEventListener('click', screenshotChat);
   document.getElementById('encryptChip')?.addEventListener('click', encryptCurrentChat);
   document.getElementById('voiceAssistantChip')?.addEventListener('click', toggleVoiceAssistant);
+  // Font size buttons
+  if (DOM.fontDecreaseBtn) DOM.fontDecreaseBtn.addEventListener('click', ()=>changeFontSize(-0.1));
+  if (DOM.fontIncreaseBtn) DOM.fontIncreaseBtn.addEventListener('click', ()=>changeFontSize(0.1));
+  // Copy all button
+  if (DOM.copyAllBtn) DOM.copyAllBtn.addEventListener('click', copyEntireConversation);
   DOM.fileInput.addEventListener('change', handleFileUpload);
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey||e.metaKey)&&e.key==='k') { e.preventDefault(); createNewChat(); }
