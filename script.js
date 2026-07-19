@@ -28,7 +28,8 @@ const state = {
   isSpeaking: false,
   speechSynth: window.speechSynthesis,
   voicesLoaded: false,
-  fontScale: 1.0
+  fontScale: 1.0,
+  currentAudio: null        // to track Puter TTS audio
 };
 
 // ==================== DOM ELEMENTS ====================
@@ -65,7 +66,7 @@ const DOM = {
 
 const EMOJIS = ['😀','😂','🤣','😍','🥰','😘','😜','🤪','😎','🤩','😇','🤗','😴','🥱','😈','👿','💀','👻','🎃','🐬','🐳','🐋','🐟','🌊','💧','🔥','⚡','⭐','✨','🌈','🍕','🍔','🍟','🌮','🍩','🍪','🎂','☕','🍺','🎸','🎮','🎯','🏆','⚽','🚀','✈️','🏖️','🗺️'];
 
-// ==================== OCEAN + DOLPHIN ANIMATION ====================
+// ==================== OCEAN + DOLPHIN ANIMATION (unchanged) ====================
 const canvas = DOM.oceanCanvas;
 const ctx = canvas.getContext('2d');
 let bubbles = [];
@@ -380,14 +381,28 @@ function toggleWebSearch() {
   showToast(state.webSearchEnabled?'Web search ON':'Web search OFF','info');
 }
 
-// ==================== IMAGE GENERATION (Pollinations with retry) ====================
-function generateImageUrl(prompt, w=768, h=768) {
+// ==================== IMAGE GENERATION (Puter.js primary, Pollinations fallback) ====================
+function generateImageUrlPollinations(prompt, w=768, h=768) {
   return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${w}&height=${h}&nologo=true&seed=${Math.floor(Math.random()*10000)}`;
 }
 
+async function generateImageWithPuter(prompt) {
+  try {
+    const img = await puter.ai.txt2img(prompt, false);   // false = real generation (uses free credits)
+    return img.src;   // blob URL of the generated image
+  } catch (e) {
+    console.warn('Puter image generation failed, falling back to Pollinations:', e);
+    throw e;
+  }
+}
+
 async function generateImageWithRetry(prompt) {
+  try {
+    return await generateImageWithPuter(prompt);
+  } catch (e) {}
+  // Fallback to Pollinations
   for (let i=0; i<3; i++) {
-    const url = generateImageUrl(prompt);
+    const url = generateImageUrlPollinations(prompt);
     try {
       const resp = await fetch(url);
       if (resp.ok) return url;
@@ -401,7 +416,7 @@ function showImageGen() {
   const prompt = prompt('Enter image description:', 'dolphin underwater cyberpunk ocean');
   if (!prompt) return;
 
-  const placeBubble = renderMessage('assistant', '🎨 Generating image, please wait...', Date.now(), false);
+  const placeBubble = renderMessage('assistant', '🎨 Generating image with Puter AI...', Date.now(), false);
   placeBubble.innerHTML = '<span class="cursor-blink"></span> 🎨 Generating image…';
 
   state.conversation.push({role:'user', content:'🎨 ' + prompt, timestamp: Date.now()});
@@ -552,7 +567,7 @@ function encryptCurrentChat() {
   saveCurrentChat(); saveData(); scrollToBottom();
 }
 
-// ==================== TTS – Emojis silently removed during speech ====================
+// ==================== TTS (Puter.js primary, Web Speech fallback) ====================
 function toggleAutoSpeak() {
   state.autoSpeakEnabled = !state.autoSpeakEnabled;
   updateToolChips(); updateStatusBar(); saveData();
@@ -560,61 +575,110 @@ function toggleAutoSpeak() {
 }
 
 function stopSpeaking() {
+  // Stop Puter audio if playing
+  if (state.currentAudio) {
+    state.currentAudio.pause();
+    state.currentAudio.currentTime = 0;
+    state.currentAudio = null;
+  }
+  // Stop Web Speech
   if (state.speechSynth) state.speechSynth.cancel();
   state.isSpeaking = false;
   document.querySelectorAll('.action-btn.speaking').forEach(btn => btn.classList.remove('speaking'));
 }
 
-function speakText(text, btn) {
-  const synth = state.speechSynth;
-  if (!synth) return;
+async function speakText(text, btn) {
   if (state.isSpeaking) { stopSpeaking(); return; }
   stopSpeaking();
 
-  // Remove code, HTML, markdown, and emojis – but keep the original message untouched
-  let clean = text
-    .replace(/```[\s\S]*?```/g, ' Code omitted ')   // code blocks
-    .replace(/`([^`]+)`/g, ' ')                     // inline code
-    .replace(/<[^>]*>/g, '')                        // any HTML tags
-    .replace(/&[a-z]+;/gi, '')                      // HTML entities
-    .replace(/\*\*(.*?)\*\*/g, '$1')                // bold
-    .replace(/__(.*?)__/g, '$1')
-    .replace(/_(.*?)_/g, '$1')                      // italic
-    .replace(/~~(.*?)~~/g, '$1')                    // strikethrough
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')        // links
-    .replace(/^#{1,6}\s+/gm, '')                    // headings
-    .replace(/\n{2,}/g, ' ')                        // multiple newlines
-    .replace(/\n/g, ' ')                            // single newlines
-    .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2300}-\u{23FF}\u{2B50}\u{2B55}\u{231A}\u{231B}\u{2328}\u{23CF}\u{23E9}-\u{23F3}\u{23F8}-\u{23FA}\u{FE0F}\u{200D}]/gu, '') // all emojis
-    .replace(/[^a-zA-Z0-9\s]/g, '')                 // remove remaining punctuation/symbols
-    .replace(/\s{2,}/g, ' ')                        // collapse spaces
-    .trim()
-    .substring(0, 3000);
+  // Show speaking state
+  state.isSpeaking = true;
+  if (btn) btn.classList.add('speaking');
 
-  if (!clean) return;
+  // Try Puter TTS first
+  try {
+    const audioBlob = await puter.ai.txt2speech(text);
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const audio = new Audio(audioUrl);
+    state.currentAudio = audio;
+    audio.onended = () => {
+      state.isSpeaking = false;
+      if (btn) btn.classList.remove('speaking');
+      state.currentAudio = null;
+      URL.revokeObjectURL(audioUrl);
+    };
+    audio.onerror = () => {
+      state.isSpeaking = false;
+      if (btn) btn.classList.remove('speaking');
+      state.currentAudio = null;
+      URL.revokeObjectURL(audioUrl);
+      // Fallback to Web Speech if Puter TTS fails
+      speakWithWebSpeech(text, btn);
+    };
+    audio.play();
+  } catch (e) {
+    console.warn('Puter TTS failed, falling back to Web Speech:', e);
+    // Fallback to Web Speech
+    speakWithWebSpeech(text, btn);
+  }
+}
 
-  const utterance = new SpeechSynthesisUtterance(clean);
-
-  const voices = synth.getVoices();
-  if (voices.length === 0) {
-    setTimeout(() => speakText(text, btn), 200);
+function speakWithWebSpeech(text, btn) {
+  const synth = state.speechSynth;
+  if (!synth) {
+    state.isSpeaking = false;
+    if (btn) btn.classList.remove('speaking');
     return;
   }
 
+  let clean = text
+    .replace(/```[\s\S]*?```/g, ' Code omitted ')
+    .replace(/`([^`]+)`/g, ' ')
+    .replace(/<[^>]*>/g, '')
+    .replace(/&[a-z]+;/gi, '')
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/__(.*?)__/g, '$1')
+    .replace(/_(.*?)_/g, '$1')
+    .replace(/~~(.*?)~~/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\n{2,}/g, ' ')
+    .replace(/\n/g, ' ')
+    .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2300}-\u{23FF}\u{2B50}\u{2B55}\u{231A}\u{231B}\u{2328}\u{23CF}\u{23E9}-\u{23F3}\u{23F8}-\u{23FA}\u{FE0F}\u{200D}]/gu, '')
+    .replace(/[^a-zA-Z0-9\s]/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+    .substring(0, 3000);
+
+  if (!clean) {
+    state.isSpeaking = false;
+    if (btn) btn.classList.remove('speaking');
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(clean);
+  const voices = synth.getVoices();
+  if (voices.length === 0) {
+    setTimeout(() => speakWithWebSpeech(text, btn), 200);
+    return;
+  }
   let bestVoice = voices.find(v => v.name === 'Google UK English Female');
   if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Google') && v.name.includes('Female'));
   if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Female') && v.lang.startsWith('en'));
   if (!bestVoice) bestVoice = voices.find(v => v.lang.startsWith('en'));
   if (bestVoice) utterance.voice = bestVoice;
-
   utterance.rate = 0.9;
   utterance.pitch = 1.0;
   utterance.volume = 1;
 
-  state.isSpeaking = true;
-  if (btn) btn.classList.add('speaking');
-  utterance.onend = () => { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); };
-  utterance.onerror = () => { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); };
+  utterance.onend = () => {
+    state.isSpeaking = false;
+    if (btn) btn.classList.remove('speaking');
+  };
+  utterance.onerror = () => {
+    state.isSpeaking = false;
+    if (btn) btn.classList.remove('speaking');
+  };
   synth.speak(utterance);
 }
 
@@ -908,7 +972,7 @@ async function sendMessage() {
   }
   if (['/image','/i'].includes(cmd)) {
     DOM.userInput.value = '';
-    showImageGen();   // calls image gen with retry
+    showImageGen();   // calls Puter image gen with fallback
     return;
   }
   if (['/python','/py'].includes(cmd)) {
