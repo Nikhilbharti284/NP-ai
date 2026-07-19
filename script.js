@@ -550,7 +550,7 @@ function encryptCurrentChat() {
   saveCurrentChat(); saveData(); scrollToBottom();
 }
 
-// ==================== TTS (Google Assistant style, improved cleaning) ====================
+// ==================== TTS – Google Assistant Style (NO SSML) ====================
 function toggleAutoSpeak() {
   state.autoSpeakEnabled = !state.autoSpeakEnabled;
   updateToolChips(); updateStatusBar(); saveData();
@@ -571,7 +571,7 @@ function speakText(text, btn) {
 
   stopSpeaking();
 
-  // Aggressive cleaning: remove markdown, HTML, code, special characters
+  // Clean text for natural speech – no SSML tags
   let cleanText = text
     .replace(/```[\s\S]*?```/g, 'Code omitted.')       // code blocks
     .replace(/`([^`]+)`/g, '$1')                       // inline code
@@ -583,13 +583,10 @@ function speakText(text, btn) {
     .replace(/~~(.*?)~~/g, '$1')                       // strikethrough
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')           // links
     .replace(/^#{1,6}\s+/gm, '')                       // headings
-    .replace(/\n{2,}/g, '. ')                          // multiple newlines -> pause
-    .replace(/\. /g, '.<break time="200ms"/> ')
-    .replace(/\? /g, '?<break time="200ms"/> ')
-    .replace(/\! /g, '!<break time="200ms"/> ')
-    .replace(/\n/g, ' ')
-    .replace(/[<>]/g, '')                              // leftover angle brackets
-    .replace(/\s{2,}/g, ' ')
+    .replace(/\n{2,}/g, '. ')                          // multiple newlines -> period
+    .replace(/\n/g, ' ')                               // single newlines -> space
+    .replace(/[<>]/g, '')                              // remove any leftover angle brackets
+    .replace(/\s{2,}/g, ' ')                           // collapse multiple spaces
     .trim()
     .substring(0, 3000);
 
@@ -825,7 +822,7 @@ function copyEntireConversation() {
   navigator.clipboard.writeText(text).then(() => showToast('Conversation copied!', 'success'));
 }
 
-// ==================== SETTINGS (theme, etc.) ====================
+// ==================== SETTINGS ====================
 function toggleSettings() { DOM.settingsPanel.classList.toggle('open'); }
 function applySettings() {
   state.systemPrompt = DOM.systemPromptInput.value.trim() || DEFAULT_JAILBREAK;
