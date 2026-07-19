@@ -54,7 +54,7 @@ body {
 .dropdown { position:relative; }
 .dropdown-menu {
   display:none; position:absolute; top:100%; right:0; background:var(--surface);
-  border:1px solid var(--border); border-radius:12px; padding:8px 0; min-width:180px;
+  border:1px solid var(--border); border-radius:12px; padding:8px 0; min-width:200px;
   box-shadow: var(--shadow-lg); z-index:1100;
 }
 .dropdown-menu.open { display:block; }
@@ -65,7 +65,12 @@ body {
 .dropdown-item.active { color:var(--accent); background:rgba(0,180,216,0.1); }
 
 /* Sidebar */
-.sidebar { width:280px; background:var(--sidebar-bg); backdrop-filter:blur(20px); border-right:1px solid var(--border); display:flex; flex-direction:column; position:fixed; top:0; left:0; height:100%; z-index:200; transform:translateX(-100%); transition: transform 0.3s ease; }
+.sidebar {
+  width:280px; background:var(--sidebar-bg); backdrop-filter:blur(20px);
+  border-right:1px solid var(--border); display:flex; flex-direction:column;
+  position:fixed; top:0; left:0; height:100%; z-index:200; transform:translateX(-100%);
+  transition: transform 0.3s ease;
+}
 .sidebar.open { transform:translateX(0); }
 .sidebar-header { padding:16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
 .sidebar-logo { font-weight:700; font-size:18px; background:linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
@@ -201,10 +206,12 @@ body {
 /* Responsive */
 @media (max-width:768px) {
   .menu-btn { display:block; }
-  .nav-right { display:none; }  /* simplified for mobile */
+  .nav-right { display:none; position:absolute; top:100%; right:0; background:var(--surface); flex-direction:column; padding:12px; border:1px solid var(--border); border-radius:12px; gap:12px; }
+  .nav-right.open { display:flex; }
   .hero-inner h1 { font-size:32px; }
   .hero-inner p { font-size:14px; }
   .example-prompts { display:none; }
   .chat-container { padding:16px 12px; }
   .settings-row { flex-direction:column; }
-                    }
+  .dropdown-menu { right:auto; left:0; }
+                  }
