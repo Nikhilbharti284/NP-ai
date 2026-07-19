@@ -57,9 +57,7 @@ const DOM = {
   oceanCanvas: document.getElementById('oceanCanvas')
 };
 
-const EMOJIS = ['😀','😂','🤣','😍','🥰','😘','😜','🤪','😎','🤩','😇','🤗','😴','🥱','😈','👿','💀','👻','🎃','🐬','🐳','🐋','🐟','🌊','💧','🔥','⚡','⭐','✨','🌈','🍕','🍔','🍟','🌮','🍩','🍪','🎂','☕','🍺','🎸','🎮','🎯','🏆','⚽','🚀','✈️','🏖️','🗺️'];
-
-// ==================== OCEAN + DOLPHIN ANIMATION ====================
+// ==================== OCEAN + DOLPHIN ANIMATION (unchanged) ====================
 const canvas = DOM.oceanCanvas;
 const ctx = canvas.getContext('2d');
 let bubbles = [];
