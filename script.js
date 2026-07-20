@@ -131,7 +131,7 @@ function renderSidebar() {
   DOM.chatList.innerHTML = chats.map(chat => `
     <div class="chat-item ${chat.id===state.activeChatId?'active':''}" data-id="${chat.id}">
       <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${escapeHtml(chat.title||'Untitled')}</span>
-      <button class="delete-chat-btn" data-id="${chat.id}"><i class="fas fa-trash-alt"></i></button>
+      <button class="delete-chat-btn" data-id="${chat.id}">🗑</button>
     </div>
   `).join('');
   DOM.chatList.querySelectorAll('.chat-item').forEach(item => item.addEventListener('click', function(e) {
@@ -322,7 +322,7 @@ function renderMessage(role, content, timestamp=null, animate=true) {
     msgDiv.innerHTML = `<div class="message-avatar">U</div><div class="message-content"><div class="message-bubble">${escapeHtml(content)}</div><div class="message-time">${timeStr}</div></div>`;
     const editBtn = document.createElement('button');
     editBtn.className = 'user-edit-btn';
-    editBtn.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+    editBtn.innerHTML = '✎';
     editBtn.title = 'Edit & resend';
     editBtn.addEventListener('click', () => {
       DOM.userInput.value = content; DOM.userInput.focus();
@@ -345,17 +345,17 @@ function renderMessage(role, content, timestamp=null, animate=true) {
     bubble.querySelectorAll('pre').forEach(pre => {
       const wrapper = document.createElement('div'); wrapper.className='code-block-wrapper';
       pre.parentNode.insertBefore(wrapper, pre); wrapper.appendChild(pre);
-      const copyBtn = document.createElement('button'); copyBtn.className='code-copy-btn'; copyBtn.innerHTML='<i class="fas fa-copy"></i>';
+      const copyBtn = document.createElement('button'); copyBtn.className='code-copy-btn'; copyBtn.innerHTML='📋';
       copyBtn.addEventListener('click', ()=> navigator.clipboard.writeText(pre.textContent).then(()=>showToast('Code copied!','success')));
       wrapper.appendChild(copyBtn);
     });
     const contentDiv = msgDiv.querySelector('.message-content');
     const actions = document.createElement('div'); actions.className = 'message-actions';
-    const speakBtn = document.createElement('button'); speakBtn.className='action-btn'; speakBtn.innerHTML='<i class="fas fa-volume-up"></i>';
+    const speakBtn = document.createElement('button'); speakBtn.className='action-btn'; speakBtn.innerHTML='🔊';
     speakBtn.addEventListener('click', ()=> { if (state.isSpeaking) stopSpeaking(); else speakText(content, speakBtn); });
-    const copyBtn = document.createElement('button'); copyBtn.className='action-btn'; copyBtn.innerHTML='<i class="fas fa-copy"></i>';
+    const copyBtn = document.createElement('button'); copyBtn.className='action-btn'; copyBtn.innerHTML='📋';
     copyBtn.addEventListener('click', ()=>{ navigator.clipboard.writeText(content); showToast('Copied!','success'); });
-    const regenBtn = document.createElement('button'); regenBtn.className='action-btn'; regenBtn.innerHTML='<i class="fas fa-redo"></i>';
+    const regenBtn = document.createElement('button'); regenBtn.className='action-btn'; regenBtn.innerHTML='🔄';
     regenBtn.addEventListener('click', regenerateResponse);
     actions.appendChild(speakBtn); actions.appendChild(copyBtn); actions.appendChild(regenBtn);
     contentDiv.appendChild(actions);
@@ -406,8 +406,8 @@ function updateThemeUI() {
   const theme = document.documentElement.getAttribute('data-theme')||'dark';
   const icon = document.getElementById('themeIcon');
   const text = document.getElementById('themeText');
-  if (icon) icon.className = theme==='dark'?'fas fa-sun':'fas fa-moon';
-  if (text) text.textContent = theme==='dark'?'Light Mode':'Dark Mode';
+  if (icon) icon.textContent = theme==='dark' ? '☀️' : '🌙';
+  if (text) text.textContent = theme==='dark' ? 'Light Mode' : 'Dark Mode';
 }
 
 // ==================== POLLINATIONS CHAT (UPDATED MODELS) ====================
@@ -531,8 +531,8 @@ function regenerateResponse() {
 }
 function stopGeneration() { state.stopFlag = true; }
 function updateSendButton(sending) {
-  if (sending) { DOM.sendBtn.classList.add('stop-mode'); DOM.sendBtn.innerHTML = '<i class="fas fa-stop"></i>'; }
-  else { DOM.sendBtn.classList.remove('stop-mode'); DOM.sendBtn.innerHTML = '<i class="fas fa-arrow-up"></i>'; }
+  if (sending) { DOM.sendBtn.classList.add('stop-mode'); DOM.sendBtn.innerHTML = '⏹'; }
+  else { DOM.sendBtn.classList.remove('stop-mode'); DOM.sendBtn.innerHTML = '↑'; }
 }
 function setTypingIndicator(show) { DOM.typingIndicator.style.display = show ? 'inline' : 'none'; }
 
