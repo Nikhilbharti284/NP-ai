@@ -8,8 +8,7 @@
     <title>🐬 Dolphin AI – Essential</title>
 
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- No Font Awesome CDN – we use Unicode icons now -->
     
     <script src="https://js.puter.com/v2/"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
@@ -22,21 +21,21 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">🐬 Dolphin AI</div>
-            <button class="icon-btn sidebar-close-btn"><i class="fas fa-times"></i></button>
+            <button class="icon-btn sidebar-close-btn" title="Close sidebar">✕</button>
         </div>
-        <button class="new-chat-btn" id="newChatSidebarBtn"><i class="fas fa-plus"></i> New Chat</button>
+        <button class="new-chat-btn" id="newChatSidebarBtn">＋ New Chat</button>
         <div class="chat-list" id="chatList"></div>
         <div class="sidebar-footer">
-            <button class="sidebar-btn" id="exportAllBtn"><i class="fas fa-download"></i> Export All</button>
-            <button class="sidebar-btn" id="clearAllBtn"><i class="fas fa-trash-alt"></i> Clear History</button>
-            <button class="sidebar-btn" id="themeToggleBtn"><i class="fas fa-moon" id="themeIcon"></i> <span id="themeText">Light Mode</span></button>
+            <button class="sidebar-btn" id="exportAllBtn">📥 Export All</button>
+            <button class="sidebar-btn" id="clearAllBtn">🗑 Clear History</button>
+            <button class="sidebar-btn" id="themeToggleBtn"><span id="themeIcon">☀️</span> <span id="themeText">Light Mode</span></button>
         </div>
     </aside>
 
     <div class="main-area">
         <header class="header">
             <div class="header-left">
-                <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+                <button class="menu-btn" id="menuBtn" title="Menu">☰</button>
                 <span class="header-title" id="headerTitle">New Chat</span>
             </div>
             <div class="header-right">
@@ -51,9 +50,9 @@
                         <option value="pollinations-mistral">🐝 Mistral</option>
                     </optgroup>
                 </select>
-                <button class="icon-btn" id="settingsBtn"><i class="fas fa-sliders-h"></i></button>
-                <button class="icon-btn" id="newChatBtn"><i class="fas fa-plus"></i></button>
-                <button class="icon-btn" id="exportBtn"><i class="fas fa-file-export"></i></button>
+                <button class="icon-btn" id="settingsBtn" title="Settings">⚙️</button>
+                <button class="icon-btn" id="newChatBtn" title="New chat">＋</button>
+                <button class="icon-btn" id="exportBtn" title="Export chat">📤</button>
             </div>
         </header>
 
@@ -84,10 +83,10 @@
 
         <footer class="input-area">
             <div class="input-wrapper">
-                <button class="mic-btn" id="micBtn"><i class="fas fa-microphone"></i></button>
-                <button class="emoji-btn" id="emojiBtn"><i class="fas fa-smile"></i></button>
+                <button class="mic-btn" id="micBtn" title="Voice input">🎤</button>
+                <button class="emoji-btn" id="emojiBtn" title="Emoji picker">😊</button>
                 <textarea id="userInput" rows="1" placeholder="Type a message..." autofocus></textarea>
-                <button id="sendBtn"><i class="fas fa-arrow-up"></i></button>
+                <button id="sendBtn" title="Send message">↑</button>
             </div>
             <div class="info-bar">
                 <span>Tokens: <span id="tokenCount">0</span></span>
