@@ -551,7 +551,7 @@ function insertEmoji(emoji) {
 }
 function toggleEmojiPicker() { DOM.emojiPopover.classList.toggle('open'); }
 
-// ==================== VOICE INPUT (one-shot, no wake word) ====================
+// ==================== VOICE INPUT (one-shot) ====================
 function setupVoiceInput() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { DOM.micBtn.style.display='none'; return; }
