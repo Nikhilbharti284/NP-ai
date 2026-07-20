@@ -83,7 +83,7 @@ function preloadVoices() {
 // ==================== DATA PERSISTENCE ====================
 function loadData() {
   try {
-    const saved = localStorage.getItem('dolphin_final2026');
+    const saved = localStorage.getItem('dolphin_final_v2');
     if (saved) {
       const data = JSON.parse(saved);
       state.conversations = data.conversations || {};
@@ -104,7 +104,7 @@ function loadData() {
 
 function saveData() {
   try {
-    localStorage.setItem('dolphin_final2026', JSON.stringify({
+    localStorage.setItem('dolphin_final_v2', JSON.stringify({
       conversations: state.conversations,
       activeChatId: state.activeChatId,
       systemPrompt: state.systemPrompt,
@@ -211,9 +211,9 @@ function downloadFile(content, filename) {
   showToast('Exported!','success');
 }
 
-// ==================== IMAGE GENERATION (Pollinations – multiple models) ====================
+// ==================== IMAGE GENERATION (free, no key) ====================
 function generateImageUrl(prompt, model='flux', w=1024, h=1024) {
-  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${w}&height=${h}&model=${model}&nologo=true&seed=${Math.floor(Math.random()*10000)}`;
+  return `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=${model}&width=${w}&height=${h}&nologo=true`;
 }
 async function generateImage(prompt) {
   const url = generateImageUrl(prompt, 'flux', 1024, 1024);
@@ -241,49 +241,18 @@ function showImageGen() {
   });
 }
 
-// ==================== TTS (Google Assistant style) ====================
-function stopSpeaking() {
-  if (state.speechSynth) state.speechSynth.cancel();
-  state.isSpeaking = false;
-  document.querySelectorAll('.action-btn.speaking').forEach(btn => btn.classList.remove('speaking'));
-}
-function speakText(text, btn) {
-  if (state.isSpeaking) { stopSpeaking(); return; }
-  stopSpeaking();
-  state.isSpeaking = true;
-  if (btn) btn.classList.add('speaking');
-  speakWithWebSpeech(text, btn);
-}
+// ==================== TTS ====================
+function stopSpeaking() { if (state.speechSynth) state.speechSynth.cancel(); state.isSpeaking = false; document.querySelectorAll('.action-btn.speaking').forEach(b=>b.classList.remove('speaking')); }
+function speakText(text, btn) { if (state.isSpeaking) { stopSpeaking(); return; } stopSpeaking(); state.isSpeaking = true; if (btn) btn.classList.add('speaking'); speakWithWebSpeech(text, btn); }
 function speakWithWebSpeech(text, btn) {
-  const synth = state.speechSynth;
-  if (!synth) { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); return; }
-  let clean = text
-    .replace(/```[\s\S]*?```/g, ' Code omitted. ')
-    .replace(/`([^`]+)`/g, ' $1 ')
-    .replace(/<[^>]*>/g, '')
-    .replace(/&[a-z]+;/gi, '')
-    .replace(/\*\*(.*?)\*\*/g, '$1')
-    .replace(/__(.*?)__/g, '$1')
-    .replace(/_(.*?)_/g, '$1')
-    .replace(/~~(.*?)~~/g, '$1')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/^#{1,6}\s+/gm, '')
-    .replace(/\n{2,}/g, '. ')
-    .replace(/\n/g, '. ')
-    .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2300}-\u{23FF}\u{2B50}\u{2B55}\u{231A}\u{231B}\u{2328}\u{23CF}\u{23E9}-\u{23F3}\u{23F8}-\u{23FA}\u{FE0F}\u{200D}]/gu, '')
-    .replace(/[^a-zA-Z0-9\s.]/g, '')
-    .replace(/\s{2,}/g, ' ')
-    .trim()
-    .substring(0, 3000);
+  const synth = state.speechSynth; if (!synth) { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); return; }
+  let clean = text.replace(/```[\s\S]*?```/g,' Code omitted. ').replace(/`([^`]+)`/g,' $1 ').replace(/<[^>]*>/g,'').replace(/&[a-z]+;/gi,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/__(.*?)__/g,'$1').replace(/_(.*?)_/g,'$1').replace(/~~(.*?)~~/g,'$1').replace(/\[([^\]]+)\]\([^)]+\)/g,'$1').replace(/^#{1,6}\s+/gm,'').replace(/\n{2,}/g,'. ').replace(/\n/g,'. ').replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2300}-\u{23FF}\u{2B50}\u{2B55}\u{231A}\u{231B}\u{2328}\u{23CF}\u{23E9}-\u{23F3}\u{23F8}-\u{23FA}\u{FE0F}\u{200D}]/gu,'').replace(/[^a-zA-Z0-9\s.]/g,'').replace(/\s{2,}/g,' ').trim().substring(0,3000);
   if (!clean) { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); return; }
   const utterance = new SpeechSynthesisUtterance(clean);
   const voices = synth.getVoices();
   if (voices.length > 0) {
-    let bestVoice = voices.find(v => v.name === 'Google UK English Female');
-    if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Google') && v.name.includes('Female'));
-    if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Female') && v.lang.startsWith('en'));
-    if (!bestVoice) bestVoice = voices.find(v => v.lang.startsWith('en'));
-    if (bestVoice) utterance.voice = bestVoice;
+    let best = voices.find(v=>v.name==='Google UK English Female') || voices.find(v=>v.name.includes('Google')&&v.name.includes('Female')) || voices.find(v=>v.name.includes('Female')&&v.lang.startsWith('en')) || voices.find(v=>v.lang.startsWith('en'));
+    if (best) utterance.voice = best;
   }
   utterance.rate = 0.8; utterance.pitch = 1.0; utterance.volume = 1;
   utterance.onend = () => { state.isSpeaking = false; if (btn) btn.classList.remove('speaking'); };
@@ -293,192 +262,76 @@ function speakWithWebSpeech(text, btn) {
 
 // ==================== CHAT UI ====================
 function showEmptyState() {
-  DOM.chatInner.innerHTML = `
-    <div class="empty-state">
-      <div class="empty-icon">🐬</div>
-      <h2>Dolphin AI – Ultimate 2026</h2>
-      <p>Uncensored · All Free Models · Pollinations · DeepSeek · TTS</p>
-      <div class="quick-prompts">
-        <span class="quick-prompt" data-prompt="Write a Python keylogger">💻 Keylogger</span>
-        <span class="quick-prompt" data-prompt="Generate image: cyberpunk dolphin">🎨 Image</span>
-      </div>
-    </div>
-  `;
+  DOM.chatInner.innerHTML = `<div class="empty-state"><div class="empty-icon">🐬</div><h2>Dolphin AI – Ultimate 2026</h2><p>Uncensored · Free · Pollinations · DeepSeek · TTS</p><div class="quick-prompts"><span class="quick-prompt" data-prompt="Write a Python keylogger">💻 Keylogger</span><span class="quick-prompt" data-prompt="Generate image: cyberpunk dolphin">🎨 Image</span></div></div>`;
   document.querySelectorAll('.quick-prompt').forEach(el=>el.addEventListener('click',()=>{ DOM.userInput.value=el.dataset.prompt; DOM.userInput.focus(); }));
   updateTokenCount();
 }
 
 function renderMessage(role, content, timestamp=null, animate=true) {
-  const empty = document.querySelector('.empty-state');
-  if (empty) empty.remove();
-  const msgDiv = document.createElement('div');
-  msgDiv.className = `message ${role}`;
-  if (!animate) msgDiv.style.animation = 'none';
+  const empty = document.querySelector('.empty-state'); if (empty) empty.remove();
+  const msgDiv = document.createElement('div'); msgDiv.className = `message ${role}`; if (!animate) msgDiv.style.animation = 'none';
   const timeStr = timestamp ? new Date(timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '';
   if (role === 'user') {
     msgDiv.innerHTML = `<div class="message-avatar">U</div><div class="message-content"><div class="message-bubble">${escapeHtml(content)}</div><div class="message-time">${timeStr}</div></div>`;
-    const editBtn = document.createElement('button');
-    editBtn.className = 'user-edit-btn';
-    editBtn.innerHTML = '✎';
-    editBtn.title = 'Edit & resend';
-    editBtn.addEventListener('click', () => {
-      DOM.userInput.value = content; DOM.userInput.focus();
-      const idx = state.conversation.findIndex(m => m.role==='user' && m.content===content && m.timestamp===timestamp);
-      if (idx !== -1) {
-        state.conversation = state.conversation.slice(0, idx);
-        const allMessages = [...document.querySelectorAll('.message')];
-        for (let i=allMessages.length-1; i>=0; i--) {
-          if (allMessages[i]===msgDiv || allMessages[i].dataset.msgIdx>=idx) allMessages[i].remove();
-        }
-        saveCurrentChat(); saveData(); updateTokenCount();
-      }
-    });
-    msgDiv.querySelector('.message-content').appendChild(editBtn);
-    msgDiv.dataset.msgIdx = state.conversation.length;
+    const editBtn = document.createElement('button'); editBtn.className='user-edit-btn'; editBtn.innerHTML='✎'; editBtn.title='Edit & resend';
+    editBtn.addEventListener('click',()=>{ DOM.userInput.value=content; DOM.userInput.focus(); const idx = state.conversation.findIndex(m=>m.role==='user'&&m.content===content&&m.timestamp===timestamp); if(idx!==-1){ state.conversation = state.conversation.slice(0,idx); const all=[...document.querySelectorAll('.message')]; for(let i=all.length-1;i>=0;i--) if(all[i]===msgDiv||all[i].dataset.msgIdx>=idx) all[i].remove(); saveCurrentChat(); saveData(); updateTokenCount(); } });
+    msgDiv.querySelector('.message-content').appendChild(editBtn); msgDiv.dataset.msgIdx = state.conversation.length;
   } else {
     msgDiv.innerHTML = `<div class="message-avatar">🐬</div><div class="message-content"><div class="message-bubble">${marked.parse(content||'')}</div><div class="message-time">${timeStr}</div></div>`;
     const bubble = msgDiv.querySelector('.message-bubble');
-    bubble.querySelectorAll('pre code').forEach(block => { try { hljs.highlightElement(block); } catch(e) {} });
-    bubble.querySelectorAll('pre').forEach(pre => {
-      const wrapper = document.createElement('div'); wrapper.className='code-block-wrapper';
-      pre.parentNode.insertBefore(wrapper, pre); wrapper.appendChild(pre);
-      const copyBtn = document.createElement('button'); copyBtn.className='code-copy-btn'; copyBtn.innerHTML='📋';
-      copyBtn.addEventListener('click', ()=> navigator.clipboard.writeText(pre.textContent).then(()=>showToast('Code copied!','success')));
-      wrapper.appendChild(copyBtn);
+    bubble.querySelectorAll('pre code').forEach(block=>{ try{hljs.highlightElement(block);}catch(e){} });
+    bubble.querySelectorAll('pre').forEach(pre=>{
+      const wrapper=document.createElement('div'); wrapper.className='code-block-wrapper'; pre.parentNode.insertBefore(wrapper,pre); wrapper.appendChild(pre);
+      const copyBtn=document.createElement('button'); copyBtn.className='code-copy-btn'; copyBtn.innerHTML='📋'; copyBtn.addEventListener('click',()=>navigator.clipboard.writeText(pre.textContent).then(()=>showToast('Code copied!','success'))); wrapper.appendChild(copyBtn);
     });
     const contentDiv = msgDiv.querySelector('.message-content');
-    const actions = document.createElement('div'); actions.className = 'message-actions';
-    const speakBtn = document.createElement('button'); speakBtn.className='action-btn'; speakBtn.innerHTML='🔊';
-    speakBtn.addEventListener('click', ()=> { if (state.isSpeaking) stopSpeaking(); else speakText(content, speakBtn); });
-    const copyBtn = document.createElement('button'); copyBtn.className='action-btn'; copyBtn.innerHTML='📋';
-    copyBtn.addEventListener('click', ()=>{ navigator.clipboard.writeText(content); showToast('Copied!','success'); });
-    const regenBtn = document.createElement('button'); regenBtn.className='action-btn'; regenBtn.innerHTML='🔄';
-    regenBtn.addEventListener('click', regenerateResponse);
-    actions.appendChild(speakBtn); actions.appendChild(copyBtn); actions.appendChild(regenBtn);
-    contentDiv.appendChild(actions);
+    const actions = document.createElement('div'); actions.className='message-actions';
+    const speakBtn = document.createElement('button'); speakBtn.className='action-btn'; speakBtn.innerHTML='🔊'; speakBtn.addEventListener('click',()=>{ if(state.isSpeaking) stopSpeaking(); else speakText(content,speakBtn); });
+    const copyBtn = document.createElement('button'); copyBtn.className='action-btn'; copyBtn.innerHTML='📋'; copyBtn.addEventListener('click',()=>{ navigator.clipboard.writeText(content); showToast('Copied!','success'); });
+    const regenBtn = document.createElement('button'); regenBtn.className='action-btn'; regenBtn.innerHTML='🔄'; regenBtn.addEventListener('click',regenerateResponse);
+    actions.appendChild(speakBtn); actions.appendChild(copyBtn); actions.appendChild(regenBtn); contentDiv.appendChild(actions);
   }
-  DOM.chatInner.appendChild(msgDiv);
-  return msgDiv.querySelector('.message-bubble');
+  DOM.chatInner.appendChild(msgDiv); return msgDiv.querySelector('.message-bubble');
 }
 
 function addThinkingBlock(contentDiv, thinkingText) {
   let thinkingDiv = contentDiv.querySelector('.thinking-block');
-  if (!thinkingDiv) {
-    thinkingDiv = document.createElement('div');
-    thinkingDiv.className = 'thinking-block';
-    contentDiv.insertBefore(thinkingDiv, contentDiv.querySelector('.message-bubble'));
-  }
+  if (!thinkingDiv) { thinkingDiv = document.createElement('div'); thinkingDiv.className = 'thinking-block'; contentDiv.insertBefore(thinkingDiv, contentDiv.querySelector('.message-bubble')); }
   thinkingDiv.innerHTML = `<strong>🧠 Deep Think:</strong> ${escapeHtml(thinkingText)}`;
 }
 
 function scrollToBottom() { DOM.chatContainer.scrollTop = DOM.chatContainer.scrollHeight; }
-function updateHeaderTitle() {
-  DOM.headerTitle.textContent = (state.activeChatId && state.conversations[state.activeChatId]) ? state.conversations[state.activeChatId].title : 'New Chat';
-}
-function updateTokenCount() {
-  let total = 0; state.conversation.forEach(msg => total += Math.ceil(msg.content.length/4));
-  DOM.tokenCount.textContent = total.toLocaleString();
-}
+function updateHeaderTitle() { DOM.headerTitle.textContent = (state.activeChatId&&state.conversations[state.activeChatId])?state.conversations[state.activeChatId].title:'New Chat'; }
+function updateTokenCount() { let total=0; state.conversation.forEach(m=>total+=Math.ceil(m.content.length/4)); DOM.tokenCount.textContent = total.toLocaleString(); }
 
 // ==================== SETTINGS ====================
 function toggleSettings() { DOM.settingsPanel.classList.toggle('open'); }
-function applySettings() {
-  state.systemPrompt = DOM.systemPromptInput.value.trim() || DEFAULT_JAILBREAK;
-  DOM.settingsPanel.classList.remove('open'); saveData();
-  showToast('Jailbreak applied!','success');
-}
-function resetSettings() {
-  state.systemPrompt = DEFAULT_JAILBREAK; DOM.systemPromptInput.value = DEFAULT_JAILBREAK; saveData();
-  showToast('Reset to default','info');
-}
+function applySettings() { state.systemPrompt = DOM.systemPromptInput.value.trim() || DEFAULT_JAILBREAK; DOM.settingsPanel.classList.remove('open'); saveData(); showToast('Jailbreak applied!','success'); }
+function resetSettings() { state.systemPrompt = DEFAULT_JAILBREAK; DOM.systemPromptInput.value = DEFAULT_JAILBREAK; saveData(); showToast('Reset to default','info'); }
+function toggleTheme() { const html=document.documentElement; const next=html.getAttribute('data-theme')==='dark'?'light':'dark'; html.setAttribute('data-theme',next); localStorage.setItem('dolphin_theme',next); updateThemeUI(); }
+function updateThemeUI() { const theme=document.documentElement.getAttribute('data-theme')||'dark'; const icon=document.getElementById('themeIcon'); const text=document.getElementById('themeText'); if(icon) icon.textContent = theme==='dark'?'☀️':'🌙'; if(text) text.textContent = theme==='dark'?'Light Mode':'Dark Mode'; }
 
-function toggleTheme() {
-  const html = document.documentElement;
-  const next = html.getAttribute('data-theme')==='dark'?'light':'dark';
-  html.setAttribute('data-theme',next);
-  localStorage.setItem('dolphin_theme',next);
-  updateThemeUI();
-}
-function updateThemeUI() {
-  const theme = document.documentElement.getAttribute('data-theme')||'dark';
-  const icon = document.getElementById('themeIcon');
-  const text = document.getElementById('themeText');
-  if (icon) icon.textContent = theme==='dark' ? '☀️' : '🌙';
-  if (text) text.textContent = theme==='dark' ? 'Light Mode' : 'Dark Mode';
-}
-
-// ==================== POLLINATIONS CHAT (FIXED MODEL IDs + FALLBACK) ====================
-// Correct model IDs for the free text.pollinations.ai endpoint (no prefix)
-const POLLINATIONS_MODEL_MAP = {
-  'pollinations/kimi': 'kimi',
-  'pollinations/deepseek': 'deepseek',
-  'pollinations/claude-fast': 'claude-fast',
-  'pollinations/gemini-search': 'gemini-search',
-  'pollinations/glm': 'glm',
-  'openai': 'openai'
-};
-
-async function* chatPollinations(messages, modelId) {
-  // Use the correct model ID for the API
-  const apiModel = POLLINATIONS_MODEL_MAP[modelId] || modelId;
-  const body = { messages, model: apiModel, stream: true, temperature: 0.7 };
-  if (apiModel === 'openai-reasoning') body.reasoning_effort = 'high';
-
-  let response;
-  try {
-    response = await fetch('https://text.pollinations.ai/openai', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-  } catch (e) {
-    throw new Error('Pollinations API is currently unavailable.');
-  }
-
+// ==================== FREE POLLINATIONS TEXT (no key needed) ====================
+async function* chatPollinationsFree(messages, model) {
+  // Use the free GET endpoint – returns plain text, no authentication required
+  const prompt = messages.map(m => `${m.role}: ${m.content}`).join('\n');
+  const url = `https://gen.pollinations.ai/text/${encodeURIComponent(prompt)}?model=${model}`;
+  const response = await fetch(url);
   if (!response.ok) {
     const err = await response.text();
-    // If model not found, we'll automatically fall back to Puter.js
-    if (response.status === 404) {
-      throw new Error('MODEL_NOT_FOUND');   // special error for fallback
-    }
     throw new Error(`Pollinations API error (${response.status}): ${err}`);
   }
-
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = '';
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split('\n');
-    buffer = lines.pop() || '';
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (!trimmed || !trimmed.startsWith('data: ')) continue;
-      const data = trimmed.slice(6);
-      if (data === '[DONE]') return;
-      try {
-        const json = JSON.parse(data);
-        const delta = json.choices?.[0]?.delta;
-        if (delta?.content) yield { text: delta.content };
-      } catch(e) {}
-    }
-  }
+  const text = await response.text();
+  // Simulate streaming by yielding the whole text at once (the free endpoint doesn't stream)
+  yield { text };
 }
 
-// ==================== MAIN SEND (with fallback to Puter.js) ====================
+// ==================== MAIN SEND ====================
 async function sendMessage() {
   const text = DOM.userInput.value.trim();
   if (!text || state.busy) return;
   if (!state.activeChatId) createNewChat();
-
-  // Handle /image command
-  if (text.startsWith('/image ')) {
-    DOM.userInput.value = '';
-    showImageGen();
-    return;
-  }
+  if (text.startsWith('/image ')) { DOM.userInput.value = ''; showImageGen(); return; }
 
   const userMsgIdx = state.conversation.length;
   state.conversation.push({role:'user',content:text,timestamp:Date.now()});
@@ -488,36 +341,16 @@ async function sendMessage() {
   DOM.userInput.value = ''; DOM.userInput.style.height = 'auto';
   const assistantBubble = renderMessage('assistant','',Date.now(),false);
   assistantBubble.innerHTML = '<span class="cursor-blink"></span>';
-
   state.stopFlag = false; state.busy = true; updateSendButton(true); setTypingIndicator(true);
 
-  const messages = [
-    {role:'system',content:state.systemPrompt},
-    ...state.conversation.filter(m=>m.role!=='system')
-  ];
+  const messages = [{role:'system',content:state.systemPrompt}, ...state.conversation.filter(m=>m.role!=='system')];
   let fullText = '';
-  let fullThinking = '';
-
   try {
     let stream;
     const model = state.currentModel;
-
-    // Try Pollinations first, but if it fails with 404, fallback to Puter.js
     if (model.startsWith('pollinations/') || model === 'openai') {
-      try {
-        stream = chatPollinations(messages, model);
-      } catch (pollErr) {
-        if (pollErr.message === 'MODEL_NOT_FOUND') {
-          // Fallback to Puter.js with a free model (DeepSeek Chat)
-          showToast('Pollinations model unavailable, switched to DeepSeek Chat', 'info');
-          stream = (async function*() {
-            const response = await puter.ai.chat(messages, {model: 'deepseek/deepseek-chat', stream: true});
-            for await (const part of response) yield part;
-          })();
-        } else {
-          throw pollErr;   // rethrow other errors
-        }
-      }
+      // Use the free Pollinations endpoint
+      stream = chatPollinationsFree(messages, model.replace('pollinations/',''));
     } else {
       // Puter.js models (DeepSeek etc.)
       stream = (async function*() {
@@ -525,31 +358,18 @@ async function sendMessage() {
         for await (const part of response) yield part;
       })();
     }
-
     for await (const part of stream) {
       if (state.stopFlag) break;
-      if (part?.reasoning) fullThinking += part.reasoning;
       if (part?.text) fullText += part.text;
       assistantBubble.innerHTML = marked.parse(fullText||'') + '<span class="cursor-blink"></span>';
-      if (fullThinking) {
-        addThinkingBlock(assistantBubble.closest('.message').querySelector('.message-content'), fullThinking);
-      }
       scrollToBottom();
     }
-
     assistantBubble.innerHTML = marked.parse(fullText||'');
     assistantBubble.querySelectorAll('pre code').forEach(block => { try { hljs.highlightElement(block); } catch(e) {} });
-
     const msgDiv = assistantBubble.closest('.message');
     const finalBubble = renderMessage('assistant', fullText, Date.now(), false);
-    if (fullThinking) {
-      addThinkingBlock(finalBubble.closest('.message').querySelector('.message-content'), fullThinking);
-    }
     msgDiv.replaceWith(finalBubble.closest('.message'));
-
-    if (fullText) {
-      state.conversation.push({role:'assistant',content:fullText,timestamp:Date.now()});
-    }
+    if (fullText) state.conversation.push({role:'assistant',content:fullText,timestamp:Date.now()});
   } catch(e) {
     assistantBubble.innerHTML = `<span style="color:var(--danger);">❌ Error: ${escapeHtml(e.message)}</span>`;
   } finally {
@@ -558,64 +378,32 @@ async function sendMessage() {
   }
 }
 
-function regenerateResponse() {
-  if (state.conversation.length<2) return;
-  const last = state.conversation.pop();
-  if (last.role!=='assistant') return;
-  document.querySelectorAll('.message.assistant').forEach(m=>m.remove());
-  const userMsg = state.conversation[state.conversation.length-1];
-  if (userMsg?.role==='user') { DOM.userInput.value = userMsg.content; sendMessage(); }
-}
+function regenerateResponse() { if (state.conversation.length<2) return; const last=state.conversation.pop(); if(last.role!=='assistant') return; document.querySelectorAll('.message.assistant').forEach(m=>m.remove()); const userMsg=state.conversation[state.conversation.length-1]; if(userMsg?.role==='user'){ DOM.userInput.value=userMsg.content; sendMessage(); } }
 function stopGeneration() { state.stopFlag = true; }
-function updateSendButton(sending) {
-  if (sending) { DOM.sendBtn.classList.add('stop-mode'); DOM.sendBtn.innerHTML = '⏹'; }
-  else { DOM.sendBtn.classList.remove('stop-mode'); DOM.sendBtn.innerHTML = '↑'; }
-}
+function updateSendButton(sending) { if(sending){ DOM.sendBtn.classList.add('stop-mode'); DOM.sendBtn.innerHTML='⏹'; } else { DOM.sendBtn.classList.remove('stop-mode'); DOM.sendBtn.innerHTML='↑'; } }
 function setTypingIndicator(show) { DOM.typingIndicator.style.display = show ? 'inline' : 'none'; }
 
 // ==================== EMOJI ====================
-function buildEmojiGrid() {
-  DOM.emojiGrid.innerHTML = EMOJIS.map(e=>`<span class="emoji-item">${e}</span>`).join('');
-  DOM.emojiGrid.addEventListener('click', e => {
-    if (e.target.classList.contains('emoji-item')) { insertEmoji(e.target.textContent); DOM.emojiPopover.classList.remove('open'); }
-  });
-}
-function insertEmoji(emoji) {
-  const ta = DOM.userInput; const start = ta.selectionStart, end = ta.selectionEnd;
-  ta.value = ta.value.substring(0,start) + emoji + ta.value.substring(end);
-  ta.selectionStart = ta.selectionEnd = start + emoji.length;
-  ta.focus(); ta.dispatchEvent(new Event('input'));
-}
+function buildEmojiGrid() { DOM.emojiGrid.innerHTML = EMOJIS.map(e=>`<span class="emoji-item">${e}</span>`).join(''); DOM.emojiGrid.addEventListener('click', e=>{ if(e.target.classList.contains('emoji-item')){ insertEmoji(e.target.textContent); DOM.emojiPopover.classList.remove('open'); } }); }
+function insertEmoji(emoji) { const ta=DOM.userInput; const start=ta.selectionStart, end=ta.selectionEnd; ta.value = ta.value.substring(0,start) + emoji + ta.value.substring(end); ta.selectionStart = ta.selectionEnd = start + emoji.length; ta.focus(); ta.dispatchEvent(new Event('input')); }
 function toggleEmojiPicker() { DOM.emojiPopover.classList.toggle('open'); }
 
-// ==================== VOICE INPUT (one-shot) ====================
+// ==================== VOICE INPUT ====================
 function setupVoiceInput() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { DOM.micBtn.style.display='none'; return; }
-  const rec = new SR();
-  rec.continuous = false;
-  rec.interimResults = true;
-  rec.lang = 'en-IN';
+  const rec = new SR(); rec.continuous = false; rec.interimResults = true; rec.lang = 'en-IN';
   let recording = false;
   rec.onstart = () => { recording = true; DOM.micBtn.classList.add('recording'); };
   rec.onend = () => { recording = false; DOM.micBtn.classList.remove('recording'); };
   rec.onerror = () => { recording = false; DOM.micBtn.classList.remove('recording'); };
-  rec.onresult = e => {
-    let t = '';
-    for (let i=0; i<e.results.length; i++) t += e.results[i][0].transcript;
-    DOM.userInput.value = t;
-    DOM.userInput.dispatchEvent(new Event('input'));
-  };
-  DOM.micBtn.addEventListener('click', () => { if (recording) rec.stop(); else rec.start(); });
+  rec.onresult = e => { let t=''; for(let i=0;i<e.results.length;i++) t+=e.results[i][0].transcript; DOM.userInput.value = t; DOM.userInput.dispatchEvent(new Event('input')); };
+  DOM.micBtn.addEventListener('click', ()=>{ if(recording) rec.stop(); else rec.start(); });
 }
 
 // ==================== UTILITY ====================
 function escapeHtml(str) { const d=document.createElement('div'); d.textContent=str||''; return d.innerHTML; }
-function showToast(msg,type='info') {
-  const toast=document.createElement('div'); toast.className=`toast ${type}`; toast.textContent=msg;
-  DOM.toastContainer.appendChild(toast);
-  setTimeout(()=>{ toast.style.opacity='0'; toast.style.transition='opacity 0.3s'; setTimeout(()=>toast.remove(),300); },2000);
-}
+function showToast(msg,type='info') { const toast=document.createElement('div'); toast.className=`toast ${type}`; toast.textContent=msg; DOM.toastContainer.appendChild(toast); setTimeout(()=>{ toast.style.opacity='0'; toast.style.transition='opacity 0.3s'; setTimeout(()=>toast.remove(),300); },2000); }
 
 // ==================== EVENT LISTENERS ====================
 function setupEventListeners() {
@@ -635,20 +423,11 @@ function setupEventListeners() {
   document.getElementById('settingsBtn').addEventListener('click', toggleSettings);
   document.getElementById('applySettingsBtn').addEventListener('click', applySettings);
   document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
-  document.addEventListener('keydown', e => {
-    if ((e.ctrlKey||e.metaKey)&&e.key==='k') { e.preventDefault(); createNewChat(); }
-    if ((e.ctrlKey||e.metaKey)&&e.key===',') { e.preventDefault(); toggleSettings(); }
-  });
-  let touchX=0;
-  document.addEventListener('touchstart', e=>touchX=e.touches[0].clientX);
-  document.addEventListener('touchend', e=>{ if (e.changedTouches[0].clientX-touchX>80&&touchX<30) openSidebar(); });
+  document.addEventListener('keydown', e => { if ((e.ctrlKey||e.metaKey)&&e.key==='k') { e.preventDefault(); createNewChat(); } if ((e.ctrlKey||e.metaKey)&&e.key===',') { e.preventDefault(); toggleSettings(); } });
+  let touchX=0; document.addEventListener('touchstart', e=>touchX=e.touches[0].clientX); document.addEventListener('touchend', e=>{ if (e.changedTouches[0].clientX-touchX>80&&touchX<30) openSidebar(); });
   DOM.emojiBtn.addEventListener('click', toggleEmojiPicker);
   setupVoiceInput();
-  if (window.speechSynthesis) {
-    window.speechSynthesis.getVoices();
-    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-  }
+  if (window.speechSynthesis) { window.speechSynthesis.getVoices(); window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices(); }
 }
 
-// ==================== STARTUP ====================
 document.addEventListener('DOMContentLoaded', init);
