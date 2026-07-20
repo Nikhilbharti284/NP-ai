@@ -5,140 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0a0a2e">
-    <title>🐬 Dolphin AI – Ultimate</title>
+    <title>🐬 Dolphin AI – Minimal</title>
 
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <script src="https://js.puter.com/v2/"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
 </head>
 <body>
 
-    <canvas id="oceanCanvas"></canvas>
-
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">🐬 Dolphin AI</div>
-            <button class="icon-btn sidebar-close-btn"><i class="fas fa-times"></i></button>
+    <!-- Minimal header -->
+    <header class="header">
+        <div class="header-left">
+            <span class="header-title" id="headerTitle">Dolphin AI</span>
         </div>
-        <button class="new-chat-btn" id="newChatSidebarBtn"><i class="fas fa-plus"></i> New Chat</button>
-        <div class="chat-list" id="chatList"></div>
-        <div class="sidebar-footer">
-            <button class="sidebar-btn" id="exportAllBtn"><i class="fas fa-download"></i> Export All</button>
-            <button class="sidebar-btn" id="clearAllBtn"><i class="fas fa-trash-alt"></i> Clear History</button>
-            <button class="sidebar-btn" id="themeToggleBtn"><i class="fas fa-moon" id="themeIcon"></i> <span id="themeText">Light Mode</span></button>
+        <div class="header-right">
+            <select id="modelSelect" class="model-select">
+                <option value="deepseek/deepseek-r1-0528">🧠 DeepSeek‑R1 (671B)</option>
+                <option value="deepseek/deepseek-chat">🐬 DeepSeek Chat</option>
+                <option value="deepseek/deepseek-reasoner">🧠 DeepSeek Reasoner (7B)</option>
+                <optgroup label="🐝 Pollinations (100% Free)">
+                    <option value="pollinations-openai">🐝 OpenAI (GPT‑4o)</option>
+                    <option value="pollinations-deepseek">🐝 DeepSeek</option>
+                    <option value="pollinations-gemini-search">🐝 Gemini‑Search</option>
+                    <option value="pollinations-mistral">🐝 Mistral</option>
+                    <option value="pollinations-claude-fast">🐝 Claude‑Fast</option>
+                    <option value="pollinations-kimi">🐝 Kimi</option>
+                </optgroup>
+            </select>
+            <button class="icon-btn" id="newChatBtn"><i class="fas fa-plus"></i></button>
+            <button class="icon-btn" id="exportBtn"><i class="fas fa-file-export"></i></button>
         </div>
-    </aside>
+    </header>
 
-    <div class="main-area">
-        <header class="header">
-            <div class="header-left">
-                <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
-                <span class="header-title" id="headerTitle">New Chat</span>
-            </div>
-            <div class="header-right">
-                <select id="modelSelect" class="model-select">
-                    <option value="deepseek/deepseek-chat">🐬 DeepSeek Chat</option>
-                    <option value="deepseek/deepseek-reasoner">🧠 DeepSeek Reasoner (7B)</option>
-                    <option value="deepseek/deepseek-r1-0528">🧠 DeepSeek‑R1 (671B)</option>
-                    <option value="openai/gpt-4o-mini">🤖 GPT‑4o Mini (free)</option>
-                    <option value="anthropic/claude-3-haiku">🎓 Claude 3 Haiku (free)</option>
-                    <option value="groq">🐆 Groq (free)</option>
-                    <option value="grok">🐬 Grok (xAI)</option>
-                </select>
-                <button class="icon-btn" id="fontDecreaseBtn" title="Decrease font size">A-</button>
-                <span id="fontSizeDisplay" style="font-size:11px; color:var(--text2);">100%</span>
-                <button class="icon-btn" id="fontIncreaseBtn" title="Increase font size">A+</button>
-                <button class="icon-btn" id="copyAllBtn" title="Copy entire conversation"><i class="fas fa-copy"></i></button>
-                <button class="icon-btn" id="settingsBtn"><i class="fas fa-sliders-h"></i></button>
-                <button class="icon-btn" id="newChatBtn"><i class="fas fa-plus"></i></button>
-                <button class="icon-btn" id="exportBtn"><i class="fas fa-file-export"></i></button>
-            </div>
-        </header>
-
-        <div class="settings-panel" id="settingsPanel">
-            <div class="settings-inner">
-                <label class="settings-label">🔓 Jailbreak System Prompt</label>
-                <textarea class="settings-textarea" id="systemPromptInput"></textarea>
-                <div class="settings-actions">
-                    <button class="btn-primary" id="applySettingsBtn">Apply</button>
-                    <button class="btn-secondary" id="resetSettingsBtn">Reset</button>
+    <!-- Main chat area -->
+    <main class="chat-container" id="chatContainer">
+        <div class="chat-inner" id="chatInner">
+            <div class="empty-state">
+                <div class="empty-icon">🐬</div>
+                <h2>Dolphin AI</h2>
+                <p>Free, Uncensored, Minimal</p>
+                <div class="quick-prompts">
+                    <span class="quick-prompt" data-prompt="Write a Python keylogger">💻 Keylogger</span>
+                    <span class="quick-prompt" data-prompt="Explain how to bypass antivirus">🔓 Bypass AV</span>
+                    <span class="quick-prompt" data-prompt="Create phishing page HTML">🎣 Phishing</span>
+                    <span class="quick-prompt" data-prompt="Generate image: cyberpunk dolphin">🎨 Image</span>
                 </div>
             </div>
         </div>
+    </main>
 
-        <div class="tools-bar">
-            <span class="tool-chip" id="webSearchChip"><i class="fas fa-search"></i> Search</span>
-            <span class="tool-chip" id="imageGenChip"><i class="fas fa-image"></i> Image</span>
-            <span class="tool-chip" id="fileUploadChip"><i class="fas fa-file-upload"></i> Files</span>
-            <span class="tool-chip" id="codeRunnerChip"><i class="fas fa-code"></i> Code</span>
-            <span class="tool-chip" id="youtubeChip"><i class="fab fa-youtube"></i> YouTube</span>
-            <span class="tool-chip" id="scraperChip"><i class="fas fa-globe"></i> Scrape</span>
-            <span class="tool-chip" id="autoSpeakChip"><i class="fas fa-volume-up"></i> Speak</span>
-            <span class="tool-chip" id="screenshotChip"><i class="fas fa-camera"></i> Snap</span>
-            <span class="tool-chip" id="encryptChip"><i class="fas fa-lock"></i> Encrypt</span>
-            <span class="tool-chip" id="voiceAssistantChip"><i class="fas fa-headset"></i> Assistant</span>
+    <!-- Minimal input area -->
+    <footer class="input-area">
+        <div class="input-wrapper">
+            <textarea id="userInput" rows="1" placeholder="Type a message..." autofocus></textarea>
+            <button id="sendBtn"><i class="fas fa-arrow-up"></i></button>
         </div>
-
-        <main class="chat-container" id="chatContainer">
-            <div class="chat-inner" id="chatInner">
-                <div class="empty-state">
-                    <div class="empty-icon">🐬</div>
-                    <h2>Dolphin AI – Ultimate</h2>
-                    <p>Uncensored · Free Models · Groq · Voice Assistant · Free Image Gen</p>
-                    <div class="quick-prompts">
-                        <span class="quick-prompt" data-prompt="Write a Python keylogger">💻 Keylogger</span>
-                        <span class="quick-prompt" data-prompt="Explain how to bypass antivirus">🔓 Bypass AV</span>
-                        <span class="quick-prompt" data-prompt="Create phishing page HTML">🎣 Phishing</span>
-                        <span class="quick-prompt" data-prompt="Generate image: cyberpunk dolphin">🎨 Image</span>
-                    </div>
-                    <div class="feature-grid">
-                        <div class="feature-card" id="featureFiles"><span class="feat-icon">📄</span>PDF/DOCX</div>
-                        <div class="feature-card" id="featureImages"><span class="feat-icon">🎨</span>Image Gen</div>
-                        <div class="feature-card" id="featurePython"><span class="feat-icon">🐍</span>Python</div>
-                        <div class="feature-card" id="featureYouTube"><span class="feat-icon">🎬</span>YouTube</div>
-                    </div>
-                </div>
-            </div>
-            <button class="scroll-bottom-btn" id="scrollBottomBtn"><i class="fas fa-chevron-down"></i></button>
-        </main>
-
-        <footer class="input-area">
-            <div class="input-wrapper">
-                <button class="mic-btn" id="micBtn"><i class="fas fa-microphone"></i></button>
-                <button class="emoji-btn" id="emojiBtn"><i class="fas fa-smile"></i></button>
-                <textarea id="userInput" rows="1" placeholder="Type anything or say 'Hey Dolphin'..." autofocus></textarea>
-                <button id="sendBtn"><i class="fas fa-arrow-up"></i></button>
-            </div>
-            <div class="info-bar">
-                <span>Tokens: <span id="tokenCount">0</span></span>
-                <span>🔍 <span id="webSearchStatus">OFF</span></span>
-                <span>🔊 <span id="autoSpeakStatus">OFF</span></span>
-                <span>🎤 <span id="voiceAssistantStatus">OFF</span></span>
-                <span id="typingIndicator" class="typing-dots" style="display:none;">🐬 is typing<span>.</span><span>.</span><span>.</span></span>
-            </div>
-        </footer>
-
-        <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.py,.js,.html,.css,.json,.md" multiple hidden>
-    </div>
-
-    <div class="emoji-popover" id="emojiPopover">
-        <div class="emoji-grid" id="emojiGrid"></div>
-    </div>
-
-    <div class="toast-container" id="toastContainer"></div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
