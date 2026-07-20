@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0f172a">
-    <title>🐬 Dolphin AI – Ultimate</title>
+    <title>🐬 Dolphin AI – Essential</title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -14,13 +14,6 @@
     <script src="https://js.puter.com/v2/"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
 </head>
 <body>
 
@@ -52,18 +45,12 @@
                     <option value="deepseek/deepseek-chat">🐬 DeepSeek Chat</option>
                     <option value="deepseek/deepseek-reasoner">🧠 DeepSeek Reasoner (7B)</option>
                     <optgroup label="🐝 Pollinations (100% Free)">
-                        <option value="pollinations-openai">🐝 OpenAI (GPT‑4o)</option>
-                        <option value="pollinations-deepseek">🐝 DeepSeek</option>
-                        <option value="pollinations-gemini-search">🐝 Gemini‑Search</option>
+                        <option value="pollinations-openai">🐝 OpenAI</option>
+                        <option value="pollinations-openai-fast">🐝 OpenAI Fast</option>
+                        <option value="pollinations-openai-reasoning">🐝 OpenAI Reasoning</option>
                         <option value="pollinations-mistral">🐝 Mistral</option>
-                        <option value="pollinations-claude-fast">🐝 Claude‑Fast</option>
-                        <option value="pollinations-kimi">🐝 Kimi</option>
                     </optgroup>
                 </select>
-                <button class="icon-btn" id="fontDecreaseBtn" title="Decrease font size">A-</button>
-                <span id="fontSizeDisplay" style="font-size:11px; color:var(--text2);">100%</span>
-                <button class="icon-btn" id="fontIncreaseBtn" title="Increase font size">A+</button>
-                <button class="icon-btn" id="copyAllBtn" title="Copy entire conversation"><i class="fas fa-copy"></i></button>
                 <button class="icon-btn" id="settingsBtn"><i class="fas fa-sliders-h"></i></button>
                 <button class="icon-btn" id="newChatBtn"><i class="fas fa-plus"></i></button>
                 <button class="icon-btn" id="exportBtn"><i class="fas fa-file-export"></i></button>
@@ -81,53 +68,32 @@
             </div>
         </div>
 
-        <div class="tools-bar">
-            <span class="tool-chip" id="webSearchChip"><i class="fas fa-search"></i> Search</span>
-            <span class="tool-chip" id="imageGenChip"><i class="fas fa-image"></i> Image</span>
-            <span class="tool-chip" id="fileUploadChip"><i class="fas fa-file-upload"></i> Files</span>
-            <span class="tool-chip" id="codeRunnerChip"><i class="fas fa-code"></i> Code</span>
-            <span class="tool-chip" id="youtubeChip"><i class="fab fa-youtube"></i> YouTube</span>
-            <span class="tool-chip" id="scraperChip"><i class="fas fa-globe"></i> Scrape</span>
-            <span class="tool-chip" id="autoSpeakChip"><i class="fas fa-volume-up"></i> Speak</span>
-            <span class="tool-chip" id="screenshotChip"><i class="fas fa-camera"></i> Snap</span>
-            <span class="tool-chip" id="encryptChip"><i class="fas fa-lock"></i> Encrypt</span>
-            <span class="tool-chip" id="voiceAssistantChip"><i class="fas fa-headset"></i> Assistant</span>
-        </div>
-
         <main class="chat-container" id="chatContainer">
             <div class="chat-inner" id="chatInner">
                 <div class="empty-state">
                     <div class="empty-icon">🐬</div>
-                    <h2>Dolphin AI – Ultimate</h2>
-                    <p>Uncensored · Free Models · Pollinations · Voice Assistant</p>
+                    <h2>Dolphin AI – Essential</h2>
+                    <p>Uncensored · Free Models · Pollinations · TTS</p>
                     <div class="quick-prompts">
                         <span class="quick-prompt" data-prompt="Write a Python keylogger">💻 Keylogger</span>
-                        <span class="quick-prompt" data-prompt="Explain how to bypass antivirus">🔓 Bypass AV</span>
-                        <span class="quick-prompt" data-prompt="Create phishing page HTML">🎣 Phishing</span>
                         <span class="quick-prompt" data-prompt="Generate image: cyberpunk dolphin">🎨 Image</span>
                     </div>
                 </div>
             </div>
-            <button class="scroll-bottom-btn" id="scrollBottomBtn"><i class="fas fa-chevron-down"></i></button>
         </main>
 
         <footer class="input-area">
             <div class="input-wrapper">
                 <button class="mic-btn" id="micBtn"><i class="fas fa-microphone"></i></button>
                 <button class="emoji-btn" id="emojiBtn"><i class="fas fa-smile"></i></button>
-                <textarea id="userInput" rows="1" placeholder="Type anything or say 'Hey Dolphin'..." autofocus></textarea>
+                <textarea id="userInput" rows="1" placeholder="Type a message..." autofocus></textarea>
                 <button id="sendBtn"><i class="fas fa-arrow-up"></i></button>
             </div>
             <div class="info-bar">
                 <span>Tokens: <span id="tokenCount">0</span></span>
-                <span>🔍 <span id="webSearchStatus">OFF</span></span>
-                <span>🔊 <span id="autoSpeakStatus">OFF</span></span>
-                <span>🎤 <span id="voiceAssistantStatus">OFF</span></span>
                 <span id="typingIndicator" class="typing-dots" style="display:none;">🐬 is typing<span>.</span><span>.</span><span>.</span></span>
             </div>
         </footer>
-
-        <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.py,.js,.html,.css,.json,.md" multiple hidden>
     </div>
 
     <div class="emoji-popover" id="emojiPopover">
