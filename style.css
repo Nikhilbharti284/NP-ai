@@ -83,6 +83,18 @@ body {
 .message.assistant .message-bubble { background:var(--ai-bg); border:1px solid var(--border); border-bottom-left-radius:4px; }
 .message-time { font-size:10px; color:var(--text2); margin-top:6px; text-align:right; opacity:0.7; }
 
+/* Thinking block */
+.thinking-block {
+  background: rgba(59,130,246,0.08);
+  border-left: 3px solid var(--accent);
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  color: var(--text2);
+  font-style: italic;
+}
+
 /* Action buttons */
 .message-actions { display:flex; gap:8px; margin-top:10px; opacity:0; transition: opacity 0.2s; }
 .message:hover .message-actions { opacity:1; }
@@ -130,4 +142,4 @@ body {
   .sidebar { position:fixed; left:0; top:0; bottom:0; transform:translateX(-100%); width:280px; z-index:200; }
   .sidebar.open { transform:translateX(0); }
   .message-actions { opacity:1 !important; }
-           }
+                    }
