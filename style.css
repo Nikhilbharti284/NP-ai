@@ -97,6 +97,15 @@ body {
 .action-btn.speaking { color:var(--accent); border-color:var(--accent); animation: speakPulse 1s infinite; }
 @keyframes speakPulse { 0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,0.4);} 50%{box-shadow:0 0 0 8px rgba(59,130,246,0);} }
 
+/* User edit button */
+.user-edit-btn { position:absolute; top:8px; right:8px; background:var(--surface); border:1px solid var(--border); color:var(--text2); border-radius:4px; width:24px; height:24px; cursor:pointer; display:none; align-items:center; justify-content:center; font-size:12px; }
+.message.user:hover .user-edit-btn { display:flex; }
+
+/* Code block copy */
+.code-block-wrapper { position:relative; }
+.code-copy-btn { position:absolute; top:8px; right:8px; background:var(--surface); border:1px solid var(--border); color:var(--text2); border-radius:4px; width:24px; height:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:10px; opacity:0; transition:opacity 0.2s; }
+.code-block-wrapper:hover .code-copy-btn { opacity:1; }
+
 /* Input */
 .input-area { background:var(--surface); border-top:1px solid var(--border); padding:12px 16px calc(12px + var(--safe-bottom)); }
 .input-wrapper { max-width:800px; margin:0 auto; display:flex; gap:8px; align-items:flex-end; background:var(--bg); border:2px solid var(--border); border-radius:20px; padding:8px 8px 8px 14px; }
@@ -147,4 +156,6 @@ body {
   .sidebar { position:fixed; left:0; top:0; bottom:0; transform:translateX(-100%); width:280px; z-index:200; }
   .sidebar.open { transform:translateX(0); }
   .message-actions { opacity:1 !important; }
-  }
+  .code-copy-btn { opacity:0.5; }
+  .user-edit-btn { display:flex !important; opacity:0.8; }
+               }
