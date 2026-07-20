@@ -407,19 +407,43 @@ function updateThemeUI() {
   if (text) text.textContent = theme==='dark' ? 'Light Mode' : 'Dark Mode';
 }
 
-// ==================== POLLINATIONS CHAT (ALL MODELS) ====================
+// ==================== POLLINATIONS CHAT (FIXED MODEL IDs + FALLBACK) ====================
+// Correct model IDs for the free text.pollinations.ai endpoint (no prefix)
+const POLLINATIONS_MODEL_MAP = {
+  'pollinations/kimi': 'kimi',
+  'pollinations/deepseek': 'deepseek',
+  'pollinations/claude-fast': 'claude-fast',
+  'pollinations/gemini-search': 'gemini-search',
+  'pollinations/glm': 'glm',
+  'openai': 'openai'
+};
+
 async function* chatPollinations(messages, modelId) {
-  const body = { messages, model: modelId, stream: true, temperature: 0.7 };
-  if (modelId === 'openai-reasoning') body.reasoning_effort = 'high';
-  const response = await fetch('https://text.pollinations.ai/openai', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
+  // Use the correct model ID for the API
+  const apiModel = POLLINATIONS_MODEL_MAP[modelId] || modelId;
+  const body = { messages, model: apiModel, stream: true, temperature: 0.7 };
+  if (apiModel === 'openai-reasoning') body.reasoning_effort = 'high';
+
+  let response;
+  try {
+    response = await fetch('https://text.pollinations.ai/openai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  } catch (e) {
+    throw new Error('Pollinations API is currently unavailable.');
+  }
+
   if (!response.ok) {
     const err = await response.text();
+    // If model not found, we'll automatically fall back to Puter.js
+    if (response.status === 404) {
+      throw new Error('MODEL_NOT_FOUND');   // special error for fallback
+    }
     throw new Error(`Pollinations API error (${response.status}): ${err}`);
   }
+
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
@@ -443,7 +467,7 @@ async function* chatPollinations(messages, modelId) {
   }
 }
 
-// ==================== MAIN SEND ====================
+// ==================== MAIN SEND (with fallback to Puter.js) ====================
 async function sendMessage() {
   const text = DOM.userInput.value.trim();
   if (!text || state.busy) return;
@@ -477,9 +501,25 @@ async function sendMessage() {
   try {
     let stream;
     const model = state.currentModel;
+
+    // Try Pollinations first, but if it fails with 404, fallback to Puter.js
     if (model.startsWith('pollinations/') || model === 'openai') {
-      stream = chatPollinations(messages, model);
+      try {
+        stream = chatPollinations(messages, model);
+      } catch (pollErr) {
+        if (pollErr.message === 'MODEL_NOT_FOUND') {
+          // Fallback to Puter.js with a free model (DeepSeek Chat)
+          showToast('Pollinations model unavailable, switched to DeepSeek Chat', 'info');
+          stream = (async function*() {
+            const response = await puter.ai.chat(messages, {model: 'deepseek/deepseek-chat', stream: true});
+            for await (const part of response) yield part;
+          })();
+        } else {
+          throw pollErr;   // rethrow other errors
+        }
+      }
     } else {
+      // Puter.js models (DeepSeek etc.)
       stream = (async function*() {
         const response = await puter.ai.chat(messages, {model: model, stream: true});
         for await (const part of response) yield part;
