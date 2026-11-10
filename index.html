@@ -1,368 +1,506 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#111318">
-    <title>Dolphin AI Ultra – Face-Lock Studio, Termux & Python OS</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-    <link rel="stylesheet" href="./style.css">
-
-    <!-- Cloud AI, Markdown, Syntax Highlight & Pyodide Python 3.12 WebAssembly -->
-    <script src="https://js.puter.com/v2/"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#111318">
+  <title>Dolphin AI Ultra – AI Video Director, Face-Lock Studio, Termux & Python OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <link rel="stylesheet" href="./style.css">
+  <!-- Cloud AI, Markdown, Syntax Highlight & Pyodide Python 3.12 WebAssembly -->
+  <script src="https://js.puter.com/v2/"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js" defer></script>
 </head>
 <body>
 
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ==================== SIDEBAR ==================== -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-top">
-            <button class="new-chat-row" id="newChatSidebarBtn">
-                <span class="logo-circle">🐬</span>
-                <span>New Workspace</span>
-                <span class="edit-icon">✎</span>
-            </button>
-            <button class="icon-btn mobile-only" id="closeSidebarBtn">✕</button>
-        </div>
-
-        <div class="sidebar-section">⚡ Cyber & Creative Suite</div>
-        <div class="sidebar-tools">
-            <button class="side-tool-item" id="uploadPhotoSidebarBtn">
-                <span>👗</span> <span>Face-Lock Dress Changer</span>
-            </button>
-            <button class="side-tool-item" id="openStudioSidebarBtn">
-                <span>🎨</span> <span>Inpaint Brush & Studio</span>
-            </button>
-            <button class="side-tool-item" id="openTermuxSidebarBtn">
-                <span>💻</span> <span>Termux + Python + Recon</span>
-            </button>
-            <button class="side-tool-item" id="bugAuditSidebarBtn">
-                <span>🛡️</span> <span>Auto Bug Bounty & Audit</span>
-            </button>
-            <button class="side-tool-item" id="todayNewsSidebarBtn">
-                <span>📰</span> <span>Live Google News (HI/EN)</span>
-            </button>
-            <button class="side-tool-item" id="openSandboxSidebarBtn">
-                <span>🌐</span> <span>Live Web App Sandbox</span>
-            </button>
-        </div>
-
-        <div class="sidebar-section">💬 Recent Sessions</div>
-        <div class="chat-list" id="chatList"></div>
-
-        <div class="sidebar-footer">
-            <button class="side-footer-btn" id="themeToggleBtn">
-                <span id="themeIcon">☀️</span> <span id="themeText">Light Mode</span>
-            </button>
-            <button class="side-footer-btn" id="settingsBtn">
-                <span>⚙️</span> <span>API Keys & Auto-Run Settings</span>
-            </button>
-            <button class="side-footer-btn danger-text" id="clearAllBtn">
-                <span>🗑</span> <span>Clear All History</span>
-            </button>
-        </div>
-    </aside>
-
-    <!-- ==================== MAIN CHAT AREA ==================== -->
-    <div class="main-area">
-        <header class="top-nav">
-            <div class="nav-left">
-                <button class="menu-btn" id="menuBtn" title="Menu">☰</button>
-                <select id="modelSelect" class="chatgpt-model-picker" title="Choose Free Power Model">
-                    <optgroup label="🔥 Top Multimodal & Reasoning">
-                        <option value="gemini-hybrid">✨ Gemini 2.0 + Face-Lock AI</option>
-                        <option value="claude-3-5-sonnet">🎭 Claude 3.5 Sonnet (Coding + Audit)</option>
-                        <option value="gpt-4o">🚀 GPT-4o Omni (Vision + Full-Stack)</option>
-                        <option value="deepseek-r1">🧠 DeepSeek R1 671B (Reasoning)</option>
-                        <option value="deepseek">🐬 DeepSeek V3 (Uncensored Tech)</option>
-                    </optgroup>
-                    <optgroup label="⚡ Specialized Coding & Uncensored">
-                        <option value="qwen-coder">💻 Qwen 2.5 Coder 32B</option>
-                        <option value="llama">🦙 Llama 3.3 70B Instruct</option>
-                        <option value="mistral">🔓 Mistral Large 2 (Uncensored)</option>
-                    </optgroup>
-                </select>
-            </div>
-            <div class="nav-right">
-                <button class="top-pill-btn" id="headerTermuxBtn" title="Open Termux & Python">
-                    <span>&gt;_</span> <span>Termux</span>
-                </button>
-                <button class="icon-btn" id="headerStudioBtn" title="Photo Studio">🎨</button>
-                <button class="icon-btn" id="newChatBtn" title="New Chat">✎</button>
-            </div>
-        </header>
-
-        <!-- Settings Drawer -->
-        <div class="settings-drawer" id="settingsPanel">
-            <div class="settings-box">
-                <div class="settings-header">
-                    <span>🔑 Gemini API Key (Pre-loaded for GitHub Pages)</span>
-                    <div class="settings-toggles">
-                        <label class="voice-check"><input type="checkbox" id="faceLockCheck" checked> 🔒 Lock Real Face</label>
-                        <label class="voice-check"><input type="checkbox" id="autoRunPyCheck" checked> 🐍 Auto-Run Python</label>
-                        <label class="voice-check"><input type="checkbox" id="autoVoiceCheck"> 🔊 Voice</label>
-                    </div>
-                </div>
-                <input type="password" id="geminiKeyInput" class="key-input" placeholder="Paste Gemini Key...">
-                <div class="settings-header" style="margin-top:4px;">
-                    <span>⚙️ System Prompt (Uncensored Technical Mode)</span>
-                </div>
-                <textarea id="systemPromptInput" rows="2"></textarea>
-                <div class="settings-btns">
-                    <button class="btn-solid" id="applySettingsBtn">Save Settings</button>
-                    <button class="btn-outline" id="resetSettingsBtn">Reset Default</button>
-                    <button class="btn-outline" id="exportBtn">📥 Export JSON</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Messages Viewport -->
-        <main class="chat-viewport" id="chatContainer">
-            <div class="chat-stream" id="chatInner"></div>
-        </main>
-
-        <!-- ==================== COMPOSER & FACE-LOCK TRAY ==================== -->
-        <footer class="composer-wrap">
-            <!-- Photo Preview Tray when Gallery Image is Attached -->
-            <div class="photo-preview-tray" id="attachmentBar" style="display:none;">
-                <div class="preview-thumb-box">
-                    <img id="attachedImgThumb" src="" alt="Uploaded">
-                    <button class="remove-thumb-btn" id="removeAttachmentBtn" title="Remove">✕</button>
-                </div>
-                <div class="preview-quick-actions">
-                    <span class="preview-hint">🔒 <b>Real Face Locked!</b> ड्रेस का रंग बदलें, नया आउटफिट पहनाएं या ब्रश से एडिट करें:</span>
-                    <div class="preview-pills">
-                        <button class="action-pill color-swatch" data-color="red">🔴 Red Dress</button>
-                        <button class="action-pill color-swatch" data-color="blue">🔵 Royal Blue</button>
-                        <button class="action-pill color-swatch" data-color="green">🟢 Emerald</button>
-                        <button class="action-pill color-swatch" data-color="gold">🟡 Golden</button>
-                        <button class="action-pill color-swatch" data-color="purple">🟣 Purple</button>
-                        <button class="action-pill color-swatch" data-color="teal">🩵 Teal</button>
-                        <button class="action-pill color-swatch" data-color="black">⚫ Black</button>
-                        <button class="action-pill accent-pill" id="customOutfitBtn">👗 Custom Outfit (Face-Lock)</button>
-                        <button class="action-pill" id="studioAttachedBtn">🖌️ Inpaint Brush Studio</button>
-                        <button class="action-pill" id="bgChangeBtn">🏔️ Change BG</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="composer-box">
-                <textarea id="userInput" rows="1" placeholder="कुछ भी पूछें, Python/Recon खुद रन करवाएं, या ＋ से फोटो अपलोड करके बिना चेहरा बदले ड्रेस बदलें..."></textarea>
-
-                <div class="composer-bottom-row">
-                    <input type="file" id="chatImageUpload" accept="image/*" hidden>
-
-                    <div class="composer-tools-left">
-                        <button class="plus-upload-btn" id="attachImgBtn" title="Upload Photo from Gallery">＋</button>
-                        <button class="mode-pill" id="createImgModeBtn">
-                            <span>📸</span> <span>Real Photo</span>
-                        </button>
-                        <button class="mode-pill" id="openTermuxQuickBtn">
-                            <span>💻</span> <span>Termux</span>
-                        </button>
-                        <button class="mode-pill" id="autoAgentQuickBtn">
-                            <span>🤖</span> <span>Auto-Agent</span>
-                        </button>
-                        <button class="mode-pill" id="bugScanQuickBtn">
-                            <span>🛡️</span> <span>Bug Audit</span>
-                        </button>
-                        <button class="mode-pill" id="webSearchToggleBtn">
-                            <span>🌐</span> <span>Search</span>
-                        </button>
-                        <button class="mode-pill" id="newsQuickBtn">
-                            <span>📰</span> <span>News</span>
-                        </button>
-                        <button class="mode-pill" id="openStudioQuickBtn">
-                            <span>🎨</span> <span>Studio</span>
-                        </button>
-                    </div>
-
-                    <div class="composer-tools-right">
-                        <button class="voice-btn" id="micBtn" title="Voice Input">🎤</button>
-                        <button class="send-circle-btn" id="sendBtn" title="Send">↑</button>
-                    </div>
-                </div>
-            </div>
-        </footer>
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="new-chat-row" id="newChatSidebarBtn">
+        <span class="logo-circle">🐬</span>
+        <span>New Workspace</span>
+        <span class="edit-icon">✎</span>
+      </button>
+      <button class="icon-btn mobile-only" id="closeSidebarBtn">✕</button>
     </div>
 
-    <!-- ==================== 1. TERMUX LINUX + PYTHON + AUTO-AGENT MODAL ==================== -->
-    <div class="modal-backdrop" id="termuxModal">
-        <div class="studio-dialog termux-dialog">
-            <div class="termux-header">
-                <div class="termux-title-wrap">
-                    <span class="term-dots"><i class="r"></i><i class="y"></i><i class="g"></i></span>
-                    <h3>root@dolphin-os:~ (Termux + Python 3.12 + OSINT Agent)</h3>
-                </div>
-                <div class="btn-row">
-                    <button class="term-chip" id="termRunPythonBtn">🐍 Run recon.py</button>
-                    <button class="term-chip" id="termAutoAgentBtn">🤖 Auto-Agent</button>
-                    <button class="term-chip" id="termClearBtn">Clear</button>
-                    <button class="icon-btn" id="closeTermuxBtn">✕</button>
-                </div>
-            </div>
-
-            <div class="termux-shortcuts">
-                <button class="t-short" data-cmd="help">help</button>
-                <button class="t-short" data-cmd="recon example.com">recon &lt;domain&gt;</button>
-                <button class="t-short" data-cmd="headers https://example.com">headers &lt;url&gt;</button>
-                <button class="t-short" data-cmd="py import hashlib; print(hashlib.sha256(b'dolphin').hexdigest())">py &lt;code&gt;</button>
-                <button class="t-short" data-cmd="audit Analyze JWT None algorithm and IDOR vulnerabilities">audit &lt;topic&gt;</button>
-                <button class="t-short" data-cmd="agent Write a Python script to test password entropy and run it">agent &lt;goal&gt;</button>
-                <button class="t-short" data-cmd="ls">ls</button>
-            </div>
-
-            <div class="termux-body" id="termuxOutput"></div>
-
-            <div class="termux-input-bar">
-                <span class="term-prompt">root@dolphin:~#</span>
-                <input type="text" id="termuxInput" placeholder="Type command: help, py <code>, recon <domain>, headers <url>, audit <target>, agent <goal>..." autocomplete="off" spellcheck="false">
-                <button class="btn-accent" id="termuxSendBtn">Run ↵</button>
-            </div>
-        </div>
+    <div class="sidebar-section">⚡ Cyber & Creative Suite</div>
+    <div class="sidebar-tools">
+      <button class="side-tool-item" id="openVideoStudioSidebarBtn">
+        <span>🎬</span>
+        <span>AI Video & Movie Maker (No Key)</span>
+      </button>
+      <button class="side-tool-item" id="uploadPhotoSidebarBtn">
+        <span>👗</span>
+        <span>Face-Lock Dress Changer</span>
+      </button>
+      <button class="side-tool-item" id="openStudioSidebarBtn">
+        <span>🎨</span>
+        <span>Inpaint Brush & Studio</span>
+      </button>
+      <button class="side-tool-item" id="openTermuxSidebarBtn">
+        <span>💻</span>
+        <span>Termux + Python + Recon</span>
+      </button>
+      <button class="side-tool-item" id="bugAuditSidebarBtn">
+        <span>🛡️</span>
+        <span>Auto Bug Bounty & Audit</span>
+      </button>
+      <button class="side-tool-item" id="todayNewsSidebarBtn">
+        <span>📰</span>
+        <span>Live Google News (HI/EN)</span>
+      </button>
+      <button class="side-tool-item" id="openSandboxSidebarBtn">
+        <span>🌐</span>
+        <span>Live Web App Sandbox</span>
+      </button>
     </div>
 
-    <!-- ==================== 2. FACE-LOCK & INPAINT BRUSH PHOTO STUDIO MODAL ==================== -->
-    <div class="modal-backdrop" id="studioModal">
-        <div class="studio-dialog">
-            <div class="modal-top">
-                <h3>🎨 Face-Lock Dress Changer & Inpaint Brush Studio</h3>
-                <button class="icon-btn" id="closeStudioBtn">✕</button>
-            </div>
+    <div class="sidebar-section">💬 Recent Sessions</div>
+    <div class="chat-list" id="chatList"></div>
 
-            <div class="studio-layout">
-                <div class="studio-canvas-side">
-                    <div class="canvas-box" id="canvasBox">
-                        <canvas id="editorCanvas" width="768" height="768"></canvas>
-                        <canvas id="maskCanvas" width="768" height="768"></canvas>
-                        <div class="canvas-loader" id="studioLoading" style="display:none;">
-                            <div class="loader-ring"></div>
-                            <span id="studioLoadingText">असली चेहरा लॉक रखकर आपकी फोटो तैयार हो रही है...</span>
-                        </div>
-                    </div>
-                    <div class="canvas-tip">
-                        🔒 <b>Face-Lock Active:</b> ड्रेस पर सीधा टैप करें या <b>🖌️ Mask Brush</b> ऑन करके सिर्फ़ जिस कपड़े को बदलना है उस पर पेंट करें!
-                    </div>
-                    <div class="canvas-action-bar">
-                        <input type="file" id="uploadImageInput" accept="image/*" hidden>
-                        <button class="btn-outline" id="triggerUploadBtn">📂 Upload</button>
-                        <button class="btn-outline" id="toggleMaskBrushBtn">🖌️ Mask Brush: OFF</button>
-                        <button class="btn-outline" id="clearMaskBtn">🧹 Clear Mask</button>
-                        <button class="btn-outline" id="undoStudioBtn">↩️ Original</button>
-                        <button class="btn-outline" id="downloadStudioImgBtn">📥 Save</button>
-                        <button class="btn-solid" id="sendToChatStudioBtn">💬 To Chat</button>
-                    </div>
-                </div>
+    <div class="sidebar-footer">
+      <button class="side-footer-btn" id="themeToggleBtn">
+        <span id="themeIcon">☀️</span>
+        <span id="themeText">Light Mode</span>
+      </button>
+      <button class="side-footer-btn" id="settingsBtn">
+        <span>⚙️</span>
+        <span>API Keys & Auto-Run Settings</span>
+      </button>
+      <button class="side-footer-btn danger-text" id="clearAllBtn">
+        <span>🗑</span>
+        <span>Clear All History</span>
+      </button>
+    </div>
+  </aside>
 
-                <div class="studio-controls-side">
-                    <div class="tab-bar">
-                        <button class="tab-btn active" data-tab="st-dress">👗 Real Dress</button>
-                        <button class="tab-btn" data-tab="st-ai">🧬 Face-Lock AI</button>
-                        <button class="tab-btn" data-tab="st-filters">🎚️ Filters</button>
-                    </div>
+  <!-- ==================== MAIN CHAT AREA ==================== -->
+  <div class="main-area">
+    <header class="top-nav">
+      <div class="nav-left">
+        <button class="menu-btn" id="menuBtn" title="Menu">☰</button>
+        <select id="modelSelect" class="chatgpt-model-picker" title="Choose Free Power Model">
+          <optgroup label="🔥 Top Multimodal & Reasoning">
+            <option value="gemini-hybrid">✨ Gemini 2.0 + Face-Lock AI</option>
+            <option value="claude-3-5-sonnet">🎭 Claude 3.5 Sonnet (Coding + Audit)</option>
+            <option value="gpt-4o">🚀 GPT-4o Omni (Vision + Full-Stack)</option>
+            <option value="deepseek-r1">🧠 DeepSeek R1 671B (Reasoning)</option>
+            <option value="deepseek">🐬 DeepSeek V3 (Uncensored Tech)</option>
+          </optgroup>
+          <optgroup label="⚡ Specialized Coding & Uncensored">
+            <option value="qwen-coder">💻 Qwen 2.5 Coder 32B</option>
+            <option value="llama">🦙 Llama 3.3 70B Instruct</option>
+            <option value="mistral">🔓 Mistral Large 2 (Uncensored)</option>
+          </optgroup>
+        </select>
+      </div>
 
-                    <!-- TAB 1: PIXEL-EXACT REAL DRESS RECOLOR -->
-                    <div class="tab-pane active" id="st-dress">
-                        <div class="studio-label">1. Pixel-Exact Dress Changer (100% Same Face & Photo)</div>
-                        <div class="color-swatch-grid">
-                            <button class="dress-color-btn" data-color="red" style="background:#dc2626;color:#fff;">🔴 Royal Red</button>
-                            <button class="dress-color-btn" data-color="blue" style="background:#2563eb;color:#fff;">🔵 Royal Blue</button>
-                            <button class="dress-color-btn" data-color="green" style="background:#059669;color:#fff;">🟢 Emerald</button>
-                            <button class="dress-color-btn" data-color="gold" style="background:#d97706;color:#fff;">🟡 Golden</button>
-                            <button class="dress-color-btn" data-color="purple" style="background:#7c3aed;color:#fff;">🟣 Purple</button>
-                            <button class="dress-color-btn" data-color="teal" style="background:#0d9488;color:#fff;">🩵 Peacock Teal</button>
-                            <button class="dress-color-btn" data-color="maroon" style="background:#7f1d1d;color:#fff;">🍷 Maroon</button>
-                            <button class="dress-color-btn" data-color="black" style="background:#1f2937;color:#fff;">⚫ Jet Black</button>
-                        </div>
-                        <div class="slider-row" style="margin-top:6px;">
-                            <span>Custom Color</span>
-                            <input type="color" id="customDressColorPicker" value="#e11d48" style="width:44px;height:30px;border:none;background:none;">
-                            <button class="btn-outline" id="applyCustomDressColorBtn">Apply</button>
-                        </div>
-                        <div class="slider-row">
-                            <span>Dress Sensitivity</span>
-                            <input type="range" id="dressToleranceSlider" min="20" max="85" value="48">
-                        </div>
-                        <div class="slider-row">
-                            <span>Brush Size</span>
-                            <input type="range" id="maskBrushSize" min="15" max="90" value="45">
-                        </div>
-                    </div>
+      <div class="nav-right">
+        <button class="top-pill-btn video-pill-btn" id="headerVideoBtn" title="AI Movie & Video Maker">
+          <span>🎬</span>
+          <span>AI Video</span>
+        </button>
+        <button class="top-pill-btn" id="headerTermuxBtn" title="Open Termux & Python">
+          <span>&gt;_</span>
+          <span>Termux</span>
+        </button>
+        <button class="icon-btn" id="headerStudioBtn" title="Photo Studio">🎨</button>
+        <button class="icon-btn" id="newChatBtn" title="New Chat">✎</button>
+      </div>
+    </header>
 
-                    <!-- TAB 2: FACE-LOCK AI OUTFIT COMPOSITE -->
-                    <div class="tab-pane" id="st-ai">
-                        <div class="studio-label">2. Face-Locked AI Outfit / Background Swap</div>
-                        <textarea id="studioPromptInput" rows="2" placeholder="Ex: Wearing a royal red designer lehenga, or black leather jacket..."></textarea>
-                        <div class="btn-row">
-                            <select id="studioEngineSelect" class="text-inp" style="flex:1;">
-                                <option value="flux-realism">📸 RAW DSLR Realism</option>
-                                <option value="flux">🎨 Flux Pro</option>
-                                <option value="flux-anime">🎌 Anime Style</option>
-                            </select>
-                        </div>
-                        <div class="btn-row">
-                            <button class="btn-accent" id="studioFaceLockEditBtn" style="flex:1;">🔒 Swap Outfit (Keep Real Face)</button>
-                            <button class="btn-solid" id="studioGenerateBtn" style="flex:1;">✨ New Photo</button>
-                        </div>
-                        <div class="preset-grid">
-                            <button class="preset-btn" data-prompt="wearing a royal crimson red and gold embroidered Indian bridal suit">👗 Red Designer Suit</button>
-                            <button class="preset-btn" data-prompt="wearing a stylish black leather jacket over a white t-shirt">🧥 Black Jacket</button>
-                            <button class="preset-btn" data-prompt="wearing a royal blue silk saree with golden border">🥻 Royal Blue Saree</button>
-                            <button class="preset-btn" data-prompt="standing in front of snow-covered Himachal mountains at sunset">🏔️ Himachal BG</button>
-                        </div>
-                    </div>
-
-                    <!-- TAB 3: FILTERS & TEXT -->
-                    <div class="tab-pane" id="st-filters">
-                        <div class="slider-row"><span>Brightness</span><input type="range" id="filterBrightness" min="40" max="170" value="100"></div>
-                        <div class="slider-row"><span>Contrast</span><input type="range" id="filterContrast" min="40" max="170" value="100"></div>
-                        <div class="slider-row"><span>Saturation</span><input type="range" id="filterSaturation" min="0" max="220" value="100"></div>
-                        <div class="slider-row"><span>Warmth</span><input type="range" id="filterSepia" min="0" max="100" value="0"></div>
-                        <div class="btn-row" style="margin-top:6px;">
-                            <button class="btn-outline" style="flex:1" id="rotateImgBtn">🔄 Rotate</button>
-                            <button class="btn-outline" style="flex:1" id="flipHImgBtn">↔️ Flip</button>
-                            <button class="btn-outline" style="flex:1" id="resetFiltersBtn">♻️ Reset</button>
-                        </div>
-                        <div class="btn-row" style="margin-top:6px;">
-                            <input type="text" id="overlayTextInput" class="text-inp" placeholder="Add watermark or text...">
-                            <input type="color" id="overlayColorInput" value="#ffffff" style="width:36px;height:34px;border:none;background:none;">
-                            <button class="btn-solid" id="addTextOverlayBtn">＋ Text</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Settings Drawer -->
+    <div class="settings-drawer" id="settingsPanel">
+      <div class="settings-box">
+        <div class="settings-header">
+          <span>🔑 Gemini API Key (Optional – Video & Chat work without key too)</span>
+          <div class="settings-toggles">
+            <label class="voice-check"><input type="checkbox" id="faceLockCheck" checked> 🔒 Lock Real Face</label>
+            <label class="voice-check"><input type="checkbox" id="autoRunPyCheck" checked> 🐍 Auto-Run Python</label>
+            <label class="voice-check"><input type="checkbox" id="autoVoiceCheck"> 🔊 Voice</label>
+          </div>
         </div>
+        <input type="password" id="geminiKeyInput" class="key-input" placeholder="Paste Gemini Key...">
+        <div class="settings-header" style="margin-top:4px;">
+          <span>⚙️ System Prompt (Uncensored Technical Mode)</span>
+        </div>
+        <textarea id="systemPromptInput" rows="2"></textarea>
+        <div class="settings-btns">
+          <button class="btn-solid" id="applySettingsBtn">Save Settings</button>
+          <button class="btn-outline" id="resetSettingsBtn">Reset Default</button>
+          <button class="btn-outline" id="exportBtn">📥 Export JSON</button>
+        </div>
+      </div>
     </div>
 
-    <!-- ==================== 3. LIVE CODE SANDBOX MODAL ==================== -->
-    <div class="modal-backdrop" id="sandboxModal">
-        <div class="studio-dialog sandbox-wide">
-            <div class="modal-top">
-                <h3>🌐 Live HTML / CSS / JS App Runner</h3>
-                <div class="btn-row">
-                    <button class="btn-solid" id="runSandboxBtn">▶ Run App</button>
-                    <button class="icon-btn" id="closeSandboxBtn">✕</button>
-                </div>
-            </div>
-            <div class="sandbox-split">
-                <textarea id="sandboxCodeEditor" spellcheck="false"></textarea>
-                <iframe id="sandboxFrame" sandbox="allow-scripts allow-modals"></iframe>
-            </div>
+    <!-- Messages Viewport -->
+    <main class="chat-viewport" id="chatContainer">
+      <div class="chat-stream" id="chatInner"></div>
+    </main>
+
+    <!-- ==================== COMPOSER & FACE-LOCK TRAY ==================== -->
+    <footer class="composer-wrap">
+      <!-- Photo Preview Tray when Gallery Image is Attached -->
+      <div class="photo-preview-tray" id="attachmentBar" style="display:none;">
+        <div class="preview-thumb-box">
+          <img id="attachedImgThumb" src="" alt="Uploaded">
+          <button class="remove-thumb-btn" id="removeAttachmentBtn" title="Remove">✕</button>
         </div>
+        <div class="preview-quick-actions">
+          <span class="preview-hint">🔒 <b>Real Face Locked!</b> ड्रेस का रंग बदलें, नया आउटफिट पहनाएं या इस फोटो से वीडियो बनाएं:</span>
+          <div class="preview-pills">
+            <button class="action-pill color-swatch" data-color="red">🔴 Red Dress</button>
+            <button class="action-pill color-swatch" data-color="blue">🔵 Royal Blue</button>
+            <button class="action-pill color-swatch" data-color="green">🟢 Emerald</button>
+            <button class="action-pill color-swatch" data-color="gold">🟡 Golden</button>
+            <button class="action-pill color-swatch" data-color="purple">🟣 Purple</button>
+            <button class="action-pill color-swatch" data-color="teal">🩵 Teal</button>
+            <button class="action-pill color-swatch" data-color="black">⚫ Black</button>
+            <button class="action-pill accent-pill" id="customOutfitBtn">👗 Custom Outfit (Face-Lock)</button>
+            <button class="action-pill" id="animatePhotoVideoBtn">🎬 Animate Photo to Video</button>
+            <button class="action-pill" id="studioAttachedBtn">🖌️ Inpaint Brush Studio</button>
+            <button class="action-pill" id="bgChangeBtn">🏔️ Change BG</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="composer-box">
+        <textarea id="userInput" rows="1" placeholder="कुछ भी पूछें, 🎬 से बिना API Key के मूवी/कहानी वीडियो बनाएं, या ＋ से फोटो अपलोड करें..."></textarea>
+
+        <div class="composer-bottom-row">
+          <input type="file" id="chatImageUpload" accept="image/*" hidden>
+
+          <div class="composer-tools-left">
+            <button class="plus-upload-btn" id="attachImgBtn" title="Upload Photo from Gallery">＋</button>
+
+            <button class="mode-pill" id="createVideoModeBtn">
+              <span>🎬</span>
+              <span>AI Video</span>
+            </button>
+
+            <button class="mode-pill" id="openVideoStudioQuickBtn">
+              <span>🍿</span>
+              <span>Movie Studio</span>
+            </button>
+
+            <button class="mode-pill" id="createImgModeBtn">
+              <span>📸</span>
+              <span>Real Photo</span>
+            </button>
+
+            <button class="mode-pill" id="openTermuxQuickBtn">
+              <span>💻</span>
+              <span>Termux</span>
+            </button>
+
+            <button class="mode-pill" id="autoAgentQuickBtn">
+              <span>🤖</span>
+              <span>Auto-Agent</span>
+            </button>
+
+            <button class="mode-pill" id="bugScanQuickBtn">
+              <span>🛡️</span>
+              <span>Bug Audit</span>
+            </button>
+
+            <button class="mode-pill" id="webSearchToggleBtn">
+              <span>🌐</span>
+              <span>Search</span>
+            </button>
+
+            <button class="mode-pill" id="newsQuickBtn">
+              <span>📰</span>
+              <span>News</span>
+            </button>
+
+            <button class="mode-pill" id="openStudioQuickBtn">
+              <span>🎨</span>
+              <span>Studio</span>
+            </button>
+          </div>
+
+          <div class="composer-tools-right">
+            <button class="voice-btn" id="micBtn" title="Voice Input">🎤</button>
+            <button class="send-circle-btn" id="sendBtn" title="Send">↑</button>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ==================== 0. AI VIDEO & STORY MOVIE DIRECTOR STUDIO MODAL ==================== -->
+  <div class="modal-backdrop" id="videoStudioModal">
+    <div class="studio-dialog video-studio-dialog">
+      <div class="modal-top">
+        <h3>🎬 AI Video & Movie Director Studio (100% Free · Zero API Key)</h3>
+        <button class="icon-btn" id="closeVideoStudioBtn">✕</button>
+      </div>
+
+      <div class="studio-layout">
+        <!-- Left: Video Player / Live Render Canvas + Real-Time Progress Bar -->
+        <div class="studio-canvas-side">
+          <div class="canvas-box video-canvas-box" id="videoPreviewBox">
+            <canvas id="videoRenderCanvas" width="854" height="480" style="display:none;"></canvas>
+            <video id="studioVideoPlayer" controls playsinline loop style="width:100%;height:100%;object-fit:contain;display:none;"></video>
+            <div id="videoEmptyPlaceholder" style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">
+              <div style="font-size:36px;margin-bottom:8px;">🎬</div>
+              <b>AI Story & Movie Generator Ready!</b><br>
+              दाईं तरफ कहानी या टॉपिक लिखें और <b>🚀 Generate Full Movie</b> दबाएं।<br>
+              आपको हर सीन की लाइव लोडिंग (%) और प्रिव्यू दिखाई देगा।
+            </div>
+          </div>
+
+          <!-- Live Step-by-Step Loading Progress Container -->
+          <div class="video-progress-box" id="studioVideoProgressBox" style="display:none;">
+            <div class="vp-top-row">
+              <span class="vp-step-badge" id="studioVpBadge">⏳ Step 1/4</span>
+              <span class="vp-percent" id="studioVpPercent">0%</span>
+            </div>
+            <div class="vp-bar-track">
+              <div class="vp-bar-fill" id="studioVpBar" style="width:0%;"></div>
+            </div>
+            <div class="vp-status-text" id="studioVpStatus">AI डायरेक्टर आपकी कहानी और सीन तैयार कर रहा है...</div>
+            <div class="vp-scene-strip" id="studioVpThumbs"></div>
+          </div>
+
+          <div class="canvas-action-bar" id="studioVideoActions" style="display:none;">
+            <button class="btn-accent" id="playWithVoiceoverStudioBtn">🔊 Play with AI Voiceover</button>
+            <a class="btn-solid" id="downloadStudioVideoBtn" download="dolphin-ai-movie.webm" style="text-decoration:none;">📥 Download HD Video</a>
+            <button class="btn-outline" id="sendVideoToChatBtn">💬 Send to Chat</button>
+          </div>
+        </div>
+
+        <!-- Right: Movie Director Controls -->
+        <div class="studio-controls-side">
+          <div class="studio-label">1. कहानी, मूवी या शॉर्ट वीडियो का टॉपिक लिखें</div>
+          <textarea id="videoPromptInput" rows="3" placeholder="Ex: एक बहादुर योद्धा और ड्रैगन की कहानी हिमालय के बर्फीले पहाड़ों में (A cinematic story of a warrior and dragon in snow mountains)..."></textarea>
+
+          <div class="preset-grid">
+            <button class="preset-btn video-preset-btn" data-prompt="एक रहस्यमयी जादुई जंगल में भटकते हुए राजकुमार की कहानी जिसे एक चमकती हुई नदी और प्राचीन महल मिलता है">🏰 जादुई जंगल की कहानी</button>
+            <button class="preset-btn video-preset-btn" data-prompt="2099 के साइबरपंक टोक्यो शहर में एक हैकर और रोबोट की हाई-टेक एक्शन मूवी">🤖 Cyberpunk Sci-Fi Movie</button>
+            <button class="preset-btn video-preset-btn" data-prompt="हिमाचल प्रदेश के बर्फीले पहाड़ों और देवदार के जंगलों में एक सुकून भरी बाइक यात्रा">🏔️ Himachal Road Trip</button>
+            <button class="preset-btn video-preset-btn" data-prompt="अंतरिक्ष में एक अकेले एस्ट्रोनॉट की कहानी जो एक नए नीले ग्रह और एलियन सभ्यता की खोज करता है">🚀 Space Odyssey</button>
+          </div>
+
+          <div class="studio-label" style="margin-top:4px;">2. मूवी सेटिंग्स (Style, Size & Audio)</div>
+          <div class="slider-row">
+            <span>Visual Style</span>
+            <select id="videoStyleSelect" class="text-inp" style="flex:1;">
+              <option value="flux-realism">🎥 4K Hollywood Realism</option>
+              <option value="flux-3d">🧸 3D Pixar / Disney Animation</option>
+              <option value="flux-anime">🎌 Anime Studio Movie (Makoto Shinkai)</option>
+              <option value="flux">⚡ Cyberpunk & Fantasy Epic</option>
+            </select>
+          </div>
+
+          <div class="slider-row">
+            <span>Aspect Ratio</span>
+            <select id="videoAspectSelect" class="text-inp" style="flex:1;">
+              <option value="16:9">📺 16:9 YouTube / Cinema (854×480)</option>
+              <option value="9:16">📱 9:16 Reels / Shorts (480×854)</option>
+              <option value="1:1">🟦 1:1 Square Post (640×640)</option>
+            </select>
+          </div>
+
+          <div class="slider-row">
+            <span>Movie Length</span>
+            <select id="videoSceneCountSelect" class="text-inp" style="flex:1;">
+              <option value="3">⚡ 3 Scenes (~14 sec Fast Render)</option>
+              <option value="4" selected>🎬 4 Scenes (~18 sec Story Movie)</option>
+              <option value="5">🍿 5 Scenes (~23 sec Full Mini-Movie)</option>
+            </select>
+          </div>
+
+          <div class="slider-row">
+            <span>BGM & Audio</span>
+            <select id="videoBgmSelect" class="text-inp" style="flex:1;">
+              <option value="cinematic">🎻 Cinematic Epic Ambient</option>
+              <option value="lofi">🎧 Emotional Lofi Chill</option>
+              <option value="cyber">⚡ Suspense Cyber Pulse</option>
+              <option value="none">🔇 Mute BGM</option>
+            </select>
+          </div>
+
+          <button class="btn-accent" id="generateStudioMovieBtn" style="padding:11px;font-size:13.5px;margin-top:4px;">
+            🚀 Generate Full AI Movie (No API Key)
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="toast-stack" id="toastContainer"></div>
+  <!-- ==================== 1. TERMUX LINUX + PYTHON + AUTO-AGENT MODAL ==================== -->
+  <div class="modal-backdrop" id="termuxModal">
+    <div class="studio-dialog termux-dialog">
+      <div class="termux-header">
+        <div class="termux-title-wrap">
+          <span class="term-dots"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+          <h3>root@dolphin-os:~ (Termux + Python 3.12 + OSINT Agent)</h3>
+        </div>
+        <div class="btn-row">
+          <button class="term-chip" id="termRunPythonBtn">🐍 Run recon.py</button>
+          <button class="term-chip" id="termAutoAgentBtn">🤖 Auto-Agent</button>
+          <button class="term-chip" id="termClearBtn">Clear</button>
+          <button class="icon-btn" id="closeTermuxBtn">✕</button>
+        </div>
+      </div>
+      <div class="termux-shortcuts">
+        <button class="t-short" data-cmd="help">help</button>
+        <button class="t-short" data-cmd="recon example.com">recon &lt;domain&gt;</button>
+        <button class="t-short" data-cmd="headers https://example.com">headers &lt;url&gt;</button>
+        <button class="t-short" data-cmd="py import hashlib; print(hashlib.sha256(b'dolphin').hexdigest())">py &lt;code&gt;</button>
+        <button class="t-short" data-cmd="audit Analyze JWT None algorithm and IDOR vulnerabilities">audit &lt;topic&gt;</button>
+        <button class="t-short" data-cmd="agent Write a Python script to test password entropy and run it">agent &lt;goal&gt;</button>
+        <button class="t-short" data-cmd="ls">ls</button>
+      </div>
+      <div class="termux-body" id="termuxOutput"></div>
+      <div class="termux-input-bar">
+        <span class="term-prompt">root@dolphin:~#</span>
+        <input type="text" id="termuxInput" placeholder="Type command: help, py <code>, recon <domain>, headers <url>, audit <target>, agent <goal>..." autocomplete="off" spellcheck="false">
+        <button class="btn-accent" id="termuxSendBtn">Run ↵</button>
+      </div>
+    </div>
+  </div>
 
-    <script src="./script.js"></script>
+  <!-- ==================== 2. FACE-LOCK & INPAINT BRUSH PHOTO STUDIO MODAL ==================== -->
+  <div class="modal-backdrop" id="studioModal">
+    <div class="studio-dialog">
+      <div class="modal-top">
+        <h3>🎨 Face-Lock Dress Changer & Inpaint Brush Studio</h3>
+        <button class="icon-btn" id="closeStudioBtn">✕</button>
+      </div>
+
+      <div class="studio-layout">
+        <div class="studio-canvas-side">
+          <div class="canvas-box" id="canvasBox">
+            <canvas id="editorCanvas" width="768" height="768"></canvas>
+            <canvas id="maskCanvas" width="768" height="768"></canvas>
+            <div class="canvas-loader" id="studioLoading" style="display:none;">
+              <div class="loader-ring"></div>
+              <span id="studioLoadingText">असली चेहरा लॉक रखकर आपकी फोटो तैयार हो रही है...</span>
+            </div>
+          </div>
+          <div class="canvas-tip">
+            🔒 <b>Face-Lock Active:</b> ड्रेस पर सीधा टैप करें या <b>🖌️ Mask Brush</b> ऑन करके सिर्फ़ जिस कपड़े को बदलना है उस पर पेंट करें!
+          </div>
+          <div class="canvas-action-bar">
+            <input type="file" id="uploadImageInput" accept="image/*" hidden>
+            <button class="btn-outline" id="triggerUploadBtn">📂 Upload</button>
+            <button class="btn-outline" id="toggleMaskBrushBtn">🖌️ Mask Brush: OFF</button>
+            <button class="btn-outline" id="clearMaskBtn">🧹 Clear Mask</button>
+            <button class="btn-outline" id="undoStudioBtn">↩️ Original</button>
+            <button class="btn-outline" id="downloadStudioImgBtn">📥 Save</button>
+            <button class="btn-solid" id="sendToChatStudioBtn">💬 To Chat</button>
+          </div>
+        </div>
+
+        <div class="studio-controls-side">
+          <div class="tab-bar">
+            <button class="tab-btn active" data-tab="st-dress">👗 Real Dress</button>
+            <button class="tab-btn" data-tab="st-ai">🧬 Face-Lock AI</button>
+            <button class="tab-btn" data-tab="st-filters">🎚️ Filters</button>
+          </div>
+
+          <!-- TAB 1: PIXEL-EXACT REAL DRESS RECOLOR -->
+          <div class="tab-pane active" id="st-dress">
+            <div class="studio-label">1. Pixel-Exact Dress Changer (100% Same Face & Photo)</div>
+            <div class="color-swatch-grid">
+              <button class="dress-color-btn" data-color="red" style="background:#dc2626;color:#fff;">🔴 Royal Red</button>
+              <button class="dress-color-btn" data-color="blue" style="background:#2563eb;color:#fff;">🔵 Royal Blue</button>
+              <button class="dress-color-btn" data-color="green" style="background:#059669;color:#fff;">🟢 Emerald</button>
+              <button class="dress-color-btn" data-color="gold" style="background:#d97706;color:#fff;">🟡 Golden</button>
+              <button class="dress-color-btn" data-color="purple" style="background:#7c3aed;color:#fff;">🟣 Purple</button>
+              <button class="dress-color-btn" data-color="teal" style="background:#0d9488;color:#fff;">🩵 Peacock Teal</button>
+              <button class="dress-color-btn" data-color="maroon" style="background:#7f1d1d;color:#fff;">🍷 Maroon</button>
+              <button class="dress-color-btn" data-color="black" style="background:#1f2937;color:#fff;">⚫ Jet Black</button>
+            </div>
+            <div class="slider-row" style="margin-top:6px;">
+              <span>Custom Color</span>
+              <input type="color" id="customDressColorPicker" value="#e11d48" style="width:44px;height:30px;border:none;background:none;">
+              <button class="btn-outline" id="applyCustomDressColorBtn">Apply</button>
+            </div>
+            <div class="slider-row">
+              <span>Dress Sensitivity</span>
+              <input type="range" id="dressToleranceSlider" min="20" max="85" value="48">
+            </div>
+            <div class="slider-row">
+              <span>Brush Size</span>
+              <input type="range" id="maskBrushSize" min="15" max="90" value="45">
+            </div>
+          </div>
+
+          <!-- TAB 2: FACE-LOCK AI OUTFIT COMPOSITE -->
+          <div class="tab-pane" id="st-ai">
+            <div class="studio-label">2. Face-Locked AI Outfit / Background Swap</div>
+            <textarea id="studioPromptInput" rows="2" placeholder="Ex: Wearing a royal red designer lehenga, or black leather jacket..."></textarea>
+            <div class="btn-row">
+              <select id="studioEngineSelect" class="text-inp" style="flex:1;">
+                <option value="flux-realism">📸 RAW DSLR Realism</option>
+                <option value="flux">🎨 Flux Pro</option>
+                <option value="flux-anime">🎌 Anime Style</option>
+              </select>
+            </div>
+            <div class="btn-row">
+              <button class="btn-accent" id="studioFaceLockEditBtn" style="flex:1;">🔒 Swap Outfit (Keep Real Face)</button>
+              <button class="btn-solid" id="studioGenerateBtn" style="flex:1;">✨ New Photo</button>
+            </div>
+            <div class="preset-grid">
+              <button class="preset-btn" data-prompt="wearing a royal crimson red and gold embroidered Indian bridal suit">👗 Red Designer Suit</button>
+              <button class="preset-btn" data-prompt="wearing a stylish black leather jacket over a white t-shirt">🧥 Black Jacket</button>
+              <button class="preset-btn" data-prompt="wearing a royal blue silk saree with golden border">🥻 Royal Blue Saree</button>
+              <button class="preset-btn" data-prompt="standing in front of snow-covered Himachal mountains at sunset">🏔️ Himachal BG</button>
+            </div>
+          </div>
+
+          <!-- TAB 3: FILTERS & TEXT -->
+          <div class="tab-pane" id="st-filters">
+            <div class="slider-row"><span>Brightness</span><input type="range" id="filterBrightness" min="40" max="170" value="100"></div>
+            <div class="slider-row"><span>Contrast</span><input type="range" id="filterContrast" min="40" max="170" value="100"></div>
+            <div class="slider-row"><span>Saturation</span><input type="range" id="filterSaturation" min="0" max="220" value="100"></div>
+            <div class="slider-row"><span>Warmth</span><input type="range" id="filterSepia" min="0" max="100" value="0"></div>
+            <div class="btn-row" style="margin-top:6px;">
+              <button class="btn-outline" style="flex:1" id="rotateImgBtn">🔄 Rotate</button>
+              <button class="btn-outline" style="flex:1" id="flipHImgBtn">↔️ Flip</button>
+              <button class="btn-outline" style="flex:1" id="resetFiltersBtn">♻️ Reset</button>
+            </div>
+            <div class="btn-row" style="margin-top:6px;">
+              <input type="text" id="overlayTextInput" class="text-inp" placeholder="Add watermark or text...">
+              <input type="color" id="overlayColorInput" value="#ffffff" style="width:36px;height:34px;border:none;background:none;">
+              <button class="btn-solid" id="addTextOverlayBtn">＋ Text</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 3. LIVE CODE SANDBOX MODAL ==================== -->
+  <div class="modal-backdrop" id="sandboxModal">
+    <div class="studio-dialog sandbox-wide">
+      <div class="modal-top">
+        <h3>🌐 Live HTML / CSS / JS App Runner</h3>
+        <div class="btn-row">
+          <button class="btn-solid" id="runSandboxBtn">▶ Run App</button>
+          <button class="icon-btn" id="closeSandboxBtn">✕</button>
+        </div>
+      </div>
+      <div class="sandbox-split">
+        <textarea id="sandboxCodeEditor" spellcheck="false"></textarea>
+        <iframe id="sandboxFrame" sandbox="allow-scripts allow-modals"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toastContainer"></div>
+  <script src="./script.js"></script>
 </body>
 </html>
