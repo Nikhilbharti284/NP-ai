@@ -4,28 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#070b14">
-    <title>🐬 Dolphin AI Pro – Static AI Workspace</title>
+    <meta name="theme-color" content="#0b0f19">
+    <title>🐬 Dolphin AI Ultra – Smart AI Workspace</title>
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <!-- Highlight.js & Custom Styles (Relative path for GitHub Pages) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
     <link rel="stylesheet" href="./style.css">
 
-    <!-- Free Static AI SDKs -->
     <script src="https://js.puter.com/v2/"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
 <body>
-
-    <!-- Ambient Background Glows -->
-    <div class="ambient-glow glow-1"></div>
-    <div class="ambient-glow glow-2"></div>
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -35,48 +28,43 @@
             <div class="brand-wrap">
                 <span class="brand-icon">🐬</span>
                 <div>
-                    <div class="sidebar-logo">Dolphin AI Pro</div>
-                    <span class="brand-badge">Zero-Key Static Suite</span>
+                    <div class="sidebar-logo">Dolphin AI Ultra</div>
+                    <span class="brand-badge">Vision · Web · Image Edit</span>
                 </div>
             </div>
-            <button class="icon-btn sidebar-close-btn" title="Close sidebar">✕</button>
+            <button class="icon-btn sidebar-close-btn" id="closeSidebarBtn" title="Close">✕</button>
         </div>
 
         <button class="new-chat-btn" id="newChatSidebarBtn">
-            <span>＋</span> New Workspace Chat
+            <span>＋</span> New Conversation
         </button>
 
-        <!-- AI Tools Quick Launch -->
-        <div class="sidebar-section-label">⚡ AI Power Tools</div>
+        <div class="sidebar-section-label">⚡ Smart AI Tools</div>
         <div class="tools-grid">
             <button class="tool-card-btn" id="openStudioSidebarBtn">
-                <span class="t-icon">🎨</span>
-                <span>Image Studio</span>
+                <span>🎨</span> <span>Photo Studio</span>
             </button>
             <button class="tool-card-btn" id="triggerVisionSidebarBtn">
-                <span class="t-icon">👁️</span>
-                <span>Vision / OCR</span>
+                <span>🪄</span> <span>Edit Gallery Photo</span>
+            </button>
+            <button class="tool-card-btn" id="urlSummarySidebarBtn">
+                <span>🔗</span> <span>Read Website</span>
             </button>
             <button class="tool-card-btn" id="openSandboxSidebarBtn">
-                <span class="t-icon">💻</span>
-                <span>Code Runner</span>
-            </button>
-            <button class="tool-card-btn" id="toggleWebSidebarBtn">
-                <span class="t-icon">🌐</span>
-                <span>Web Search</span>
+                <span>💻</span> <span>Code Runner</span>
             </button>
         </div>
 
-        <div class="sidebar-section-label">💬 Recent Conversations</div>
+        <div class="sidebar-section-label">💬 Chat History</div>
         <div class="chat-list" id="chatList"></div>
 
         <div class="sidebar-footer">
             <div class="footer-row">
-                <button class="sidebar-btn" id="exportAllBtn" title="Backup all chats">📥 Backup</button>
-                <button class="sidebar-btn" id="clearAllBtn" title="Clear all chats">🗑 Clear</button>
+                <button class="sidebar-btn" id="exportAllBtn">📥 Backup</button>
+                <button class="sidebar-btn" id="clearAllBtn">🗑 Clear</button>
             </div>
             <button class="sidebar-btn full-width" id="themeToggleBtn">
-                <span id="themeIcon">🌌</span> <span id="themeText">Theme: Cyber Dark</span>
+                <span id="themeIcon">🌙</span> <span id="themeText">Theme: Dark</span>
             </button>
         </div>
     </aside>
@@ -87,35 +75,30 @@
             <div class="header-left">
                 <button class="menu-btn" id="menuBtn" title="Menu">☰</button>
                 <div class="title-stack">
-                    <span class="header-title" id="headerTitle">New Chat</span>
-                    <span class="status-dot-wrap"><span class="status-dot"></span> Online · GitHub Pages Ready</span>
+                    <span class="header-title" id="headerTitle">Dolphin AI</span>
+                    <span class="status-dot-wrap"><span class="status-dot"></span> Auto-Failover Active</span>
                 </div>
             </div>
 
             <div class="header-right">
-                <select id="modelSelect" class="model-select" title="Choose Free AI Model">
-                    <optgroup label="⚡ Puter.js Free Cloud Models">
-                        <option value="deepseek/deepseek-r1-0528">🧠 DeepSeek-R1 (Reasoning)</option>
-                        <option value="deepseek/deepseek-chat">🐬 DeepSeek V3 Chat</option>
+                <select id="modelSelect" class="model-select" title="Select AI Model">
+                    <optgroup label="🚀 Best All-Rounders (Vision + Chat)">
+                        <option value="gpt-4o-mini">⚡ GPT-4o Mini (Fast + Vision)</option>
+                        <option value="gpt-4o">🧠 GPT-4o Pro (Vision + Smart)</option>
                         <option value="claude-3-5-sonnet">🎭 Claude 3.5 Sonnet</option>
-                        <option value="gpt-4o-mini">🤖 GPT-4o Mini (Vision)</option>
-                        <option value="gpt-4o">🚀 GPT-4o (Vision + Code)</option>
-                        <option value="meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo">🦙 Llama 3.1 70B</option>
+                        <option value="deepseek/deepseek-chat">🐬 DeepSeek V3 Chat</option>
+                        <option value="deepseek/deepseek-r1-0528">🔬 DeepSeek R1 (Reasoner)</option>
                     </optgroup>
-                    <optgroup label="🐝 Pollinations (100% Keyless)">
-                        <option value="pollinations/openai">🐝 OpenAI GPT-4.1 Mini</option>
-                        <option value="pollinations/gemini-search">🌐 Gemini Live Search</option>
-                        <option value="pollinations/qwen-coder">💻 Qwen 2.5 Coder 32B</option>
-                        <option value="pollinations/deepseek">🧠 DeepSeek V3.2</option>
-                        <option value="pollinations/claude-fast">⚡ Claude Haiku 4.5</option>
+                    <optgroup label="🐝 Pollinations Cloud (POST v2)">
+                        <option value="pollinations/openai">🐝 OpenAI GPT-4.1</option>
+                        <option value="pollinations/qwen-coder">💻 Qwen 2.5 Coder</option>
                         <option value="pollinations/mistral">🌪️ Mistral Large</option>
+                        <option value="pollinations/deepseek">🧠 Pollinations DeepSeek</option>
                     </optgroup>
                 </select>
-                <button class="icon-btn" id="headerStudioBtn" title="AI Image Generator & Editor">🎨</button>
-                <button class="icon-btn" id="headerSandboxBtn" title="Live HTML/JS Sandbox">💻</button>
-                <button class="icon-btn" id="settingsBtn" title="System Prompt & Voice Settings">⚙️</button>
-                <button class="icon-btn" id="newChatBtn" title="New chat">＋</button>
-                <button class="icon-btn" id="exportBtn" title="Export chat">📤</button>
+                <button class="icon-btn" id="headerStudioBtn" title="Photo Editor & AI Generator">🎨</button>
+                <button class="icon-btn" id="settingsBtn" title="Settings">⚙️</button>
+                <button class="icon-btn" id="newChatBtn" title="New Chat">＋</button>
             </div>
         </header>
 
@@ -123,162 +106,208 @@
         <div class="settings-panel" id="settingsPanel">
             <div class="settings-inner">
                 <div class="settings-top-row">
-                    <label class="settings-label">🔓 Custom System Prompt / Persona</label>
+                    <label class="settings-label">⚙️ Custom System Instructions</label>
                     <label class="tts-toggle-label">
                         <input type="checkbox" id="usePuterTtsCheck" checked>
-                        <span>🎙️ Use Puter Neural AI Voice (TTS)</span>
+                        <span>🎙️ Neural AI Voice</span>
                     </label>
                 </div>
                 <textarea class="settings-textarea" id="systemPromptInput"></textarea>
                 <div class="settings-actions">
-                    <button class="btn-primary" id="applySettingsBtn">Save & Apply</button>
-                    <button class="btn-secondary" id="resetSettingsBtn">Reset Default</button>
+                    <button class="btn-primary" id="applySettingsBtn">Save</button>
+                    <button class="btn-secondary" id="resetSettingsBtn">Reset</button>
+                    <button class="btn-secondary" id="exportBtn">📤 Export Chat</button>
                 </div>
             </div>
         </div>
 
-        <!-- Chat Viewport -->
+        <!-- Chat Messages Container -->
         <main class="chat-container" id="chatContainer">
             <div class="chat-inner" id="chatInner"></div>
         </main>
 
-        <!-- Input Dock -->
+        <!-- ==================== MOBILE-FIRST 2-ROW INPUT DOCK ==================== -->
         <footer class="input-area">
-            <!-- Image Attachment Preview Bar (For AI Vision / OCR) -->
+            <!-- Gallery Image / File Preview Bar -->
             <div class="attachment-preview-bar" id="attachmentBar" style="display:none;">
-                <img id="attachedImgThumb" src="" alt="Attached">
+                <img id="attachedImgThumb" src="" alt="Preview">
                 <div class="attachment-info">
-                    <span class="att-title">Image attached for AI Vision</span>
+                    <span class="att-title" id="attachmentTitle">Gallery Photo Ready</span>
                     <div class="att-actions">
-                        <button class="mini-pill-btn" id="extractOcrBtn">🔍 Extract Text (OCR)</button>
-                        <button class="mini-pill-btn" id="editAttachedInStudioBtn">✏️ Edit in Studio</button>
+                        <button class="mini-pill-btn primary-pill" id="aiEditAttachedBtn">🪄 AI Edit Photo with Prompt</button>
+                        <button class="mini-pill-btn" id="extractOcrBtn">🔍 Read Text (OCR)</button>
+                        <button class="mini-pill-btn" id="editAttachedInStudioBtn">🎛️ Filters</button>
                     </div>
                 </div>
-                <button class="remove-att-btn" id="removeAttachmentBtn" title="Remove image">✕</button>
+                <button class="remove-att-btn" id="removeAttachmentBtn" title="Remove">✕</button>
             </div>
 
-            <div class="input-wrapper">
-                <input type="file" id="chatImageUpload" accept="image/*" hidden>
-                <button class="tool-icon-btn" id="attachImgBtn" title="Upload Image for AI Vision or OCR">📎</button>
-                <button class="tool-icon-btn" id="webSearchToggleBtn" title="Toggle Live Web Search">🌐</button>
-                <button class="tool-icon-btn" id="quickImgGenBtn" title="Generate Image (/image)">🎨</button>
-                <button class="tool-icon-btn" id="openEditorBtn" title="Open Image Editor Studio">🖼️</button>
-                <button class="tool-icon-btn" id="emojiBtn" title="Emoji Picker">😊</button>
-                <button class="tool-icon-btn" id="micBtn" title="Voice Input">🎤</button>
+            <div class="composer-card">
+                <!-- Row 1: Full-width typing area -->
+                <textarea id="userInput" rows="1" placeholder="Ask anything, or upload a photo 📎 and type how to edit it..." autofocus></textarea>
 
-                <textarea id="userInput" rows="1" placeholder="Ask anything, /image for art, /web for live search, or attach 📎 photo..." autofocus></textarea>
-                <button id="sendBtn" title="Send message">↑</button>
+                <!-- Row 2: Action Pills + Mic & Send -->
+                <div class="composer-toolbar">
+                    <input type="file" id="chatImageUpload" accept="image/*" hidden>
+                    <input type="file" id="chatDocUpload" accept=".txt,.md,.js,.py,.html,.css,.json,.csv" hidden>
+
+                    <div class="toolbar-left">
+                        <button class="chip-btn" id="attachImgBtn" title="Upload Photo from Gallery">
+                            <span>📎</span> <span>Photo</span>
+                        </button>
+                        <button class="chip-btn" id="webSearchToggleBtn" title="Live Internet Search">
+                            <span>🌐</span> <span>Web</span>
+                        </button>
+                        <button class="chip-btn" id="quickImgGenBtn" title="Create or Edit AI Image">
+                            <span>🎨</span> <span>Create</span>
+                        </button>
+                        <button class="chip-btn" id="enhancePromptBtn" title="Enhance your prompt with AI">
+                            <span>✨</span> <span>Enhance</span>
+                        </button>
+                        <button class="chip-btn" id="attachDocBtn" title="Upload Code or Text File">
+                            <span>📄</span> <span>File</span>
+                        </button>
+                        <button class="chip-btn" id="emojiBtn" title="Emojis">
+                            <span>😊</span>
+                        </button>
+                    </div>
+
+                    <div class="toolbar-right">
+                        <button class="round-icon-btn" id="micBtn" title="Voice Input">🎤</button>
+                        <button id="sendBtn" title="Send">↑</button>
+                    </div>
+                </div>
             </div>
 
             <div class="info-bar">
-                <span>Tokens: <strong id="tokenCount">0</strong></span>
                 <span id="webModeBadge" class="mode-badge" style="display:none;">🌐 Live Web Search ON</span>
-                <span>Commands: <code>/image</code> · <code>/web</code> · <code>📎 Vision/OCR</code></span>
-                <span id="typingIndicator" class="typing-dots" style="display:none;">🐬 Processing<span>.</span><span>.</span><span>.</span></span>
+                <span>Tokens: <strong id="tokenCount">0</strong></span>
+                <span id="typingIndicator" class="typing-dots" style="display:none;">🐬 Working<span>.</span><span>.</span><span>.</span></span>
             </div>
         </footer>
     </div>
 
-    <!-- ==================== 1. AI IMAGE STUDIO & EDITOR MODAL ==================== -->
+    <!-- ==================== MOBILE-FRIENDLY IMAGE STUDIO MODAL ==================== -->
     <div class="studio-modal-overlay" id="studioModal">
         <div class="studio-modal">
             <div class="studio-header">
-                <h3>🎨 AI Image Generator & Canvas Editor (No API Key)</h3>
+                <h3>🎨 AI Photo Editor & Generator</h3>
                 <button class="icon-btn" id="closeStudioBtn">✕</button>
             </div>
 
             <div class="studio-body">
-                <!-- Controls Column -->
-                <div class="studio-controls">
-                    <div class="control-group">
-                        <label>1. Source Image</label>
-                        <input type="file" id="uploadImageInput" accept="image/*" hidden>
-                        <button class="btn-secondary full-width" id="triggerUploadBtn">📂 Upload Photo from Device</button>
-                    </div>
-
-                    <div class="control-group">
-                        <label>AI Prompt (Generate or AI Remix)</label>
-                        <textarea id="studioPromptInput" rows="3" placeholder="Cyberpunk samurai in neon rain, cinematic lighting, 8k..."></textarea>
-                        <div class="studio-row">
-                            <select id="studioModelSelect" class="model-select" style="flex:1;">
-                                <option value="flux">⚡ Flux (Best Quality)</option>
-                                <option value="flux-realism">📸 Flux Realism</option>
-                                <option value="flux-anime">🎌 Flux Anime</option>
-                                <option value="flux-3d">🧊 Flux 3D</option>
-                                <option value="turbo">🚀 Turbo (Fastest)</option>
-                                <option value="puter-dalle">🤖 Puter AI Generator</option>
-                            </select>
-                            <select id="studioRatioSelect" class="model-select">
-                                <option value="1024x1024">1:1 Square</option>
-                                <option value="1280x720">16:9 Landscape</option>
-                                <option value="720x1280">9:16 Portrait</option>
-                            </select>
-                        </div>
-                        <div class="studio-row" style="margin-top:6px;">
-                            <button class="btn-primary" id="studioGenerateBtn" style="flex:1;">✨ Generate</button>
-                            <button class="btn-secondary" id="studioAiRemixBtn" style="flex:1;">🪄 AI Edit / Remix</button>
-                        </div>
-                    </div>
-
-                    <hr class="studio-divider">
-
-                    <div class="control-group">
-                        <label>2. Live Color & Filter Grading</label>
-                        <div class="slider-item"><span>Brightness</span><input type="range" id="filterBrightness" min="20" max="200" value="100"></div>
-                        <div class="slider-item"><span>Contrast</span><input type="range" id="filterContrast" min="20" max="200" value="100"></div>
-                        <div class="slider-item"><span>Saturation</span><input type="range" id="filterSaturation" min="0" max="250" value="100"></div>
-                        <div class="slider-item"><span>Hue Shift</span><input type="range" id="filterHue" min="0" max="360" value="0"></div>
-                        <div class="slider-item"><span>Blur</span><input type="range" id="filterBlur" min="0" max="15" value="0" step="0.5"></div>
-                        <div class="slider-item"><span>Sepia</span><input type="range" id="filterSepia" min="0" max="100" value="0"></div>
-                    </div>
-
-                    <div class="control-group">
-                        <label>3. Transform & Text Overlay</label>
-                        <div class="studio-row">
-                            <button class="btn-secondary" id="rotateImgBtn">🔄 Rotate</button>
-                            <button class="btn-secondary" id="flipHImgBtn">↔️ Flip H</button>
-                            <button class="btn-secondary" id="flipVImgBtn">↕️ Flip V</button>
-                            <button class="btn-secondary" id="resetFiltersBtn">♻️ Reset</button>
-                        </div>
-                        <div class="studio-row" style="margin-top:6px;">
-                            <input type="text" id="overlayTextInput" class="studio-input" placeholder="Watermark or meme text...">
-                            <input type="color" id="overlayColorInput" value="#ffffff" title="Text Color">
-                            <button class="btn-primary" id="addTextOverlayBtn">＋ Text</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Live Canvas Preview Column -->
+                <!-- TOP/RIGHT: Live Canvas Preview (Always visible on mobile!) -->
                 <div class="studio-preview-area">
                     <div class="canvas-container" id="canvasContainer">
                         <canvas id="editorCanvas" width="768" height="768"></canvas>
                         <div class="studio-loading" id="studioLoading" style="display:none;">
                             <div class="spinner"></div>
-                            <span id="studioLoadingText">Generating with AI...</span>
+                            <span id="studioLoadingText">AI is processing your image...</span>
                         </div>
                     </div>
                     <div class="studio-footer-actions">
-                        <button class="btn-secondary" id="ocrStudioImgBtn">🔍 Read Text (OCR)</button>
-                        <button class="btn-secondary" id="downloadStudioImgBtn">📥 Download PNG</button>
+                        <input type="file" id="uploadImageInput" accept="image/*" hidden>
+                        <button class="btn-secondary" id="triggerUploadBtn">📂 Upload Gallery Photo</button>
+                        <button class="btn-secondary" id="downloadStudioImgBtn">📥 Save</button>
                         <button class="btn-primary" id="sendToChatStudioBtn">💬 Send to Chat</button>
+                    </div>
+                </div>
+
+                <!-- BOTTOM/LEFT: Tabbed Controls for Mobile Comfort -->
+                <div class="studio-controls">
+                    <div class="studio-tabs">
+                        <button class="studio-tab active" data-tab="tab-ai">🪄 AI Edit & Create</button>
+                        <button class="studio-tab" data-tab="tab-filters">🎚️ Filters</button>
+                        <button class="studio-tab" data-tab="tab-transform">✏️ Text & Crop</button>
+                    </div>
+
+                    <!-- TAB 1: AI Generate & Gallery Image Edit -->
+                    <div class="studio-tab-content active" id="tab-ai">
+                        <div class="control-group">
+                            <label>Write Prompt (Create New OR Edit Uploaded Photo)</label>
+                            <textarea id="studioPromptInput" rows="3" placeholder="Ex: Make him wear neon cyberpunk glasses and anime jacket..."></textarea>
+                            <div class="studio-row">
+                                <select id="studioModelSelect" class="model-select" style="flex:1;">
+                                    <option value="flux">⚡ Flux Pro</option>
+                                    <option value="flux-realism">📸 Realism</option>
+                                    <option value="flux-anime">🎌 Anime Style</option>
+                                    <option value="flux-3d">🧊 3D Render</option>
+                                    <option value="turbo">🚀 Fast Turbo</option>
+                                </select>
+                                <select id="studioRatioSelect" class="model-select">
+                                    <option value="768x768">1:1 Square</option>
+                                    <option value="1024x576">16:9 Wide</option>
+                                    <option value="576x1024">9:16 Tall</option>
+                                </select>
+                            </div>
+                            <div class="studio-row" style="margin-top:6px;">
+                                <button class="btn-primary" id="studioGenerateBtn" style="flex:1;">✨ Create New</button>
+                                <button class="btn-accent-outline" id="studioAiRemixBtn" style="flex:1;">🪄 AI Edit Current Photo</button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label>⚡ 1-Click AI Style Presets (For Uploaded Photo)</label>
+                            <div class="preset-chips">
+                                <button class="preset-chip" data-style="Convert this exact person and scene into high-budget Japanese Anime Studio Ghibli style">🎌 Animeify</button>
+                                <button class="preset-chip" data-style="Transform into futuristic cyberpunk style with neon lighting and rain">🌃 Cyberpunk</button>
+                                <button class="preset-chip" data-style="Convert into a hyper-realistic 8k DSLR studio portrait with cinematic bokeh lighting">📸 DSLR Studio</button>
+                                <button class="preset-chip" data-style="Turn into a 3D Pixar Disney animated movie character style">🧊 3D Pixar</button>
+                                <button class="preset-chip" data-style="Keep the subject identical but change the background to snow-covered Himalayan mountains at sunset">🏔️ Change BG</button>
+                                <button class="preset-chip" data-style="Convert into a classic dramatic charcoal pencil sketch artwork">✏️ Sketch</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: Live Sliders -->
+                    <div class="studio-tab-content" id="tab-filters">
+                        <div class="control-group">
+                            <div class="slider-item"><span>Brightness</span><input type="range" id="filterBrightness" min="20" max="200" value="100"></div>
+                            <div class="slider-item"><span>Contrast</span><input type="range" id="filterContrast" min="20" max="200" value="100"></div>
+                            <div class="slider-item"><span>Saturation</span><input type="range" id="filterSaturation" min="0" max="250" value="100"></div>
+                            <div class="slider-item"><span>Hue Shift</span><input type="range" id="filterHue" min="0" max="360" value="0"></div>
+                            <div class="slider-item"><span>Blur</span><input type="range" id="filterBlur" min="0" max="15" value="0" step="0.5"></div>
+                            <div class="slider-item"><span>Sepia</span><input type="range" id="filterSepia" min="0" max="100" value="0"></div>
+                            <button class="btn-secondary full-width" id="resetFiltersBtn" style="margin-top:8px;">♻️ Reset All Filters</button>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: Transform & Text -->
+                    <div class="studio-tab-content" id="tab-transform">
+                        <div class="control-group">
+                            <label>Rotate & Flip</label>
+                            <div class="studio-row">
+                                <button class="btn-secondary" style="flex:1" id="rotateImgBtn">🔄 Rotate 90°</button>
+                                <button class="btn-secondary" style="flex:1" id="flipHImgBtn">↔️ Flip H</button>
+                                <button class="btn-secondary" style="flex:1" id="flipVImgBtn">↕️ Flip V</button>
+                            </div>
+                        </div>
+                        <div class="control-group" style="margin-top:10px;">
+                            <label>Add Text / Meme Caption on Photo</label>
+                            <div class="studio-row">
+                                <input type="text" id="overlayTextInput" class="studio-input" placeholder="Type text...">
+                                <input type="color" id="overlayColorInput" value="#ffffff" style="width:40px;height:36px;border:none;background:none;">
+                                <button class="btn-primary" id="addTextOverlayBtn">＋ Add</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== 2. LIVE CODE SANDBOX MODAL ==================== -->
+    <!-- ==================== LIVE CODE SANDBOX MODAL ==================== -->
     <div class="studio-modal-overlay" id="sandboxModal">
         <div class="studio-modal sandbox-modal-size">
             <div class="studio-header">
-                <h3>💻 Live HTML / CSS / JS Code Sandbox</h3>
+                <h3>💻 Live HTML / CSS / JS Runner</h3>
                 <div class="studio-row">
-                    <button class="btn-primary" id="runSandboxBtn">▶ Run Code</button>
+                    <button class="btn-primary" id="runSandboxBtn">▶ Run</button>
                     <button class="icon-btn" id="closeSandboxBtn">✕</button>
                 </div>
             </div>
             <div class="sandbox-body">
-                <textarea id="sandboxCodeEditor" spellcheck="false" placeholder="Paste or write HTML/CSS/JS here..."></textarea>
+                <textarea id="sandboxCodeEditor" spellcheck="false"></textarea>
                 <iframe id="sandboxFrame" sandbox="allow-scripts allow-modals"></iframe>
             </div>
         </div>
