@@ -1,32 +1,30 @@
 if (typeof puter !== 'undefined') puter.quiet = true;
 
-// ==================== DEFAULT SYSTEM PROMPT ====================
-const DEFAULT_SYSTEM_PROMPT = `You are Dolphin AI Ultra, a smart, helpful, uncensored, and technically accurate AI assistant.
-- You speak naturally in the user's language (Hindi, Hinglish, or English).
-- You provide complete working code, real facts, and practical solutions without lecturing.`;
+// ==================== SYSTEM PROMPT ====================
+const DEFAULT_PROMPT = `You are Dolphin AI (ChatGPT-4o class assistant).
+- Speak naturally in the user's preferred language (Hindi, Hinglish, or English).
+- Give direct, accurate, complete answers and working code without unnecessary disclaimers.`;
 
-// ==================== GLOBAL STATE ====================
+// ==================== STATE ====================
 const state = {
   conversations: {},
   activeChatId: null,
   conversation: [],
   busy: false,
   stopFlag: false,
-  systemPrompt: DEFAULT_SYSTEM_PROMPT,
-  currentModel: 'gpt-4o-mini',
-  webSearchEnabled: false,
+  systemPrompt: DEFAULT_PROMPT,
+  currentModel: 'openai',
+  webSearchMode: false,
+  imageGenMode: false,
   attachedImageDataUrl: null,
-  usePuterTts: true,
-  isSpeaking: false,
+  autoVoice: false,
   speechSynth: window.speechSynthesis,
   editor: {
     baseImage: null,
-    baseDataUrl: null,
-    currentPrompt: '',
     rotation: 0,
     flipH: 1,
     flipV: 1,
-    filters: { brightness: 100, contrast: 100, saturation: 100, hue: 0, blur: 0, sepia: 0 },
+    filters: { brightness: 100, contrast: 100, saturation: 100, sepia: 0, blur: 0 },
     texts: []
   }
 };
@@ -40,39 +38,27 @@ const DOM = {
   chatContainer: document.getElementById('chatContainer'),
   userInput: document.getElementById('userInput'),
   sendBtn: document.getElementById('sendBtn'),
-  headerTitle: document.getElementById('headerTitle'),
-  tokenCount: document.getElementById('tokenCount'),
-  systemPromptInput: document.getElementById('systemPromptInput'),
-  settingsPanel: document.getElementById('settingsPanel'),
-  toastContainer: document.getElementById('toastContainer'),
-  micBtn: document.getElementById('micBtn'),
   modelSelect: document.getElementById('modelSelect'),
-  emojiBtn: document.getElementById('emojiBtn'),
-  emojiPopover: document.getElementById('emojiPopover'),
-  emojiGrid: document.getElementById('emojiGrid'),
-  typingIndicator: document.getElementById('typingIndicator'),
-  webSearchToggleBtn: document.getElementById('webSearchToggleBtn'),
-  webModeBadge: document.getElementById('webModeBadge'),
+  settingsPanel: document.getElementById('settingsPanel'),
+  systemPromptInput: document.getElementById('systemPromptInput'),
+  autoVoiceCheck: document.getElementById('autoVoiceCheck'),
   attachmentBar: document.getElementById('attachmentBar'),
   attachedImgThumb: document.getElementById('attachedImgThumb'),
-  attachmentTitle: document.getElementById('attachmentTitle'),
   chatImageUpload: document.getElementById('chatImageUpload'),
-  chatDocUpload: document.getElementById('chatDocUpload'),
-  usePuterTtsCheck: document.getElementById('usePuterTtsCheck'),
+  createImgModeBtn: document.getElementById('createImgModeBtn'),
+  webSearchToggleBtn: document.getElementById('webSearchToggleBtn'),
+  micBtn: document.getElementById('micBtn'),
   studioModal: document.getElementById('studioModal'),
   editorCanvas: document.getElementById('editorCanvas'),
   studioPromptInput: document.getElementById('studioPromptInput'),
-  studioModelSelect: document.getElementById('studioModelSelect'),
-  studioRatioSelect: document.getElementById('studioRatioSelect'),
   studioLoading: document.getElementById('studioLoading'),
   studioLoadingText: document.getElementById('studioLoadingText'),
   uploadImageInput: document.getElementById('uploadImageInput'),
   sandboxModal: document.getElementById('sandboxModal'),
   sandboxCodeEditor: document.getElementById('sandboxCodeEditor'),
-  sandboxFrame: document.getElementById('sandboxFrame')
+  sandboxFrame: document.getElementById('sandboxFrame'),
+  toastContainer: document.getElementById('toastContainer')
 };
-
-const EMOJIS = ['😀','😂','😍','😎','🤩','😈','💀','🐬','🔥','⚡','✨','🚀','💻','🛡️','🎯','🏆','❤️','👍','🙏','🎉','🍕'];
 
 marked.setOptions({
   breaks: true,
@@ -83,1126 +69,993 @@ marked.setOptions({
   }
 });
 
-// ==================== INIT ====================
+// ==================== INITIALIZE ====================
 function init() {
-  loadData();
-  setupEventListeners();
-  setupStudioEvents();
-  setupExtraTools();
-  const savedTheme = localStorage.getItem('dolphin_theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  updateThemeUI();
-  initPlaceholderCanvas();
-  buildEmojiGrid();
+  loadStorage();
+  bindEvents();
+  bindStudioEvents();
+  const theme = localStorage.getItem('dolphin_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+  updateThemeLabel();
+  drawEmptyStudioCanvas();
 }
 
-// ==================== STORAGE ====================
-function loadData() {
-  try {
-    const saved = localStorage.getItem('dolphin_ultra_v4');
-    if (saved) {
-      const data = JSON.parse(saved);
-      state.conversations = data.conversations || {};
-      state.activeChatId = data.activeChatId || null;
-      state.systemPrompt = data.systemPrompt || DEFAULT_SYSTEM_PROMPT;
-      state.currentModel = data.model || 'gpt-4o-mini';
-      state.usePuterTts = data.usePuterTts !== false;
+// ==================== IMAGE COMPRESSOR (FIXES GALLERY PHOTO ERRORS!) ====================
+// Compresses 10MB phone gallery photos down to a crisp ~60KB 800px JPEG so Vision APIs never fail
+function compressGalleryImage(fileOrDataUrl, maxDim = 800) {
+  return new Promise((resolve, reject) => {
+    const processImg = (src) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        let w = img.naturalWidth || img.width;
+        let h = img.naturalHeight || img.height;
+        if (w > maxDim || h > maxDim) {
+          if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+          else { w = Math.round((w * maxDim) / h); h = maxDim; }
+        }
+        const c = document.createElement('canvas');
+        c.width = w;
+        c.height = h;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL('image/jpeg', 0.82));
+      };
+      img.onerror = () => reject(new Error('Could not read image'));
+      img.src = src;
+    };
+
+    if (typeof fileOrDataUrl === 'string') {
+      processImg(fileOrDataUrl);
+    } else {
+      const reader = new FileReader();
+      reader.onload = e => processImg(e.target.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(fileOrDataUrl);
     }
-  } catch (e) { state.conversations = {}; }
-
-  DOM.systemPromptInput.value = state.systemPrompt;
-  DOM.modelSelect.value = state.currentModel;
-  DOM.usePuterTtsCheck.checked = state.usePuterTts;
-
-  if (state.activeChatId && state.conversations[state.activeChatId]) {
-    loadChat(state.activeChatId);
-  } else {
-    renderSidebar();
-    showEmptyState();
-  }
+  });
 }
 
-function saveData() {
+// ==================== BULLETPROOF MULTIMODAL AI ENGINE (NO 404, NO POPUPS) ====================
+// Uses Pollinations OpenAI-compatible POST endpoint (supports Text + Base64 Vision!) with Puter fallback
+async function askMultimodalAI(messages, model = 'openai') {
+  const mappedModel = model === 'puter-gpt4o' ? 'openai' : model;
+
+  // 1. Primary: Pollinations OpenAI-Compatible POST Endpoint
   try {
-    localStorage.setItem('dolphin_ultra_v4', JSON.stringify({
-      conversations: state.conversations,
-      activeChatId: state.activeChatId,
-      systemPrompt: state.systemPrompt,
-      model: state.currentModel,
-      usePuterTts: state.usePuterTts
-    }));
+    const resp = await fetch('https://text.pollinations.ai/openai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: mappedModel,
+        messages: messages,
+        temperature: 0.7
+      })
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      const reply = data?.choices?.[0]?.message?.content;
+      if (reply && reply.trim()) return reply.trim();
+    }
   } catch (e) {}
-}
 
-function openSidebar() { DOM.sidebar.classList.add('open'); DOM.sidebarOverlay.classList.add('open'); }
-function closeSidebar() { DOM.sidebar.classList.remove('open'); DOM.sidebarOverlay.classList.remove('open'); }
-
-function renderSidebar() {
-  const chats = Object.values(state.conversations).sort((a, b) => b.timestamp - a.timestamp);
-  if (chats.length === 0) {
-    DOM.chatList.innerHTML = '<div style="padding:14px;text-align:center;color:var(--text2);font-size:12px;">No chats yet</div>';
-    return;
-  }
-  DOM.chatList.innerHTML = chats.map(chat => `
-    <div class="chat-item ${chat.id === state.activeChatId ? 'active' : ''}" data-id="${chat.id}">
-      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${escapeHtml(chat.title || 'New Chat')}</span>
-      <button class="delete-chat-btn" data-id="${chat.id}">🗑</button>
-    </div>
-  `).join('');
-
-  DOM.chatList.querySelectorAll('.chat-item').forEach(item => item.addEventListener('click', function(e) {
-    if (!e.target.closest('.delete-chat-btn')) switchChat(this.dataset.id);
-  }));
-  DOM.chatList.querySelectorAll('.delete-chat-btn').forEach(btn => btn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    delete state.conversations[this.dataset.id];
-    if (state.activeChatId === this.dataset.id) { state.activeChatId = null; state.conversation = []; showEmptyState(); }
-    saveData();
-    renderSidebar();
-  }));
-}
-
-function createNewChat() {
-  if (state.busy) stopGeneration();
-  saveCurrentChat();
-  const id = 'chat_' + Date.now();
-  state.conversations[id] = { id, title: 'New Chat', messages: [], timestamp: Date.now() };
-  state.activeChatId = id;
-  state.conversation = [];
-  saveData();
-  renderSidebar();
-  showEmptyState();
-  updateHeaderTitle();
-  if (window.innerWidth <= 768) closeSidebar();
-}
-
-function switchChat(id) {
-  if (state.busy || id === state.activeChatId) return;
-  saveCurrentChat();
-  loadChat(id);
-  if (window.innerWidth <= 768) closeSidebar();
-}
-
-function loadChat(id) {
-  if (!state.conversations[id]) return;
-  state.activeChatId = id;
-  state.conversation = [...state.conversations[id].messages];
-  DOM.chatInner.innerHTML = '';
-  if (state.conversation.length === 0) showEmptyState();
-  else {
-    state.conversation.forEach(msg => renderMessage(msg.role, msg.content, msg.timestamp, false));
-    scrollToBottom();
-  }
-  updateHeaderTitle();
-  renderSidebar();
-  updateTokenCount();
-}
-
-function saveCurrentChat() {
-  if (state.activeChatId && state.conversations[state.activeChatId] && state.conversation.length > 0) {
-    state.conversations[state.activeChatId].messages = [...state.conversation];
-    state.conversations[state.activeChatId].timestamp = Date.now();
-    if (state.conversations[state.activeChatId].title === 'New Chat') {
-      const first = state.conversation.find(m => m.role === 'user');
-      if (first) state.conversations[state.activeChatId].title = first.content.substring(0, 36);
+  // 2. Secondary: Pollinations Raw POST Endpoint
+  try {
+    const flatMessages = messages.map(m => ({
+      role: m.role,
+      content: Array.isArray(m.content)
+        ? m.content.map(c => c.text || '').join(' ')
+        : m.content
+    }));
+    const resp2 = await fetch('https://text.pollinations.ai/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: flatMessages, model: 'openai' })
+    });
+    if (resp2.ok) {
+      const txt = await resp2.text();
+      if (txt && !txt.includes('404 Not Found')) return txt.trim();
     }
-    saveData();
+  } catch (e) {}
+
+  // 3. Tertiary: Puter.js Cloud AI
+  if (typeof puter !== 'undefined' && puter.ai?.chat) {
+    const lastMsg = messages[messages.length - 1];
+    let textPrompt = '';
+    let imgData = null;
+    if (Array.isArray(lastMsg.content)) {
+      textPrompt = lastMsg.content.find(c => c.type === 'text')?.text || 'Describe this image';
+      imgData = lastMsg.content.find(c => c.type === 'image_url')?.image_url?.url;
+    } else {
+      textPrompt = lastMsg.content;
+    }
+    const pResp = imgData
+      ? await puter.ai.chat(textPrompt, imgData)
+      : await puter.ai.chat(textPrompt);
+    return typeof pResp === 'string' ? pResp : (pResp?.message?.content || String(pResp));
   }
+
+  throw new Error('Network busy. Please check your internet connection and try again.');
 }
 
-// ==================== VISION-TO-IMAGE AI PHOTO EDITOR (CHATGPT STYLE) ====================
-async function buildVisionEditedPrompt(imageDataUrl, userEditInstruction) {
-  const visionInstruction = `Look closely at this uploaded photo. Describe the main subject (person/object, gender, facial features, expression, clothing, pose, camera angle, lighting) in high detail, and then apply this exact modification requested by the user: "${userEditInstruction}".
-Output ONLY the final merged English image generation prompt (under 75 words) ready for Flux image generator. Do not write any intro or explanation.`;
-
-  if (typeof puter !== 'undefined' && puter.ai?.chat) {
+// ==================== REAL CHATGPT PHOTO EDITING & IMAGE GENERATION ====================
+// Converts Hindi/Hinglish or Gallery Photo + User Edit Prompt into a clean English Flux prompt
+async function craftSmartImagePrompt(userRequest, attachedBase64 = null) {
+  if (attachedBase64) {
+    // Vision-to-Image: Read the exact uploaded gallery photo and merge the user's edit request!
+    const visionMessages = [
+      {
+        role: 'system',
+        content: 'You are an expert AI photo editor and visual prompt engineer. Look closely at the attached image. Describe the subject (person/object, gender, approximate age, hairstyle, facial expression, glasses/beard, clothing, pose, camera framing, and lighting) accurately, and then apply the user\'s requested modification or style transfer. Output ONLY the final detailed English image generation prompt (max 65 words). No intro, no quotes.'
+      },
+      {
+        role: 'user',
+        content: [
+          { type: 'text', text: `Modify this photo as follows: "${userRequest}"` },
+          { type: 'image_url', image_url: { url: attachedBase64 } }
+        ]
+      }
+    ];
     try {
-      const resp = await puter.ai.chat(visionInstruction, imageDataUrl, { model: 'gpt-4o-mini' });
-      const text = typeof resp === 'string' ? resp : (resp?.message?.content || '');
-      if (text && text.trim().length > 10) return text.trim();
+      const crafted = await askMultimodalAI(visionMessages, 'openai');
+      if (crafted && crafted.length > 10) return crafted.replace(/["`]/g, '').trim();
+    } catch (e) {}
+  } else {
+    // Translate Hindi/Hinglish/short prompt into rich English Flux prompt
+    const translateMessages = [
+      {
+        role: 'system',
+        content: 'Convert the user\'s image request (which may be in Hindi, Hinglish, or English) into a vivid, detailed English image generation prompt (under 55 words) for Flux AI. Output ONLY the English prompt, nothing else.'
+      },
+      { role: 'user', content: userRequest }
+    ];
+    try {
+      const enhanced = await askMultimodalAI(translateMessages, 'openai');
+      if (enhanced && enhanced.length > 5) return enhanced.replace(/["`]/g, '').trim();
     } catch (e) {}
   }
-  return `${userEditInstruction}, high quality detailed masterpiece, 8k resolution`;
+  return userRequest;
 }
 
-function buildPollinationsImageUrl(prompt, model = 'flux', width = 768, height = 768) {
+function getFluxImageUrl(englishPrompt, width = 768, height = 768) {
   const seed = Math.floor(Math.random() * 9999999);
-  const cleanModel = ['flux', 'flux-realism', 'flux-anime', 'flux-3d', 'turbo'].includes(model) ? model : 'flux';
-  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${cleanModel}&width=${width}&height=${height}&seed=${seed}&nologo=true`;
+  const safePrompt = englishPrompt.substring(0, 450);
+  return `https://image.pollinations.ai/prompt/${encodeURIComponent(safePrompt)}?model=flux&width=${width}&height=${height}&seed=${seed}&nologo=true`;
 }
 
-function loadImageElement(url) {
+function preloadImage(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
-    img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error('Image server busy, trying backup...'));
+    img.onload = () => resolve(url);
+    img.onerror = () => reject(new Error('Image server timed out'));
     img.src = url;
   });
 }
 
-async function generateImageWithFallback(promptText, model = 'flux', w = 768, h = 768) {
-  const url = buildPollinationsImageUrl(promptText, model, w, h);
+// ==================== LIVE WEB SEARCH (WIKIPEDIA + HACKERNEWS + JINA) ====================
+async function runLiveWebSearch(query) {
+  const snippets = [];
+
+  // 1. Wikipedia Search API (Instant, 100% CORS-supported)
   try {
-    await loadImageElement(url);
-    return url;
-  } catch (err) {
-    if (typeof puter !== 'undefined' && puter.ai?.txt2img) {
-      const imgEl = await puter.ai.txt2img(promptText);
-      return imgEl.src;
-    }
-    throw new Error('Image generation failed. Please try a simpler prompt.');
-  }
-}
-
-// Edit an uploaded Gallery Photo using AI Vision + Flux right inside Chat!
-async function handleGalleryPhotoAiEditInChat(imageDataUrl, editInstruction) {
-  if (!state.activeChatId) createNewChat();
-  const instruction = editInstruction || prompt('🪄 बताइये इस फोटो में क्या बदलाव (Edit) करना है?', 'Convert this photo into anime style with glowing neon background');
-  if (!instruction) return;
-
-  const userMsg = `🪄 Edit Uploaded Photo: "${instruction}"`;
-  state.conversation.push({ role: 'user', content: userMsg, timestamp: Date.now() });
-  renderMessage('user', userMsg, Date.now(), true, { attachedImage: imageDataUrl });
-  clearAttachment();
-
-  const assistantBubble = renderMessage('assistant', '👁️ Step 1/2: AI आपकी अपलोड की गई फोटो को पढ़ रहा है (Vision Analysis)...', Date.now(), false);
-  setTypingIndicator(true);
-  scrollToBottom();
-
-  try {
-    const smartPrompt = await buildVisionEditedPrompt(imageDataUrl, instruction);
-    assistantBubble.innerHTML = `🎨 Step 2/2: आपके प्रॉम्प्ट के हिसाब से नई एडिटेड फोटो बनाई जा रही है...<br><small style="color:var(--text2)">Prompt: ${escapeHtml(smartPrompt)}</small>`;
-
-    const finalImgUrl = await generateImageWithFallback(smartPrompt, 'flux', 768, 768);
-    const mdContent = `**🪄 AI Edited Photo:** \`${instruction}\`\n\n![Edited Photo](${finalImgUrl})\n\n*AI Vision Prompt Used:* _${smartPrompt}_`;
-
-    const msgDiv = assistantBubble.closest('.message');
-    const finalBubble = renderMessage('assistant', mdContent, Date.now(), false, {
-      imageUrl: finalImgUrl,
-      imagePrompt: smartPrompt
-    });
-    msgDiv.replaceWith(finalBubble.closest('.message'));
-
-    state.conversation.push({ role: 'assistant', content: mdContent, timestamp: Date.now() });
-    saveCurrentChat();
-    showToast('Photo Edited Successfully!', 'success');
-  } catch (err) {
-    assistantBubble.innerHTML = `<span style="color:var(--danger);">❌ Photo Edit Error: ${escapeHtml(err.message)}</span>`;
-  } finally {
-    setTypingIndicator(false);
-    scrollToBottom();
-  }
-}
-
-async function handleChatImageGeneration(rawPrompt) {
-  if (!state.activeChatId) createNewChat();
-  const cleanPrompt = rawPrompt.replace(/^(\/image|\/img)\s*/i, '').trim();
-  if (!cleanPrompt) { openStudioModal(); return; }
-
-  // If user has attached a gallery photo, edit that photo instead of generating blind!
-  if (state.attachedImageDataUrl) {
-    await handleGalleryPhotoAiEditInChat(state.attachedImageDataUrl, cleanPrompt);
-    return;
-  }
-
-  const userText = `🎨 Create Image: ${cleanPrompt}`;
-  state.conversation.push({ role: 'user', content: userText, timestamp: Date.now() });
-  renderMessage('user', userText, Date.now());
-
-  const assistantBubble = renderMessage('assistant', '🎨 Generating high-resolution AI image...', Date.now(), false);
-  setTypingIndicator(true);
-  scrollToBottom();
-
-  try {
-    const imgUrl = await generateImageWithFallback(cleanPrompt, 'flux', 768, 768);
-    const mdContent = `**🎨 Generated Image:** \`${cleanPrompt}\`\n\n![${cleanPrompt}](${imgUrl})`;
-    const msgDiv = assistantBubble.closest('.message');
-    const finalBubble = renderMessage('assistant', mdContent, Date.now(), false, {
-      imageUrl: imgUrl,
-      imagePrompt: cleanPrompt
-    });
-    msgDiv.replaceWith(finalBubble.closest('.message'));
-
-    state.conversation.push({ role: 'assistant', content: mdContent, timestamp: Date.now() });
-    saveCurrentChat();
-  } catch (err) {
-    assistantBubble.innerHTML = `<span style="color:var(--danger);">❌ ${escapeHtml(err.message)}</span>`;
-  } finally {
-    setTypingIndicator(false);
-    scrollToBottom();
-  }
-}
-
-// ==================== REAL LIVE WEB SEARCH (JINA + WIKIPEDIA) ====================
-async function fetchLiveWebSearchContext(query) {
-  const results = [];
-
-  // 1. DuckDuckGo Live Scraper via Jina Reader (CORS-free)
-  try {
-    const ddgUrl = `https://r.jina.ai/https://lite.duckduckgo.com/lite/?q=${encodeURIComponent(query)}`;
-    const resp = await fetch(ddgUrl, { headers: { 'Accept': 'text/plain' } });
-    if (resp.ok) {
-      const text = await resp.text();
-      if (text && text.length > 100) {
-        results.push(`--- LIVE WEB SEARCH RESULTS FOR "${query}" ---\n${text.substring(0, 3500)}`);
-      }
+    const wUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&utf8=&format=json&origin=*`;
+    const r = await fetch(wUrl);
+    if (r.ok) {
+      const d = await r.json();
+      const items = (d?.query?.search || []).slice(0, 3).map(s =>
+        `• [${s.title}](https://en.wikipedia.org/wiki/${encodeURIComponent(s.title)}): ${s.snippet.replace(/<[^>]+>/g, '')}`
+      );
+      if (items.length) snippets.push(`Wikipedia Live Data:\n${items.join('\n')}`);
     }
   } catch (e) {}
 
-  // 2. Wikipedia Instant Search Fallback
+  // 2. HackerNews Algolia Tech/News Search (Instant, 100% CORS-supported)
   try {
-    const wikiUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&utf8=&format=json&origin=*`;
-    const wResp = await fetch(wikiUrl);
-    if (wResp.ok) {
-      const wData = await wResp.json();
-      const snippets = (wData?.query?.search || []).slice(0, 3).map(s =>
-        `- ${s.title}: ${s.snippet.replace(/<[^>]+>/g, '')} (https://en.wikipedia.org/wiki/${encodeURIComponent(s.title)})`
-      ).join('\n');
-      if (snippets) results.push(`--- WIKIPEDIA RESULTS ---\n${snippets}`);
+    const hnUrl = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(query)}&hitsPerPage=4`;
+    const r2 = await fetch(hnUrl);
+    if (r2.ok) {
+      const d2 = await r2.json();
+      const hits = (d2?.hits || []).filter(h => h.title).map(h =>
+        `• [${h.title}](${h.url || `https://news.ycombinator.com/item?id=${h.objectID}`}) (${h.created_at?.substring(0, 10)})`
+      );
+      if (hits.length) snippets.push(`Tech & Web News:\n${hits.join('\n')}`);
     }
   } catch (e) {}
 
-  return results.join('\n\n');
-}
-
-// ==================== POLLINATIONS POST v2 + AUTO-FAILOVER ====================
-async function callAiWithFailover(messages, model, onChunk) {
-  // If Pollinations model selected, use POST JSON endpoint (prevents 404 URL length error!)
-  if (model.startsWith('pollinations/')) {
-    const subModel = model.replace('pollinations/', '') || 'openai';
-    try {
-      const response = await fetch('https://text.pollinations.ai/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: messages,
-          model: subModel,
-          seed: Math.floor(Math.random() * 100000)
-        })
-      });
-      if (response.ok) {
-        const text = await response.text();
-        if (text && !text.includes('404 Not Found')) {
-          onChunk(text);
-          return text;
-        }
-      }
-    } catch (e) {}
-  }
-
-  // Primary / Failover: Puter.js Cloud AI
-  if (typeof puter !== 'undefined' && puter.ai?.chat) {
-    const puterModel = model.startsWith('pollinations/') ? 'gpt-4o-mini' : model;
-    try {
-      let accumulated = '';
-      const stream = await puter.ai.chat(messages, { model: puterModel, stream: true });
-      for await (const part of stream) {
-        if (state.stopFlag) break;
-        if (part?.text) {
-          accumulated += part.text;
-          onChunk(accumulated);
-        }
-      }
-      if (accumulated) return accumulated;
-    } catch (err) {
-      // Non-streaming fallback with gpt-4o-mini
-      const fallbackResp = await puter.ai.chat(messages, { model: 'gpt-4o-mini' });
-      const text = typeof fallbackResp === 'string' ? fallbackResp : (fallbackResp?.message?.content || String(fallbackResp));
-      onChunk(text);
-      return text;
+  // 3. Jina Live Web Reader (with 3.5s timeout so it never hangs)
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 3500);
+    const jUrl = `https://r.jina.ai/https://lite.duckduckgo.com/lite/?q=${encodeURIComponent(query)}`;
+    const r3 = await fetch(jUrl, { headers: { 'Accept': 'text/plain' }, signal: ctrl.signal });
+    clearTimeout(timer);
+    if (r3.ok) {
+      const txt = await r3.text();
+      if (txt && txt.length > 80) snippets.push(`DuckDuckGo Web Results:\n${txt.substring(0, 2200)}`);
     }
-  }
+  } catch (e) {}
 
-  throw new Error('All AI endpoints are unreachable right now. Check your internet connection.');
+  return snippets.join('\n\n');
 }
 
-// ==================== MAIN SEND MESSAGE ====================
-async function sendMessage() {
-  let text = DOM.userInput.value.trim();
-  if ((!text && !state.attachedImageDataUrl) || state.busy) return;
+// ==================== DETECT USER INTENT AUTOMATICALLY (LIKE REAL CHATGPT) ====================
+function detectUserIntent(text, hasAttachedImage) {
+  const lower = text.toLowerCase();
+
+  // Did user explicitly toggle Image Mode or type an image creation phrase?
+  if (state.imageGenMode || /^(\/image|\/img)\b/i.test(lower)) {
+    return hasAttachedImage ? 'edit_uploaded_photo' : 'generate_new_image';
+  }
+
+  // If a gallery photo is attached, check if user wants to EDIT/CONVERT it vs ASK a question about it
+  if (hasAttachedImage) {
+    const editKeywords = /(edit|change|modify|convert|transform|make|turn|style|anime|cartoon|sketch|cyberpunk|pixar|3d|background|bg|remove|add|wear|dress|glasses|suit|color|filter|banao|bna do|badal|kar do|kr do|laga do|lga do|hata do)/i;
+    if (editKeywords.test(lower) || !text.trim()) {
+      return 'edit_uploaded_photo';
+    }
+    return 'vision_qa';
+  }
+
+  // Check if user naturally asked to generate/create a photo in Hindi/Hinglish/English
+  const createImgKeywords = /(generate an? image|create an? image|draw an? |make a photo of|make an image of|photo bnao|photo banao|image bnao|image banao|pic bnao|tasveer bnao|फोटो बनाओ|इमेज बनाओ)/i;
+  if (createImgKeywords.test(lower)) {
+    return 'generate_new_image';
+  }
+
+  return 'normal_chat';
+}
+
+// ==================== MAIN SEND FLOW ====================
+async function sendMessage(overrideText = null, forceIntent = null) {
+  let text = (overrideText !== null ? overrideText : DOM.userInput.value).trim();
+  const hasImage = !!state.attachedImageDataUrl;
+  if ((!text && !hasImage) || state.busy) return;
   if (!state.activeChatId) createNewChat();
 
-  // Check if user wants to generate an image
-  if (/^(\/image|\/img|generate image:?|create image:?)\s+/i.test(text)) {
-    const cleanPrompt = text.replace(/^(\/image|\/img|generate image:?|create image:?)\s+/i, '');
-    DOM.userInput.value = '';
-    await handleChatImageGeneration(cleanPrompt);
-    return;
-  }
-
-  // Check if user uploaded a photo AND asked to edit/modify/convert it in chat!
-  const isPhotoEditRequest = state.attachedImageDataUrl && /(edit|change|modify|convert|make|banao|bna|badal|add|remove|style|anime|cyberpunk|background|bg|filter|dress|glasses)/i.test(text);
-  if (isPhotoEditRequest) {
-    const imgData = state.attachedImageDataUrl;
-    DOM.userInput.value = '';
-    await handleGalleryPhotoAiEditInChat(imgData, text);
-    return;
-  }
-
-  const useWeb = state.webSearchEnabled || text.startsWith('/web ');
-  if (text.startsWith('/web ')) text = text.replace(/^\/web\s+/i, '').trim();
-
-  const currentAttachment = state.attachedImageDataUrl;
+  const intent = forceIntent || detectUserIntent(text, hasImage);
+  const currentImage = state.attachedImageDataUrl;
   clearAttachment();
-
-  const displayUserText = text || 'इस फोटो को ध्यान से देखकर इसके बारे में पूरी जानकारी दो।';
-  state.conversation.push({ role: 'user', content: displayUserText, timestamp: Date.now() });
-  renderMessage('user', displayUserText, Date.now(), true, { attachedImage: currentAttachment });
 
   DOM.userInput.value = '';
   DOM.userInput.style.height = 'auto';
 
-  const assistantBubble = renderMessage('assistant', '🐬 Thinking...', Date.now(), false);
-  state.stopFlag = false;
+  // Turn off one-shot Create Image pill after sending
+  if (state.imageGenMode) {
+    state.imageGenMode = false;
+    DOM.createImgModeBtn.classList.remove('active');
+  }
+
+  const userDisplay = text || (intent === 'edit_uploaded_photo' ? '🪄 Edit this photo with AI' : '👁️ Analyze this photo');
+  state.conversation.push({ role: 'user', content: userDisplay, timestamp: Date.now() });
+  appendUserMessage(userDisplay, currentImage);
+
   state.busy = true;
-  updateSendButton(true);
-  setTypingIndicator(true);
+  state.stopFlag = false;
+  updateSendBtn(true);
+
+  const aiBodyEl = appendAssistantPlaceholder();
   scrollToBottom();
 
   try {
-    let fullText = '';
+    // 1. GENERATE NEW IMAGE OR EDIT GALLERY PHOTO
+    if (intent === 'generate_new_image' || intent === 'edit_uploaded_photo') {
+      const cleanReq = text.replace(/^(\/image|\/img)\s*/i, '') || 'Enhance this photo into a high quality artistic portrait';
+      aiBodyEl.innerHTML = `
+        <div class="img-skeleton">
+          <div class="loader-ring"></div>
+          <span>${currentImage ? '👁️ AI आपकी फोटो को पढ़कर नया एडिटेड वर्जन बना रहा है...' : '🎨 AI इमेज बना रहा है...'}</span>
+        </div>`;
+      scrollToBottom();
 
-    // Case 1: Image Attached for AI Vision Q&A
-    if (currentAttachment && typeof puter !== 'undefined' && puter.ai?.chat) {
-      assistantBubble.innerHTML = '👁️ Analyzing your photo with AI Vision...';
-      const visionResp = await puter.ai.chat(displayUserText, currentAttachment, { model: 'gpt-4o-mini' });
-      fullText = typeof visionResp === 'string' ? visionResp : (visionResp?.message?.content || String(visionResp));
-    } else {
-      // Case 2: Live Web Search Context Injection
-      let messages = [{ role: 'system', content: state.systemPrompt }, ...state.conversation.slice(-10)];
-      if (useWeb) {
-        assistantBubble.innerHTML = '🌐 Searching live internet...';
-        const webContext = await fetchLiveWebSearchContext(displayUserText);
-        if (webContext) {
-          messages.push({
+      const smartEnglishPrompt = await craftSmartImagePrompt(cleanReq, currentImage);
+      const imgUrl = getFluxImageUrl(smartEnglishPrompt, 768, 768);
+      await preloadImage(imgUrl);
+
+      const finalMarkdown = `**${currentImage ? '🪄 AI Edited Photo' : '🎨 Generated Image'}:**\n\n![AI Image](${imgUrl})\n\n<small style="color:var(--text-muted)">Prompt: ${escapeHtml(smartEnglishPrompt)}</small>`;
+      renderFinalAssistantContent(aiBodyEl, finalMarkdown, { imageUrl: imgUrl, imagePrompt: smartEnglishPrompt });
+      state.conversation.push({ role: 'assistant', content: finalMarkdown, timestamp: Date.now() });
+    }
+    // 2. VISION Q&A (READ/SOLVE UPLOADED PHOTO)
+    else if (intent === 'vision_qa') {
+      aiBodyEl.innerHTML = `<span style="color:var(--text-muted)">👁️ फोटो को ध्यान से देखा जा रहा है...</span>`;
+      const visionMessages = [
+        { role: 'system', content: state.systemPrompt },
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: userDisplay },
+            { type: 'image_url', image_url: { url: currentImage } }
+          ]
+        }
+      ];
+      const answer = await askMultimodalAI(visionMessages, 'openai');
+      await streamTextToElement(aiBodyEl, answer);
+      renderFinalAssistantContent(aiBodyEl, answer);
+      state.conversation.push({ role: 'assistant', content: answer, timestamp: Date.now() });
+      if (state.autoVoice) speakReply(answer);
+    }
+    // 3. NORMAL CHAT + OPTIONAL LIVE WEB SEARCH
+    else {
+      let historyMsgs = [
+        { role: 'system', content: state.systemPrompt },
+        ...state.conversation.slice(-10).map(m => ({ role: m.role, content: m.content }))
+      ];
+
+      if (state.webSearchMode || /^\/web\b/i.test(text)) {
+        const q = text.replace(/^\/web\s*/i, '');
+        aiBodyEl.innerHTML = `<span style="color:var(--text-muted)">🌐 इंटरनेट से ताज़ा जानकारी खोजी जा रही है...</span>`;
+        const webData = await runLiveWebSearch(q);
+        if (webData) {
+          historyMsgs.push({
             role: 'system',
-            content: `Use the following real-time internet search results to answer the user's question accurately. Include clickable markdown links where relevant:\n\n${webContext}`
+            content: `Here is live web search data for the user's query. Use it to answer accurately and include markdown links:\n\n${webData}`
           });
         }
+      } else {
+        aiBodyEl.innerHTML = `<span style="color:var(--text-muted)">Thinking...</span>`;
       }
 
-      fullText = await callAiWithFailover(messages, state.currentModel, partial => {
-        assistantBubble.innerHTML = marked.parse(partial || '');
-        scrollToBottom();
-      });
+      const reply = await askMultimodalAI(historyMsgs, state.currentModel);
+      await streamTextToElement(aiBodyEl, reply);
+      renderFinalAssistantContent(aiBodyEl, reply);
+      state.conversation.push({ role: 'assistant', content: reply, timestamp: Date.now() });
+      if (state.autoVoice) speakReply(reply);
     }
-
-    const msgDiv = assistantBubble.closest('.message');
-    const finalBubble = renderMessage('assistant', fullText, Date.now(), false);
-    msgDiv.replaceWith(finalBubble.closest('.message'));
-    if (fullText) state.conversation.push({ role: 'assistant', content: fullText, timestamp: Date.now() });
-  } catch (e) {
-    assistantBubble.innerHTML = `<span style="color:var(--danger);">❌ Error: ${escapeHtml(e.message)}</span>`;
+  } catch (err) {
+    aiBodyEl.innerHTML = `<span style="color:var(--danger)">⚠️ ${escapeHtml(err.message)}</span>`;
   } finally {
     state.busy = false;
-    updateSendButton(false);
-    setTypingIndicator(false);
-    saveCurrentChat();
-    renderSidebar();
-    updateHeaderTitle();
-    updateTokenCount();
+    updateSendBtn(false);
+    saveActiveChat();
+    renderSidebarList();
     scrollToBottom();
   }
 }
 
-// ==================== STUDIO MODAL (GALLERY PHOTO AI EDIT & FILTERS) ====================
-function initPlaceholderCanvas() {
-  const ctx = DOM.editorCanvas.getContext('2d');
-  ctx.fillStyle = '#0b0f19';
-  ctx.fillRect(0, 0, DOM.editorCanvas.width, DOM.editorCanvas.height);
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = '18px Inter, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('📂 Upload Gallery Photo or ✨ Create with AI', DOM.editorCanvas.width / 2, DOM.editorCanvas.height / 2);
-}
-
-function openStudioModal(imageUrl = null, promptText = '') {
-  DOM.studioModal.classList.add('open');
-  if (promptText) DOM.studioPromptInput.value = promptText;
-  if (imageUrl) loadStudioImageFromUrl(imageUrl, promptText);
-}
-
-function closeStudioModal() { DOM.studioModal.classList.remove('open'); }
-
-async function loadStudioImageFromUrl(url, promptText = '') {
-  setStudioLoading(true, 'Loading image into studio...');
-  try {
-    const img = await loadImageElement(url);
-    state.editor.baseImage = img;
-    state.editor.baseDataUrl = url.startsWith('data:') ? url : null;
-    if (promptText) state.editor.currentPrompt = promptText;
-    resetEditorAdjustments(false);
-    renderEditorCanvas();
-  } catch (err) {
-    showToast(err.message, 'error');
-  } finally {
-    setStudioLoading(false);
+// Smooth ChatGPT-style typing effect
+async function streamTextToElement(el, fullText) {
+  const words = fullText.split(' ');
+  let current = '';
+  const step = Math.max(2, Math.ceil(words.length / 35));
+  for (let i = 0; i < words.length; i += step) {
+    if (state.stopFlag) break;
+    current += words.slice(i, i + step).join(' ') + ' ';
+    el.innerHTML = marked.parse(current);
+    scrollToBottom();
+    await new Promise(r => setTimeout(r, 18));
   }
 }
 
-function resetEditorAdjustments(redraw = true) {
+// ==================== CHAT UI RENDERERS ====================
+function showWelcomeScreen() {
+  DOM.chatInner.innerHTML = `
+    <div class="welcome-screen">
+      <div class="welcome-logo">🐬</div>
+      <h1>What can I help with?</h1>
+      <p>ChatGPT-style Vision, Gallery Photo AI Editing, Live Web Search & Code Execution</p>
+      <div class="starter-grid">
+        <div class="starter-card" data-action="upload-photo">
+          <strong>🪄 Edit Gallery Photo</strong>
+          <span>अपनी फोटो अपलोड करें और प्रॉम्प्ट लिखकर बदलें</span>
+        </div>
+        <div class="starter-card" data-prompt="Create an image of a futuristic cyberpunk motorcycle in Himachal mountains at sunset">
+          <strong>🎨 Generate AI Art</strong>
+          <span>हिंदी या इंग्लिश में बोलकर नई फोटो बनवाएं</span>
+        </div>
+        <div class="starter-card" data-action="web-news">
+          <strong>🌐 Search Live Web</strong>
+          <span>आज की ताज़ा टेक और दुनिया की खबरें पूछें</span>
+        </div>
+        <div class="starter-card" data-prompt="Build a modern interactive Calculator in single-file HTML/CSS/JS">
+          <strong>💻 Write & Run Code</strong>
+          <span>वेबसाइट और ऐप्स बनवाकर तुरंत लाइव चलाएं</span>
+        </div>
+      </div>
+    </div>`;
+
+  DOM.chatInner.querySelectorAll('.starter-card').forEach(card => {
+    card.addEventListener('click', () => {
+      if (card.dataset.action === 'upload-photo') {
+        DOM.chatImageUpload.click();
+      } else if (card.dataset.action === 'web-news') {
+        state.webSearchMode = true;
+        DOM.webSearchToggleBtn.classList.add('active');
+        sendMessage('आज की लेटेस्ट टेक्नोलॉजी और AI खबरें क्या हैं?');
+      } else if (card.dataset.prompt) {
+        sendMessage(card.dataset.prompt);
+      }
+    });
+  });
+}
+
+function appendUserMessage(text, imageUrl = null) {
+  document.querySelector('.welcome-screen')?.remove();
+  const row = document.createElement('div');
+  row.className = 'msg-row user';
+  const imgHtml = imageUrl ? `<img src="${imageUrl}" alt="Uploaded">` : '';
+  row.innerHTML = `<div class="user-pill">${imgHtml}${escapeHtml(text)}</div>`;
+  DOM.chatInner.appendChild(row);
+}
+
+function appendAssistantPlaceholder() {
+  document.querySelector('.welcome-screen')?.remove();
+  const row = document.createElement('div');
+  row.className = 'msg-row assistant';
+  row.innerHTML = `<div class="ai-avatar">🐬</div><div class="ai-body"></div>`;
+  DOM.chatInner.appendChild(row);
+  return row.querySelector('.ai-body');
+}
+
+function renderFinalAssistantContent(aiBodyEl, markdownText, meta = null) {
+  aiBodyEl.innerHTML = marked.parse(markdownText || '');
+
+  // Enhance Code Blocks with Copy + Run Live
+  aiBodyEl.querySelectorAll('pre code').forEach(b => { try { hljs.highlightElement(b); } catch (e) {} });
+  aiBodyEl.querySelectorAll('pre').forEach(pre => {
+    const codeEl = pre.querySelector('code');
+    const raw = codeEl ? codeEl.textContent : pre.textContent;
+    const langClass = codeEl ? [...codeEl.classList].find(c => c.startsWith('language-')) : '';
+    const lang = langClass ? langClass.replace('language-', '') : 'code';
+
+    const box = document.createElement('div');
+    box.className = 'code-box';
+    const bar = document.createElement('div');
+    bar.className = 'code-bar';
+    bar.innerHTML = `<span>${escapeHtml(lang.toUpperCase())}</span><div class="code-bar-btns"></div>`;
+    const btnGroup = bar.querySelector('.code-bar-btns');
+
+    if (['html', 'xml', 'javascript', 'js'].includes(lang.toLowerCase()) || raw.includes('<html')) {
+      const runBtn = document.createElement('button');
+      runBtn.className = 'code-btn run';
+      runBtn.textContent = '▶ Run Live';
+      runBtn.onclick = () => openCodeSandbox(raw);
+      btnGroup.appendChild(runBtn);
+    }
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'code-btn';
+    copyBtn.textContent = '📋 Copy';
+    copyBtn.onclick = () => { navigator.clipboard.writeText(raw); toast('Code copied!'); };
+    btnGroup.appendChild(copyBtn);
+
+    pre.parentNode.insertBefore(box, pre);
+    box.appendChild(bar);
+    box.appendChild(pre);
+  });
+
+  // Action Bar under AI Message
+  const tools = document.createElement('div');
+  tools.className = 'msg-tools';
+
+  const imgEl = aiBodyEl.querySelector('img');
+  if (imgEl) {
+    const src = meta?.imageUrl || imgEl.src;
+    const promptUsed = meta?.imagePrompt || '';
+
+    const studioBtn = document.createElement('button');
+    studioBtn.className = 'msg-tool-btn';
+    studioBtn.innerHTML = '🎛️ Filters & Studio';
+    studioBtn.onclick = () => openStudioWithImage(src, promptUsed);
+
+    const modifyBtn = document.createElement('button');
+    modifyBtn.className = 'msg-tool-btn';
+    modifyBtn.innerHTML = '🪄 Modify Again';
+    modifyBtn.onclick = async () => {
+      const editReq = prompt('🪄 इस फोटो में आगे क्या बदलाव करना है?', 'Change lighting to neon cyberpunk');
+      if (editReq) {
+        state.attachedImageDataUrl = src;
+        sendMessage(editReq, 'edit_uploaded_photo');
+      }
+    };
+
+    const dlBtn = document.createElement('a');
+    dlBtn.className = 'msg-tool-btn';
+    dlBtn.href = src;
+    dlBtn.target = '_blank';
+    dlBtn.innerHTML = '📥 Full Image';
+
+    tools.append(studioBtn, modifyBtn, dlBtn);
+  }
+
+  const speakBtn = document.createElement('button');
+  speakBtn.className = 'msg-tool-btn';
+  speakBtn.innerHTML = '🔊 Listen';
+  speakBtn.onclick = () => speakReply(markdownText);
+
+  const copyMsgBtn = document.createElement('button');
+  copyMsgBtn.className = 'msg-tool-btn';
+  copyMsgBtn.innerHTML = '📋 Copy';
+  copyMsgBtn.onclick = () => { navigator.clipboard.writeText(markdownText); toast('Copied!'); };
+
+  tools.append(speakBtn, copyMsgBtn);
+  aiBodyEl.appendChild(tools);
+}
+
+// ==================== PHOTO STUDIO & CANVAS FILTER EDITOR ====================
+function drawEmptyStudioCanvas() {
+  const ctx = DOM.editorCanvas.getContext('2d');
+  ctx.fillStyle = '#141414';
+  ctx.fillRect(0, 0, DOM.editorCanvas.width, DOM.editorCanvas.height);
+  ctx.fillStyle = '#888';
+  ctx.font = '18px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('📂 Upload a Gallery Photo or ✨ Generate with AI', DOM.editorCanvas.width / 2, DOM.editorCanvas.height / 2);
+}
+
+function openStudioWithImage(url = null, promptText = '') {
+  DOM.studioModal.classList.add('open');
+  if (promptText) DOM.studioPromptInput.value = promptText;
+  if (url) loadStudioImage(url);
+}
+
+function loadStudioImage(url) {
+  DOM.studioLoading.style.display = 'flex';
+  DOM.studioLoadingText.textContent = 'Loading photo...';
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    state.editor.baseImage = img;
+    resetStudioFilters(false);
+    renderStudioCanvas();
+    DOM.studioLoading.style.display = 'none';
+  };
+  img.onerror = () => {
+    DOM.studioLoading.style.display = 'none';
+    toast('Could not load image into canvas');
+  };
+  img.src = url;
+}
+
+function resetStudioFilters(redraw = true) {
   state.editor.rotation = 0;
   state.editor.flipH = 1;
   state.editor.flipV = 1;
-  state.editor.filters = { brightness: 100, contrast: 100, saturation: 100, hue: 0, blur: 0, sepia: 0 };
+  state.editor.filters = { brightness: 100, contrast: 100, saturation: 100, sepia: 0, blur: 0 };
   state.editor.texts = [];
-  ['Brightness','Contrast','Saturation'].forEach(k => document.getElementById('filter'+k).value = 100);
-  ['Hue','Blur','Sepia'].forEach(k => document.getElementById('filter'+k).value = 0);
-  if (redraw) renderEditorCanvas();
+  ['Brightness', 'Contrast', 'Saturation'].forEach(k => document.getElementById('filter' + k).value = 100);
+  ['Sepia', 'Blur'].forEach(k => document.getElementById('filter' + k).value = 0);
+  if (redraw) renderStudioCanvas();
 }
 
-function renderEditorCanvas() {
+function renderStudioCanvas() {
   const img = state.editor.baseImage;
   if (!img) return;
-  const canvas = DOM.editorCanvas;
-  const ctx = canvas.getContext('2d');
-
-  const isRotated90 = Math.abs(state.editor.rotation) % 180 === 90;
+  const c = DOM.editorCanvas;
+  const ctx = c.getContext('2d');
+  const rot90 = Math.abs(state.editor.rotation) % 180 === 90;
   const w = img.naturalWidth || img.width;
   const h = img.naturalHeight || img.height;
-  canvas.width = isRotated90 ? h : w;
-  canvas.height = isRotated90 ? w : h;
+  c.width = rot90 ? h : w;
+  c.height = rot90 ? w : h;
 
   const f = state.editor.filters;
   ctx.save();
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.filter = `brightness(${f.brightness}%) contrast(${f.contrast}%) saturate(${f.saturation}%) hue-rotate(${f.hue}deg) blur(${f.blur}px) sepia(${f.sepia}%)`;
-  ctx.translate(canvas.width / 2, canvas.height / 2);
+  ctx.clearRect(0, 0, c.width, c.height);
+  ctx.filter = `brightness(${f.brightness}%) contrast(${f.contrast}%) saturate(${f.saturation}%) sepia(${f.sepia}%) blur(${f.blur}px)`;
+  ctx.translate(c.width / 2, c.height / 2);
   ctx.rotate((state.editor.rotation * Math.PI) / 180);
   ctx.scale(state.editor.flipH, state.editor.flipV);
   ctx.drawImage(img, -w / 2, -h / 2, w, h);
   ctx.restore();
 
-  state.editor.texts.forEach(item => {
+  state.editor.texts.forEach(t => {
     ctx.save();
-    const fontSize = Math.max(26, Math.round(canvas.width * 0.055));
-    ctx.font = `800 ${fontSize}px Inter, sans-serif`;
-    ctx.fillStyle = item.color;
-    ctx.strokeStyle = 'rgba(0,0,0,0.85)';
-    ctx.lineWidth = Math.max(4, Math.round(fontSize / 9));
+    const sz = Math.max(24, Math.round(c.width * 0.055));
+    ctx.font = `700 ${sz}px Inter, sans-serif`;
+    ctx.fillStyle = t.color;
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = Math.max(3, Math.round(sz / 9));
     ctx.textAlign = 'center';
-    ctx.strokeText(item.text, canvas.width / 2, item.y);
-    ctx.fillText(item.text, canvas.width / 2, item.y);
+    ctx.strokeText(t.text, c.width / 2, t.y);
+    ctx.fillText(t.text, c.width / 2, t.y);
     ctx.restore();
   });
 }
 
-function setStudioLoading(show, text = 'Working...') {
-  DOM.studioLoading.style.display = show ? 'flex' : 'none';
-  DOM.studioLoadingText.textContent = text;
-}
-
-async function runStudioAiRemix(customInstruction = null) {
-  const instruction = customInstruction || DOM.studioPromptInput.value.trim();
-  if (!instruction) {
-    showToast('पहले प्रॉम्प्ट बॉक्स में लिखें कि फोटो में क्या बदलना है!', 'error');
-    return;
-  }
-
-  setStudioLoading(true, '👁️ AI आपकी फोटो को देखकर आपके प्रॉम्प्ट के हिसाब से एडिट कर रहा है...');
+async function runStudioAiEdit(customPrompt = null) {
+  const req = (customPrompt || DOM.studioPromptInput.value).trim();
+  if (!req) return toast('पहले लिखें कि फोटो में क्या बदलना है!');
+  DOM.studioLoading.style.display = 'flex';
+  DOM.studioLoadingText.textContent = '👁️ AI आपकी फोटो को देखकर नया वर्जन बना रहा है...';
   try {
-    let finalPrompt = instruction;
-    // If there is an image on canvas, use AI Vision to analyze it first!
+    let base64Snap = null;
     if (state.editor.baseImage) {
-      const currentCanvasDataUrl = DOM.editorCanvas.toDataURL('image/jpeg', 0.85);
-      finalPrompt = await buildVisionEditedPrompt(currentCanvasDataUrl, instruction);
+      base64Snap = await compressGalleryImage(DOM.editorCanvas.toDataURL('image/jpeg', 0.85), 768);
     }
-    DOM.studioLoadingText.textContent = '🎨 Rendering edited photo...';
-    const [w, h] = DOM.studioRatioSelect.value.split('x').map(Number);
-    const model = DOM.studioModelSelect.value;
-    const newUrl = await generateImageWithFallback(finalPrompt, model, w, h);
-    await loadStudioImageFromUrl(newUrl, finalPrompt);
-    showToast('✨ Photo AI Edited!', 'success');
-  } catch (err) {
-    showToast(err.message, 'error');
-  } finally {
-    setStudioLoading(false);
+    const smartPrompt = await craftSmartImagePrompt(req, base64Snap);
+    const newUrl = getFluxImageUrl(smartPrompt, 768, 768);
+    await preloadImage(newUrl);
+    loadStudioImage(newUrl);
+    toast('✨ Photo Edited!');
+  } catch (e) {
+    DOM.studioLoading.style.display = 'none';
+    toast(e.message);
   }
 }
 
-function setupStudioEvents() {
-  // Studio Tabs
-  document.querySelectorAll('.studio-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.studio-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.studio-tab-content').forEach(c => c.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById(tab.dataset.tab).classList.add('active');
-    });
+function bindStudioEvents() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    };
   });
 
-  document.getElementById('headerStudioBtn').addEventListener('click', () => openStudioModal());
-  document.getElementById('openStudioSidebarBtn').addEventListener('click', () => {
-    if (window.innerWidth <= 768) closeSidebar();
-    openStudioModal();
-  });
-  document.getElementById('closeStudioBtn').addEventListener('click', closeStudioModal);
+  document.getElementById('headerStudioBtn').onclick = () => openStudioWithImage();
+  document.getElementById('openStudioQuickBtn').onclick = () => openStudioWithImage();
+  document.getElementById('openStudioSidebarBtn').onclick = () => { closeSidebar(); openStudioWithImage(); };
+  document.getElementById('closeStudioBtn').onclick = () => DOM.studioModal.classList.remove('open');
 
-  // Upload from Gallery into Studio
-  document.getElementById('triggerUploadBtn').addEventListener('click', () => DOM.uploadImageInput.click());
-  DOM.uploadImageInput.addEventListener('change', e => {
+  document.getElementById('triggerUploadBtn').onclick = () => DOM.uploadImageInput.click();
+  DOM.uploadImageInput.onchange = async e => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const img = new Image();
-      img.onload = () => {
-        state.editor.baseImage = img;
-        state.editor.baseDataUrl = ev.target.result;
-        resetEditorAdjustments(false);
-        renderEditorCanvas();
-        showToast('Photo loaded! Now write prompt & click "🪄 AI Edit Current Photo"', 'success');
-      };
-      img.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // Create New Image
-  document.getElementById('studioGenerateBtn').addEventListener('click', async () => {
-    const promptText = DOM.studioPromptInput.value.trim();
-    if (!promptText) return showToast('Enter a prompt first!', 'error');
-    setStudioLoading(true, '✨ Generating new image...');
-    try {
-      const [w, h] = DOM.studioRatioSelect.value.split('x').map(Number);
-      const url = await generateImageWithFallback(promptText, DOM.studioModelSelect.value, w, h);
-      await loadStudioImageFromUrl(url, promptText);
-    } catch (e) {
-      showToast(e.message, 'error');
-    } finally {
-      setStudioLoading(false);
-    }
-  });
-
-  // AI Edit Current Gallery Photo
-  document.getElementById('studioAiRemixBtn').addEventListener('click', () => runStudioAiRemix());
-
-  // 1-Click AI Style Presets
-  document.querySelectorAll('.preset-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      DOM.studioPromptInput.value = chip.dataset.style;
-      runStudioAiRemix(chip.dataset.style);
-    });
-  });
-
-  // Live Sliders
-  const sliderMap = {
-    filterBrightness: 'brightness', filterContrast: 'contrast', filterSaturation: 'saturation',
-    filterHue: 'hue', filterBlur: 'blur', filterSepia: 'sepia'
+    const compressed = await compressGalleryImage(file, 900);
+    loadStudioImage(compressed);
+    toast('Photo loaded! Click 🪄 AI Edit or use presets.');
   };
-  Object.entries(sliderMap).forEach(([id, key]) => {
-    document.getElementById(id).addEventListener('input', e => {
+
+  document.getElementById('studioGenerateBtn').onclick = async () => {
+    const p = DOM.studioPromptInput.value.trim();
+    if (!p) return toast('Write a prompt first!');
+    DOM.studioLoading.style.display = 'flex';
+    DOM.studioLoadingText.textContent = '✨ Creating image...';
+    try {
+      const eng = await craftSmartImagePrompt(p, null);
+      const url = getFluxImageUrl(eng, 768, 768);
+      await preloadImage(url);
+      loadStudioImage(url);
+    } catch (e) {
+      DOM.studioLoading.style.display = 'none';
+      toast(e.message);
+    }
+  };
+
+  document.getElementById('studioAiRemixBtn').onclick = () => runStudioAiEdit();
+
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.onclick = () => {
+      DOM.studioPromptInput.value = btn.dataset.prompt;
+      runStudioAiEdit(btn.dataset.prompt);
+    };
+  });
+
+  const sMap = {
+    filterBrightness: 'brightness', filterContrast: 'contrast',
+    filterSaturation: 'saturation', filterSepia: 'sepia', filterBlur: 'blur'
+  };
+  Object.entries(sMap).forEach(([id, key]) => {
+    document.getElementById(id).oninput = e => {
       state.editor.filters[key] = parseFloat(e.target.value);
-      renderEditorCanvas();
-    });
+      renderStudioCanvas();
+    };
   });
 
-  document.getElementById('rotateImgBtn').addEventListener('click', () => { state.editor.rotation = (state.editor.rotation + 90) % 360; renderEditorCanvas(); });
-  document.getElementById('flipHImgBtn').addEventListener('click', () => { state.editor.flipH *= -1; renderEditorCanvas(); });
-  document.getElementById('flipVImgBtn').addEventListener('click', () => { state.editor.flipV *= -1; renderEditorCanvas(); });
-  document.getElementById('resetFiltersBtn').addEventListener('click', () => resetEditorAdjustments(true));
+  document.getElementById('rotateImgBtn').onclick = () => { state.editor.rotation = (state.editor.rotation + 90) % 360; renderStudioCanvas(); };
+  document.getElementById('flipHImgBtn').onclick = () => { state.editor.flipH *= -1; renderStudioCanvas(); };
+  document.getElementById('flipVImgBtn').onclick = () => { state.editor.flipV *= -1; renderStudioCanvas(); };
+  document.getElementById('resetFiltersBtn').onclick = () => resetStudioFilters(true);
 
-  document.getElementById('addTextOverlayBtn').addEventListener('click', () => {
-    const txtInput = document.getElementById('overlayTextInput');
-    const colorInput = document.getElementById('overlayColorInput');
-    const text = txtInput.value.trim();
-    if (!text || !state.editor.baseImage) return showToast('Load a photo and enter text first!', 'error');
-    const yPos = state.editor.texts.length === 0
-      ? DOM.editorCanvas.height - Math.round(DOM.editorCanvas.height * 0.08)
-      : Math.round(DOM.editorCanvas.height * 0.12) * (state.editor.texts.length + 1);
-    state.editor.texts.push({ text, color: colorInput.value, y: yPos });
-    txtInput.value = '';
-    renderEditorCanvas();
-  });
+  document.getElementById('addTextOverlayBtn').onclick = () => {
+    const inp = document.getElementById('overlayTextInput');
+    const col = document.getElementById('overlayColorInput').value;
+    if (!inp.value.trim() || !state.editor.baseImage) return;
+    const y = state.editor.texts.length === 0 ? DOM.editorCanvas.height - 40 : 60 * (state.editor.texts.length + 1);
+    state.editor.texts.push({ text: inp.value.trim(), color: col, y });
+    inp.value = '';
+    renderStudioCanvas();
+  };
 
-  document.getElementById('downloadStudioImgBtn').addEventListener('click', () => {
-    if (!state.editor.baseImage) return showToast('No image to save!', 'error');
+  document.getElementById('downloadStudioImgBtn').onclick = () => {
+    if (!state.editor.baseImage) return;
     const a = document.createElement('a');
     a.href = DOM.editorCanvas.toDataURL('image/png');
-    a.download = `dolphin-photo-${Date.now()}.png`;
+    a.download = `photo-${Date.now()}.png`;
     a.click();
-  });
-
-  document.getElementById('sendToChatStudioBtn').addEventListener('click', () => {
-    if (!state.editor.baseImage) return showToast('No image on canvas!', 'error');
-    if (!state.activeChatId) createNewChat();
-    const dataUrl = DOM.editorCanvas.toDataURL('image/png');
-    const caption = DOM.studioPromptInput.value.trim() || 'Studio Edited Photo';
-    const md = `**🖼️ Studio Photo:** \`${caption}\`\n\n![Edited](${dataUrl})`;
-    renderMessage('assistant', md, Date.now(), true, { imageUrl: dataUrl, imagePrompt: caption });
-    state.conversation.push({ role: 'assistant', content: md, timestamp: Date.now() });
-    saveCurrentChat();
-    closeStudioModal();
-    scrollToBottom();
-  });
-}
-
-// ==================== EXTRA SMART TOOLS (OCR, ENHANCE, URL READER, FILE UPLOAD) ====================
-function setupExtraTools() {
-  // Attach Photo from Gallery
-  document.getElementById('attachImgBtn').addEventListener('click', () => DOM.chatImageUpload.click());
-  document.getElementById('triggerVisionSidebarBtn').addEventListener('click', () => {
-    if (window.innerWidth <= 768) closeSidebar();
-    DOM.chatImageUpload.click();
-  });
-
-  DOM.chatImageUpload.addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      state.attachedImageDataUrl = ev.target.result;
-      DOM.attachedImgThumb.src = state.attachedImageDataUrl;
-      DOM.attachmentBar.style.display = 'flex';
-      DOM.userInput.placeholder = 'बताइये इस फोटो में क्या एडिट करना है या क्या पूछना है...';
-      DOM.userInput.focus();
-    };
-    reader.readAsDataURL(file);
-  });
-
-  document.getElementById('removeAttachmentBtn').addEventListener('click', clearAttachment);
-
-  // 1-Click AI Edit Photo from Attachment Bar
-  document.getElementById('aiEditAttachedBtn').addEventListener('click', async () => {
-    if (!state.attachedImageDataUrl) return;
-    const typed = DOM.userInput.value.trim();
-    DOM.userInput.value = '';
-    await handleGalleryPhotoAiEditInChat(state.attachedImageDataUrl, typed);
-  });
-
-  // OCR Text Extraction
-  document.getElementById('extractOcrBtn').addEventListener('click', async () => {
-    if (!state.attachedImageDataUrl) return;
-    const imgData = state.attachedImageDataUrl;
-    clearAttachment();
-    if (!state.activeChatId) createNewChat();
-    renderMessage('user', '🔍 Extract text (OCR) from this image', Date.now(), true, { attachedImage: imgData });
-    const bubble = renderMessage('assistant', '🔍 Reading text from image...', Date.now(), false);
-    try {
-      const txt = await puter.ai.img2txt(imgData);
-      const out = txt?.trim() ? `**🔍 Extracted Text:**\n\n\`\`\`text\n${txt.trim()}\n\`\`\`` : 'No text found in image.';
-      bubble.innerHTML = marked.parse(out);
-      state.conversation.push({ role: 'assistant', content: out, timestamp: Date.now() });
-      saveCurrentChat();
-    } catch (e) {
-      bubble.innerHTML = '❌ OCR failed.';
-    }
-  });
-
-  document.getElementById('editAttachedInStudioBtn').addEventListener('click', () => {
-    if (!state.attachedImageDataUrl) return;
-    const url = state.attachedImageDataUrl;
-    clearAttachment();
-    openStudioModal(url, '');
-  });
-
-  // Web Search Toggle
-  DOM.webSearchToggleBtn.addEventListener('click', () => {
-    state.webSearchEnabled = !state.webSearchEnabled;
-    DOM.webSearchToggleBtn.classList.toggle('active-mode', state.webSearchEnabled);
-    DOM.webModeBadge.style.display = state.webSearchEnabled ? 'inline-block' : 'none';
-    showToast(state.webSearchEnabled ? '🌐 Live Web Search ON' : 'Web Search OFF', 'success');
-  });
-
-  // Quick Image Create Button
-  document.getElementById('quickImgGenBtn').addEventListener('click', () => {
-    const val = DOM.userInput.value.trim();
-    if (val) {
-      DOM.userInput.value = '';
-      handleChatImageGeneration(val);
-    } else if (state.attachedImageDataUrl) {
-      handleGalleryPhotoAiEditInChat(state.attachedImageDataUrl, '');
-    } else {
-      const p = prompt('🎨 क्या इमेज बनानी है? (Prompt लिखें):', 'A futuristic Royal Enfield motorcycle on Himachal mountains at sunset, 8k');
-      if (p) handleChatImageGeneration(p);
-    }
-  });
-
-  // ✨ AI Prompt Enhancer
-  document.getElementById('enhancePromptBtn').addEventListener('click', async () => {
-    const raw = DOM.userInput.value.trim();
-    if (!raw) return showToast('पहले बॉक्स में थोड़ा सा प्रॉम्प्ट लिखें!', 'error');
-    DOM.userInput.value = '✨ Enhancing your prompt...';
-    try {
-      const resp = await puter.ai.chat(`Rewrite and enhance this user prompt to make it super detailed, clear, and effective. Output ONLY the improved prompt:\n"${raw}"`, { model: 'gpt-4o-mini' });
-      DOM.userInput.value = (typeof resp === 'string' ? resp : resp?.message?.content || raw).trim();
-      showToast('✨ Prompt Enhanced!', 'success');
-    } catch (e) {
-      DOM.userInput.value = raw;
-    }
-  });
-
-  // 📄 Upload Code / Text File
-  document.getElementById('attachDocBtn').addEventListener('click', () => DOM.chatDocUpload.click());
-  DOM.chatDocUpload.addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const content = ev.target.result.substring(0, 12000);
-      DOM.userInput.value = `Here is the file "${file.name}":\n\`\`\`\n${content}\n\`\`\`\nAnalyze or improve this file:`;
-      DOM.userInput.focus();
-      showToast(`📄 ${file.name} loaded!`, 'success');
-    };
-    reader.readAsText(file);
-  });
-
-  // 🔗 Read Website URL
-  document.getElementById('urlSummarySidebarBtn').addEventListener('click', async () => {
-    if (window.innerWidth <= 768) closeSidebar();
-    const url = prompt('🔗 Enter any Website URL to read & summarize:', 'https://news.ycombinator.com');
-    if (!url) return;
-    DOM.userInput.value = `/web Summarize and analyze the content of ${url}`;
-    sendMessage();
-  });
-
-  // 💻 Code Sandbox
-  const openSandbox = (code = '') => {
-    if (code) DOM.sandboxCodeEditor.value = code;
-    else if (!DOM.sandboxCodeEditor.value.trim()) {
-      DOM.sandboxCodeEditor.value = `<!DOCTYPE html>\n<html>\n<body style="background:#0b0f19;color:#38bdf8;font-family:sans-serif;text-align:center;padding-top:20%;">\n  <h1>🐬 Dolphin Live Code Runner</h1>\n</body>\n</html>`;
-    }
-    DOM.sandboxModal.classList.add('open');
-    DOM.sandboxFrame.srcdoc = DOM.sandboxCodeEditor.value;
   };
-  document.getElementById('openSandboxSidebarBtn').addEventListener('click', () => {
-    if (window.innerWidth <= 768) closeSidebar();
-    openSandbox();
-  });
-  document.getElementById('closeSandboxBtn').addEventListener('click', () => DOM.sandboxModal.classList.remove('open'));
-  document.getElementById('runSandboxBtn').addEventListener('click', () => {
-    DOM.sandboxFrame.srcdoc = DOM.sandboxCodeEditor.value;
-  });
-  window.openDolphinSandbox = openSandbox;
+
+  document.getElementById('sendToChatStudioBtn').onclick = () => {
+    if (!state.editor.baseImage) return;
+    if (!state.activeChatId) createNewChat();
+    const dataUrl = DOM.editorCanvas.toDataURL('image/jpeg', 0.9);
+    const md = `**🖼️ Studio Edited Photo:**\n\n![Studio Photo](${dataUrl})`;
+    const bodyEl = appendAssistantPlaceholder();
+    renderFinalAssistantContent(bodyEl, md, { imageUrl: dataUrl });
+    state.conversation.push({ role: 'assistant', content: md, timestamp: Date.now() });
+    saveActiveChat();
+    DOM.studioModal.classList.remove('open');
+    scrollToBottom();
+  };
 }
 
+// ==================== STORAGE & SIDEBAR ====================
+function loadStorage() {
+  try {
+    const raw = localStorage.getItem('dolphin_chatgpt_v5');
+    if (raw) {
+      const d = JSON.parse(raw);
+      state.conversations = d.conversations || {};
+      state.activeChatId = d.activeChatId || null;
+      state.systemPrompt = d.systemPrompt || DEFAULT_PROMPT;
+      state.currentModel = d.model || 'openai';
+    }
+  } catch (e) {}
+  DOM.systemPromptInput.value = state.systemPrompt;
+  DOM.modelSelect.value = state.currentModel;
+
+  if (state.activeChatId && state.conversations[state.activeChatId]) {
+    switchChat(state.activeChatId);
+  } else {
+    renderSidebarList();
+    showWelcomeScreen();
+  }
+}
+
+function saveStorage() {
+  try {
+    localStorage.setItem('dolphin_chatgpt_v5', JSON.stringify({
+      conversations: state.conversations,
+      activeChatId: state.activeChatId,
+      systemPrompt: state.systemPrompt,
+      model: state.currentModel
+    }));
+  } catch (e) {}
+}
+
+function createNewChat() {
+  saveActiveChat();
+  const id = 'c_' + Date.now();
+  state.conversations[id] = { id, title: 'New Chat', messages: [], timestamp: Date.now() };
+  state.activeChatId = id;
+  state.conversation = [];
+  saveStorage();
+  renderSidebarList();
+  showWelcomeScreen();
+  closeSidebar();
+}
+
+function switchChat(id) {
+  if (!state.conversations[id]) return;
+  saveActiveChat();
+  state.activeChatId = id;
+  state.conversation = [...state.conversations[id].messages];
+  DOM.chatInner.innerHTML = '';
+  if (state.conversation.length === 0) {
+    showWelcomeScreen();
+  } else {
+    state.conversation.forEach(m => {
+      if (m.role === 'user') appendUserMessage(m.content);
+      else {
+        const b = appendAssistantPlaceholder();
+        renderFinalAssistantContent(b, m.content);
+      }
+    });
+    scrollToBottom();
+  }
+  renderSidebarList();
+  closeSidebar();
+}
+
+function saveActiveChat() {
+  if (state.activeChatId && state.conversations[state.activeChatId] && state.conversation.length > 0) {
+    state.conversations[state.activeChatId].messages = [...state.conversation];
+    state.conversations[state.activeChatId].timestamp = Date.now();
+    if (state.conversations[state.activeChatId].title === 'New Chat') {
+      const first = state.conversation.find(m => m.role === 'user');
+      if (first) state.conversations[state.activeChatId].title = first.content.substring(0, 34);
+    }
+    saveStorage();
+  }
+}
+
+function renderSidebarList() {
+  const list = Object.values(state.conversations).sort((a, b) => b.timestamp - a.timestamp);
+  if (!list.length) {
+    DOM.chatList.innerHTML = `<div style="padding:12px;font-size:12px;color:var(--text-muted)">No recent chats</div>`;
+    return;
+  }
+  DOM.chatList.innerHTML = list.map(c => `
+    <div class="chat-item ${c.id === state.activeChatId ? 'active' : ''}" data-id="${c.id}">
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">${escapeHtml(c.title)}</span>
+      <button class="del-chat" data-id="${c.id}">✕</button>
+    </div>`).join('');
+
+  DOM.chatList.querySelectorAll('.chat-item').forEach(el => {
+    el.onclick = e => {
+      if (!e.target.classList.contains('del-chat')) switchChat(el.dataset.id);
+    };
+  });
+  DOM.chatList.querySelectorAll('.del-chat').forEach(btn => {
+    btn.onclick = e => {
+      e.stopPropagation();
+      delete state.conversations[btn.dataset.id];
+      if (state.activeChatId === btn.dataset.id) { state.activeChatId = null; state.conversation = []; showWelcomeScreen(); }
+      saveStorage();
+      renderSidebarList();
+    };
+  });
+}
+
+// ==================== EVENTS & HELPERS ====================
 function clearAttachment() {
   state.attachedImageDataUrl = null;
   DOM.chatImageUpload.value = '';
   DOM.attachmentBar.style.display = 'none';
-  DOM.userInput.placeholder = 'Ask anything, or upload a photo 📎 and type how to edit it...';
 }
 
-// ==================== CHAT UI & MESSAGES ====================
-function showEmptyState() {
-  DOM.chatInner.innerHTML = `
-    <div class="empty-state">
-      <div class="empty-icon">🐬</div>
-      <h2>Dolphin AI Ultra</h2>
-      <p>Upload Gallery Photo & Edit with Prompt · Live Web Search · Zero 404 Errors</p>
-
-      <div class="hero-cards-grid">
-        <div class="hero-card" data-action="vision">
-          <span class="hero-card-icon">🪄</span>
-          <h4>Edit Gallery Photo</h4>
-          <span>गैलरी से अपनी फोटो अपलोड करें और प्रॉम्प्ट लिखकर AI से एडिट करवाएं।</span>
-        </div>
-        <div class="hero-card" data-action="studio">
-          <span class="hero-card-icon">🎨</span>
-          <h4>AI Photo Studio</h4>
-          <span>1-Click Anime, Cyberpunk, Background Change और Live Filters.</span>
-        </div>
-        <div class="hero-card" data-prompt="/web Latest tech and cybersecurity news today">
-          <span class="hero-card-icon">🌐</span>
-          <h4>Live Web Search</h4>
-          <span>रियल-टाइम इंटरनेट सर्च और लेटेस्ट जानकारी बिना किसी एरर के।</span>
-        </div>
-        <div class="hero-card" data-action="sandbox">
-          <span class="hero-card-icon">💻</span>
-          <h4>Live Code Runner</h4>
-          <span>HTML/CSS/JS गेम्स और ऐप्स बनवाकर तुरंत ब्राउज़र में चलाएं।</span>
-        </div>
-      </div>
-
-      <div class="quick-prompts">
-        <span class="quick-prompt" data-prompt="/image cyberpunk samurai standing in neon rain, 8k">🎨 Create Cyberpunk Art</span>
-        <span class="quick-prompt" data-prompt="Create a modern responsive Portfolio Website in single-file HTML/CSS/JS">⚡ Build Portfolio Site</span>
-        <span class="quick-prompt" data-prompt="/web Top bug bounty programs and tips in 2026">🛡️ Bug Bounty Search</span>
-      </div>
-    </div>`;
-
-  DOM.chatInner.querySelectorAll('.hero-card, .quick-prompt').forEach(el => {
-    el.addEventListener('click', () => {
-      const act = el.dataset.action;
-      if (act === 'studio') return openStudioModal();
-      if (act === 'vision') return DOM.chatImageUpload.click();
-      if (act === 'sandbox') return window.openDolphinSandbox();
-      if (el.dataset.prompt) {
-        DOM.userInput.value = el.dataset.prompt;
-        DOM.userInput.focus();
-      }
-    });
-  });
-  updateTokenCount();
+function openCodeSandbox(code = '') {
+  if (code) DOM.sandboxCodeEditor.value = code;
+  else if (!DOM.sandboxCodeEditor.value.trim()) {
+    DOM.sandboxCodeEditor.value = `<!DOCTYPE html>\n<html>\n<body style="background:#111;color:#10a37f;font-family:sans-serif;text-align:center;padding-top:20%">\n  <h1>🐬 Live Code Sandbox</h1>\n</body>\n</html>`;
+  }
+  DOM.sandboxModal.classList.add('open');
+  DOM.sandboxFrame.srcdoc = DOM.sandboxCodeEditor.value;
 }
 
-function renderMessage(role, content, timestamp = null, animate = true, meta = null) {
-  const empty = document.querySelector('.empty-state');
-  if (empty) empty.remove();
-
-  const msgDiv = document.createElement('div');
-  msgDiv.className = `message ${role}`;
-  const timeStr = timestamp ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-
-  if (role === 'user') {
-    const thumbHtml = meta?.attachedImage ? `<img src="${meta.attachedImage}" style="max-height:160px;margin-bottom:8px;border-radius:8px;">` : '';
-    msgDiv.innerHTML = `<div class="message-avatar">U</div><div class="message-content"><div class="message-bubble">${thumbHtml}${escapeHtml(content)}</div><div class="message-time">${timeStr}</div></div>`;
-  } else {
-    msgDiv.innerHTML = `<div class="message-avatar">🐬</div><div class="message-content"><div class="message-bubble">${marked.parse(content || '')}</div><div class="message-time">${timeStr}</div></div>`;
-    const bubble = msgDiv.querySelector('.message-bubble');
-
-    bubble.querySelectorAll('pre code').forEach(block => { try { hljs.highlightElement(block); } catch (e) {} });
-    bubble.querySelectorAll('pre').forEach(pre => {
-      const codeEl = pre.querySelector('code');
-      const rawCode = codeEl ? codeEl.textContent : pre.textContent;
-      const langClass = codeEl ? [...codeEl.classList].find(c => c.startsWith('language-')) : '';
-      const lang = langClass ? langClass.replace('language-', '') : 'code';
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'code-block-wrapper';
-      const header = document.createElement('div');
-      header.className = 'code-block-header';
-      header.innerHTML = `<span>${escapeHtml(lang.toUpperCase())}</span><div class="code-header-btns"></div>`;
-
-      const btnWrap = header.querySelector('.code-header-btns');
-      if (['html', 'xml', 'javascript', 'js'].includes(lang.toLowerCase()) || rawCode.includes('<html')) {
-        const runBtn = document.createElement('button');
-        runBtn.className = 'code-action-btn run-btn';
-        runBtn.innerHTML = '▶ Run Live';
-        runBtn.addEventListener('click', () => window.openDolphinSandbox(rawCode));
-        btnWrap.appendChild(runBtn);
-      }
-
-      const copyBtn = document.createElement('button');
-      copyBtn.className = 'code-action-btn';
-      copyBtn.innerHTML = '📋 Copy';
-      copyBtn.addEventListener('click', () => navigator.clipboard.writeText(rawCode).then(() => showToast('Copied!', 'success')));
-      btnWrap.appendChild(copyBtn);
-
-      pre.parentNode.insertBefore(wrapper, pre);
-      wrapper.appendChild(header);
-      wrapper.appendChild(pre);
-    });
-
-    const imgEl = bubble.querySelector('img');
-    if (imgEl) {
-      const imgUrl = meta?.imageUrl || imgEl.getAttribute('src');
-      const imgPrompt = meta?.imagePrompt || imgEl.getAttribute('alt') || '';
-      const cardActions = document.createElement('div');
-      cardActions.className = 'chat-image-actions';
-
-      const editBtn = document.createElement('button');
-      editBtn.className = 'img-card-btn';
-      editBtn.innerHTML = '🎛️ Open in Studio';
-      editBtn.addEventListener('click', () => openStudioModal(imgUrl, imgPrompt));
-
-      const remixBtn = document.createElement('button');
-      remixBtn.className = 'img-card-btn';
-      remixBtn.innerHTML = '🪄 Edit Again with Prompt';
-      remixBtn.addEventListener('click', () => {
-        const mod = prompt('🪄 इस फोटो में आगे क्या बदलाव करना है?', '');
-        if (mod) handleGalleryPhotoAiEditInChat(imgUrl, mod);
-      });
-
-      const fullBtn = document.createElement('a');
-      fullBtn.className = 'img-card-btn';
-      fullBtn.href = imgUrl;
-      fullBtn.target = '_blank';
-      fullBtn.innerHTML = '🔗 Full Size';
-
-      cardActions.append(editBtn, remixBtn, fullBtn);
-      bubble.appendChild(cardActions);
-    }
-
-    const contentDiv = msgDiv.querySelector('.message-content');
-    const actions = document.createElement('div');
-    actions.className = 'message-actions';
-
-    const speakBtn = document.createElement('button');
-    speakBtn.className = 'action-btn';
-    speakBtn.innerHTML = '🔊';
-    speakBtn.addEventListener('click', () => speakText(content));
-
-    const copyBtn = document.createElement('button');
-    copyBtn.className = 'action-btn';
-    copyBtn.innerHTML = '📋';
-    copyBtn.addEventListener('click', () => { navigator.clipboard.writeText(content); showToast('Copied!', 'success'); });
-
-    const regenBtn = document.createElement('button');
-    regenBtn.className = 'action-btn';
-    regenBtn.innerHTML = '🔄';
-    regenBtn.addEventListener('click', regenerateResponse);
-
-    actions.append(speakBtn, copyBtn, regenBtn);
-    contentDiv.appendChild(actions);
-  }
-
-  DOM.chatInner.appendChild(msgDiv);
-  return msgDiv.querySelector('.message-bubble');
-}
-
-// ==================== TTS, SETTINGS & HELPERS ====================
-async function speakText(text) {
-  if (state.isSpeaking) {
-    if (state.speechSynth) state.speechSynth.cancel();
-    if (window.currentPuterAudio) window.currentPuterAudio.pause();
-    state.isSpeaking = false;
-    return;
-  }
-  state.isSpeaking = true;
-  const clean = text.replace(/```[\s\S]*?```/g, '').replace(/[#*`_~>\[\]\(\)]/g, ' ').trim().substring(0, 1200);
-  if (state.usePuterTts && typeof puter !== 'undefined' && puter.ai?.txt2speech) {
-    try {
-      const audio = await puter.ai.txt2speech(clean);
-      window.currentPuterAudio = audio;
-      audio.onended = () => { state.isSpeaking = false; };
-      await audio.play();
-      return;
-    } catch (e) {}
-  }
+function speakReply(text) {
+  if (!state.speechSynth) return;
+  state.speechSynth.cancel();
+  const clean = text.replace(/```[\s\S]*?```/g, '').replace(/[#*`_~>\[\]\(\)]/g, ' ').trim().substring(0, 1000);
   const u = new SpeechSynthesisUtterance(clean);
-  u.onend = () => { state.isSpeaking = false; };
+  u.lang = /[\u0900-\u097F]/.test(clean) ? 'hi-IN' : 'en-IN';
   state.speechSynth.speak(u);
 }
 
-function regenerateResponse() {
-  if (state.conversation.length < 2 || state.busy) return;
-  state.conversation.pop();
-  const lastUser = state.conversation.pop();
-  if (lastUser) {
-    DOM.chatInner.lastElementChild?.remove();
-    DOM.chatInner.lastElementChild?.remove();
-    DOM.userInput.value = lastUser.content;
-    sendMessage();
-  }
+function openSidebar() { DOM.sidebar.classList.add('open'); DOM.sidebarOverlay.classList.add('open'); }
+function closeSidebar() { DOM.sidebar.classList.remove('open'); DOM.sidebarOverlay.classList.remove('open'); }
+function updateSendBtn(busy) {
+  DOM.sendBtn.classList.toggle('stop-mode', busy);
+  DOM.sendBtn.textContent = busy ? '⏹' : '↑';
 }
-
-function stopGeneration() { state.stopFlag = true; }
-function updateSendButton(sending) {
-  DOM.sendBtn.classList.toggle('stop-mode', sending);
-  DOM.sendBtn.innerHTML = sending ? '⏹' : '↑';
-}
-function setTypingIndicator(show) { DOM.typingIndicator.style.display = show ? 'inline' : 'none'; }
 function scrollToBottom() { DOM.chatContainer.scrollTop = DOM.chatContainer.scrollHeight; }
-function updateHeaderTitle() {
-  DOM.headerTitle.textContent = (state.activeChatId && state.conversations[state.activeChatId])
-    ? state.conversations[state.activeChatId].title : 'Dolphin AI';
+function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  DOM.toastContainer.appendChild(t);
+  setTimeout(() => t.remove(), 2400);
 }
-function updateTokenCount() {
-  let total = 0;
-  state.conversation.forEach(m => total += Math.ceil((m.content || '').length / 4));
-  DOM.tokenCount.textContent = total.toLocaleString();
-}
-
-function toggleTheme() {
-  const html = document.documentElement;
-  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('dolphin_theme', next);
-  updateThemeUI();
-}
-function updateThemeUI() {
-  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-  document.getElementById('themeIcon').textContent = theme === 'dark' ? '🌙' : '☀️';
-  document.getElementById('themeText').textContent = theme === 'dark' ? 'Theme: Dark' : 'Theme: Light';
+function updateThemeLabel() {
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  document.getElementById('themeIcon').textContent = isDark ? '☀️' : '🌙';
+  document.getElementById('themeText').textContent = isDark ? 'Light Mode' : 'Dark Mode';
 }
 
-function buildEmojiGrid() {
-  DOM.emojiGrid.innerHTML = EMOJIS.map(e => `<span class="emoji-item">${e}</span>`).join('');
-  DOM.emojiGrid.addEventListener('click', e => {
-    if (e.target.classList.contains('emoji-item')) {
-      DOM.userInput.value += e.target.textContent;
-      DOM.emojiPopover.classList.remove('open');
-      DOM.userInput.focus();
-    }
-  });
-}
-
-function setupVoiceInput() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { DOM.micBtn.style.display = 'none'; return; }
-  const rec = new SR();
-  rec.lang = 'en-IN';
-  let recording = false;
-  rec.onstart = () => { recording = true; DOM.micBtn.classList.add('recording'); };
-  rec.onend = () => { recording = false; DOM.micBtn.classList.remove('recording'); };
-  rec.onresult = e => { DOM.userInput.value = e.results[0][0].transcript; };
-  DOM.micBtn.addEventListener('click', () => recording ? rec.stop() : rec.start());
-}
-
-function escapeHtml(str) {
-  const d = document.createElement('div');
-  d.textContent = str || '';
-  return d.innerHTML;
-}
-
-function showToast(msg, type = 'info') {
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.textContent = msg;
-  DOM.toastContainer.appendChild(toast);
-  setTimeout(() => toast.remove(), 2500);
-}
-
-function setupEventListeners() {
-  DOM.userInput.addEventListener('input', function() {
+function bindEvents() {
+  DOM.userInput.oninput = function() {
     this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 110) + 'px';
-  });
-  DOM.userInput.addEventListener('keydown', e => {
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  };
+  DOM.userInput.onkeydown = e => {
     if (e.key === 'Enter' && !e.shiftKey && window.innerWidth > 768) {
       e.preventDefault();
       sendMessage();
     }
-  });
-  DOM.sendBtn.addEventListener('click', () => state.busy ? stopGeneration() : sendMessage());
-  DOM.modelSelect.addEventListener('change', function() { state.currentModel = this.value; saveData(); });
-  document.getElementById('menuBtn').addEventListener('click', openSidebar);
-  document.getElementById('closeSidebarBtn').addEventListener('click', closeSidebar);
-  DOM.sidebarOverlay.addEventListener('click', closeSidebar);
-  document.getElementById('newChatBtn').addEventListener('click', createNewChat);
-  document.getElementById('newChatSidebarBtn').addEventListener('click', createNewChat);
-  document.getElementById('themeToggleBtn').addEventListener('click', toggleTheme);
-  document.getElementById('settingsBtn').addEventListener('click', () => DOM.settingsPanel.classList.toggle('open'));
-  document.getElementById('applySettingsBtn').addEventListener('click', () => {
-    state.systemPrompt = DOM.systemPromptInput.value.trim() || DEFAULT_SYSTEM_PROMPT;
-    state.usePuterTts = DOM.usePuterTtsCheck.checked;
+  };
+  DOM.sendBtn.onclick = () => {
+    if (state.busy) state.stopFlag = true;
+    else sendMessage();
+  };
+
+  // Gallery Photo Upload & Instant Compression
+  document.getElementById('attachImgBtn').onclick = () => DOM.chatImageUpload.click();
+  document.getElementById('uploadPhotoSidebarBtn').onclick = () => { closeSidebar(); DOM.chatImageUpload.click(); };
+
+  DOM.chatImageUpload.onchange = async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      toast('Optimizing photo...');
+      state.attachedImageDataUrl = await compressGalleryImage(file, 800);
+      DOM.attachedImgThumb.src = state.attachedImageDataUrl;
+      DOM.attachmentBar.style.display = 'flex';
+      DOM.userInput.placeholder = 'बताइये इस फोटो में क्या बदलना है या क्या पूछना है...';
+      DOM.userInput.focus();
+    } catch (err) {
+      toast('Error loading photo');
+    }
+  };
+
+  document.getElementById('removeAttachmentBtn').onclick = clearAttachment;
+
+  // Quick Action Pills on Uploaded Gallery Photo
+  document.getElementById('aiEditAttachedBtn').onclick = () => {
+    const custom = DOM.userInput.value.trim() || prompt('🪄 इस फोटो में क्या बदलाव (Edit) करना है?', 'Make it look cinematic 8k');
+    if (custom) sendMessage(custom, 'edit_uploaded_photo');
+  };
+  document.getElementById('animeAttachedBtn').onclick = () => sendMessage('Convert this exact person and pose into high-budget Japanese Anime Studio Ghibli style', 'edit_uploaded_photo');
+  document.getElementById('cyberAttachedBtn').onclick = () => sendMessage('Transform this exact photo into futuristic cyberpunk style with neon lights', 'edit_uploaded_photo');
+  document.getElementById('ocrAttachedBtn').onclick = () => sendMessage('Extract all visible text from this image accurately and explain it.', 'vision_qa');
+  document.getElementById('studioAttachedBtn').onclick = () => {
+    const img = state.attachedImageDataUrl;
+    clearAttachment();
+    openStudioWithImage(img);
+  };
+
+  // Mode Pills
+  DOM.createImgModeBtn.onclick = () => {
+    state.imageGenMode = !state.imageGenMode;
+    DOM.createImgModeBtn.classList.toggle('active', state.imageGenMode);
+    DOM.userInput.placeholder = state.imageGenMode
+      ? '🎨 Describe the image you want to create (Hindi or English)...'
+      : 'Message Dolphin AI...';
+    DOM.userInput.focus();
+  };
+
+  DOM.webSearchToggleBtn.onclick = () => {
+    state.webSearchMode = !state.webSearchMode;
+    DOM.webSearchToggleBtn.classList.toggle('active', state.webSearchMode);
+    toast(state.webSearchMode ? '🌐 Live Web Search Enabled' : 'Web Search Off');
+  };
+
+  // Sidebar & Nav
+  document.getElementById('menuBtn').onclick = openSidebar;
+  document.getElementById('closeSidebarBtn').onclick = closeSidebar;
+  DOM.sidebarOverlay.onclick = closeSidebar;
+  document.getElementById('newChatBtn').onclick = createNewChat;
+  document.getElementById('newChatSidebarBtn').onclick = createNewChat;
+  DOM.modelSelect.onchange = function() { state.currentModel = this.value; saveStorage(); };
+
+  document.getElementById('themeToggleBtn').onclick = () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('dolphin_theme', next);
+    updateThemeLabel();
+  };
+
+  document.getElementById('settingsBtn').onclick = () => { closeSidebar(); DOM.settingsPanel.classList.toggle('open'); };
+  document.getElementById('applySettingsBtn').onclick = () => {
+    state.systemPrompt = DOM.systemPromptInput.value.trim() || DEFAULT_PROMPT;
+    state.autoVoice = DOM.autoVoiceCheck.checked;
     DOM.settingsPanel.classList.remove('open');
-    saveData();
-    showToast('Saved!', 'success');
-  });
-  document.getElementById('resetSettingsBtn').addEventListener('click', () => {
-    state.systemPrompt = DEFAULT_SYSTEM_PROMPT;
-    DOM.systemPromptInput.value = DEFAULT_SYSTEM_PROMPT;
-    saveData();
-  });
-  document.getElementById('exportBtn').addEventListener('click', () => {
-    const blob = new Blob([JSON.stringify(state.conversation, null, 2)], { type: 'text/plain' });
+    saveStorage();
+    toast('Settings saved!');
+  };
+  document.getElementById('resetSettingsBtn').onclick = () => {
+    state.systemPrompt = DEFAULT_PROMPT;
+    DOM.systemPromptInput.value = DEFAULT_PROMPT;
+    saveStorage();
+  };
+  document.getElementById('exportBtn').onclick = () => {
+    const blob = new Blob([JSON.stringify(state.conversation, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = `chat-${Date.now()}.json`;
     a.click();
-  });
-  document.getElementById('exportAllBtn').addEventListener('click', () => {
-    const blob = new Blob([JSON.stringify(state.conversations, null, 2)], { type: 'text/plain' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `backup-${Date.now()}.json`;
-    a.click();
-  });
-  document.getElementById('clearAllBtn').addEventListener('click', () => {
-    if (confirm('Clear all history?')) {
+  };
+  document.getElementById('clearAllBtn').onclick = () => {
+    if (confirm('Delete all chats?')) {
       state.conversations = {};
       state.activeChatId = null;
       state.conversation = [];
-      saveData();
-      renderSidebar();
-      showEmptyState();
+      saveStorage();
+      renderSidebarList();
+      showWelcomeScreen();
     }
-  });
-  DOM.emojiBtn.addEventListener('click', () => DOM.emojiPopover.classList.toggle('open'));
-  setupVoiceInput();
+  };
+
+  // Sandbox
+  document.getElementById('openSandboxSidebarBtn').onclick = () => { closeSidebar(); openCodeSandbox(); };
+  document.getElementById('closeSandboxBtn').onclick = () => DOM.sandboxModal.classList.remove('open');
+  document.getElementById('runSandboxBtn').onclick = () => { DOM.sandboxFrame.srcdoc = DOM.sandboxCodeEditor.value; };
+
+  // Voice Input
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SR) {
+    const rec = new SR();
+    rec.lang = 'hi-IN';
+    let active = false;
+    rec.onstart = () => { active = true; DOM.micBtn.classList.add('recording'); };
+    rec.onend = () => { active = false; DOM.micBtn.classList.remove('recording'); };
+    rec.onresult = e => { DOM.userInput.value = e.results[0][0].transcript; };
+    DOM.micBtn.onclick = () => active ? rec.stop() : rec.start();
+  } else {
+    DOM.micBtn.style.display = 'none';
+  }
 }
 
 document.addEventListener('DOMContentLoaded', init);
