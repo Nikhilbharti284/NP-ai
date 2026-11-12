@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0a0a0f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Ultra AI Studio</title>
+    <title>AGI Ultra Studio</title>
     <link rel="manifest" href="manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- 3D Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Core Libraries -->
     <script src="https://js.puter.com/v2/"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -26,10 +28,10 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-head">
             <div class="brand">
-                <div class="brand-icon"><i class="fa-solid fa-bolt"></i></div>
+                <div class="brand-icon"><i class="fa-solid fa-brain"></i></div>
                 <div>
-                    <h2>Ultra AI</h2>
-                    <p>Personal Studio</p>
+                    <h2>AGI Ultra</h2>
+                    <p>Superintelligence</p>
                 </div>
             </div>
             <button class="close-btn" id="closeSidebar"><i class="fa-solid fa-xmark"></i></button>
@@ -49,7 +51,7 @@
             <div class="menu-label">AI Studio</div>
             <button class="menu-item" id="openImageGen">
                 <div class="menu-icon icon-purple"><i class="fa-solid fa-image"></i></div>
-                <div class="menu-text"><strong>Image Generator</strong><small>Create photos with AI</small></div>
+                <div class="menu-text"><strong>Image Generator</strong><small>GPT-Image Engine</small></div>
             </button>
             <button class="menu-item" id="openVideoGen">
                 <div class="menu-icon icon-pink"><i class="fa-solid fa-clapperboard"></i></div>
@@ -73,58 +75,90 @@
     <main class="main">
         <header class="topbar">
             <button class="icon-button" id="openSidebar"><i class="fa-solid fa-bars-staggered"></i></button>
-            <div class="model-pill">
+            
+            <!-- Model Selector -->
+            <div class="model-selector-wrap">
                 <i class="fa-solid fa-wand-magic-sparkles text-yellow"></i>
-                <span>Auto AI</span>
+                <select id="modelSelect" class="model-select">
+                    <option value="gpt-4o">GPT-4o (AGI)</option>
+                    <option value="claude-3-5-sonnet">Claude 3.5 Sonnet</option>
+                    <option value="deepseek-reasoner">DeepSeek R1</option>
+                    <option value="llama-3-70b">Llama 3 70B</option>
+                </select>
             </div>
-            <button class="icon-button" id="newChatTop"><i class="fa-solid fa-pen-to-square"></i></button>
+
+            <div style="display:flex; gap:8px;">
+                <button class="icon-button" id="themeToggle" title="Toggle Theme"><i class="fa-solid fa-moon"></i></button>
+                <button class="icon-button" id="openSettings" title="Settings"><i class="fa-solid fa-gear"></i></button>
+                <button class="icon-button" id="newChatTop" title="New Chat"><i class="fa-solid fa-pen-to-square"></i></button>
+            </div>
         </header>
 
         <div class="chat-area" id="chatArea">
             <div class="welcome" id="welcome">
                 <div class="welcome-glow"></div>
-                <div class="welcome-logo"><i class="fa-solid fa-bolt"></i></div>
-                <h1>Ultra AI Studio</h1>
-                <p>Chat · Image · Video · Python · Apps</p>
+                <div class="welcome-logo"><i class="fa-solid fa-brain"></i></div>
+                <h1>AGI Ultra Studio</h1>
+                <p>Superintelligence · Image · Video · Python</p>
                 <div class="quick-actions">
                     <button class="quick-card" data-action="image">
                         <div class="menu-icon icon-purple"><i class="fa-solid fa-image"></i></div>
-                        <strong>Generate Image</strong>
-                        <small>AI photos</small>
+                        <strong>Generate Image</strong><small>AI photos</small>
                     </button>
                     <button class="quick-card" data-action="video">
                         <div class="menu-icon icon-pink"><i class="fa-solid fa-clapperboard"></i></div>
-                        <strong>Make Video</strong>
-                        <small>Cinematic</small>
+                        <strong>Make Video</strong><small>Cinematic</small>
                     </button>
                     <button class="quick-card" data-action="apps">
                         <div class="menu-icon icon-blue"><i class="fa-solid fa-mobile-screen-button"></i></div>
-                        <strong>Open Apps</strong>
-                        <small>Phone apps</small>
+                        <strong>Open Apps</strong><small>Phone apps</small>
                     </button>
                     <button class="quick-card" data-action="python">
                         <div class="menu-icon icon-orange"><i class="fa-solid fa-terminal"></i></div>
-                        <strong>Python</strong>
-                        <small>Run code</small>
+                        <strong>Python</strong><small>Run code</small>
                     </button>
                 </div>
             </div>
             <div class="messages" id="messages"></div>
         </div>
 
+        <!-- ATTACHMENT PREVIEW -->
+        <div class="attach-preview" id="attachPreview">
+            <img id="attachImg" src="">
+            <button id="removeAttach"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
         <div class="composer">
             <div class="composer-inner">
-                <textarea id="input" rows="1" placeholder="Ask anything or say 'generate image of a cat'..."></textarea>
+                <textarea id="input" rows="1" placeholder="Ask AGI anything, or say 'generate image of a cat'..."></textarea>
                 <div class="composer-row">
                     <div class="mode-btns">
-                        <button class="mode-btn" id="modeImage" title="Image"><i class="fa-solid fa-image"></i></button>
-                        <button class="mode-btn" id="modeVideo" title="Video"><i class="fa-solid fa-clapperboard"></i></button>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                        <button class="mode-btn" id="uploadBtn" title="Upload Image"><i class="fa-solid fa-paperclip"></i></button>
+                        <button class="mode-btn" id="modeImage" title="Image Gen"><i class="fa-solid fa-image"></i></button>
+                        <button class="mode-btn" id="modeVideo" title="Video Gen"><i class="fa-solid fa-clapperboard"></i></button>
+                        <button class="mode-btn" id="micBtn" title="Voice Input"><i class="fa-solid fa-microphone"></i></button>
                     </div>
                     <button class="send-btn" id="sendBtn"><i class="fa-solid fa-arrow-up"></i></button>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- SETTINGS MODAL -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-sheet">
+            <div class="sheet-head">
+                <h3><i class="fa-solid fa-gear"></i> AGI Settings</h3>
+                <button class="close-btn" data-close="settingsModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <label style="font-size:12px; color:var(--text-dim);">System Prompt (AI का बर्ताव)</label>
+                <textarea id="systemPrompt" style="width:100%; height:80px; background:var(--bg); border:1px solid var(--border); border-radius:10px; color:var(--text); padding:10px; font-family:inherit; font-size:13px; outline:none;">You are AGI Ultra, an Artificial General Intelligence. You have deep reasoning, coding mastery, and problem-solving skills. Answer directly. Use markdown. Provide complete code when asked.</textarea>
+                <button class="btn-save" id="saveSettings">Save Settings</button>
+            </div>
+        </div>
+    </div>
 
     <!-- APP LAUNCHER MODAL -->
     <div class="modal" id="appLauncherModal">
@@ -134,42 +168,12 @@
                 <button class="close-btn" data-close="appLauncherModal"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="app-grid">
-                <a class="app-tile" href="intent://#Intent;scheme=whatsapp;package=com.whatsapp;end">
-                    <div class="app-icon icon-whatsapp"><i class="fa-brands fa-whatsapp"></i></div>
-                    <span>WhatsApp</span>
-                </a>
-                <a class="app-tile" href="intent://#Intent;scheme=camera;action=android.media.action.IMAGE_CAPTURE;end">
-                    <div class="app-icon icon-blue"><i class="fa-solid fa-camera"></i></div>
-                    <span>Camera</span>
-                </a>
-                <a class="app-tile" href="intent://#Intent;scheme=gallery;action=android.intent.action.VIEW;type=image/*;end">
-                    <div class="app-icon icon-purple"><i class="fa-solid fa-images"></i></div>
-                    <span>Gallery</span>
-                </a>
-                <a class="app-tile" href="intent://#Intent;scheme=settings;action=android.settings.SETTINGS;end">
-                    <div class="app-icon icon-gray"><i class="fa-solid fa-gear"></i></div>
-                    <span>Settings</span>
-                </a>
-                <a class="app-tile" href="intent://#Intent;scheme=youtube;package=com.google.android.youtube;end">
-                    <div class="app-icon icon-red"><i class="fa-brands fa-youtube"></i></div>
-                    <span>YouTube</span>
-                </a>
-                <a class="app-tile" href="intent://#Intent;scheme=chrome;package=com.android.chrome;end">
-                    <div class="app-icon icon-yellow"><i class="fa-brands fa-chrome"></i></div>
-                    <span>Chrome</span>
-                </a>
-                <a class="app-tile" href="intent://#Intent;scheme=tel;end">
-                    <div class="app-icon icon-green"><i class="fa-solid fa-phone"></i></div>
-                    <span>Dialer</span>
-                </a>
-                <a class="app-tile" href="intent://#Intent;scheme=smsto;end">
-                    <div class="app-icon icon-teal"><i class="fa-solid fa-message"></i></div>
-                    <span>Messages</span>
-                </a>
-                <a class="app-tile" href="intent://#Intent;scheme=mailto;end">
-                    <div class="app-icon icon-orange"><i class="fa-solid fa-envelope"></i></div>
-                    <span>Email</span>
-                </a>
+                <a class="app-tile" href="intent://#Intent;scheme=whatsapp;package=com.whatsapp;end"><div class="app-icon icon-whatsapp"><i class="fa-brands fa-whatsapp"></i></div><span>WhatsApp</span></a>
+                <a class="app-tile" href="intent://#Intent;scheme=camera;action=android.media.action.IMAGE_CAPTURE;end"><div class="app-icon icon-blue"><i class="fa-solid fa-camera"></i></div><span>Camera</span></a>
+                <a class="app-tile" href="intent://#Intent;scheme=gallery;action=android.intent.action.VIEW;type=image/*;end"><div class="app-icon icon-purple"><i class="fa-solid fa-images"></i></div><span>Gallery</span></a>
+                <a class="app-tile" href="intent://#Intent;scheme=settings;action=android.settings.SETTINGS;end"><div class="app-icon icon-gray"><i class="fa-solid fa-gear"></i></div><span>Settings</span></a>
+                <a class="app-tile" href="intent://#Intent;scheme=youtube;package=com.google.android.youtube;end"><div class="app-icon icon-red"><i class="fa-brands fa-youtube"></i></div><span>YouTube</span></a>
+                <a class="app-tile" href="intent://#Intent;scheme=chrome;package=com.android.chrome;end"><div class="app-icon icon-yellow"><i class="fa-brands fa-chrome"></i></div><span>Chrome</span></a>
             </div>
         </div>
     </div>
@@ -182,22 +186,9 @@
                 <button class="close-btn" data-close="deviceToolsModal"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="tool-grid">
-                <button class="tool-tile" id="vibrateBtn">
-                    <div class="menu-icon icon-orange"><i class="fa-solid fa-mobile-button"></i></div>
-                    <strong>Vibrate</strong>
-                </button>
-                <button class="tool-tile" id="shareBtn">
-                    <div class="menu-icon icon-blue"><i class="fa-solid fa-share-nodes"></i></div>
-                    <strong>Share App</strong>
-                </button>
-                <button class="tool-tile" id="batteryBtn">
-                    <div class="menu-icon icon-green"><i class="fa-solid fa-battery-full"></i></div>
-                    <strong>Battery</strong>
-                </button>
-                <button class="tool-tile" id="clipboardBtn">
-                    <div class="menu-icon icon-purple"><i class="fa-solid fa-clipboard"></i></div>
-                    <strong>Copy Text</strong>
-                </button>
+                <button class="tool-tile" id="vibrateBtn"><div class="menu-icon icon-orange"><i class="fa-solid fa-mobile-button"></i></div><strong>Vibrate</strong></button>
+                <button class="tool-tile" id="shareBtn"><div class="menu-icon icon-blue"><i class="fa-solid fa-share-nodes"></i></div><strong>Share App</strong></button>
+                <button class="tool-tile" id="batteryBtn"><div class="menu-icon icon-green"><i class="fa-solid fa-battery-full"></i></div><strong>Battery</strong></button>
             </div>
             <div class="tool-output" id="toolOutput"></div>
         </div>
@@ -210,7 +201,7 @@
                 <h3><i class="fa-solid fa-terminal"></i> Python 3.12</h3>
                 <button class="close-btn" data-close="pythonModal"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="python-body" id="pythonOutput"># Python terminal ready. Type code below.</div>
+            <div class="python-body" id="pythonOutput"># Python terminal ready.</div>
             <div class="python-input">
                 <span>>>></span>
                 <input id="pythonInput" placeholder="print('Hello World')" autocomplete="off">
@@ -222,4 +213,4 @@
     <div class="toast-stack" id="toasts"></div>
     <script src="script.js"></script>
 </body>
-                        </html>
+                                                            </html>
