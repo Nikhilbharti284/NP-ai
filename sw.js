@@ -1,8 +1,8 @@
 /* ============================================================================
- * Astra Carbon X v8.0 — Clean Service Worker (sw.js)
+ * Astra Carbon X v10.0 — Omni-Research Service Worker (sw.js)
  * ============================================================================ */
 
-const CACHE_VERSION = "astra-carbon-v8.0";
+const CACHE_VERSION = "astra-carbon-v10.0";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const CDN_CACHE = `${CACHE_VERSION}-cdn`;
 
@@ -26,7 +26,8 @@ const BYPASS_HOSTS = [
   "pollinations.ai", "text.pollinations.ai", "image.pollinations.ai",
   "emkc.org", "r.jina.ai", "wikipedia.org", "algolia.com", "reddit.com",
   "archive.org", "arxiv.org", "dns.google", "crt.sh", "rdap.org",
-  "shodan.io", "urlscan.io", "api.github.com", "nist.gov", "securityheaders.com"
+  "shodan.io", "urlscan.io", "api.github.com", "stackexchange.com",
+  "nist.gov", "securityheaders.com"
 ];
 
 self.addEventListener("install", (e) => {
