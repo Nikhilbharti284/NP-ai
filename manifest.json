@@ -1,17 +1,15 @@
 {
-  "name": "AGI Astra Ultra — Autonomous Cloud Supercomputer",
-  "short_name": "Astra Ultra",
-  "description": "Autonomous Multi-Brain AI Agent, Zero-Load Cloud Code Executor, Live Voice Orb, and Passive OSINT Suite.",
+  "name": "Astra Carbon X v8.0",
+  "short_name": "Astra X",
+  "description": "Autonomous Self-Healing Cloud AI, Visual Attack Surface Graph & Legal Bug Hunter.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "orientation": "any",
-  "background_color": "#0d1117",
-  "theme_color": "#0d1117",
-  "categories": ["productivity", "developer tools", "utilities", "artificial intelligence"],
+  "background_color": "#090c10",
+  "theme_color": "#090c10",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%230b0f17'/%3E%3Ccircle cx='256' cy='256' r='190' fill='none' stroke='%2310a37f' stroke-width='24'/%3E%3Cpath d='M256 86l44 126 126 44-126 44-44 126-44-126-126-44 126-44z' fill='%2310a37f'/%3E%3C/svg%3E",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23090c10'/%3E%3Cpath d='M256 76l46 134 134 46-134 46-46 134-46-134-134-46 134-46z' fill='%2310a37f'/%3E%3C/svg%3E",
       "sizes": "192x192 512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
