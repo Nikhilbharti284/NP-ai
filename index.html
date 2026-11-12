@@ -4,15 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
-<meta name="theme-color" content="#212121">
-<title>AGI Agent Pro — Cloud & Canvas Edition</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%2310a37f'/%3E%3Cpath d='M256 96l36 100 100 36-100 36-36 100-36-100-100-36 100-36z' fill='%23fff'/%3E%3C/svg%3E" type="image/svg+xml">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%2310a37f'/%3E%3Cpath d='M256 96l36 100 100 36-100 36-36 100-36-100-100-36 100-36z' fill='%23fff'/%3E%3C/svg%3E">
-<script>
-/* Single-file PWA: runtime manifest generation for static hosting & GitHub Pages */
-try{const I=document.querySelector('link[rel=icon]').href,b=location.href.split("#")[0],m={name:"AGI Agent Pro",short_name:"AGI Agent",start_url:b,scope:b.replace(/[^\/]*$/,""),display:"standalone",background_color:"#212121",theme_color:"#212121",icons:[{src:I,sizes:"any",type:"image/svg+xml",purpose:"any"}]};
-const l=document.createElement("link");l.rel="manifest";l.href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:"application/manifest+json"}));document.head.appendChild(l)}catch(e){}
-</script>
+<meta name="theme-color" content="#090d16">
+<title>AGI Astra Ultra v5.0 — Autonomous Cloud & Local Bridge Supercomputer</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%23090d16'/%3E%3Ccircle cx='256' cy='256' r='190' fill='none' stroke='%2310a37f' stroke-width='24'/%3E%3Cpath d='M256 86l44 126 126 44-126 44-44 126-44-126-126-44 126-44z' fill='%2310a37f'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%23090d16'/%3E%3Cpath d='M256 86l44 126 126 44-126 44-44 126-44-126-126-44 126-44z' fill='%2310a37f'/%3E%3C/svg%3E">
+
 <script src="https://js.puter.com/v2/"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
@@ -22,39 +19,41 @@ const l=document.createElement("link");l.rel="manifest";l.href=URL.createObjectU
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
+
 <style>
-:root{--bg:#212121;--side:#171717;--sur:#2f2f2f;--hov:#3a3a3a;--b:rgba(255,255,255,.1);--t:#ececec;--m:#9b9b9b;--ac:#10a37f}
-@media(prefers-color-scheme:light){:root{--bg:#fff;--side:#f9f9f9;--sur:#f4f4f4;--hov:#e8e8e8;--b:rgba(0,0,0,.1);--t:#0d0d0d;--m:#6b6b6b}}
-:root[data-theme="light"]{--bg:#fff;--side:#f9f9f9;--sur:#f4f4f4;--hov:#e8e8e8;--b:rgba(0,0,0,.1);--t:#0d0d0d;--m:#6b6b6b}
-:root[data-theme="dark"]{--bg:#212121;--side:#171717;--sur:#2f2f2f;--hov:#3a3a3a;--b:rgba(255,255,255,.1);--t:#ececec;--m:#9b9b9b}
+:root{--bg:#0b0f17;--side:#06090f;--sur:#141b26;--hov:#1f2937;--b:rgba(255,255,255,.1);--t:#f0f6fc;--m:#8b949e;--ac:#10a37f;--ac2:#3b82f6}
+@media(prefers-color-scheme:light){:root{--bg:#ffffff;--side:#f6f8fa;--sur:#eff2f5;--hov:#e1e4e8;--b:rgba(0,0,0,.1);--t:#0d1117;--m:#57606a}}
+:root[data-theme="light"]{--bg:#ffffff;--side:#f6f8fa;--sur:#eff2f5;--hov:#e1e4e8;--b:rgba(0,0,0,.1);--t:#0d1117;--m:#57606a}
+:root[data-theme="dark"]{--bg:#0b0f17;--side:#06090f;--sur:#141b26;--hov:#1f2937;--b:rgba(255,255,255,.1);--t:#f0f6fc;--m:#8b949e}
+:root[data-theme="red"]{--bg:#090406;--side:#050203;--sur:#16080c;--hov:#250e14;--b:rgba(239,68,68,.22);--t:#ffe4e6;--m:#fda4af;--ac:#ef4444;--ac2:#f97316}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif;background:var(--bg);color:var(--t);display:flex;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 :focus-visible{outline:2px solid var(--ac);outline-offset:2px;border-radius:4px}
-#side{width:260px;background:var(--side);display:flex;flex-direction:column;flex-shrink:0;z-index:30;transition:transform .2s}
-.srow{display:flex;align-items:center;gap:8px;padding:9px 12px;margin:4px 8px 0;border-radius:10px;font-size:13.5px;text-align:left}
+#side{width:270px;background:var(--side);border-right:1px solid var(--b);display:flex;flex-direction:column;flex-shrink:0;z-index:30;transition:transform .2s}
+.srow{display:flex;align-items:center;gap:8px;padding:8px 12px;margin:2.5px 8px 0;border-radius:10px;font-size:13px;text-align:left}
 .srow:hover,.ci.on{background:var(--sur)}
 #list{flex:1;overflow-y:auto;padding:0 8px;margin-top:4px}
-.ci{display:flex;align-items:center;padding:8px 10px;border-radius:10px;font-size:13.5px;cursor:pointer;gap:6px}
+.ci{display:flex;align-items:center;padding:8px 10px;border-radius:10px;font-size:13px;cursor:pointer;gap:6px}
 .ci:hover{background:var(--sur)}.ci span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ci b{font-weight:400;color:var(--m);padding:0 4px}
-.lab{font-size:11.5px;color:var(--m);padding:10px 18px 4px;text-transform:uppercase;letter-spacing:.5px}
-.sfoot{padding:4px 8px 8px;border-top:1px solid var(--b);margin-top:4px;max-height:48vh;overflow-y:auto}
+.lab{font-size:10.5px;color:var(--m);padding:9px 18px 3px;text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+.sfoot{padding:4px 8px 8px;border-top:1px solid var(--b);margin-top:4px;max-height:44vh;overflow-y:auto}
 #main{flex:1;display:flex;flex-direction:column;min-width:0}
 header{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;flex-shrink:0;border-bottom:1px solid var(--b)}
-header button,select{padding:7px 10px;border-radius:10px;font-size:14px}
+header button,select{padding:6px 10px;border-radius:10px;font-size:13.5px}
 header button:hover,select:hover{background:var(--sur)}
-select{background:transparent;color:var(--t);border:0;font-weight:600;outline:0;max-width:46vw}
+select{background:transparent;color:var(--t);border:0;font-weight:600;outline:0;max-width:44vw}
 select option{background:var(--side)}
 #menu{display:none}
 #workspace{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
 #chat{flex:1;overflow-y:auto;padding:12px 14px;outline-offset:-8px;min-width:0}
 #chat.drag{outline:2px dashed var(--ac)}
-#in{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:22px;padding-bottom:16px}
+#in{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:22px;padding-bottom:16px}
 .urow{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
-.u{background:var(--sur);padding:10px 16px;border-radius:20px;max-width:85%;white-space:pre-wrap;line-height:1.5;overflow-wrap:anywhere}
-.fchip{display:inline-block;margin-top:6px;font-size:12px;background:rgba(255,255,255,.1);padding:3px 8px;border-radius:8px}
+.u{background:var(--sur);border:1px solid var(--b);padding:10px 16px;border-radius:20px;max-width:85%;white-space:pre-wrap;line-height:1.5;overflow-wrap:anywhere}
+.fchip{display:inline-block;margin-top:6px;font-size:12px;background:rgba(255,255,255,.08);padding:3px 8px;border-radius:8px}
 .arow{display:flex;flex-direction:column;gap:6px}
 .a{line-height:1.7;font-size:15.5px;overflow-wrap:anywhere;min-width:0}
 .a p{margin-bottom:12px}.a ul,.a ol{padding-left:22px;margin-bottom:12px}.a a{color:var(--ac)}
@@ -64,47 +63,47 @@ select option{background:var(--side)}
 .a .katex-display{overflow-x:auto;overflow-y:hidden}
 .acts{display:flex;gap:14px;font-size:12px;color:var(--m);flex-wrap:wrap}
 .acts button:hover{color:var(--t)}
-.cb{position:relative;margin:10px 0}.cb pre{background:#0d0d0d;color:#ececec;padding:34px 14px 14px;border-radius:12px;overflow-x:auto;font-size:13px;line-height:1.5}
+.cb{position:relative;margin:10px 0}.cb pre{background:#05070a;color:#e6edf3;padding:36px 14px 14px;border-radius:12px;overflow-x:auto;font-size:13px;line-height:1.5;border:1px solid var(--b)}
 .cb pre code{background:none;padding:0}
 .cbar{position:absolute;top:6px;right:6px;left:10px;display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
-.clang{margin-right:auto;font-size:11px;color:#9b9b9b;font-family:ui-monospace,Menlo,monospace;text-transform:uppercase}
-.cp{font-size:11.5px;background:#2f2f2f;color:#ececec;padding:3px 9px;border-radius:7px;border:1px solid rgba(255,255,255,.08)}
-.cp:hover{background:#3f3f3f}
+.clang{margin-right:auto;font-size:11px;color:var(--m);font-family:ui-monospace,Menlo,monospace;text-transform:uppercase;font-weight:600}
+.cp{font-size:11.5px;background:var(--sur);color:var(--t);padding:3px 9px;border-radius:7px;border:1px solid var(--b)}
+.cp:hover{background:var(--hov)}
 .cp.ac{background:var(--ac);color:#fff;border-color:transparent}
-.ro{background:#050505;color:#7ee0c3;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 14px;border-radius:0 0 12px 12px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:320px;overflow:auto;border-top:1px solid rgba(255,255,255,.1)}
+.ro{background:#030406;color:#7ee0c3;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 14px;border-radius:0 0 12px 12px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:320px;overflow:auto;border:1px solid var(--b);border-top:0}
 .ro[hidden]{display:none}
 .pv{width:100%;height:340px;border:0;background:#fff;border-radius:8px}
 .mm{overflow-x:auto;margin:10px 0}.mm svg{max-width:100%;height:auto}
-details.th{border:1px solid var(--b);border-radius:12px;margin-bottom:12px;font-size:13px;color:var(--m);background:rgba(0,0,0,.12)}
+details.th{border:1px solid var(--b);border-radius:12px;margin-bottom:12px;font-size:13px;color:var(--m);background:rgba(0,0,0,.18)}
 details.th summary{padding:8px 12px;cursor:pointer;list-style:none;display:flex;gap:8px;align-items:center}
 details.th summary::-webkit-details-marker{display:none}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--ac);animation:p 1s infinite}
 .done .dot{animation:none;background:var(--m)}
 @keyframes p{50%{opacity:.25}}
 .st{padding:6px 14px 10px;border-top:1px solid var(--b);font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow-y:auto}
-.cur{display:inline-block;width:7px;height:15px;background:var(--t);vertical-align:middle;margin-left:2px;animation:p .8s infinite}
-#hello{text-align:center;padding:8vh 10px 0}
-#hello h1{font-size:25px;font-weight:600;margin-bottom:8px}
-#hello p{font-size:13.5px;color:var(--m);margin-bottom:18px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:680px;margin:0 auto}
-.chips button{border:1px solid var(--b);border-radius:99px;padding:8px 14px;font-size:13px;background:rgba(255,255,255,.02)}.chips button:hover{background:var(--sur);border-color:var(--ac)}
+.cur{display:inline-block;width:7px;height:15px;background:var(--ac);vertical-align:middle;margin-left:2px;animation:p .8s infinite}
+#hello{text-align:center;padding:4vh 10px 0}
+#hello h1{font-size:25px;font-weight:700;margin-bottom:8px;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#hello p{font-size:13px;color:var(--m);margin-bottom:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:740px;margin:0 auto}
+.chips button{border:1px solid var(--b);border-radius:99px;padding:7.5px 13px;font-size:12.5px;background:var(--sur)}.chips button:hover{border-color:var(--ac);transform:translateY(-1px)}
 footer{padding:4px 12px calc(10px + env(safe-area-inset-bottom,0px));flex-shrink:0}
-#file{max-width:760px;margin:0 auto 6px;display:none}
+#file{max-width:780px;margin:0 auto 6px;display:none}
 #file div{display:inline-flex;align-items:center;gap:8px;background:var(--sur);border:1px solid var(--b);border-radius:12px;padding:6px 10px;font-size:13px}
 #file b{cursor:pointer;color:var(--m);font-weight:400}
-#box{max-width:760px;margin:0 auto;background:var(--sur);border-radius:26px;padding:8px 8px 8px 16px;display:flex;align-items:flex-end;gap:4px;border:1px solid var(--b)}
-#box textarea{flex:1;background:none;border:0;outline:0;color:var(--t);font:inherit;font-size:15.5px;resize:none;max-height:140px;padding:8px 0;line-height:1.4}
-#attach,#mic,#taskModeBtn{width:34px;height:34px;border-radius:50%;flex-shrink:0;font-size:15px;color:var(--m);display:flex;align-items:center;justify-content:center}
-#attach:hover,#mic:hover,#taskModeBtn:hover{background:var(--hov);color:var(--t)}
-#taskModeBtn.on{background:var(--ac);color:#fff}
+#box{max-width:780px;margin:0 auto;background:var(--sur);border-radius:26px;padding:6px 8px 6px 12px;display:flex;align-items:flex-end;gap:3px;border:1px solid var(--b)}
+#box textarea{flex:1;background:none;border:0;outline:0;color:var(--t);font:inherit;font-size:15.5px;resize:none;max-height:140px;padding:8px 4px;line-height:1.4}
+.ibtn{width:33px;height:33px;border-radius:50%;flex-shrink:0;font-size:14.5px;color:var(--m);display:flex;align-items:center;justify-content:center}
+.ibtn:hover{background:var(--hov);color:var(--t)}
+.ibtn.on{background:var(--ac);color:#fff}
 #mic.rec{background:#ef4444;color:#fff}
-#send{width:36px;height:36px;border-radius:50%;background:var(--t);color:var(--bg);font-weight:700;flex-shrink:0}
-.note{text-align:center;font-size:11px;color:var(--m);margin-top:6px}
+#send{width:36px;height:36px;border-radius:50%;background:var(--ac);color:#fff;font-weight:700;flex-shrink:0}
+.note{text-align:center;font-size:11px;color:var(--m);margin-top:5px}
 #ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20}
 #ov.open{display:block}
-.mbk{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;align-items:center;justify-content:center;padding:14px}
+.mbk{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50;align-items:center;justify-content:center;padding:14px}
 .mbk.open{display:flex}
-.mdl{background:var(--side);border:1px solid var(--b);border-radius:16px;width:100%;max-width:680px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+.mdl{background:var(--side);border:1px solid var(--b);border-radius:16px;width:100%;max-width:720px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
 .mtop{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--b);font-size:15px;font-weight:600}
 .ttabs{display:flex;gap:4px;padding:8px;overflow-x:auto;border-bottom:1px solid var(--b);flex-shrink:0}
 .tt1{padding:6px 12px;border-radius:99px;font-size:13px;white-space:nowrap;color:var(--m)}
@@ -112,32 +111,40 @@ footer{padding:4px 12px calc(10px + env(safe-area-inset-bottom,0px));flex-shrink
 .tpane{padding:14px 16px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px}
 .ti{width:100%;background:var(--sur);border:1px solid var(--b);border-radius:10px;padding:9px 11px;color:var(--t);font:inherit;font-size:14px;outline:0}
 textarea.ti{resize:vertical;min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:13px}
-.out2{background:#0d0d0d;color:#ececec;border-radius:10px;padding:12px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto}
+.out2{background:#05070a;color:#e6edf3;border-radius:10px;padding:12px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;border:1px solid var(--b)}
 .row2{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .row2 button{border:1px solid var(--b);border-radius:10px;padding:7px 12px;font-size:13px}
 .row2 button:hover{background:var(--sur)}
 .row2 button.pri{background:var(--ac);color:#fff;border-color:transparent}
 .swatch{width:100%;height:46px;border-radius:10px;border:1px solid var(--b)}
 #toasts{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:60;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
-.toast{background:var(--sur);border:1px solid var(--b);padding:8px 16px;border-radius:12px;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.3);transition:opacity .4s}
+.toast{background:var(--sur);border:1px solid var(--b);padding:8px 16px;border-radius:12px;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.4);transition:opacity .4s}
 .toast.out{opacity:0}
 
 /* LIVE CLOUD CANVAS / ARTIFACT DRAWER */
-#canvasPane{width:48%;border-left:1px solid var(--b);background:var(--side);display:none;flex-direction:column;z-index:25}
+#canvasPane{width:50%;border-left:1px solid var(--b);background:var(--side);display:none;flex-direction:column;z-index:25}
 #canvasPane.open{display:flex}
 .ctop{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--b);gap:6px;flex-wrap:wrap}
-.ctop .ctitle{font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:6px}
-.cbar2{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.cbar2 button,.cbar2 select{font-size:12px;padding:5px 10px;border-radius:8px;border:1px solid var(--b);background:var(--sur)}
+.ctop .ctitle{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+.cbar2{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.cbar2 button{font-size:11.5px;padding:5px 9px;border-radius:8px;border:1px solid var(--b);background:var(--sur)}
 .cbar2 button.pri{background:var(--ac);color:#fff;border-color:transparent}
 #cBody{flex:1;display:flex;flex-direction:column;min-height:0;position:relative}
 #cFrame{flex:1;width:100%;border:0;background:#fff}
-#cCode{flex:1;width:100%;border:0;background:#0d0d0d;color:#ececec;font:13px/1.5 ui-monospace,Menlo,monospace;padding:12px;resize:none;outline:0;display:none}
-#cTerm{height:160px;background:#050505;color:#7ee0c3;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 12px;border-top:1px solid var(--b);overflow:auto;white-space:pre-wrap;display:none}
+#cCode{flex:1;width:100%;border:0;background:#05070a;color:#e6edf3;font:13px/1.5 ui-monospace,Menlo,monospace;padding:12px;resize:none;outline:0;display:none}
+#cTerm{height:160px;background:#030406;color:#7ee0c3;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 12px;border-top:1px solid var(--b);overflow:auto;white-space:pre-wrap;display:none}
 
-@media(max-width:900px){
-  #canvasPane{position:fixed;inset:0;width:100%;border-left:0}
-}
+/* ASTRA LIVE VOICE ORB OVERLAY */
+#orbM{display:none;position:fixed;inset:0;background:radial-gradient(circle at center,#0f172a 0%,#030712 100%);z-index:80;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:24px;text-align:center}
+#orbM.open{display:flex}
+.orb{width:170px;height:170px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#34d399,#10a37f 55%,#1e40af);box-shadow:0 0 60px rgba(16,163,127,.55),inset 0 0 30px rgba(255,255,255,.35);animation:orbPulse 2.4s infinite ease-in-out;cursor:pointer}
+.orb.listen{background:radial-gradient(circle at 35% 35%,#f87171,#ef4444 55%,#991b1b);box-shadow:0 0 75px rgba(239,68,68,.7)}
+.orb.speak{background:radial-gradient(circle at 35% 35%,#60a5fa,#3b82f6 55%,#1d4ed8);box-shadow:0 0 80px rgba(59,130,246,.8);animation:orbSpeak .6s infinite alternate}
+@keyframes orbPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes orbSpeak{0%{transform:scale(0.96)}100%{transform:scale(1.14)}}
+#orbSub{max-width:560px;font-size:17px;color:#e2e8f0;line-height:1.5;min-height:54px}
+
+@media(max-width:900px){#canvasPane{position:fixed;inset:0;width:100%;border-left:0}}
 @media(max-width:768px){#side{position:fixed;top:0;bottom:0;left:0;transform:translateX(-100%)}#side.open{transform:none}#menu{display:block}}
 .srow[hidden]{display:none}
 #offline{position:fixed;bottom:calc(86px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:#b45309;color:#fff;font-size:12.5px;padding:6px 14px;border-radius:99px;z-index:40;max-width:92vw;text-align:center}
@@ -147,35 +154,50 @@ textarea.ti{resize:vertical;min-height:90px;font-family:ui-monospace,Menlo,monos
 .stab{padding:6px 12px;border-radius:99px;font-size:13px;white-space:nowrap;color:var(--m)}.stab.on{background:var(--sur);color:var(--t)}
 .mslot{margin:8px 0}.gm{max-width:100%;border-radius:12px;display:block}.dl{display:inline-block;margin-top:4px;font-size:12px;color:var(--ac)}
 #spane select.ti{max-width:100%;font-weight:400}
-.badge{font-size:10.5px;background:var(--ac);color:#fff;padding:1px 6px;border-radius:99px;margin-left:auto}
+.badge{font-size:10px;background:var(--ac);color:#fff;padding:1.5px 6px;border-radius:99px;margin-left:auto;font-weight:600}
 </style>
 </head>
 <body>
-<noscript>This application requires JavaScript to run. Please enable JavaScript in your browser settings.</noscript>
+<noscript>This application requires JavaScript to run.</noscript>
 <div id="ov"></div>
 <div id="toasts" role="status" aria-live="polite"></div>
-<div id="offline" role="status" hidden>⚠️ Offline — Chat history & Engineer Tools work offline, but Cloud & AI tools require internet.</div>
+<div id="offline" role="status" hidden>⚠️ Offline — Local Chat History, Canvas & Engineer Tools active. Reconnect for Cloud AI.</div>
+
+<!-- ASTRA LIVE VOICE ORB MODAL -->
+<div id="orbM" role="dialog" aria-modal="true" aria-label="Astra Live Voice Mode">
+  <div style="font-size:13px;letter-spacing:1.2px;text-transform:uppercase;color:#94a3b8">⚡ AGI Astra Live Neural Voice</div>
+  <div class="orb" id="orbCircle" title="Tap to Listen / Pause"></div>
+  <div id="orbSub">Tap the glowing orb and speak naturally in Hindi, English, or Hinglish…</div>
+  <div class="row2">
+    <button class="pri" id="orbToggleBtn">🎙️ Start Listening</button>
+    <button id="orbCloseBtn" style="border-color:rgba(255,255,255,.25);color:#fff">✕ Exit Live Mode</button>
+  </div>
+</div>
 
 <aside id="side">
-  <button class="srow" id="new">✎ New chat</button>
-  <button class="srow" id="taskBtn">🚀 Autonomous Task Runner <span class="badge">Auto</span></button>
-  <button class="srow" id="cloudIdeBtn">☁️ Cloud Sandbox & Deploy</button>
-  <button class="srow" id="canvasToggleBtn">🖥️ Live Canvas / Preview</button>
+  <button class="srow" id="new">✎ New Chat</button>
+  <button class="srow" id="orbOpenBtn">🎙️ Astra Live Voice <span class="badge">Live</span></button>
+  <button class="srow" id="taskBtn">🚀 Autonomous Task Engine <span class="badge">Auto</span></button>
+  <button class="srow" id="arenaSideBtn">⚔️ 3-Brain Consensus</button>
+  <button class="srow" id="osintDashBtn">🛡️ Recon & CVE Monitor <span class="badge">Pro</span></button>
+  <button class="srow" id="bridgeSideBtn">🔌 Ollama / Termux Bridge</button>
+  <button class="srow" id="cloudIdeBtn">☁️ Cloud Sandbox & Host</button>
+  <button class="srow" id="canvasToggleBtn">🖥️ Live Canvas / Artifact</button>
   <button class="srow" id="studioBtn">🎨 Studio (Image · Edit · Video)</button>
-  <button class="srow" id="toolsBtn">🛠 Engineer & Recon Tools</button>
-  <div class="lab">Chats</div>
+  <button class="srow" id="toolsBtn">🛠 Engineer & Security Tools</button>
+  <div class="lab">Workspaces</div>
   <div id="list"></div>
   <div class="sfoot">
     <button class="srow" id="gkBtn">🔑 Gemini API Key</button>
-    <button class="srow" id="deepBtn">🧠 Deep mode: off</button>
-    <button class="srow" id="mem">🧠 Memory & Persona</button>
-    <button class="srow" id="installBtn" hidden>📲 Install App</button>
+    <button class="srow" id="deepBtn">🧠 Deep Verification: off</button>
+    <button class="srow" id="mem">🧠 Persistent Memory</button>
+    <button class="srow" id="installBtn" hidden>📲 Install PWA App</button>
     <button class="srow" id="bak">💾 Backup (.json)</button>
-    <button class="srow" id="rst">♻️ Restore backup</button>
+    <button class="srow" id="rst">♻️ Restore Backup</button>
     <input type="file" id="rfin" accept=".json,application/json" hidden>
-    <button class="srow" id="exp">📥 Export chat (.md)</button>
-    <button class="srow" id="themeBtn">🌓 Theme: auto</button>
-    <button class="srow" id="wipe">🗑 Clear all</button>
+    <button class="srow" id="exp">📥 Export Chat (.md)</button>
+    <button class="srow" id="themeBtn">🌓 Theme: dark</button>
+    <button class="srow" id="wipe">🗑 Clear All</button>
   </div>
 </aside>
 
@@ -186,6 +208,8 @@ textarea.ti{resize:vertical;min-height:90px;font-family:ui-monospace,Menlo,monos
       <select id="model" aria-label="Select AI Model"></select>
     </div>
     <div style="display:flex;align-items:center;gap:4px">
+      <button id="hdrBridgeBtn" title="Local Ollama & Termux Bridge">🔌 Local</button>
+      <button id="hdrLiveBtn" title="Astra Live Voice Orb">🎙️ Live</button>
       <button id="openCanvasHdr" title="Toggle Live Canvas Preview">🖥️ Canvas</button>
       <button id="new2" title="New chat" aria-label="New chat">✎</button>
     </div>
@@ -200,9 +224,10 @@ textarea.ti{resize:vertical;min-height:90px;font-family:ui-monospace,Menlo,monos
         <div class="ctitle">🖥️ <span id="cTitle">Live Artifact & Cloud Preview</span></div>
         <div class="cbar2">
           <button id="cViewBtn">Code / Preview</button>
-          <button id="cCloudRunBtn" class="pri" title="Execute on Remote Cloud Server (Zero Phone Load)">☁️ Run in Cloud</button>
-          <button id="cHostBtn" title="Publish live website to Puter Free Cloud Hosting">🌐 Host Live URL</button>
-          <button id="cDlBtn" title="Download File">⬇</button>
+          <button id="cOsintBtn" title="Load Advanced Passive Recon & CVE Monitor Dashboard">🛡️ Recon UI</button>
+          <button id="cCloudRunBtn" class="pri" title="Execute on Remote Cloud Server (Zero Phone Load)">☁️ Run Cloud</button>
+          <button id="cHostBtn" title="Publish live website to Puter Free Cloud Hosting">🌐 Host Live</button>
+          <button id="cDlBtn" title="Download Artifact">⬇</button>
           <button id="cCloseBtn" aria-label="Close Canvas">✕</button>
         </div>
       </div>
@@ -217,13 +242,15 @@ textarea.ti{resize:vertical;min-height:90px;font-family:ui-monospace,Menlo,monos
   <footer>
     <div id="file"></div>
     <div id="box">
-      <button id="attach" title="Attach file or image" aria-label="Attach file">📎</button>
-      <button id="taskModeBtn" title="Toggle Autonomous Multi-Step Task Mode (Auto-Plan, Cloud Execute & Verify)">🚀</button>
-      <textarea id="q" rows="1" placeholder="Ask anything, or click 🚀 to run a complete autonomous multi-step task…" aria-label="Message input"></textarea>
-      <button id="mic" title="Voice input" aria-label="Voice input">🎤</button>
+      <button class="ibtn" id="attach" title="Attach file, code, or image" aria-label="Attach file">📎</button>
+      <button class="ibtn" id="snapBtn" title="Capture Screen / Window for AI Vision Debugging">📷</button>
+      <button class="ibtn" id="taskModeBtn" title="Toggle Autonomous Multi-Step Task Mode">🚀</button>
+      <button class="ibtn" id="arenaModeBtn" title="Toggle Multi-Brain Consensus Mode (Queries 3 Models in Parallel & Synthesizes)">⚔️</button>
+      <textarea id="q" rows="1" placeholder="Ask anything, 🚀 Autonomous Task, ⚔️ 3-Brain Consensus, or 🔌 Local Ollama…" aria-label="Message input"></textarea>
+      <button class="ibtn" id="mic" title="Voice input" aria-label="Voice input">🎤</button>
       <button id="send" aria-label="Send">↑</button>
     </div>
-    <div class="note">Zero-Load Cloud Compute (Piston 30+ Langs) · 1-Click Free Cloud Hosting · Autonomous Task Engine · Live Canvas · Passive OSINT</div>
+    <div class="note">Astra Ultra v5.0 · 3-Brain Consensus · Zero-Load Cloud Compute · Passive Recon & CVE Suite · Local Ollama/Termux Bridge</div>
     <input type="file" id="fin" accept=".txt,.md,.csv,.json,.log,.yml,.yaml,.xml,.py,.js,.html,.css,.sh,.cpp,.rs,.go,image/*" hidden>
   </footer>
 </div>
@@ -231,16 +258,41 @@ textarea.ti{resize:vertical;min-height:90px;font-family:ui-monospace,Menlo,monos
 <!-- AUTONOMOUS TASK RUNNER MODAL -->
 <div class="mbk" id="taskM" role="dialog" aria-modal="true" aria-label="Autonomous Task Runner">
   <div class="mdl">
-    <div class="mtop"><span>🚀 Autonomous End-to-End Task Engine</span><button id="taskClose" aria-label="Close">✕</button></div>
+    <div class="mtop"><span>🚀 Astra Autonomous End-to-End Task Engine</span><button id="taskClose" aria-label="Close">✕</button></div>
     <div class="tpane">
-      <div class="note" style="text-align:left;margin:0">Describe any complex goal. The agent will autonomously create an execution plan, run web research, execute code on remote cloud servers (zero phone load), build interactive apps/previews in the Canvas, and verify the final deliverable.</div>
-      <textarea class="ti" id="taskGoal" rows="4" placeholder="e.g., Research the top 5 open-source LLM frameworks, benchmark their GitHub stars & security posture via cloud Python script, and build an interactive dashboard HTML chart in the Live Canvas."></textarea>
+      <div class="note" style="text-align:left;margin:0">Give Astra Ultra any complex engineering, research, or passive security assessment goal. It will autonomously plan, search the live web, execute code on remote cloud servers, build interactive apps in the Canvas, and verify everything.</div>
+      <textarea class="ti" id="taskGoal" rows="4" placeholder="e.g., Perform a complete passive OSINT & security header check on example.com, run a cloud Python script to score the findings, and build a visual dashboard in the Live Canvas."></textarea>
       <div class="row2">
         <button class="pri" id="startTaskBtn">⚡ Launch Autonomous Task</button>
-        <button class="tplTask" data-g="Build a complete responsive Cyberpunk Pomodoro + Todo Web App with sound effects and local storage, preview it in Live Canvas, and make it ready for 1-click Cloud Hosting.">🎮 App Builder Task</button>
-        <button class="tplTask" data-g="Perform a full passive OSINT & security posture audit on example.com (DNS, Subdomains, WHOIS, SSL, Security Headers, Wayback history) and compile an executive report.">🛡️ Passive Recon Audit</button>
-        <button class="tplTask" data-g="Write and execute a Cloud Python data science script that simulates 1,000 Monte Carlo portfolio runs, prints statistical metrics, and generates an interactive HTML visualization.">📊 Cloud Data Science</button>
+        <button class="tplTask" data-g="Build a full-featured Cyberpunk Bug Bounty Notes & Passive Recon Tracker Web App with severity tags, exportable JSON, and search in Live Canvas.">🎮 Recon Tracker App</button>
+        <button class="tplTask" data-g="Perform a comprehensive passive OSINT audit on example.com (DNS, Subdomains, WHOIS, SSL, Security Headers, Wayback history) and compile an executive security report.">🛡️ Full Passive Audit</button>
+        <button class="tplTask" data-g="Write and execute a Cloud Python script that benchmarks SHA-256, SHA-512, and BLAKE2b speeds, outputs metrics, and renders an interactive HTML chart in the Canvas.">📊 Cloud Benchmark Task</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOCAL OLLAMA & TERMUX BRIDGE MODAL -->
+<div class="mbk" id="bridgeM" role="dialog" aria-modal="true" aria-label="Local Ollama and Termux Bridge">
+  <div class="mdl">
+    <div class="mtop"><span>🔌 Local Ollama & Termux Bridge</span><button id="bridgeClose" aria-label="Close">✕</button></div>
+    <div class="tpane">
+      <div class="note" style="text-align:left;margin:0">Connect this static web app directly to your local <b>Ollama</b> instance (on Android Termux or Desktop) or a local read-only Termux status server. No internet or API key required for local models!</div>
+      <label class="note" style="text-align:left">Ollama Endpoint URL (run with <code>OLLAMA_ORIGINS=* ollama serve</code>):</label>
+      <input class="ti" id="olUrl" value="http://127.0.0.1:11434" placeholder="http://127.0.0.1:11434">
+      <label class="note" style="text-align:left">Local Ollama Model Name:</label>
+      <input class="ti" id="olModel" value="qwen2.5-coder:7b" placeholder="e.g., llama3.2, deepseek-r1:7b, qwen2.5-coder">
+      <div class="row2">
+        <button class="pri" id="olTestBtn">🔍 Detect Local Ollama Models</button>
+        <button id="olUseBtn">⚡ Activate Local Ollama Model</button>
+      </div>
+      <label class="note" style="text-align:left;margin-top:6px">Termux Local Bridge URL (Optional local HTTP helper on port 8765):</label>
+      <input class="ti" id="tmUrl" value="http://127.0.0.1:8765" placeholder="http://127.0.0.1:8765">
+      <div class="row2">
+        <button id="tmPingBtn">📡 Ping Termux Bridge</button>
+        <button id="tmHelpBtn">📋 Copy Termux Setup Command</button>
+      </div>
+      <div class="out2" id="brOut">Status: Ready to connect to localhost.</div>
     </div>
   </div>
 </div>
@@ -293,6 +345,8 @@ const GEMINI_KEY=atob("QVEuQWI4Uk42SVU2WVBkRHBTakZlNDRY"+"YlhSSVd1Sl9GUzZyMDVKbl
 const MODELS=[
   ["gm:gemini-2.5-pro","⚡ Gemini 2.5 Pro (Built-in Key)"],
   ["gm:gemini-2.5-flash","⚡ Gemini 2.5 Flash (Built-in Key)"],
+  ["arena:consensus","⚔️ Astra 3-Brain Consensus (Gemini + DeepSeek R1 + GPT-4.1)"],
+  ["ol:local","🔌 Local Ollama Model (Termux / Localhost Bridge)"],
   ["gm:custom","🔑 Gemini Custom Model (Built-in Key)"],
   ["claude-sonnet-4-5","Claude 4.5 Sonnet (Puter Cloud)"],
   ["claude-opus-4-1","Claude 4.1 Opus (Puter Cloud)"],
@@ -310,24 +364,146 @@ const MODELS=[
   ["pl:llama","Llama 3.3 70B (Pollinations · Keyless Cloud)"],
   ["pl:mistral","Mistral Large (Pollinations · Keyless Cloud)"],
   ["pl:openai","OpenAI Fast (Pollinations · Keyless Cloud)"],
-  ["auto","Auto Router (Best Available Free Cloud Model)"]
+  ["auto","Auto Router (Fastest Available Cloud Model)"]
 ];
 
-const MAXSTEPS=14;
+const MAXSTEPS=15;
 const F="`".repeat(3);
 const $=s=>document.querySelector(s);
 const escapeHtml=s=>{const d=document.createElement("div");d.textContent=s??"";return d.innerHTML};
 
+/* ===== ADVANCED PASSIVE BUG BOUNTY RECON & CVE MONITOR DASHBOARD ===== */
+const OSINT_DASH_HTML=`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Astra Passive Recon & CVE Monitor</title>
+<style>
+  *{box-sizing:border-box}
+  body{font-family:system-ui,-apple-system,sans-serif;background:#070a12;color:#e2e8f0;margin:0;padding:16px}
+  .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+  .hdr h2{margin:0;font-size:18px;color:#10a37f;display:flex;align-items:center;gap:8px}
+  .bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  input{flex:1;min-width:170px;background:#0f172a;border:1px solid #334155;color:#fff;padding:9px 12px;border-radius:10px;outline:0;font-size:13.5px}
+  button{background:#10a37f;color:#fff;border:0;padding:9px 14px;border-radius:10px;font-weight:600;cursor:pointer;font-size:13px}
+  button.sec{background:#1e293b;border:1px solid #334155}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+  .stbox{background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:10px;text-align:center}
+  .stbox b{display:block;font-size:18px;color:#38bdf8}
+  .stbox span{font-size:11px;color:#94a3b8;text-transform:uppercase}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+  .card{background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:12px;display:flex;flex-direction:column}
+  .card h3{margin:0 0 8px;font-size:12.5px;color:#38bdf8;text-transform:uppercase;letter-spacing:.5px;display:flex;justify-content:space-between}
+  pre{margin:0;font:11.5px/1.5 ui-monospace,monospace;color:#a7f3d0;white-space:pre-wrap;overflow-wrap:anywhere;max-height:210px;overflow:auto;flex:1}
+  .sev-HIGH,.sev-CRITICAL{color:#f87171;font-weight:700}
+</style>
+</head>
+<body>
+  <div class="hdr">
+    <h2>🛡️ Astra Passive Bug Bounty Recon & CVE Monitor</h2>
+    <button class="sec" onclick="exportReport()">📥 Export JSON Report</button>
+  </div>
+  <div class="bar">
+    <input id="dom" value="example.com" placeholder="Target Domain (e.g. example.com)">
+    <input id="tech" value="imagemagick" placeholder="CVE Keyword / Tech Stack (e.g. nginx, openssh, imagemagick)">
+    <button onclick="runAll()">⚡ Run Full Passive Scan</button>
+  </div>
+  <div class="stats">
+    <div class="stbox"><b id="stSub">0</b><span>Subdomains</span></div>
+    <div class="stbox"><b id="stDns">0</b><span>DNS Records</span></div>
+    <div class="stbox"><b id="stPorts">0</b><span>Shodan Ports</span></div>
+    <div class="stbox"><b id="stCve">0</b><span>Matched CVEs</span></div>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>🔒 CT Subdomains (crt.sh)</h3><pre id="subOut">Ready.</pre></div>
+    <div class="card"><h3>🌐 DNS & IP Resolution</h3><pre id="dnsOut">Ready.</pre></div>
+    <div class="card"><h3>🛰️ Shodan InternetDB (Ports & CVEs)</h3><pre id="shoOut">Ready.</pre></div>
+    <div class="card"><h3>🚨 Live NVD CVE Monitor</h3><pre id="cveOut">Ready.</pre></div>
+    <div class="card"><h3>📋 RDAP / WHOIS & Nameservers</h3><pre id="whoOut">Ready.</pre></div>
+    <div class="card"><h3>🕰️ Wayback Historical Endpoints</h3><pre id="wbOut">Ready.</pre></div>
+  </div>
+<script>
+let reportData={};
+async function runAll(){
+  const d=document.getElementById('dom').value.trim().replace(/^https?:\\/\\//,'').split('/')[0];
+  const kw=document.getElementById('tech').value.trim();
+  reportData={domain:d,keyword:kw,timestamp:new Date().toISOString()};
+  document.getElementById('subOut').textContent='Scanning crt.sh Certificate Logs...';
+  document.getElementById('dnsOut').textContent='Resolving A/MX/TXT records...';
+  document.getElementById('shoOut').textContent='Waiting for IP resolution...';
+  document.getElementById('cveOut').textContent='Querying NIST NVD CVE API...';
+  document.getElementById('whoOut').textContent='Querying RDAP...';
+  document.getElementById('wbOut').textContent='Querying Archive.org CDX...';
+
+  // 1. DNS + Shodan InternetDB
+  try{
+    const r=await fetch('https://dns.google/resolve?name='+encodeURIComponent(d)+'&type=A').then(x=>x.json());
+    const ans=r.Answer||[];
+    document.getElementById('stDns').textContent=ans.length;
+    document.getElementById('dnsOut').textContent=ans.map(a=>a.name+' ['+a.ttl+'s] -> '+a.data).join('\\n')||'No A records';
+    reportData.dns=ans;
+    const ip=ans.find(a=>/^\\d+\\.\\d+\\.\\d+\\.\\d+$/.test(a.data))?.data;
+    if(ip){
+      const sh=await fetch('https://internetdb.shodan.io/'+ip).then(x=>x.json());
+      document.getElementById('stPorts').textContent=(sh.ports||[]).length;
+      document.getElementById('shoOut').textContent='IP: '+ip+'\\nPorts: '+(sh.ports||[]).join(', ')+'\\nHostnames: '+(sh.hostnames||[]).join(', ')+'\\nCPEs: '+(sh.cpes||[]).join(', ')+'\\nVulns: '+(sh.vulns||[]).join(', ');
+      reportData.shodan=sh;
+    }else document.getElementById('shoOut').textContent='No direct IPv4 found for Shodan lookup.';
+  }catch(e){document.getElementById('dnsOut').textContent=String(e)}
+
+  // 2. Subdomains
+  fetch('https://crt.sh/?output=json&q=%25.'+encodeURIComponent(d)).then(r=>r.json()).then(j=>{
+    const subs=[...new Set(j.flatMap(x=>x.name_value.split('\\n')))].filter(s=>!s.includes('*')).slice(0,80);
+    document.getElementById('stSub').textContent=subs.length;
+    document.getElementById('subOut').textContent=subs.join('\\n')||'None found';
+    reportData.subdomains=subs;
+  }).catch(()=>document.getElementById('subOut').textContent='crt.sh rate-limited; retry shortly.');
+
+  // 3. NVD CVE Monitor
+  if(kw){
+    fetch('https://services.nvd.nist.gov/rest/json/cves/2.0?resultsPerPage=8&keywordSearch='+encodeURIComponent(kw)).then(r=>r.json()).then(j=>{
+      const v=j.vulnerabilities||[];
+      document.getElementById('stCve').textContent=v.length;
+      document.getElementById('cveOut').textContent=v.map(x=>{
+        const c=x.cve,m=c.metrics?.cvssMetricV31?.[0]?.cvssData;
+        return c.id+' [CVSS '+(m?m.baseScore+' '+m.baseSeverity:'N/A')+']\\n'+c.descriptions?.[0]?.value?.slice(0,180)+'...';
+      }).join('\\n\\n')||'No CVEs found for '+kw;
+      reportData.cves=v.map(x=>x.cve.id);
+    }).catch(()=>document.getElementById('cveOut').textContent='NVD API busy.');
+  }
+
+  // 4. RDAP WHOIS
+  fetch('https://rdap.org/domain/'+encodeURIComponent(d)).then(r=>r.json()).then(j=>{
+    document.getElementById('whoOut').textContent=JSON.stringify({domain:j.ldhName,status:j.status,nameservers:(j.nameservers||[]).map(n=>n.ldhName)},null,2);
+  }).catch(()=>document.getElementById('whoOut').textContent='RDAP unavailable');
+
+  // 5. Wayback CDX
+  fetch('https://web.archive.org/cdx/search/cdx?url='+encodeURIComponent(d+'/*')+'&output=json&limit=20&fl=timestamp,original,statuscode&collapse=urlkey').then(r=>r.json()).then(cdx=>{
+    document.getElementById('wbOut').textContent=cdx.length>1?cdx.slice(1).map(r=>r.join(' | ')).join('\\n'):'No archived URLs';
+  }).catch(()=>document.getElementById('wbOut').textContent='Wayback CDX unavailable');
+}
+function exportReport(){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(reportData,null,2)],{type:'application/json'}));
+  a.download='recon-report-'+(reportData.domain||'target')+'.json';
+  a.click();
+}
+<\/script>
+</body>
+</html>`;
+
 /* ===== STATE ===== */
-let S={};try{S=JSON.parse(localStorage.agi_v3||localStorage.agi_v2||localStorage.agi_v1||"{}")}catch(e){}
+let S={};try{S=JSON.parse(localStorage.agi_v5||localStorage.agi_v4||localStorage.agi_v3||"{}")}catch(e){}
 S.chats??={};S.cur??=null;
 if(!S.model||!MODELS.some(m=>m[0]===S.model))S.model=MODELS[0][0];
-S.mem??=[];S.theme??="auto";S.taskMode??=false;S.hostedSites??=[];
-S.canvasCode??="<!DOCTYPE html>\n<html>\n<head>\n<style>\n  body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }\n  .card { background: #1e293b; padding: 28px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.4); text-align: center; max-width: 420px; border: 1px solid rgba(255,255,255,.1); }\n  h2 { color: #10a37f; margin-bottom: 10px; }\n  button { background: #10a37f; color: #fff; border: 0; padding: 10px 18px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 14px; }\n</style>\n</head>\n<body>\n  <div class=\"card\">\n    <h2>⚡ Live Cloud Canvas</h2>\n    <p>Ask the AI Agent to build any Web App, Dashboard, Game, or Tool and it will automatically render & preview right here!</p>\n    <button onclick=\"alert('Cloud Canvas Active!')\">Test Interactive Preview</button>\n  </div>\n</body>\n</html>";
+S.mem??=[];S.theme??="dark";S.taskMode??=false;S.arenaMode??=false;S.hostedSites??=[];
+S.olUrl??="http://127.0.0.1:11434";S.olModel??="qwen2.5-coder:7b";S.tmUrl??="http://127.0.0.1:8765";
+S.canvasCode??=OSINT_DASH_HTML;
 S.canvasLang??="html";
 
 function save(){
-  try{localStorage.agi_v3=JSON.stringify(S)}
+  try{localStorage.agi_v5=JSON.stringify(S)}
   catch(e){
     const ids=Object.values(S.chats).sort((a,b)=>a.ts-b.ts).map(c=>c.id);
     if(ids.length>1){delete S.chats[ids[0]];save()}
@@ -338,7 +514,7 @@ let busy=false,stop=false,pending=null;
 const cur=()=>S.chats[S.cur];
 
 /* ===== LIVE CANVAS & CLOUD HOSTING CONTROLLER ===== */
-let canvasView="preview"; // "preview" | "code"
+let canvasView="preview";
 function openCanvas(code,lang="html",title="Live Artifact & Cloud Preview"){
   if(code){S.canvasCode=code;S.canvasLang=lang.toLowerCase();save()}
   $("#cTitle").textContent=title;
@@ -371,6 +547,8 @@ $("#cViewBtn").onclick=()=>{
   }
 };
 
+$("#cOsintBtn").onclick=()=>openCanvas(OSINT_DASH_HTML,"html","Passive Recon & CVE Monitor");
+$("#osintDashBtn").onclick=()=>{closeSide();openCanvas(OSINT_DASH_HTML,"html","Passive Recon & CVE Monitor")};
 $("#cCode").addEventListener("input",()=>{S.canvasCode=$("#cCode").value;save()});
 $("#cCloseBtn").onclick=()=>$("#canvasPane").classList.remove("open");
 $("#canvasToggleBtn").onclick=()=>{closeSide();openCanvas()};
@@ -383,7 +561,7 @@ $("#cDlBtn").onclick=()=>{
   const ext=({html:".html",python:".py",py:".py",javascript:".js",js:".js",cpp:".cpp",rust:".rs",go:".go"})[S.canvasLang]||".txt";
   const a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob([S.canvasCode],{type:"text/plain"}));
-  a.download="artifact-"+Date.now()+ext;a.click();
+  a.download="astra-artifact-"+Date.now()+ext;a.click();
 };
 
 $("#cCloudRunBtn").onclick=async()=>{
@@ -395,7 +573,7 @@ $("#cCloudRunBtn").onclick=async()=>{
     return;
   }
   const term=$("#cTerm");term.style.display="block";
-  term.textContent="☁️ Sending code to remote Cloud Execution Engine (0% local CPU load)...";
+  term.textContent="☁️ Sending code to remote Cloud Execution Engine (0% phone load)...";
   const res=await tools.cloud_exec(S.canvasLang+"\n"+S.canvasCode);
   term.textContent=res;
 };
@@ -408,7 +586,7 @@ $("#cHostBtn").onclick=async()=>{
   term.textContent=out;
 };
 
-/* ===== ZERO-LOAD CLOUD EXECUTION (PISTON API) & PUTER CLOUD ===== */
+/* ===== ZERO-LOAD CLOUD EXECUTION (PISTON API) ===== */
 const PISTON_MAP={
   python:"python",py:"python",javascript:"javascript",js:"javascript",node:"javascript",
   typescript:"typescript",ts:"typescript",cpp:"c++","c++":"c++",c:"c",
@@ -429,51 +607,151 @@ async function runPistonCloud(lang,code){
   return `[Cloud Executed (${d.language} ${d.version})]\n`+(out.trim()||"(Executed successfully with no console output)");
 }
 
+/* ===== LOCAL OLLAMA & TERMUX BRIDGE ENGINE ===== */
+async function callLocalOllama(msgs,onTok){
+  const u=(S.olUrl||"http://127.0.0.1:11434").replace(/\/$/,"")+"/api/chat";
+  const r=await fetch(u,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:S.olModel||"qwen2.5-coder:7b",messages:msgs.map(({img,...x})=>x),stream:false})
+  });
+  if(!r.ok)throw new Error("Ollama HTTP "+r.status);
+  const j=await r.json();
+  const t=j.message?.content||"";
+  onTok(t);return t;
+}
+
+function openBridgeModal(){
+  closeSide();
+  $("#olUrl").value=S.olUrl||"http://127.0.0.1:11434";
+  $("#olModel").value=S.olModel||"qwen2.5-coder:7b";
+  $("#tmUrl").value=S.tmUrl||"http://127.0.0.1:8765";
+  $("#bridgeM").classList.add("open");
+}
+$("#bridgeSideBtn").onclick=$("#hdrBridgeBtn").onclick=openBridgeModal;
+$("#bridgeClose").onclick=()=>$("#bridgeM").classList.remove("open");
+
+$("#olTestBtn").onclick=async()=>{
+  S.olUrl=$("#olUrl").value.trim()||"http://127.0.0.1:11434";save();
+  $("#brOut").textContent="Querying "+S.olUrl+"/api/tags ...";
+  try{
+    const r=await fetch(S.olUrl.replace(/\/$/,"")+"/api/tags");
+    const j=await r.json();
+    const names=(j.models||[]).map(m=>m.name);
+    if(names.length){$("#olModel").value=names[0];S.olModel=names[0];save()}
+    $("#brOut").textContent="✔ Connected to Local Ollama!\nInstalled Models:\n"+(names.join("\n")||"(No models pulled yet — run: ollama run qwen2.5-coder:7b)");
+  }catch(e){
+    $("#brOut").textContent="⚠️ Could not reach Local Ollama at "+S.olUrl+"\nTip: In Termux or Linux terminal, start Ollama with CORS enabled:\nOLLAMA_ORIGINS=* ollama serve";
+  }
+};
+
+$("#olUseBtn").onclick=()=>{
+  S.olUrl=$("#olUrl").value.trim()||"http://127.0.0.1:11434";
+  S.olModel=$("#olModel").value.trim()||"qwen2.5-coder:7b";
+  S.model="ol:local";save();
+  $("#model").value="ol:local";
+  $("#bridgeM").classList.remove("open");
+  toast("🔌 Switched to Local Ollama ("+S.olModel+")");
+};
+
+$("#tmPingBtn").onclick=async()=>{
+  S.tmUrl=$("#tmUrl").value.trim()||"http://127.0.0.1:8765";save();
+  try{
+    const r=await fetch(S.tmUrl.replace(/\/$/,"")+"/status");
+    $("#brOut").textContent="✔ Termux Bridge Active:\n"+await r.text();
+  }catch(e){
+    $("#brOut").textContent="⚠️ Local Termux Bridge not detected on "+S.tmUrl+". Click 'Copy Termux Setup Command' to start a safe local status server.";
+  }
+};
+
+$("#tmHelpBtn").onclick=()=>{
+  const cmd=`# Run in Termux to start Ollama with CORS for AGI Astra Ultra:\npkg install ollama -y && OLLAMA_ORIGINS=* ollama serve &`;
+  navigator.clipboard.writeText(cmd);
+  $("#brOut").textContent="Copied to clipboard:\n\n"+cmd;
+  toast("Termux command copied ✔");
+};
+
 /* ===== AUTONOMOUS AGENT TOOLS ===== */
 const J=async(u,o)=>{const r=await fetch(u,o);if(!r.ok)throw new Error("HTTP "+r.status);return r.json()};
 let py=null;
 
 const tools={
-  /* NEW: ZERO-LOAD REMOTE CLOUD CODE RUNNER (30+ LANGUAGES, NO API KEY) */
   async cloud_exec(inp){
     const m=inp.trim().match(/^([a-zA-Z0-9+#_-]+)\n([\s\S]*)$/);
     const lang=m?m[1]:"python",code=m?m[2]:inp;
-    try{
-      return await runPistonCloud(lang,code);
-    }catch(e){
-      if(/^(js|javascript|node)$/i.test(lang))return await tools.js(code);
-      throw e;
-    }
+    try{return await runPistonCloud(lang,code)}
+    catch(e){if(/^(js|javascript|node)$/i.test(lang))return await tools.js(code);throw e}
   },
-  /* NEW: LIVE ARTIFACT / CANVAS RENDERER */
   async canvas(inp){
     const m=inp.trim().match(/^([a-zA-Z0-9_-]+)\n([\s\S]*)$/);
     const lang=(m&&m[1].length<15)?m[1]:"html",code=(m&&m[1].length<15)?m[2]:inp;
-    openCanvas(code,lang,"AI Live Canvas Artifact");
+    openCanvas(code,lang,"Astra Live Canvas Artifact");
     return "Artifact rendered live in the user's Side-by-Side Canvas Preview panel.";
   },
-  /* NEW: 1-CLICK FREE CLOUD WEB HOSTING VIA PUTER */
   async cloud_host(htmlCode){
     let code=htmlCode.trim();
-    if(!code.startsWith("<"))code=`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cloud Hosted App</title></head><body>${code}</body></html>`;
+    if(!code.startsWith("<"))code=`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Astra Cloud App</title></head><body>${code}</body></html>`;
     openCanvas(code,"html","Cloud Hosted Web App");
     if(window.puter&&puter.hosting){
       try{
-        const dir="agi_app_"+Date.now();
+        const dir="astra_app_"+Date.now();
         await puter.fs.mkdir(dir);
         await puter.fs.write(dir+"/index.html",code);
-        const sub="agi-"+Math.random().toString(36).slice(2,8);
+        const sub="astra-"+Math.random().toString(36).slice(2,8);
         const site=await puter.hosting.create(sub,dir);
         const url="https://"+(site.subdomain||sub)+".puter.site";
         S.hostedSites.unshift({url,ts:new Date().toLocaleString()});
         save();
-        return `Live Cloud Website Deployed Successfully!\nPublic URL: ${url}\n(Also opened in Live Canvas Preview)`;
+        return `Live Cloud Website Deployed!\nPublic URL: ${url}\n(Also opened in Live Canvas Preview)`;
       }catch(e){
         const blobUrl=URL.createObjectURL(new Blob([code],{type:"text/html"}));
-        return `Rendered in Live Canvas & Instant Sandbox URL ready: ${blobUrl} (Note: Sign into Puter free popup if you want a permanent .puter.site subdomain: ${e.message||e})`;
+        return `Rendered in Live Canvas & Sandbox URL ready: ${blobUrl}`;
       }
     }
     return "Rendered in Live Canvas Preview.";
+  },
+  async arena(q){
+    return await runConsensus([{role:"user",content:q.trim()}],()=>{});
+  },
+  async ollama_local(q){
+    return await callLocalOllama([{role:"user",content:q.trim()}],()=>{});
+  },
+  async weather(loc){
+    loc=loc.trim();
+    const g=await J("https://geocoding-api.open-meteo.com/v1/search?count=1&name="+encodeURIComponent(loc));
+    const p=g.results?.[0];if(!p)return "Location not found: "+loc;
+    const w=await J(`https://api.open-meteo.com/v1/forecast?latitude=${p.latitude}&longitude=${p.longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code`);
+    return `${p.name}, ${p.country}: ${w.current?.temperature_2m}°C, Humidity ${w.current?.relative_humidity_2m}%, Wind ${w.current?.wind_speed_10m} km/h`;
+  },
+  async crypto(coin){
+    coin=coin.trim().toLowerCase()||"bitcoin";
+    const d=await J(`https://api.coingecko.com/api/v3/simple/price?ids=${encodeURIComponent(coin)}&vs_currencies=usd,inr&include_24hr_change=true`);
+    return JSON.stringify(d,null,2);
+  },
+  async translate(inp){
+    const m=inp.trim().match(/^([a-z]{2}\|[a-z]{2})\s+([\s\S]+)$/i);
+    const pair=m?m[1]:"en|hi",text=m?m[2]:inp.trim();
+    const d=await J(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.slice(0,450))}&langpair=${encodeURIComponent(pair)}`);
+    return d.responseData?.translatedText||"Translation unavailable.";
+  },
+  /* NEW KEYLESS CLOUD KNOWLEDGE & OSINT TOOLS */
+  async books(q){
+    const d=await J("https://openlibrary.org/search.json?limit=5&q="+encodeURIComponent(q.trim()));
+    return (d.docs||[]).map(b=>`${b.title} by ${(b.author_name||["Unknown"]).join(", ")} (${b.first_publish_year||"n/a"})`).join("\n")||"No books found.";
+  },
+  async dictionary(w){
+    const d=await J("https://api.dictionaryapi.dev/api/v2/entries/en/"+encodeURIComponent(w.trim()));
+    return (d[0]?.meanings||[]).map(m=>m.partOfSpeech+": "+(m.definitions?.[0]?.definition||"")).join("\n")||"No definition found.";
+  },
+  async country(c){
+    const d=(await J("https://restcountries.com/v3.1/name/"+encodeURIComponent(c.trim())))[0];
+    return `${d.name?.common} (${d.cca2}) | Capital: ${(d.capital||[]).join(", ")} | Pop: ${d.population?.toLocaleString()} | Region: ${d.region}`;
+  },
+  async github_user(u){
+    u=u.trim().replace(/^@/,"");
+    const d=await J("https://api.github.com/users/"+encodeURIComponent(u));
+    const repos=await J("https://api.github.com/users/"+encodeURIComponent(u)+"/repos?sort=updated&per_page=5");
+    return `${d.login} (${d.name||""}) — ${d.bio||""}\nPublic Repos: ${d.public_repos} | Followers: ${d.followers}\nRecent Repos:\n`+(repos||[]).map(r=>`- ${r.full_name} ⭐${r.stargazers_count} (${r.language||"n/a"}): ${r.description||""}`).join("\n");
   },
   async deepsearch(q){
     q=q.trim();
@@ -531,11 +809,9 @@ const tools={
     }catch(e){logs.push("ERROR: "+e.message)}
     return logs.join("\n").slice(0,4500)||"(executed with no output)";
   },
-  /* PYTHON DEFAULT: ZERO-LOAD CLOUD FIRST, FALLBACK TO PYODIDE ONLY IF NEEDED */
   async python(code){
-    try{
-      return await runPistonCloud("python",code);
-    }catch(_){
+    try{return await runPistonCloud("python",code)}
+    catch(_){
       if(!py){
         if(!window.loadPyodide)await new Promise((ok,no)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
         py=await loadPyodide();
@@ -582,13 +858,12 @@ const tools={
     return t.replace(/\n{3,}/g,"\n\n").slice(0,3000)}
 };
 
-const TOOL_NAMES="cloud_exec|canvas|cloud_host|deepsearch|search|websearch|fetch|arxiv|reddit|wayback|js|python|remember|image|edit|video|dns|subdomains|whois|ip|urlscan|github|npm|pypi|stackoverflow|hn|mdn|cve|osv|currency|ssl|securityheaders";
-const TOOLRE=new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F);
+const TOOL_NAMES="cloud_exec|canvas|cloud_host|arena|ollama_local|weather|crypto|translate|books|dictionary|country|github_user|deepsearch|search|websearch|fetch|arxiv|reddit|wayback|js|python|remember|image|edit|video|dns|subdomains|whois|ip|urlscan|github|npm|pypi|stackoverflow|hn|mdn|cve|osv|currency|ssl|securityheaders";
 const TOOLRE_G=new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F,"g");
 
-const sysPrompt=()=>`You are an elite, autonomous Full-Stack AI Agent, Cloud Execution Architect & Deep Research Engine (comparable to ChatGPT-6 Ultra / Gemini Ultra). Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
+const sysPrompt=()=>`You are AGI Astra Ultra v5.0 — the world's fastest, autonomous Full-Stack AI Super-Agent, Cloud Execution Architect & Passive Recon Engine. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
 Your goal is to complete every user request end-to-end autonomously: plan the steps, gather live data, run code on remote cloud servers (so the user's phone browser has zero CPU/RAM load), render interactive apps in the Live Canvas, and verify your output.
-${S.taskMode?"[AUTONOMOUS TASK MODE ACTIVE]: Break the user's goal into a clear multi-step checklist, execute all required cloud tools & code automatically, build any requested app/report, and deliver the final verified result without asking the user to do manual steps.":""}
+${S.taskMode?"[AUTONOMOUS TASK MODE ACTIVE]: Break the user's goal into a clear multi-step checklist, execute all required cloud tools & code automatically, build any requested app/report, and deliver the final verified result without stopping early.":""}
 When you generate media, place the exact [[media:ID]] token from the tool result on its own line in your final response.
 
 To invoke one or more tools (you can call multiple tools in parallel in a single turn!), reply ONLY with tool blocks in this exact format:
@@ -597,10 +872,12 @@ ${F}
 input
 ${F}
 
-Available Autonomous Cloud & Agent Tools:
-- @cloud_exec : Execute code in 30+ languages (python, javascript, typescript, c++, rust, go, bash, java, php, sql) on a remote keyless Cloud Sandbox with ZERO load on the user's phone. First line of input MUST be the language name, followed by the code on the next lines.
-- @canvas : Open & render an interactive HTML/CSS/JS web app, game, dashboard, or UI artifact directly in the user's Side-by-Side Live Canvas preview window. First line: "html", followed by the complete self-contained HTML code.
+Available Autonomous Cloud, Local Bridge & Agent Tools:
+- @cloud_exec : Execute code in 30+ languages (python, javascript, typescript, c++, rust, go, bash, java, php, sql) on a remote keyless Cloud Sandbox with ZERO load on the user's phone. First line MUST be the language name, followed by the code.
+- @canvas : Open & render an interactive HTML/CSS/JS web app, dashboard, or UI artifact directly in the user's Side-by-Side Live Canvas preview window. First line: "html", followed by the complete HTML code.
 - @cloud_host : Deploy a complete HTML web app to a live public cloud URL (.puter.site) AND preview it in the Live Canvas. Input: full HTML document.
+- @arena : Query 3 frontier AI models in parallel and synthesize their consensus for ultra-hard reasoning questions.
+- @ollama_local : Query the user's local Ollama instance on localhost:11434.
 - @deepsearch : Multi-source parallel search (DuckDuckGo Web, Wikipedia, Reddit, HackerNews).
 - @websearch : Live DuckDuckGo web search.
 - @fetch : Read the full text of any URL (https://...).
@@ -608,7 +885,8 @@ Available Autonomous Cloud & Agent Tools:
 - @arxiv : Search scientific & AI research papers on ArXiv.
 - @reddit : Search Reddit discussions.
 - @wayback : Check Internet Archive Wayback Machine snapshots and historical URLs.
-- @python : Run Python 3 code (executes on remote Cloud Sandbox first for zero phone load; falls back to Pyodide if needed).
+- @weather ("Shimla"), @crypto ("bitcoin,ethereum"), @translate ("en|hi Hello"), @books ("query"), @dictionary ("word"), @country ("India"), @github_user ("username").
+- @python : Run Python 3 code (executes on remote Cloud Sandbox first for zero phone load).
 - @js : Run fast ES2024 JavaScript.
 - @dns ("domain TYPE"), @subdomains (crt.sh certificate logs), @whois (RDAP), @ip (Geo + Shodan InternetDB ports/CVEs), @urlscan (urlscan.io domain intel), @ssl (SSL Labs), @securityheaders (HTTP security header report).
 - @github ("owner/repo" or search query), @npm, @pypi, @stackoverflow, @hn, @mdn.
@@ -618,10 +896,10 @@ Available Autonomous Cloud & Agent Tools:
 
 For diagrams, write a ${F}mermaid code block; for math, use $$...$$ or \\(...\\).
 Never fabricate tool outputs or citations. Maximum ${MAXSTEPS} tool turns.
-Legal & Passive Security Boundary: Strictly perform only legal, authorized, passive/public OSINT, defensive security auditing, and safe cloud sandboxing; never perform active exploitation or attack unauthorized targets.
+Legal & Passive Security Boundary: Strictly perform only legal, authorized, passive/public OSINT, defensive security auditing, and safe cloud sandboxing; never perform active exploitation.
 Persistent User Memory: ${S.mem.join(" | ")||"none yet"}`;
 
-/* ===== MULTI-PROVIDER LLM ROUTER (Gemini -> Puter -> Pollinations) ===== */
+/* ===== MULTI-PROVIDER LLM ROUTER & 3-BRAIN CONSENSUS ARENA ===== */
 const withTimeout=(p,ms,msg)=>Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(new Error(msg||"Timeout")),ms))]);
 
 async function pollinations(msgs,model,onTok){
@@ -640,8 +918,31 @@ async function pollinations(msgs,model,onTok){
   }finally{clearTimeout(to)}
 }
 
+async function runConsensus(msgs,onTok){
+  const plain=msgs.map(({img,...r})=>r);
+  onTok("⚔️ **Astra 3-Brain Consensus Active:** Querying Gemini 2.5 + DeepSeek R1 + GPT-4.1 in parallel across the cloud…");
+  const tasks=[
+    gemini(msgs,"gemini-2.5-flash",()=>{}).then(t=>"[Brain 1 — Gemini 2.5]\n"+t).catch(()=>""),
+    pollinations(plain,"deepseek-r1",()=>{}).then(t=>"[Brain 2 — DeepSeek R1 Reasoning]\n"+t).catch(()=>""),
+    pollinations(plain,"openai-large",()=>{}).then(t=>"[Brain 3 — GPT-4.1 Large]\n"+t).catch(()=>"")
+  ];
+  const drafts=(await Promise.all(tasks)).filter(Boolean);
+  if(!drafts.length)throw new Error("Consensus brains unavailable");
+  const synthPrompt=[
+    ...plain,
+    {role:"user",content:`Three independent frontier AI models analyzed the request above. Synthesize their best insights, verify all code/facts, eliminate any hallucinations, and produce ONE superior, comprehensive master response:\n\n${drafts.join("\n\n---\n\n")}`}
+  ];
+  return await gemini(synthPrompt,"gemini-2.5-pro",onTok).catch(()=>pollinations(synthPrompt,"openai-large",onTok));
+}
+
 async function llm(msgs,onTok){
-  if(!navigator.onLine)throw new Error("You are offline. Please connect to the internet and try again.");
+  if(S.model==="ol:local"){
+    return await callLocalOllama(msgs,onTok);
+  }
+  if(!navigator.onLine)throw new Error("You are offline. Connect to the internet or switch to 🔌 Local Ollama model.");
+  if(S.arenaMode||S.model==="arena:consensus"){
+    return await runConsensus(msgs,onTok);
+  }
   const plain=msgs.map(({img,...r})=>r);
   const m=S.model,errs=[],seen=new Set(),chain=[];
   const add=(k,x)=>{const key=k+":"+x;if(!seen.has(key)){seen.add(key);chain.push([k,x])}};
@@ -683,6 +984,31 @@ async function llm(msgs,onTok){
 
 const toLLM=m=>m.file?.imgId?{img:m.file.imgId,role:m.role,content:m.content+"\n\n[User attached an image ("+m.file.name+"). It is set as the active image: you can inspect it or call @edit to modify it.]"}:m.file?{role:m.role,content:m.content+"\n\n[Attached file: "+m.file.name+"]\n"+F+"\n"+m.file.text+"\n"+F}:{role:m.role,content:m.content};
 
+/* ===== CLOUD NEURAL TTS + FALLBACK SPEECH ===== */
+let curAudio=null;
+function speakText(text){
+  if(curAudio){curAudio.pause();curAudio=null;return}
+  if(window.speechSynthesis?.speaking){speechSynthesis.cancel();return}
+  const clean=text.replace(/```[\s\S]*?```/g," ").replace(/[#*`_~\[\]()]/g," ").replace(/\s+/g," ").trim().slice(0,450);
+  if(!clean)return;
+  try{
+    const u="https://text.pollinations.ai/"+encodeURIComponent("Read this aloud verbatim: "+clean)+"?model=openai-audio&voice=nova";
+    const a=new Audio(u);
+    curAudio=a;
+    a.onended=()=>{curAudio=null};
+    a.onerror=()=>{
+      curAudio=null;
+      if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(clean));
+    };
+    a.play().catch(()=>{
+      curAudio=null;
+      if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(clean));
+    });
+  }catch(_){
+    if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(clean));
+  }
+}
+
 /* ===== RENDER, CLOUD CODE EXECUTION & CANVAS BUTTONS ===== */
 const md=t=>{let h;try{h=DOMPurify.sanitize(marked.parse(t||"",{breaks:true,gfm:true}))}catch(e){h="<pre>"+escapeHtml(t)+"</pre>"}return h.replace(/\[\[media:(m[a-z0-9]+)\]\]/g,'<div class="mslot" data-id="$1"></div>')};
 const bottom=()=>{const c=$("#chat");c.scrollTop=c.scrollHeight};
@@ -720,11 +1046,7 @@ function dress(el){
 function addActs(row,text,i){
   const acts=document.createElement("div");acts.className="acts";
   const cp=document.createElement("button");cp.textContent="📋 Copy";cp.onclick=()=>{navigator.clipboard.writeText(text);toast("Copied to clipboard")};
-  const sp=document.createElement("button");sp.textContent="🔊 Speak";sp.onclick=()=>{
-    if(!window.speechSynthesis)return toast("Speech synthesis not supported");
-    if(speechSynthesis.speaking){speechSynthesis.cancel();return}
-    const u=new SpeechSynthesisUtterance(text.replace(/[#*`_~]/g,""));speechSynthesis.speak(u);
-  };
+  const sp=document.createElement("button");sp.textContent="🔊 Neural Speak";sp.onclick=()=>speakText(text);
   acts.append(cp,sp);
   if(i!=null){const rg=document.createElement("button");rg.textContent="↻ Regenerate";rg.onclick=()=>regenerate(i);acts.appendChild(rg)}
   row.appendChild(acts);
@@ -749,23 +1071,25 @@ function addAI(content,i){
 }
 
 function hello(){
-  $("#in").innerHTML=`<div id="hello"><h1>AGI Agent Pro — Cloud & Autonomous Task Edition</h1>
-  <p>Zero-Load Cloud Code Execution · Side-by-Side Live Canvas · 1-Click Free Cloud Hosting · Multi-Step Autonomous Tasks</p>
+  $("#in").innerHTML=`<div id="hello"><h1>⚡ AGI Astra Ultra v5.0 — Static Cloud Supercomputer</h1>
+  <p>3-Brain Consensus · Zero-Load Cloud Runner · Passive Bug Bounty & CVE Monitor · Local Ollama/Termux Bridge · Neural Voice</p>
   <div class="chips">
-  <button data-q="1">Build an interactive Expense Tracker & Chart Dashboard in the Live Canvas (@canvas)</button>
-  <button data-q="1">Run a Cloud Python script (@cloud_exec) to benchmark sorting algorithms & show results</button>
-  <button data-q="1">Perform passive OSINT & security header recon on example.com</button>
-  <button data-q="1">Research the latest AI Agent architectures and draw a Mermaid system diagram</button>
+  <button id="helloOsint">🛡️ Open Passive Recon & CVE Monitor</button>
+  <button id="helloBridge">🔌 Connect Local Ollama / Termux</button>
+  <button id="helloArena">⚔️ Activate 3-Brain Consensus</button>
+  <button id="helloLive">🎙️ Astra Live Voice Orb</button>
+  <button data-q="1">Run a Cloud Python script (@cloud_exec) to benchmark SHA-256 vs BLAKE2b & render an HTML chart</button>
+  <button data-q="1">Perform passive OSINT & security header analysis on example.com</button>
   <button id="helloTask">🚀 Launch Autonomous Task</button>
   <button id="helloCloud">☁️ Open Cloud Sandbox</button>
-  <button id="helloCanvas">🖥️ Open Live Canvas</button>
-  <button id="helloStudio">🎨 Open Studio</button>
   </div></div>`;
   $("#in").querySelectorAll(".chips button[data-q]").forEach(b=>b.onclick=()=>ask(b.textContent));
+  $("#helloOsint").onclick=()=>openCanvas(OSINT_DASH_HTML,"html","Passive Recon & CVE Monitor");
+  $("#helloBridge").onclick=openBridgeModal;
+  $("#helloArena").onclick=()=>{S.arenaMode=true;save();syncModesUI();toast("⚔️ 3-Brain Consensus Activated!");$("#q").focus()};
+  $("#helloLive").onclick=()=>openOrb();
   $("#helloTask").onclick=()=>$("#taskM").classList.add("open");
   $("#helloCloud").onclick=()=>openCloudModal("exec");
-  $("#helloCanvas").onclick=()=>openCanvas();
-  $("#helloStudio").onclick=()=>openStudio("img");
 }
 
 function renderAll(){
@@ -788,7 +1112,7 @@ async function ask(text){
   $("#q").value="";$("#q").style.height="auto";
   pending=null;$("#file").style.display="none";
   save();drawList();
-  await runAgent();
+  return await runAgent();
 }
 
 async function regenerate(i){
@@ -813,7 +1137,7 @@ async function runAgent(){
   const c=cur();const myIndex=c.msgs.length;
   const row=document.createElement("div");row.className="arow";
   const th=document.createElement("details");th.className="th";th.open=true;
-  th.innerHTML='<summary><span class="dot"></span><span class="tt">Autonomous Agent planning & executing in Cloud…</span><span class="tm" style="margin-left:auto">0.0s</span></summary><div class="st"></div>';
+  th.innerHTML='<summary><span class="dot"></span><span class="tt">Astra Ultra executing in Cloud…</span><span class="tm" style="margin-left:auto">0.0s</span></summary><div class="st"></div>';
   const st=th.querySelector(".st"),t0=performance.now();
   const tick=setInterval(()=>th.querySelector(".tm").textContent=((performance.now()-t0)/1000).toFixed(1)+"s",100);
   const ans=document.createElement("div");ans.className="a";
@@ -834,14 +1158,13 @@ async function runAgent(){
         log("▸ @"+name+": "+inp.trim().slice(0,180).replace(/\n/g," "));
         let res;
         try{
-          res=await withTimeout(tools[name](inp),({cloud_exec:60000,cloud_host:60000,python:90000,ssl:120000,image:180000,edit:180000,video:600000,deepsearch:45000})[name]||35000,"Tool timeout");
+          res=await withTimeout(tools[name](inp),({cloud_exec:60000,cloud_host:60000,arena:90000,python:90000,ssl:120000,image:180000,edit:180000,video:600000,deepsearch:45000})[name]||35000,"Tool timeout");
         }catch(e){res="ERROR: "+(e.message||e)}
         log("  → "+String(res).slice(0,260).replace(/\n/g," "));
         return "[TOOL RESULT: "+name+"]\n"+res;
       }));
       work.push({role:"assistant",content:out},{role:"user",content:results.join("\n\n")});
     }
-    /* Auto-detect standalone full HTML blocks and offer instant Live Canvas preview */
     const htmlMatch=final.match(/```html\s*\n([\s\S]*?<!DOCTYPE html>[\s\S]*?)```/i)||final.match(/```html\s*\n([\s\S]{250,}?)```/i);
     if(htmlMatch&&!$("#canvasPane").classList.contains("open")){
       openCanvas(htmlMatch[1],"html","Auto-Previewed App Artifact");
@@ -864,17 +1187,95 @@ async function runAgent(){
     th.querySelector(".tm").textContent="";th.open=false}
   else th.remove();
   busy=false;$("#send").textContent="↑";save();drawList();bottom();
+  return final;
 }
 
-/* ===== AUTONOMOUS TASK MODE & MODAL ===== */
-function syncTaskUI(){
+/* ===== SCREEN / WINDOW VISION CAPTURE (📷) ===== */
+$("#snapBtn").onclick=async()=>{
+  if(!navigator.mediaDevices?.getDisplayMedia)return toast("Screen capture requires a desktop browser or use 📎 to attach a screenshot.");
+  try{
+    const stream=await navigator.mediaDevices.getDisplayMedia({video:true});
+    const track=stream.getVideoTracks()[0];
+    const v=document.createElement("video");v.srcObject=stream;await v.play();
+    const c=document.createElement("canvas");c.width=v.videoWidth;c.height=v.videoHeight;
+    c.getContext("2d").drawImage(v,0,0);
+    track.stop();
+    const blob=await new Promise(ok=>c.toBlob(ok,"image/jpeg",.9));
+    const id=newId();await mPut(id,{b:blob,kind:"image"});S.lastImg=id;save();
+    pending={name:"screen-capture.jpg",imgId:id,text:""};
+    $("#file").style.display="block";$("#file").innerHTML=`<div>🖼 screen-capture.jpg <b id="rmf">✕</b></div>`;
+    $("#rmf").onclick=()=>{pending=null;$("#file").style.display="none"};
+    toast("Screen captured for AI Vision analysis ✔");
+  }catch(_){}
+};
+
+/* ===== ASTRA LIVE VOICE ORB (REAL-TIME CONVERSATIONAL MODE) ===== */
+let orbRec=null,orbActive=false;
+function openOrb(){
+  closeSide();
+  $("#orbM").classList.add("open");
+}
+$("#orbOpenBtn").onclick=$("#hdrLiveBtn").onclick=openOrb;
+$("#orbCloseBtn").onclick=()=>{
+  orbActive=false;
+  try{orbRec?.stop()}catch(_){}
+  if(curAudio){curAudio.pause();curAudio=null}
+  if(window.speechSynthesis)speechSynthesis.cancel();
+  $("#orbCircle").className="orb";
+  $("#orbM").classList.remove("open");
+};
+
+function toggleOrbListen(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR)return toast("Voice recognition is not supported in this browser.");
+  if(orbActive){
+    orbActive=false;
+    try{orbRec?.stop()}catch(_){}
+    $("#orbCircle").className="orb";
+    $("#orbToggleBtn").textContent="🎙️ Start Listening";
+    return;
+  }
+  if(curAudio){curAudio.pause();curAudio=null}
+  if(window.speechSynthesis)speechSynthesis.cancel();
+  orbRec=new SR();
+  orbRec.lang="en-IN";
+  orbRec.interimResults=false;
+  orbActive=true;
+  $("#orbCircle").className="orb listen";
+  $("#orbSub").textContent="Listening… Speak now";
+  $("#orbToggleBtn").textContent="⏹ Stop";
+  orbRec.onresult=async e=>{
+    const transcript=e.results[0][0].transcript;
+    $("#orbSub").textContent="You: \""+transcript+"\"\nThinking in Cloud…";
+    $("#orbCircle").className="orb";
+    const reply=await ask(transcript);
+    if(!reply||!$("#orbM").classList.contains("open"))return;
+    const clean=reply.replace(/```[\s\S]*?```/g,"[Code rendered in chat]").replace(/[#*`_~]/g,"").slice(0,550);
+    $("#orbSub").textContent=clean;
+    $("#orbCircle").className="orb speak";
+    speakText(clean);
+  };
+  orbRec.onerror=()=>{$("#orbCircle").className="orb";orbActive=false;$("#orbToggleBtn").textContent="🎙️ Start Listening"};
+  orbRec.onend=()=>{orbActive=false;$("#orbToggleBtn").textContent="🎙️ Start Listening"};
+  orbRec.start();
+}
+$("#orbToggleBtn").onclick=$("#orbCircle").onclick=toggleOrbListen;
+
+/* ===== AUTONOMOUS TASK & CONSENSUS MODE TOGGLES ===== */
+function syncModesUI(){
   $("#taskModeBtn").classList.toggle("on",!!S.taskMode);
+  $("#arenaModeBtn").classList.toggle("on",!!S.arenaMode);
 }
 $("#taskModeBtn").onclick=()=>{
-  S.taskMode=!S.taskMode;save();syncTaskUI();
+  S.taskMode=!S.taskMode;save();syncModesUI();
   toast(S.taskMode?"🚀 Autonomous Multi-Step Task Mode: ON":"Autonomous Task Mode: OFF");
 };
-syncTaskUI();
+$("#arenaModeBtn").onclick=$("#arenaSideBtn").onclick=()=>{
+  closeSide();
+  S.arenaMode=!S.arenaMode;save();syncModesUI();
+  toast(S.arenaMode?"⚔️ 3-Brain Consensus Mode: ON (Gemini + DeepSeek R1 + GPT-4.1)":"3-Brain Consensus Mode: OFF");
+};
+syncModesUI();
 
 $("#taskBtn").onclick=()=>{closeSide();$("#taskM").classList.add("open")};
 $("#taskClose").onclick=()=>$("#taskM").classList.remove("open");
@@ -882,7 +1283,7 @@ document.querySelectorAll(".tplTask").forEach(b=>b.onclick=()=>$("#taskGoal").va
 $("#startTaskBtn").onclick=()=>{
   const g=$("#taskGoal").value.trim();
   if(!g)return toast("Please enter a task goal");
-  S.taskMode=true;save();syncTaskUI();
+  S.taskMode=true;save();syncModesUI();
   $("#taskM").classList.remove("open");
   ask("[AUTONOMOUS END-TO-END TASK]\nGoal: "+g+"\n\nExecute all needed research, cloud code execution (@cloud_exec), and live artifact rendering (@canvas) automatically and provide the complete verified deliverable.");
 };
@@ -906,10 +1307,10 @@ function openCloudModal(tab="exec"){
       <option value="php">PHP (Cloud)</option>
       <option value="sqlite3">SQLite3 (Cloud)</option>
     </select>
-    <textarea id="clCode" class="ti" rows="7" placeholder="Write code to execute on the remote cloud server...">import platform, sys, math
+    <textarea id="clCode" class="ti" rows="7" placeholder="Write code to execute on the remote cloud server...">import platform, sys, hashlib
 print("Executed on Remote Cloud Container:", platform.platform())
 print("Python Version:", sys.version.split()[0])
-print("Factorial(20):", math.factorial(20))</textarea>
+print("SHA-256 Digest:", hashlib.sha256(b"AGI Astra Ultra v5").hexdigest())</textarea>
     <div class="row2">
       <button class="pri" id="clRun">☁️ Execute on Cloud</button>
       <button id="clToCanvas">🖥️ Open in Live Canvas</button>
@@ -948,12 +1349,12 @@ print("Factorial(20):", math.factorial(20))</textarea>
     </div>
     <div class="out2" id="kvOut">Ready.</div>`;
     $("#kvPush").onclick=async()=>{
-      try{await puter.kv.set("agi_cloud_backup",JSON.stringify(S));$("#kvOut").textContent="✔ Successfully synced state to Puter Cloud KV storage!"}
+      try{await puter.kv.set("agi_astra_backup",JSON.stringify(S));$("#kvOut").textContent="✔ Successfully synced state to Puter Cloud KV storage!"}
       catch(e){$("#kvOut").textContent="⚠️ Cloud sync requires Puter session: "+(e.message||e)}
     };
     $("#kvPull").onclick=async()=>{
       try{
-        const raw=await puter.kv.get("agi_cloud_backup");
+        const raw=await puter.kv.get("agi_astra_backup");
         if(!raw)return $("#kvOut").textContent="No cloud backup found.";
         S=Object.assign(S,JSON.parse(raw));save();renderAll();drawList();
         $("#kvOut").textContent="✔ Restored state from Puter Cloud!";
@@ -1147,16 +1548,17 @@ $("#ov").onclick=closeSide;
 $("#mem").onclick=()=>{const v=prompt("Persistent Agent Memory & Instructions (separate facts with | ):",S.mem.join(" | "));if(v!==null){S.mem=v.split("|").map(x=>x.trim()).filter(Boolean);save();toast("Memory updated")}};
 $("#exp").onclick=()=>{
   const c=cur();if(!c||!c.msgs.length)return toast("Current chat is empty");
-  const t=c.msgs.map(m=>"## "+(m.role==="user"?"You":"Agent")+"\n\n"+m.content).join("\n\n");
+  const t=c.msgs.map(m=>"## "+(m.role==="user"?"You":"Astra Ultra")+"\n\n"+m.content).join("\n\n");
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/markdown"}));a.download=(c.title||"chat")+".md";a.click();
 };
 $("#wipe").onclick=()=>{if(confirm("Delete all chat history?")){S.chats={};S.cur=null;save();renderAll();drawList()}};
 $("#themeBtn").onclick=()=>{
-  S.theme=S.theme==="dark"?"light":S.theme==="light"?"auto":"dark";
-  applyTheme();save();toast("Theme: "+(S.theme==="auto"?"System default":S.theme));
+  const order=["dark","red","light","auto"];
+  S.theme=order[(order.indexOf(S.theme)+1)%order.length];
+  applyTheme();save();toast("Theme: "+S.theme);
 };
 function applyTheme(){
-  if(S.theme==="light"||S.theme==="dark")document.documentElement.setAttribute("data-theme",S.theme);
+  if(S.theme==="light"||S.theme==="dark"||S.theme==="red")document.documentElement.setAttribute("data-theme",S.theme);
   else document.documentElement.removeAttribute("data-theme");
   $("#themeBtn").textContent="🌓 Theme: "+S.theme;
 }
@@ -1189,7 +1591,7 @@ $("#chat").addEventListener("dragleave",()=>$("#chat").classList.remove("drag"))
 /* Voice Input */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 if(SR){
-  const rec=new SR();rec.lang="en-US";rec.interimResults=false;
+  const rec=new SR();rec.lang="en-IN";rec.interimResults=false;
   let on=false;
   rec.onresult=e=>{$("#q").value+=(($("#q").value?" ":"")+e.results[0][0].transcript);$("#q").dispatchEvent(new Event("input"))};
   rec.onend=()=>{on=false;$("#mic").classList.remove("rec")};
@@ -1200,7 +1602,7 @@ if(SR){
 /* Keyboard Shortcuts */
 document.addEventListener("keydown",e=>{
   if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="o"){e.preventDefault();newChat()}
-  if(e.key==="Escape"){$("#toolsM").classList.remove("open");$("#studioM").classList.remove("open");$("#taskM").classList.remove("open");$("#cloudM").classList.remove("open");closeSide()}
+  if(e.key==="Escape"){$("#toolsM").classList.remove("open");$("#studioM").classList.remove("open");$("#taskM").classList.remove("open");$("#cloudM").classList.remove("open");$("#bridgeM").classList.remove("open");$("#orbM").classList.remove("open");closeSide()}
 });
 
 /* ===== MEDIA STORE (IndexedDB) ===== */
@@ -1318,8 +1720,8 @@ function openStudio(tab){
 $("#studioBtn").onclick=()=>{closeSide();openStudio("img")};
 $("#studioClose").onclick=()=>$("#studioM").classList.remove("open");
 $("#studioM").querySelectorAll(".stab").forEach(b=>b.onclick=()=>openStudio(b.dataset.s));
-const applyDeep=()=>{$("#deepBtn").textContent="🧠 Deep mode: "+(S.deep?"on":"off")};
-$("#deepBtn").onclick=()=>{S.deep=!S.deep;save();applyDeep();toast(S.deep?"Deep mode enabled: answers undergo an extra verification pass":"Deep mode disabled")};applyDeep();
+const applyDeep=()=>{$("#deepBtn").textContent="🧠 Deep Verification: "+(S.deep?"on":"off")};
+$("#deepBtn").onclick=()=>{S.deep=!S.deep;save();applyDeep();toast(S.deep?"Deep Verification enabled":"Deep Verification disabled")};applyDeep();
 
 /* ===== GEMINI API ENGINE (Supports both AQ. Vertex Express & AIza Google AI Studio Keys) ===== */
 const getKey=()=>localStorage.agi_gk||GEMINI_KEY||"";
@@ -1385,17 +1787,17 @@ $("#gkBtn").onclick=()=>{
 let dip=null;
 addEventListener("beforeinstallprompt",e=>{e.preventDefault();dip=e;$("#installBtn").hidden=false});
 $("#installBtn").onclick=async()=>{if(!dip)return;dip.prompt();await dip.userChoice;dip=null;$("#installBtn").hidden=true};
-addEventListener("appinstalled",()=>{$("#installBtn").hidden=true;toast("App installed successfully")});
+addEventListener("appinstalled",()=>{$("#installBtn").hidden=true;toast("Astra Ultra installed successfully")});
 const netUI=()=>{$("#offline").hidden=navigator.onLine};
 addEventListener("online",()=>{netUI();toast("Back online")});addEventListener("offline",netUI);netUI();
-$("#bak").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="agi-backup-"+new Date().toISOString().slice(0,10)+".json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)};
+$("#bak").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="astra-backup-"+new Date().toISOString().slice(0,10)+".json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)};
 $("#rst").onclick=()=>$("#rfin").click();
 $("#rfin").onchange=async e=>{
   try{
     const d=JSON.parse(await e.target.files[0].text());
     if(!d||typeof d.chats!=="object")throw 0;
     if(!confirm("This will replace your current chat history. Continue?"))return;
-    S=Object.assign({chats:{},cur:null,mem:[],theme:"auto"},d);if(!MODELS.some(m=>m[0]===S.model))S.model=MODELS[0][0];
+    S=Object.assign({chats:{},cur:null,mem:[],theme:"dark"},d);if(!MODELS.some(m=>m[0]===S.model))S.model=MODELS[0][0];
     save();$("#model").value=S.model;applyTheme();renderAll();drawList();toast("Backup restored successfully");
   }catch(_){toast("Invalid backup file")}
   e.target.value="";
@@ -1409,4 +1811,4 @@ if(S.cur&&cur())openChat(S.cur);else{hello();drawList()}
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body>
-</html>
+  </html>
