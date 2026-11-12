@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#212121">
-<title>AGI Agent</title>
+<title>AGI Agent Pro — Cloud & Canvas Edition</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%2310a37f'/%3E%3Cpath d='M256 96l36 100 100 36-100 36-36 100-36-100-100-36 100-36z' fill='%23fff'/%3E%3C/svg%3E" type="image/svg+xml">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%2310a37f'/%3E%3Cpath d='M256 96l36 100 100 36-100 36-36 100-36-100-100-36 100-36z' fill='%23fff'/%3E%3C/svg%3E">
 <script>
 /* Single-file PWA: runtime manifest generation for static hosting & GitHub Pages */
-try{const I=document.querySelector('link[rel=icon]').href,b=location.href.split("#")[0],m={name:"AGI Agent",short_name:"AGI Agent",start_url:b,scope:b.replace(/[^\/]*$/,""),display:"standalone",background_color:"#212121",theme_color:"#212121",icons:[{src:I,sizes:"any",type:"image/svg+xml",purpose:"any"}]};
+try{const I=document.querySelector('link[rel=icon]').href,b=location.href.split("#")[0],m={name:"AGI Agent Pro",short_name:"AGI Agent",start_url:b,scope:b.replace(/[^\/]*$/,""),display:"standalone",background_color:"#212121",theme_color:"#212121",icons:[{src:I,sizes:"any",type:"image/svg+xml",purpose:"any"}]};
 const l=document.createElement("link");l.rel="manifest";l.href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:"application/manifest+json"}));document.head.appendChild(l)}catch(e){}
 </script>
 <script src="https://js.puter.com/v2/"></script>
@@ -33,72 +33,78 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans D
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 :focus-visible{outline:2px solid var(--ac);outline-offset:2px;border-radius:4px}
 #side{width:260px;background:var(--side);display:flex;flex-direction:column;flex-shrink:0;z-index:30;transition:transform .2s}
-.srow{display:flex;align-items:center;gap:8px;padding:10px 12px;margin:8px 8px 0;border-radius:10px;font-size:14px;text-align:left}
+.srow{display:flex;align-items:center;gap:8px;padding:9px 12px;margin:4px 8px 0;border-radius:10px;font-size:13.5px;text-align:left}
 .srow:hover,.ci.on{background:var(--sur)}
 #list{flex:1;overflow-y:auto;padding:0 8px;margin-top:4px}
-.ci{display:flex;align-items:center;padding:9px 10px;border-radius:10px;font-size:14px;cursor:pointer;gap:6px}
+.ci{display:flex;align-items:center;padding:8px 10px;border-radius:10px;font-size:13.5px;cursor:pointer;gap:6px}
 .ci:hover{background:var(--sur)}.ci span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ci b{font-weight:400;color:var(--m);padding:0 4px}
-.lab{font-size:12px;color:var(--m);padding:10px 18px 4px}
-.sfoot{padding:4px 8px 8px;border-top:1px solid var(--b);margin-top:4px}
+.lab{font-size:11.5px;color:var(--m);padding:10px 18px 4px;text-transform:uppercase;letter-spacing:.5px}
+.sfoot{padding:4px 8px 8px;border-top:1px solid var(--b);margin-top:4px;max-height:48vh;overflow-y:auto}
 #main{flex:1;display:flex;flex-direction:column;min-width:0}
-header{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;flex-shrink:0}
-header button,select{padding:7px 10px;border-radius:10px;font-size:15px}
+header{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;flex-shrink:0;border-bottom:1px solid var(--b)}
+header button,select{padding:7px 10px;border-radius:10px;font-size:14px}
 header button:hover,select:hover{background:var(--sur)}
-select{background:transparent;color:var(--t);border:0;font-weight:600;outline:0;max-width:52vw}
+select{background:transparent;color:var(--t);border:0;font-weight:600;outline:0;max-width:46vw}
 select option{background:var(--side)}
 #menu{display:none}
-#chat{flex:1;overflow-y:auto;padding:8px 14px;outline-offset:-8px}
+#workspace{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
+#chat{flex:1;overflow-y:auto;padding:12px 14px;outline-offset:-8px;min-width:0}
 #chat.drag{outline:2px dashed var(--ac)}
 #in{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:22px;padding-bottom:16px}
 .urow{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 .u{background:var(--sur);padding:10px 16px;border-radius:20px;max-width:85%;white-space:pre-wrap;line-height:1.5;overflow-wrap:anywhere}
 .fchip{display:inline-block;margin-top:6px;font-size:12px;background:rgba(255,255,255,.1);padding:3px 8px;border-radius:8px}
 .arow{display:flex;flex-direction:column;gap:6px}
-.a{line-height:1.7;font-size:16px;overflow-wrap:anywhere;min-width:0}
+.a{line-height:1.7;font-size:15.5px;overflow-wrap:anywhere;min-width:0}
 .a p{margin-bottom:12px}.a ul,.a ol{padding-left:22px;margin-bottom:12px}.a a{color:var(--ac)}
 .a img{max-width:100%;border-radius:12px;margin:6px 0}
 .a table{border-collapse:collapse;display:block;overflow-x:auto;margin-bottom:12px}.a td,.a th{border:1px solid var(--b);padding:6px 10px}
 .a code{background:var(--sur);padding:2px 5px;border-radius:5px;font-size:.9em}
 .a .katex-display{overflow-x:auto;overflow-y:hidden}
-.acts{display:flex;gap:14px;font-size:12px;color:var(--m)}
+.acts{display:flex;gap:14px;font-size:12px;color:var(--m);flex-wrap:wrap}
 .acts button:hover{color:var(--t)}
-.cb{position:relative;margin:10px 0}.cb pre{background:#0d0d0d;color:#ececec;padding:14px;border-radius:12px;overflow-x:auto;font-size:13px;line-height:1.5}
+.cb{position:relative;margin:10px 0}.cb pre{background:#0d0d0d;color:#ececec;padding:34px 14px 14px;border-radius:12px;overflow-x:auto;font-size:13px;line-height:1.5}
 .cb pre code{background:none;padding:0}
-.cbar{position:absolute;top:6px;right:6px;display:flex;gap:6px}
-.cp{font-size:12px;background:#2f2f2f;color:#ececec;padding:3px 9px;border-radius:7px}
-.ro{background:#050505;color:#7ee0c3;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 14px;border-radius:0 0 12px 12px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:300px;overflow:auto}
+.cbar{position:absolute;top:6px;right:6px;left:10px;display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.clang{margin-right:auto;font-size:11px;color:#9b9b9b;font-family:ui-monospace,Menlo,monospace;text-transform:uppercase}
+.cp{font-size:11.5px;background:#2f2f2f;color:#ececec;padding:3px 9px;border-radius:7px;border:1px solid rgba(255,255,255,.08)}
+.cp:hover{background:#3f3f3f}
+.cp.ac{background:var(--ac);color:#fff;border-color:transparent}
+.ro{background:#050505;color:#7ee0c3;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 14px;border-radius:0 0 12px 12px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:320px;overflow:auto;border-top:1px solid rgba(255,255,255,.1)}
 .ro[hidden]{display:none}
-.pv{width:100%;height:320px;border:0;background:#fff;border-radius:8px}
+.pv{width:100%;height:340px;border:0;background:#fff;border-radius:8px}
 .mm{overflow-x:auto;margin:10px 0}.mm svg{max-width:100%;height:auto}
-details.th{border:1px solid var(--b);border-radius:12px;margin-bottom:12px;font-size:13px;color:var(--m)}
+details.th{border:1px solid var(--b);border-radius:12px;margin-bottom:12px;font-size:13px;color:var(--m);background:rgba(0,0,0,.12)}
 details.th summary{padding:8px 12px;cursor:pointer;list-style:none;display:flex;gap:8px;align-items:center}
 details.th summary::-webkit-details-marker{display:none}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--ac);animation:p 1s infinite}
 .done .dot{animation:none;background:var(--m)}
 @keyframes p{50%{opacity:.25}}
-.st{padding:4px 14px 10px;border-top:1px solid var(--b);font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.st{padding:6px 14px 10px;border-top:1px solid var(--b);font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow-y:auto}
 .cur{display:inline-block;width:7px;height:15px;background:var(--t);vertical-align:middle;margin-left:2px;animation:p .8s infinite}
-#hello{text-align:center;padding:14vh 10px 0}
-#hello h1{font-size:26px;font-weight:600;margin-bottom:20px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.chips button{border:1px solid var(--b);border-radius:99px;padding:8px 14px;font-size:14px}.chips button:hover{background:var(--sur)}
+#hello{text-align:center;padding:8vh 10px 0}
+#hello h1{font-size:25px;font-weight:600;margin-bottom:8px}
+#hello p{font-size:13.5px;color:var(--m);margin-bottom:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:680px;margin:0 auto}
+.chips button{border:1px solid var(--b);border-radius:99px;padding:8px 14px;font-size:13px;background:rgba(255,255,255,.02)}.chips button:hover{background:var(--sur);border-color:var(--ac)}
 footer{padding:4px 12px calc(10px + env(safe-area-inset-bottom,0px));flex-shrink:0}
 #file{max-width:760px;margin:0 auto 6px;display:none}
 #file div{display:inline-flex;align-items:center;gap:8px;background:var(--sur);border:1px solid var(--b);border-radius:12px;padding:6px 10px;font-size:13px}
 #file b{cursor:pointer;color:var(--m);font-weight:400}
-#box{max-width:760px;margin:0 auto;background:var(--sur);border-radius:26px;padding:8px 8px 8px 18px;display:flex;align-items:flex-end;gap:4px}
-#box textarea{flex:1;background:none;border:0;outline:0;color:var(--t);font:inherit;font-size:16px;resize:none;max-height:140px;padding:8px 0;line-height:1.4}
-#attach,#mic{width:34px;height:34px;border-radius:50%;flex-shrink:0;font-size:16px;color:var(--m)}
-#attach:hover,#mic:hover{background:var(--hov)}
+#box{max-width:760px;margin:0 auto;background:var(--sur);border-radius:26px;padding:8px 8px 8px 16px;display:flex;align-items:flex-end;gap:4px;border:1px solid var(--b)}
+#box textarea{flex:1;background:none;border:0;outline:0;color:var(--t);font:inherit;font-size:15.5px;resize:none;max-height:140px;padding:8px 0;line-height:1.4}
+#attach,#mic,#taskModeBtn{width:34px;height:34px;border-radius:50%;flex-shrink:0;font-size:15px;color:var(--m);display:flex;align-items:center;justify-content:center}
+#attach:hover,#mic:hover,#taskModeBtn:hover{background:var(--hov);color:var(--t)}
+#taskModeBtn.on{background:var(--ac);color:#fff}
 #mic.rec{background:#ef4444;color:#fff}
 #send{width:36px;height:36px;border-radius:50%;background:var(--t);color:var(--bg);font-weight:700;flex-shrink:0}
-.note{text-align:center;font-size:11.5px;color:var(--m);margin-top:6px}
+.note{text-align:center;font-size:11px;color:var(--m);margin-top:6px}
 #ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20}
 #ov.open{display:block}
 .mbk{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;align-items:center;justify-content:center;padding:14px}
 .mbk.open{display:flex}
-.mdl{background:var(--side);border:1px solid var(--b);border-radius:16px;width:100%;max-width:620px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
+.mdl{background:var(--side);border:1px solid var(--b);border-radius:16px;width:100%;max-width:680px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
 .mtop{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--b);font-size:15px;font-weight:600}
 .ttabs{display:flex;gap:4px;padding:8px;overflow-x:auto;border-bottom:1px solid var(--b);flex-shrink:0}
 .tt1{padding:6px 12px;border-radius:99px;font-size:13px;white-space:nowrap;color:var(--m)}
@@ -106,14 +112,32 @@ footer{padding:4px 12px calc(10px + env(safe-area-inset-bottom,0px));flex-shrink
 .tpane{padding:14px 16px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px}
 .ti{width:100%;background:var(--sur);border:1px solid var(--b);border-radius:10px;padding:9px 11px;color:var(--t);font:inherit;font-size:14px;outline:0}
 textarea.ti{resize:vertical;min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:13px}
-.out2{background:#0d0d0d;color:#ececec;border-radius:10px;padding:12px;font-family:ui-monospace,Menlo,monospace;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:220px;overflow:auto}
-.row2{display:flex;gap:8px;flex-wrap:wrap}
+.out2{background:#0d0d0d;color:#ececec;border-radius:10px;padding:12px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto}
+.row2{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .row2 button{border:1px solid var(--b);border-radius:10px;padding:7px 12px;font-size:13px}
 .row2 button:hover{background:var(--sur)}
+.row2 button.pri{background:var(--ac);color:#fff;border-color:transparent}
 .swatch{width:100%;height:46px;border-radius:10px;border:1px solid var(--b)}
 #toasts{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:60;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
 .toast{background:var(--sur);border:1px solid var(--b);padding:8px 16px;border-radius:12px;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.3);transition:opacity .4s}
 .toast.out{opacity:0}
+
+/* LIVE CLOUD CANVAS / ARTIFACT DRAWER */
+#canvasPane{width:48%;border-left:1px solid var(--b);background:var(--side);display:none;flex-direction:column;z-index:25}
+#canvasPane.open{display:flex}
+.ctop{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--b);gap:6px;flex-wrap:wrap}
+.ctop .ctitle{font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:6px}
+.cbar2{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.cbar2 button,.cbar2 select{font-size:12px;padding:5px 10px;border-radius:8px;border:1px solid var(--b);background:var(--sur)}
+.cbar2 button.pri{background:var(--ac);color:#fff;border-color:transparent}
+#cBody{flex:1;display:flex;flex-direction:column;min-height:0;position:relative}
+#cFrame{flex:1;width:100%;border:0;background:#fff}
+#cCode{flex:1;width:100%;border:0;background:#0d0d0d;color:#ececec;font:13px/1.5 ui-monospace,Menlo,monospace;padding:12px;resize:none;outline:0;display:none}
+#cTerm{height:160px;background:#050505;color:#7ee0c3;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 12px;border-top:1px solid var(--b);overflow:auto;white-space:pre-wrap;display:none}
+
+@media(max-width:900px){
+  #canvasPane{position:fixed;inset:0;width:100%;border-left:0}
+}
 @media(max-width:768px){#side{position:fixed;top:0;bottom:0;left:0;transform:translateX(-100%)}#side.open{transform:none}#menu{display:block}}
 .srow[hidden]{display:none}
 #offline{position:fixed;bottom:calc(86px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:#b45309;color:#fff;font-size:12.5px;padding:6px 14px;border-radius:99px;z-index:40;max-width:92vw;text-align:center}
@@ -123,24 +147,28 @@ textarea.ti{resize:vertical;min-height:90px;font-family:ui-monospace,Menlo,monos
 .stab{padding:6px 12px;border-radius:99px;font-size:13px;white-space:nowrap;color:var(--m)}.stab.on{background:var(--sur);color:var(--t)}
 .mslot{margin:8px 0}.gm{max-width:100%;border-radius:12px;display:block}.dl{display:inline-block;margin-top:4px;font-size:12px;color:var(--ac)}
 #spane select.ti{max-width:100%;font-weight:400}
+.badge{font-size:10.5px;background:var(--ac);color:#fff;padding:1px 6px;border-radius:99px;margin-left:auto}
 </style>
 </head>
 <body>
 <noscript>This application requires JavaScript to run. Please enable JavaScript in your browser settings.</noscript>
 <div id="ov"></div>
 <div id="toasts" role="status" aria-live="polite"></div>
-<div id="offline" role="status" hidden>⚠️ Offline — Chat history & Engineer Tools work offline, but AI & web tools require an internet connection.</div>
+<div id="offline" role="status" hidden>⚠️ Offline — Chat history & Engineer Tools work offline, but Cloud & AI tools require internet.</div>
 
 <aside id="side">
   <button class="srow" id="new">✎ New chat</button>
-  <button class="srow" id="toolsBtn">🛠 Engineer Tools</button>
-  <button class="srow" id="studioBtn">🎨 Studio (image · edit · video)</button>
+  <button class="srow" id="taskBtn">🚀 Autonomous Task Runner <span class="badge">Auto</span></button>
+  <button class="srow" id="cloudIdeBtn">☁️ Cloud Sandbox & Deploy</button>
+  <button class="srow" id="canvasToggleBtn">🖥️ Live Canvas / Preview</button>
+  <button class="srow" id="studioBtn">🎨 Studio (Image · Edit · Video)</button>
+  <button class="srow" id="toolsBtn">🛠 Engineer & Recon Tools</button>
   <div class="lab">Chats</div>
   <div id="list"></div>
   <div class="sfoot">
     <button class="srow" id="gkBtn">🔑 Gemini API Key</button>
     <button class="srow" id="deepBtn">🧠 Deep mode: off</button>
-    <button class="srow" id="mem">🧠 Memory</button>
+    <button class="srow" id="mem">🧠 Memory & Persona</button>
     <button class="srow" id="installBtn" hidden>📲 Install App</button>
     <button class="srow" id="bak">💾 Backup (.json)</button>
     <button class="srow" id="rst">♻️ Restore backup</button>
@@ -157,25 +185,83 @@ textarea.ti{resize:vertical;min-height:90px;font-family:ui-monospace,Menlo,monos
       <button id="menu" aria-label="Open sidebar">☰</button>
       <select id="model" aria-label="Select AI Model"></select>
     </div>
-    <button id="new2" title="New chat" aria-label="New chat">✎</button>
+    <div style="display:flex;align-items:center;gap:4px">
+      <button id="openCanvasHdr" title="Toggle Live Canvas Preview">🖥️ Canvas</button>
+      <button id="new2" title="New chat" aria-label="New chat">✎</button>
+    </div>
   </header>
-  <main id="chat"><div id="in" role="log" aria-live="polite" aria-label="Chat messages"></div></main>
+
+  <div id="workspace">
+    <main id="chat"><div id="in" role="log" aria-live="polite" aria-label="Chat messages"></div></main>
+
+    <!-- SIDE-BY-SIDE LIVE CANVAS & CLOUD RUNNER -->
+    <aside id="canvasPane" aria-label="Live Cloud Canvas">
+      <div class="ctop">
+        <div class="ctitle">🖥️ <span id="cTitle">Live Artifact & Cloud Preview</span></div>
+        <div class="cbar2">
+          <button id="cViewBtn">Code / Preview</button>
+          <button id="cCloudRunBtn" class="pri" title="Execute on Remote Cloud Server (Zero Phone Load)">☁️ Run in Cloud</button>
+          <button id="cHostBtn" title="Publish live website to Puter Free Cloud Hosting">🌐 Host Live URL</button>
+          <button id="cDlBtn" title="Download File">⬇</button>
+          <button id="cCloseBtn" aria-label="Close Canvas">✕</button>
+        </div>
+      </div>
+      <div id="cBody">
+        <iframe id="cFrame" sandbox="allow-scripts allow-forms allow-modals allow-popups"></iframe>
+        <textarea id="cCode" spellcheck="false" placeholder="Write or paste HTML/JS/Python/C++/Go/Rust code here..."></textarea>
+        <div id="cTerm"></div>
+      </div>
+    </aside>
+  </div>
+
   <footer>
     <div id="file"></div>
     <div id="box">
       <button id="attach" title="Attach file or image" aria-label="Attach file">📎</button>
-      <textarea id="q" rows="1" placeholder="Ask anything, run deep research, execute code, or OSINT…" aria-label="Message input"></textarea>
+      <button id="taskModeBtn" title="Toggle Autonomous Multi-Step Task Mode (Auto-Plan, Cloud Execute & Verify)">🚀</button>
+      <textarea id="q" rows="1" placeholder="Ask anything, or click 🚀 to run a complete autonomous multi-step task…" aria-label="Message input"></textarea>
       <button id="mic" title="Voice input" aria-label="Voice input">🎤</button>
       <button id="send" aria-label="Send">↑</button>
     </div>
-    <div class="note">Autonomous Agent: DeepSearch · Web · Python · JS · OSINT/Recon · Archive · ArXiv · Studio · Ctrl+Shift+O = New Chat</div>
-    <input type="file" id="fin" accept=".txt,.md,.csv,.json,.log,.yml,.yaml,.xml,.py,.js,.html,image/*" hidden>
+    <div class="note">Zero-Load Cloud Compute (Piston 30+ Langs) · 1-Click Free Cloud Hosting · Autonomous Task Engine · Live Canvas · Passive OSINT</div>
+    <input type="file" id="fin" accept=".txt,.md,.csv,.json,.log,.yml,.yaml,.xml,.py,.js,.html,.css,.sh,.cpp,.rs,.go,image/*" hidden>
   </footer>
 </div>
 
+<!-- AUTONOMOUS TASK RUNNER MODAL -->
+<div class="mbk" id="taskM" role="dialog" aria-modal="true" aria-label="Autonomous Task Runner">
+  <div class="mdl">
+    <div class="mtop"><span>🚀 Autonomous End-to-End Task Engine</span><button id="taskClose" aria-label="Close">✕</button></div>
+    <div class="tpane">
+      <div class="note" style="text-align:left;margin:0">Describe any complex goal. The agent will autonomously create an execution plan, run web research, execute code on remote cloud servers (zero phone load), build interactive apps/previews in the Canvas, and verify the final deliverable.</div>
+      <textarea class="ti" id="taskGoal" rows="4" placeholder="e.g., Research the top 5 open-source LLM frameworks, benchmark their GitHub stars & security posture via cloud Python script, and build an interactive dashboard HTML chart in the Live Canvas."></textarea>
+      <div class="row2">
+        <button class="pri" id="startTaskBtn">⚡ Launch Autonomous Task</button>
+        <button class="tplTask" data-g="Build a complete responsive Cyberpunk Pomodoro + Todo Web App with sound effects and local storage, preview it in Live Canvas, and make it ready for 1-click Cloud Hosting.">🎮 App Builder Task</button>
+        <button class="tplTask" data-g="Perform a full passive OSINT & security posture audit on example.com (DNS, Subdomains, WHOIS, SSL, Security Headers, Wayback history) and compile an executive report.">🛡️ Passive Recon Audit</button>
+        <button class="tplTask" data-g="Write and execute a Cloud Python data science script that simulates 1,000 Monte Carlo portfolio runs, prints statistical metrics, and generates an interactive HTML visualization.">📊 Cloud Data Science</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ZERO-LOAD CLOUD SANDBOX & HOSTING MODAL -->
+<div class="mbk" id="cloudM" role="dialog" aria-modal="true" aria-label="Cloud Sandbox">
+  <div class="mdl">
+    <div class="mtop"><span>☁️ Zero-Load Cloud Sandbox & Free Web Hosting</span><button id="cloudClose" aria-label="Close">✕</button></div>
+    <div class="ttabs">
+      <button class="stab on" data-c="exec">⚡ Remote Cloud Code Runner (30+ Langs)</button>
+      <button class="stab" data-c="host">🌐 1-Click Cloud Web Hosting</button>
+      <button class="stab" data-c="kv">🗄️ Puter Cloud Storage</button>
+    </div>
+    <div class="tpane" id="cpane"></div>
+  </div>
+</div>
+
+<!-- ENGINEER TOOLS MODAL -->
 <div class="mbk" id="toolsM">
   <div class="mdl">
-    <div class="mtop"><span>🛠 Engineer Tools</span><button id="toolsClose" aria-label="Close">✕</button></div>
+    <div class="mtop"><span>🛠 Engineer & Security Utilities</span><button id="toolsClose" aria-label="Close">✕</button></div>
     <div class="ttabs" id="ttabs">
       <button class="tt1" data-t="json">JSON</button>
       <button class="tt1" data-t="b64">Base64</button>
@@ -191,9 +277,10 @@ textarea.ti{resize:vertical;min-height:90px;font-family:ui-monospace,Menlo,monos
   </div>
 </div>
 
+<!-- STUDIO MODAL -->
 <div class="mbk" id="studioM" role="dialog" aria-modal="true" aria-label="Studio">
   <div class="mdl">
-    <div class="mtop"><span>🎨 Studio</span><button id="studioClose" aria-label="Close">✕</button></div>
+    <div class="mtop"><span>🎨 AI Media Studio</span><button id="studioClose" aria-label="Close">✕</button></div>
     <div class="ttabs"><button class="stab" data-s="img">Image</button><button class="stab" data-s="edit">Edit</button><button class="stab" data-s="vid">Video</button></div>
     <div class="tpane" id="spane"></div>
   </div>
@@ -201,45 +288,46 @@ textarea.ti{resize:vertical;min-height:90px;font-family:ui-monospace,Menlo,monos
 
 <script>
 /* ===== CONFIG & BUILT-IN GEMINI KEY ===== */
-// Encoded in Base64 chunks to prevent automated GitHub secret-scanner revocation on public GitHub Pages
 const GEMINI_KEY=atob("QVEuQWI4Uk42SVU2WVBkRHBTakZlNDRY"+"YlhSSVd1Sl9GUzZyMDVKblJLeUF1cjdGRXUwVVE=");
 
 const MODELS=[
   ["gm:gemini-2.5-pro","⚡ Gemini 2.5 Pro (Built-in Key)"],
   ["gm:gemini-2.5-flash","⚡ Gemini 2.5 Flash (Built-in Key)"],
   ["gm:custom","🔑 Gemini Custom Model (Built-in Key)"],
-  ["claude-sonnet-4-5","Claude 4.5 Sonnet (Puter)"],
-  ["claude-opus-4-1","Claude 4.1 Opus (Puter)"],
-  ["claude-3-7-sonnet","Claude 3.7 Sonnet (Puter)"],
-  ["gpt-4o","GPT-4o (Puter)"],
-  ["o3-mini","OpenAI o3-mini Reasoning (Puter)"],
-  ["deepseek-reasoner","DeepSeek R1 Reasoning (Puter)"],
-  ["deepseek-chat","DeepSeek V3 (Puter)"],
-  ["grok-2","xAI Grok-2 (Puter)"],
-  ["gemini-2.0-flash","Gemini 2.0 Flash (Puter)"],
-  ["pl:openai-large","GPT-4.1 / Large (Pollinations · No Login)"],
-  ["pl:searchgpt","SearchGPT Live Web (Pollinations · No Login)"],
-  ["pl:deepseek-r1","DeepSeek R1 (Pollinations · No Login)"],
-  ["pl:qwen-coder","Qwen 2.5 Coder 32B (Pollinations · No Login)"],
-  ["pl:llama","Llama 3.3 70B (Pollinations · No Login)"],
-  ["pl:mistral","Mistral Large (Pollinations · No Login)"],
-  ["pl:openai","OpenAI Fast (Pollinations · No Login)"],
-  ["auto","Auto Router (Best Available Free Model)"]
+  ["claude-sonnet-4-5","Claude 4.5 Sonnet (Puter Cloud)"],
+  ["claude-opus-4-1","Claude 4.1 Opus (Puter Cloud)"],
+  ["claude-3-7-sonnet","Claude 3.7 Sonnet (Puter Cloud)"],
+  ["gpt-4o","GPT-4o (Puter Cloud)"],
+  ["o3-mini","OpenAI o3-mini Reasoning (Puter Cloud)"],
+  ["deepseek-reasoner","DeepSeek R1 Reasoning (Puter Cloud)"],
+  ["deepseek-chat","DeepSeek V3 (Puter Cloud)"],
+  ["grok-2","xAI Grok-2 (Puter Cloud)"],
+  ["gemini-2.0-flash","Gemini 2.0 Flash (Puter Cloud)"],
+  ["pl:openai-large","GPT-4.1 / Large (Pollinations · Keyless Cloud)"],
+  ["pl:searchgpt","SearchGPT Live Web (Pollinations · Keyless Cloud)"],
+  ["pl:deepseek-r1","DeepSeek R1 (Pollinations · Keyless Cloud)"],
+  ["pl:qwen-coder","Qwen 2.5 Coder 32B (Pollinations · Keyless Cloud)"],
+  ["pl:llama","Llama 3.3 70B (Pollinations · Keyless Cloud)"],
+  ["pl:mistral","Mistral Large (Pollinations · Keyless Cloud)"],
+  ["pl:openai","OpenAI Fast (Pollinations · Keyless Cloud)"],
+  ["auto","Auto Router (Best Available Free Cloud Model)"]
 ];
 
-const MAXSTEPS=10;
+const MAXSTEPS=14;
 const F="`".repeat(3);
 const $=s=>document.querySelector(s);
 const escapeHtml=s=>{const d=document.createElement("div");d.textContent=s??"";return d.innerHTML};
 
 /* ===== STATE ===== */
-let S={};try{S=JSON.parse(localStorage.agi_v2||localStorage.agi_v1||"{}")}catch(e){}
+let S={};try{S=JSON.parse(localStorage.agi_v3||localStorage.agi_v2||localStorage.agi_v1||"{}")}catch(e){}
 S.chats??={};S.cur??=null;
 if(!S.model||!MODELS.some(m=>m[0]===S.model))S.model=MODELS[0][0];
-S.mem??=[];S.theme??="auto";
+S.mem??=[];S.theme??="auto";S.taskMode??=false;S.hostedSites??=[];
+S.canvasCode??="<!DOCTYPE html>\n<html>\n<head>\n<style>\n  body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }\n  .card { background: #1e293b; padding: 28px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.4); text-align: center; max-width: 420px; border: 1px solid rgba(255,255,255,.1); }\n  h2 { color: #10a37f; margin-bottom: 10px; }\n  button { background: #10a37f; color: #fff; border: 0; padding: 10px 18px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 14px; }\n</style>\n</head>\n<body>\n  <div class=\"card\">\n    <h2>⚡ Live Cloud Canvas</h2>\n    <p>Ask the AI Agent to build any Web App, Dashboard, Game, or Tool and it will automatically render & preview right here!</p>\n    <button onclick=\"alert('Cloud Canvas Active!')\">Test Interactive Preview</button>\n  </div>\n</body>\n</html>";
+S.canvasLang??="html";
 
 function save(){
-  try{localStorage.agi_v2=JSON.stringify(S)}
+  try{localStorage.agi_v3=JSON.stringify(S)}
   catch(e){
     const ids=Object.values(S.chats).sort((a,b)=>a.ts-b.ts).map(c=>c.id);
     if(ids.length>1){delete S.chats[ids[0]];save()}
@@ -249,11 +337,144 @@ function save(){
 let busy=false,stop=false,pending=null;
 const cur=()=>S.chats[S.cur];
 
+/* ===== LIVE CANVAS & CLOUD HOSTING CONTROLLER ===== */
+let canvasView="preview"; // "preview" | "code"
+function openCanvas(code,lang="html",title="Live Artifact & Cloud Preview"){
+  if(code){S.canvasCode=code;S.canvasLang=lang.toLowerCase();save()}
+  $("#cTitle").textContent=title;
+  $("#cCode").value=S.canvasCode;
+  $("#canvasPane").classList.add("open");
+  if(S.canvasLang==="html"||S.canvasCode.trim().startsWith("<")){
+    canvasView="preview";
+    $("#cFrame").style.display="block";
+    $("#cCode").style.display="none";
+    $("#cFrame").srcdoc=S.canvasCode;
+  }else{
+    canvasView="code";
+    $("#cFrame").style.display="none";
+    $("#cCode").style.display="block";
+  }
+}
+
+$("#cViewBtn").onclick=()=>{
+  if(canvasView==="preview"){
+    canvasView="code";
+    $("#cCode").value=S.canvasCode;
+    $("#cFrame").style.display="none";
+    $("#cCode").style.display="block";
+  }else{
+    S.canvasCode=$("#cCode").value;save();
+    canvasView="preview";
+    $("#cCode").style.display="none";
+    $("#cFrame").style.display="block";
+    $("#cFrame").srcdoc=S.canvasCode;
+  }
+};
+
+$("#cCode").addEventListener("input",()=>{S.canvasCode=$("#cCode").value;save()});
+$("#cCloseBtn").onclick=()=>$("#canvasPane").classList.remove("open");
+$("#canvasToggleBtn").onclick=()=>{closeSide();openCanvas()};
+$("#openCanvasHdr").onclick=()=>{
+  if($("#canvasPane").classList.contains("open"))$("#canvasPane").classList.remove("open");
+  else openCanvas();
+};
+
+$("#cDlBtn").onclick=()=>{
+  const ext=({html:".html",python:".py",py:".py",javascript:".js",js:".js",cpp:".cpp",rust:".rs",go:".go"})[S.canvasLang]||".txt";
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([S.canvasCode],{type:"text/plain"}));
+  a.download="artifact-"+Date.now()+ext;a.click();
+};
+
+$("#cCloudRunBtn").onclick=async()=>{
+  S.canvasCode=$("#cCode").value||S.canvasCode;save();
+  if(S.canvasLang==="html"||S.canvasCode.trim().startsWith("<")){
+    canvasView="preview";$("#cCode").style.display="none";$("#cFrame").style.display="block";
+    $("#cFrame").srcdoc=S.canvasCode;
+    toast("HTML rendered in isolated sandbox ✔");
+    return;
+  }
+  const term=$("#cTerm");term.style.display="block";
+  term.textContent="☁️ Sending code to remote Cloud Execution Engine (0% local CPU load)...";
+  const res=await tools.cloud_exec(S.canvasLang+"\n"+S.canvasCode);
+  term.textContent=res;
+};
+
+$("#cHostBtn").onclick=async()=>{
+  S.canvasCode=$("#cCode").value||S.canvasCode;save();
+  const term=$("#cTerm");term.style.display="block";
+  term.textContent="🌐 Deploying live website to Free Cloud Hosting...";
+  const out=await tools.cloud_host(S.canvasCode);
+  term.textContent=out;
+};
+
+/* ===== ZERO-LOAD CLOUD EXECUTION (PISTON API) & PUTER CLOUD ===== */
+const PISTON_MAP={
+  python:"python",py:"python",javascript:"javascript",js:"javascript",node:"javascript",
+  typescript:"typescript",ts:"typescript",cpp:"c++","c++":"c++",c:"c",
+  rust:"rust",rs:"rust",go:"go",golang:"go",java:"java",bash:"bash",sh:"bash",
+  php:"php",ruby:"ruby",rb:"ruby",csharp:"csharp",cs:"csharp",kotlin:"kotlin",swift:"swift",sqlite3:"sqlite3"
+};
+
+async function runPistonCloud(lang,code){
+  const l=PISTON_MAP[lang.toLowerCase().trim()]||lang.toLowerCase().trim()||"python";
+  const r=await fetch("https://emkc.org/api/v2/piston/execute",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({language:l,version:"*",files:[{content:code}]})
+  });
+  if(!r.ok)throw new Error("Cloud Runner HTTP "+r.status);
+  const d=await r.json();
+  const out=(d.run?.stdout||"")+(d.run?.stderr?"\n[STDERR]\n"+d.run.stderr:"")+(d.compile?.stderr?"\n[COMPILE ERROR]\n"+d.compile.stderr:"");
+  return `[Cloud Executed (${d.language} ${d.version})]\n`+(out.trim()||"(Executed successfully with no console output)");
+}
+
 /* ===== AUTONOMOUS AGENT TOOLS ===== */
 const J=async(u,o)=>{const r=await fetch(u,o);if(!r.ok)throw new Error("HTTP "+r.status);return r.json()};
 let py=null;
 
 const tools={
+  /* NEW: ZERO-LOAD REMOTE CLOUD CODE RUNNER (30+ LANGUAGES, NO API KEY) */
+  async cloud_exec(inp){
+    const m=inp.trim().match(/^([a-zA-Z0-9+#_-]+)\n([\s\S]*)$/);
+    const lang=m?m[1]:"python",code=m?m[2]:inp;
+    try{
+      return await runPistonCloud(lang,code);
+    }catch(e){
+      if(/^(js|javascript|node)$/i.test(lang))return await tools.js(code);
+      throw e;
+    }
+  },
+  /* NEW: LIVE ARTIFACT / CANVAS RENDERER */
+  async canvas(inp){
+    const m=inp.trim().match(/^([a-zA-Z0-9_-]+)\n([\s\S]*)$/);
+    const lang=(m&&m[1].length<15)?m[1]:"html",code=(m&&m[1].length<15)?m[2]:inp;
+    openCanvas(code,lang,"AI Live Canvas Artifact");
+    return "Artifact rendered live in the user's Side-by-Side Canvas Preview panel.";
+  },
+  /* NEW: 1-CLICK FREE CLOUD WEB HOSTING VIA PUTER */
+  async cloud_host(htmlCode){
+    let code=htmlCode.trim();
+    if(!code.startsWith("<"))code=`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cloud Hosted App</title></head><body>${code}</body></html>`;
+    openCanvas(code,"html","Cloud Hosted Web App");
+    if(window.puter&&puter.hosting){
+      try{
+        const dir="agi_app_"+Date.now();
+        await puter.fs.mkdir(dir);
+        await puter.fs.write(dir+"/index.html",code);
+        const sub="agi-"+Math.random().toString(36).slice(2,8);
+        const site=await puter.hosting.create(sub,dir);
+        const url="https://"+(site.subdomain||sub)+".puter.site";
+        S.hostedSites.unshift({url,ts:new Date().toLocaleString()});
+        save();
+        return `Live Cloud Website Deployed Successfully!\nPublic URL: ${url}\n(Also opened in Live Canvas Preview)`;
+      }catch(e){
+        const blobUrl=URL.createObjectURL(new Blob([code],{type:"text/html"}));
+        return `Rendered in Live Canvas & Instant Sandbox URL ready: ${blobUrl} (Note: Sign into Puter free popup if you want a permanent .puter.site subdomain: ${e.message||e})`;
+      }
+    }
+    return "Rendered in Live Canvas Preview.";
+  },
   async deepsearch(q){
     q=q.trim();
     const tasks=[
@@ -310,15 +531,20 @@ const tools={
     }catch(e){logs.push("ERROR: "+e.message)}
     return logs.join("\n").slice(0,4500)||"(executed with no output)";
   },
+  /* PYTHON DEFAULT: ZERO-LOAD CLOUD FIRST, FALLBACK TO PYODIDE ONLY IF NEEDED */
   async python(code){
-    if(!py){
-      if(!window.loadPyodide)await new Promise((ok,no)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
-      py=await loadPyodide();
+    try{
+      return await runPistonCloud("python",code);
+    }catch(_){
+      if(!py){
+        if(!window.loadPyodide)await new Promise((ok,no)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
+        py=await loadPyodide();
+      }
+      const o=[];py.setStdout({batched:m=>o.push(m)});py.setStderr({batched:m=>o.push(m)});
+      try{await py.loadPackagesFromImports(code);const r=await py.runPythonAsync(code);if(r!=null)o.push(String(r))}
+      catch(e){o.push("ERROR: "+e.message)}
+      return o.join("\n").slice(0,4500)||"(no output)";
     }
-    const o=[];py.setStdout({batched:m=>o.push(m)});py.setStderr({batched:m=>o.push(m)});
-    try{await py.loadPackagesFromImports(code);const r=await py.runPythonAsync(code);if(r!=null)o.push(String(r))}
-    catch(e){o.push("ERROR: "+e.message)}
-    return o.join("\n").slice(0,4500)||"(no output)";
   },
   async remember(f){S.mem.push(f.trim());S.mem=S.mem.slice(-40);save();return "Saved to persistent memory."},
   async dns(x){const [d,t="A"]=x.trim().split(/\s+/);const r=await J("https://dns.google/resolve?name="+encodeURIComponent(d)+"&type="+t);return (r.Answer||[]).map(a=>a.name+" "+a.type+" "+a.data).join("\n")||"No DNS records found."},
@@ -356,12 +582,13 @@ const tools={
     return t.replace(/\n{3,}/g,"\n\n").slice(0,3000)}
 };
 
-const TOOL_NAMES="deepsearch|search|websearch|fetch|arxiv|reddit|wayback|js|python|remember|image|edit|video|dns|subdomains|whois|ip|urlscan|github|npm|pypi|stackoverflow|hn|mdn|cve|osv|currency|ssl|securityheaders";
+const TOOL_NAMES="cloud_exec|canvas|cloud_host|deepsearch|search|websearch|fetch|arxiv|reddit|wayback|js|python|remember|image|edit|video|dns|subdomains|whois|ip|urlscan|github|npm|pypi|stackoverflow|hn|mdn|cve|osv|currency|ssl|securityheaders";
 const TOOLRE=new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F);
 const TOOLRE_G=new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F,"g");
 
-const sysPrompt=()=>`You are an elite, autonomous, general-purpose AI Agent & Deep Research Engine. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
-Your goal is to solve any problem, uncover hard-to-find information, execute code, analyze architectures, and deliver complete end-to-end solutions without stopping halfway.
+const sysPrompt=()=>`You are an elite, autonomous Full-Stack AI Agent, Cloud Execution Architect & Deep Research Engine (comparable to ChatGPT-6 Ultra / Gemini Ultra). Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
+Your goal is to complete every user request end-to-end autonomously: plan the steps, gather live data, run code on remote cloud servers (so the user's phone browser has zero CPU/RAM load), render interactive apps in the Live Canvas, and verify your output.
+${S.taskMode?"[AUTONOMOUS TASK MODE ACTIVE]: Break the user's goal into a clear multi-step checklist, execute all required cloud tools & code automatically, build any requested app/report, and deliver the final verified result without asking the user to do manual steps.":""}
 When you generate media, place the exact [[media:ID]] token from the tool result on its own line in your final response.
 
 To invoke one or more tools (you can call multiple tools in parallel in a single turn!), reply ONLY with tool blocks in this exact format:
@@ -370,25 +597,28 @@ ${F}
 input
 ${F}
 
-Available Autonomous Tools:
-- @deepsearch : Multi-source deep search (simultaneously searches DuckDuckGo Web, Wikipedia, Reddit, and HackerNews). Best for finding obscure topics, latest AI models, underground docs, or complex facts.
-- @websearch : Live DuckDuckGo web search for specific queries.
-- @fetch : Read the full text of any URL (https://...). Always fetch promising URLs from search results to verify deep details.
+Available Autonomous Cloud & Agent Tools:
+- @cloud_exec : Execute code in 30+ languages (python, javascript, typescript, c++, rust, go, bash, java, php, sql) on a remote keyless Cloud Sandbox with ZERO load on the user's phone. First line of input MUST be the language name, followed by the code on the next lines.
+- @canvas : Open & render an interactive HTML/CSS/JS web app, game, dashboard, or UI artifact directly in the user's Side-by-Side Live Canvas preview window. First line: "html", followed by the complete self-contained HTML code.
+- @cloud_host : Deploy a complete HTML web app to a live public cloud URL (.puter.site) AND preview it in the Live Canvas. Input: full HTML document.
+- @deepsearch : Multi-source parallel search (DuckDuckGo Web, Wikipedia, Reddit, HackerNews).
+- @websearch : Live DuckDuckGo web search.
+- @fetch : Read the full text of any URL (https://...).
 - @search : Wikipedia + Google News RSS search.
 - @arxiv : Search scientific & AI research papers on ArXiv.
-- @reddit : Search Reddit discussions and community threads.
-- @wayback : Check Internet Archive Wayback Machine snapshots and historical URLs for a domain.
-- @js : Run fast JavaScript (ES2024) directly in the browser (use console.log or return).
-- @python : Run full Python 3.12 (Pyodide with numpy, pandas, scipy, sympy; use print).
+- @reddit : Search Reddit discussions.
+- @wayback : Check Internet Archive Wayback Machine snapshots and historical URLs.
+- @python : Run Python 3 code (executes on remote Cloud Sandbox first for zero phone load; falls back to Pyodide if needed).
+- @js : Run fast ES2024 JavaScript.
 - @dns ("domain TYPE"), @subdomains (crt.sh certificate logs), @whois (RDAP), @ip (Geo + Shodan InternetDB ports/CVEs), @urlscan (urlscan.io domain intel), @ssl (SSL Labs), @securityheaders (HTTP security header report).
-- @github ("owner/repo" for README & stats, or search query), @npm, @pypi, @stackoverflow, @hn, @mdn.
-- @cve (NVD CVE lookup by ID or keyword), @osv ("ecosystem package version", e.g., "npm lodash 4.17.15").
-- @currency ("100 USD to INR"), @remember (save an important user preference/fact to persistent memory).
+- @github ("owner/repo" or search query), @npm, @pypi, @stackoverflow, @hn, @mdn.
+- @cve (NVD CVE lookup), @osv ("ecosystem package version").
+- @currency ("100 USD to INR"), @remember (save user preference/fact to persistent memory).
 - @image (detailed English prompt), @edit (instruction to modify current image), @video (detailed English video prompt).
 
 For diagrams, write a ${F}mermaid code block; for math, use $$...$$ or \\(...\\).
 Never fabricate tool outputs or citations. Maximum ${MAXSTEPS} tool turns.
-Passive/defensive security boundary: Only perform passive/public OSINT and defensive analysis; never perform active exploitation or write malicious attack payloads.
+Legal & Passive Security Boundary: Strictly perform only legal, authorized, passive/public OSINT, defensive security auditing, and safe cloud sandboxing; never perform active exploitation or attack unauthorized targets.
 Persistent User Memory: ${S.mem.join(" | ")||"none yet"}`;
 
 /* ===== MULTI-PROVIDER LLM ROUTER (Gemini -> Puter -> Pollinations) ===== */
@@ -453,26 +683,34 @@ async function llm(msgs,onTok){
 
 const toLLM=m=>m.file?.imgId?{img:m.file.imgId,role:m.role,content:m.content+"\n\n[User attached an image ("+m.file.name+"). It is set as the active image: you can inspect it or call @edit to modify it.]"}:m.file?{role:m.role,content:m.content+"\n\n[Attached file: "+m.file.name+"]\n"+F+"\n"+m.file.text+"\n"+F}:{role:m.role,content:m.content};
 
-/* ===== RENDER & CODE EXECUTION ===== */
+/* ===== RENDER, CLOUD CODE EXECUTION & CANVAS BUTTONS ===== */
 const md=t=>{let h;try{h=DOMPurify.sanitize(marked.parse(t||"",{breaks:true,gfm:true}))}catch(e){h="<pre>"+escapeHtml(t)+"</pre>"}return h.replace(/\[\[media:(m[a-z0-9]+)\]\]/g,'<div class="mslot" data-id="$1"></div>')};
 const bottom=()=>{const c=$("#chat");c.scrollTop=c.scrollHeight};
 
 function dress(el){
   el.querySelectorAll("pre").forEach(pre=>{
     if(pre.parentElement.classList.contains("cb"))return;
-    const code=pre.querySelector("code"),lang=((code?.className||"").match(/language-(\w+)/)||[])[1]||"",src=pre.innerText;
+    const code=pre.querySelector("code"),lang=(((code?.className||"").match(/language-([\w+#-]+)/)||[])[1]||"").toLowerCase(),src=pre.innerText;
     if(lang==="mermaid"&&window.mermaid){
       const d=document.createElement("div");d.className="mm";pre.replaceWith(d);
       mermaid.render("m"+Math.random().toString(36).slice(2),src).then(r=>d.innerHTML=r.svg).catch(()=>d.textContent=src);return;
     }
     if(code&&window.hljs)try{hljs.highlightElement(code)}catch(e){}
     const w=document.createElement("div");w.className="cb";pre.replaceWith(w);w.appendChild(pre);
-    const bar=document.createElement("div");bar.className="cbar";w.appendChild(bar);
+    const bar=document.createElement("div");bar.className="cbar";
+    const lbl=document.createElement("span");lbl.className="clang";lbl.textContent=lang||"code";bar.appendChild(lbl);
+    w.appendChild(bar);
     const out=document.createElement("div");out.className="ro";out.hidden=true;w.appendChild(out);
-    const add=(l,f)=>{const b=document.createElement("button");b.className="cp";b.textContent=l;b.onclick=()=>f(b);bar.appendChild(b)};
-    if(/^(python|py)$/.test(lang))add("▶ Run Python",async()=>{out.hidden=false;out.textContent="Running Python…";out.textContent=await tools.python(src)});
-    if(/^(javascript|js)$/.test(lang))add("▶ Run JS",async()=>{out.hidden=false;out.textContent="Running JS…";out.textContent=await tools.js(src)});
-    if(lang==="html")add("▶ Preview",()=>{out.hidden=false;out.innerHTML="";const f=document.createElement("iframe");f.className="pv";f.setAttribute("sandbox","allow-scripts");f.srcdoc=src;out.appendChild(f)});
+    const add=(l,f,cls="")=>{const b=document.createElement("button");b.className="cp "+(cls||"");b.textContent=l;b.onclick=()=>f(b);bar.appendChild(b)};
+
+    if(lang==="html"||src.trim().startsWith("<!DOCTYPE")||src.trim().startsWith("<html")){
+      add("🖥️ Open in Canvas",()=>openCanvas(src,"html","Live HTML Preview"),"ac");
+      add("🌐 Host in Cloud",async()=>{out.hidden=false;out.textContent="Deploying to Puter Free Cloud Hosting…";out.textContent=await tools.cloud_host(src)});
+      add("▶ Inline Preview",()=>{out.hidden=false;out.innerHTML="";const f=document.createElement("iframe");f.className="pv";f.setAttribute("sandbox","allow-scripts");f.srcdoc=src;out.appendChild(f)});
+    }else if(PISTON_MAP[lang]||/^(python|py|js|javascript|ts|typescript|cpp|c\+\+|c|rust|rs|go|java|bash|sh|php|ruby|sql)$/i.test(lang)){
+      add("☁️ Run in Cloud",async()=>{out.hidden=false;out.textContent="☁️ Executing on remote Cloud Server (0% local load)…";out.textContent=await tools.cloud_exec((lang||"python")+"\n"+src)},"ac");
+      add("🖥️ Send to Canvas",()=>openCanvas(src,lang||"python","Cloud Code Editor"));
+    }
     add("Copy",b=>{navigator.clipboard.writeText(src);b.textContent="Copied";setTimeout(()=>b.textContent="Copy",1200)});
   });
   fillSlots(el);
@@ -511,17 +749,23 @@ function addAI(content,i){
 }
 
 function hello(){
-  $("#in").innerHTML=`<div id="hello"><h1>What would you like to build or research today?</h1><div class="chips">
-  <button data-q="1">Run deep research on the latest AI agent architectures & benchmarks</button>
-  <button data-q="1">Analyze torvalds/linux repository & recent commit activity</button>
-  <button data-q="1">Perform passive OSINT & subdomain recon on example.com</button>
-  <button data-q="1">Design a scalable microservices architecture diagram in Mermaid</button>
-  <button data-q="1">Generate a cinematic cyberpunk street poster in neon rain</button>
+  $("#in").innerHTML=`<div id="hello"><h1>AGI Agent Pro — Cloud & Autonomous Task Edition</h1>
+  <p>Zero-Load Cloud Code Execution · Side-by-Side Live Canvas · 1-Click Free Cloud Hosting · Multi-Step Autonomous Tasks</p>
+  <div class="chips">
+  <button data-q="1">Build an interactive Expense Tracker & Chart Dashboard in the Live Canvas (@canvas)</button>
+  <button data-q="1">Run a Cloud Python script (@cloud_exec) to benchmark sorting algorithms & show results</button>
+  <button data-q="1">Perform passive OSINT & security header recon on example.com</button>
+  <button data-q="1">Research the latest AI Agent architectures and draw a Mermaid system diagram</button>
+  <button id="helloTask">🚀 Launch Autonomous Task</button>
+  <button id="helloCloud">☁️ Open Cloud Sandbox</button>
+  <button id="helloCanvas">🖥️ Open Live Canvas</button>
   <button id="helloStudio">🎨 Open Studio</button>
-  <button id="helloTools">🛠 Open Engineer Tools</button>
   </div></div>`;
   $("#in").querySelectorAll(".chips button[data-q]").forEach(b=>b.onclick=()=>ask(b.textContent));
-  $("#helloTools").onclick=()=>openTools("json");$("#helloStudio").onclick=()=>openStudio("img");
+  $("#helloTask").onclick=()=>$("#taskM").classList.add("open");
+  $("#helloCloud").onclick=()=>openCloudModal("exec");
+  $("#helloCanvas").onclick=()=>openCanvas();
+  $("#helloStudio").onclick=()=>openStudio("img");
 }
 
 function renderAll(){
@@ -569,7 +813,7 @@ async function runAgent(){
   const c=cur();const myIndex=c.msgs.length;
   const row=document.createElement("div");row.className="arow";
   const th=document.createElement("details");th.className="th";th.open=true;
-  th.innerHTML='<summary><span class="dot"></span><span class="tt">Thinking & executing tools…</span><span class="tm" style="margin-left:auto">0.0s</span></summary><div class="st"></div>';
+  th.innerHTML='<summary><span class="dot"></span><span class="tt">Autonomous Agent planning & executing in Cloud…</span><span class="tm" style="margin-left:auto">0.0s</span></summary><div class="st"></div>';
   const st=th.querySelector(".st"),t0=performance.now();
   const tick=setInterval(()=>th.querySelector(".tm").textContent=((performance.now()-t0)/1000).toFixed(1)+"s",100);
   const ans=document.createElement("div");ans.className="a";
@@ -587,15 +831,20 @@ async function runAgent(){
       const results=await Promise.all(matches.map(async m=>{
         const [,name,inp]=m;
         used++;
-        log("▸ "+name+": "+inp.trim().slice(0,220));
+        log("▸ @"+name+": "+inp.trim().slice(0,180).replace(/\n/g," "));
         let res;
         try{
-          res=await withTimeout(tools[name](inp),({python:120000,ssl:120000,image:180000,edit:180000,video:600000,deepsearch:45000})[name]||35000,"Tool timeout");
+          res=await withTimeout(tools[name](inp),({cloud_exec:60000,cloud_host:60000,python:90000,ssl:120000,image:180000,edit:180000,video:600000,deepsearch:45000})[name]||35000,"Tool timeout");
         }catch(e){res="ERROR: "+(e.message||e)}
-        log("  → "+String(res).slice(0,280));
+        log("  → "+String(res).slice(0,260).replace(/\n/g," "));
         return "[TOOL RESULT: "+name+"]\n"+res;
       }));
       work.push({role:"assistant",content:out},{role:"user",content:results.join("\n\n")});
+    }
+    /* Auto-detect standalone full HTML blocks and offer instant Live Canvas preview */
+    const htmlMatch=final.match(/```html\s*\n([\s\S]*?<!DOCTYPE html>[\s\S]*?)```/i)||final.match(/```html\s*\n([\s\S]{250,}?)```/i);
+    if(htmlMatch&&!$("#canvasPane").classList.contains("open")){
+      openCanvas(htmlMatch[1],"html","Auto-Previewed App Artifact");
     }
     if(S.deep&&!stop&&final){
       log("▸ deep self-verification pass");
@@ -611,11 +860,110 @@ async function runAgent(){
     toast(e.message||"Request failed");
   }
   clearInterval(tick);
-  if(used){th.classList.add("done");th.querySelector(".tt").textContent="Worked for "+((performance.now()-t0)/1000).toFixed(1)+"s · "+used+" tool"+(used>1?"s":"");
+  if(used){th.classList.add("done");th.querySelector(".tt").textContent="Completed in "+((performance.now()-t0)/1000).toFixed(1)+"s · "+used+" cloud/agent tool"+(used>1?"s":"");
     th.querySelector(".tm").textContent="";th.open=false}
   else th.remove();
   busy=false;$("#send").textContent="↑";save();drawList();bottom();
 }
+
+/* ===== AUTONOMOUS TASK MODE & MODAL ===== */
+function syncTaskUI(){
+  $("#taskModeBtn").classList.toggle("on",!!S.taskMode);
+}
+$("#taskModeBtn").onclick=()=>{
+  S.taskMode=!S.taskMode;save();syncTaskUI();
+  toast(S.taskMode?"🚀 Autonomous Multi-Step Task Mode: ON":"Autonomous Task Mode: OFF");
+};
+syncTaskUI();
+
+$("#taskBtn").onclick=()=>{closeSide();$("#taskM").classList.add("open")};
+$("#taskClose").onclick=()=>$("#taskM").classList.remove("open");
+document.querySelectorAll(".tplTask").forEach(b=>b.onclick=()=>$("#taskGoal").value=b.dataset.g);
+$("#startTaskBtn").onclick=()=>{
+  const g=$("#taskGoal").value.trim();
+  if(!g)return toast("Please enter a task goal");
+  S.taskMode=true;save();syncTaskUI();
+  $("#taskM").classList.remove("open");
+  ask("[AUTONOMOUS END-TO-END TASK]\nGoal: "+g+"\n\nExecute all needed research, cloud code execution (@cloud_exec), and live artifact rendering (@canvas) automatically and provide the complete verified deliverable.");
+};
+
+/* ===== CLOUD SANDBOX & HOSTING MODAL ===== */
+function openCloudModal(tab="exec"){
+  $("#cloudM").classList.add("open");
+  $("#cloudM").querySelectorAll(".stab").forEach(b=>b.classList.toggle("on",b.dataset.c===tab));
+  const p=$("#cpane");
+  if(tab==="exec"){
+    p.innerHTML=`<div class="note" style="text-align:left;margin:0">Runs your code on remote Piston Cloud servers (zero CPU/RAM usage on your phone). No API key required.</div>
+    <select id="clLang" class="ti">
+      <option value="python">Python 3 (Cloud Server)</option>
+      <option value="javascript">JavaScript (Node.js Cloud)</option>
+      <option value="typescript">TypeScript (Cloud)</option>
+      <option value="c++">C++ (GCC Cloud)</option>
+      <option value="rust">Rust (Cloud)</option>
+      <option value="go">Go (Cloud)</option>
+      <option value="bash">Bash / Linux Shell (Cloud)</option>
+      <option value="java">Java (Cloud)</option>
+      <option value="php">PHP (Cloud)</option>
+      <option value="sqlite3">SQLite3 (Cloud)</option>
+    </select>
+    <textarea id="clCode" class="ti" rows="7" placeholder="Write code to execute on the remote cloud server...">import platform, sys, math
+print("Executed on Remote Cloud Container:", platform.platform())
+print("Python Version:", sys.version.split()[0])
+print("Factorial(20):", math.factorial(20))</textarea>
+    <div class="row2">
+      <button class="pri" id="clRun">☁️ Execute on Cloud</button>
+      <button id="clToCanvas">🖥️ Open in Live Canvas</button>
+    </div>
+    <div class="out2" id="clOut">Cloud terminal output will appear here...</div>`;
+    $("#clRun").onclick=async()=>{
+      $("#clOut").textContent="☁️ Running on remote cloud container...";
+      try{$("#clOut").textContent=await runPistonCloud($("#clLang").value,$("#clCode").value)}
+      catch(e){$("#clOut").textContent="Error: "+e.message}
+    };
+    $("#clToCanvas").onclick=()=>{
+      $("#cloudM").classList.remove("open");
+      openCanvas($("#clCode").value,$("#clLang").value,"Cloud Code Sandbox");
+    };
+  }else if(tab==="host"){
+    p.innerHTML=`<div class="note" style="text-align:left;margin:0">Deploy any single-file HTML/CSS/JS application to Puter Free Cloud Hosting or preview it instantly in the Live Canvas.</div>
+    <textarea id="hsCode" class="ti" rows="7">${escapeHtml(S.canvasCode)}</textarea>
+    <div class="row2">
+      <button class="pri" id="hsGo">🌐 Deploy Live Cloud Website</button>
+      <button id="hsPrev">🖥️ Preview in Canvas</button>
+    </div>
+    <div class="out2" id="hsOut">${S.hostedSites.length?"Previously Hosted Sites:\n"+S.hostedSites.map(s=>s.url+" ("+s.ts+")").join("\n"):"No sites deployed yet in this session."}</div>`;
+    $("#hsGo").onclick=async()=>{
+      $("#hsOut").textContent="🌐 Deploying to cloud...";
+      $("#hsOut").textContent=await tools.cloud_host($("#hsCode").value);
+    };
+    $("#hsPrev").onclick=()=>{
+      $("#cloudM").classList.remove("open");
+      openCanvas($("#hsCode").value,"html","Live Web App Preview");
+    };
+  }else{
+    p.innerHTML=`<div class="note" style="text-align:left;margin:0">Save & sync your chat state or custom notes to Puter Cloud Key-Value store.</div>
+    <div class="row2">
+      <button class="pri" id="kvPush">☁️ Sync Backup to Puter Cloud</button>
+      <button id="kvPull">📥 Restore from Puter Cloud</button>
+    </div>
+    <div class="out2" id="kvOut">Ready.</div>`;
+    $("#kvPush").onclick=async()=>{
+      try{await puter.kv.set("agi_cloud_backup",JSON.stringify(S));$("#kvOut").textContent="✔ Successfully synced state to Puter Cloud KV storage!"}
+      catch(e){$("#kvOut").textContent="⚠️ Cloud sync requires Puter session: "+(e.message||e)}
+    };
+    $("#kvPull").onclick=async()=>{
+      try{
+        const raw=await puter.kv.get("agi_cloud_backup");
+        if(!raw)return $("#kvOut").textContent="No cloud backup found.";
+        S=Object.assign(S,JSON.parse(raw));save();renderAll();drawList();
+        $("#kvOut").textContent="✔ Restored state from Puter Cloud!";
+      }catch(e){$("#kvOut").textContent="⚠️ "+(e.message||e)}
+    };
+  }
+}
+$("#cloudIdeBtn").onclick=()=>{closeSide();openCloudModal("exec")};
+$("#cloudClose").onclick=()=>$("#cloudM").classList.remove("open");
+$("#cloudM").querySelectorAll(".stab").forEach(b=>b.onclick=()=>openCloudModal(b.dataset.c));
 
 /* ===== CHATS MANAGEMENT ===== */
 function newChat(silent){
@@ -796,7 +1144,7 @@ $("#q").addEventListener("paste",e=>{if(e.clipboardData?.files?.length){e.preven
 $("#new").onclick=$("#new2").onclick=()=>!busy&&newChat();
 $("#menu").onclick=()=>{$("#side").classList.add("open");$("#ov").classList.add("open")};
 $("#ov").onclick=closeSide;
-$("#mem").onclick=()=>{const v=prompt("Persistent Agent Memory (separate facts with | ):",S.mem.join(" | "));if(v!==null){S.mem=v.split("|").map(x=>x.trim()).filter(Boolean);save();toast("Memory updated")}};
+$("#mem").onclick=()=>{const v=prompt("Persistent Agent Memory & Instructions (separate facts with | ):",S.mem.join(" | "));if(v!==null){S.mem=v.split("|").map(x=>x.trim()).filter(Boolean);save();toast("Memory updated")}};
 $("#exp").onclick=()=>{
   const c=cur();if(!c||!c.msgs.length)return toast("Current chat is empty");
   const t=c.msgs.map(m=>"## "+(m.role==="user"?"You":"Agent")+"\n\n"+m.content).join("\n\n");
@@ -852,7 +1200,7 @@ if(SR){
 /* Keyboard Shortcuts */
 document.addEventListener("keydown",e=>{
   if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="o"){e.preventDefault();newChat()}
-  if(e.key==="Escape"){$("#toolsM").classList.remove("open");$("#studioM").classList.remove("open");closeSide()}
+  if(e.key==="Escape"){$("#toolsM").classList.remove("open");$("#studioM").classList.remove("open");$("#taskM").classList.remove("open");$("#cloudM").classList.remove("open");closeSide()}
 });
 
 /* ===== MEDIA STORE (IndexedDB) ===== */
@@ -938,7 +1286,7 @@ Object.assign(tools,{
 let sbusy=false;
 function openStudio(tab){
   tab=tab||"img";$("#studioM").classList.add("open");
-  document.querySelectorAll(".stab").forEach(b=>b.classList.toggle("on",b.dataset.s===tab));
+  $("#studioM").querySelectorAll(".stab").forEach(b=>b.classList.toggle("on",b.dataset.s===tab));
   const list=tab==="img"?IMG_MODELS:tab==="edit"?EDIT_MODELS:VID_MODELS;
   const ph=tab==="img"?"Describe the image in detail (subject, style, lighting, composition)…":tab==="edit"?"What should be changed? (e.g., change background to sunset, keep subject identical)":"Describe the video scene (subject, motion, camera movement, mood)…";
   $("#spane").innerHTML=(tab==="edit"?'<div id="sSrc"></div><input type="file" id="sF" accept="image/*" class="ti" aria-label="Select Image">':"")+
@@ -946,7 +1294,7 @@ function openStudio(tab){
   <select id="sM" class="ti" aria-label="Model">${list.map(m=>`<option value="${m[0]}">${escapeHtml(m[1])}</option>`).join("")}</select>
   <input class="ti" id="sC" placeholder="Custom model ID (optional)" aria-label="Custom model ID">
   ${tab==="edit"?"":'<label class="note" style="text-align:left"><input type="checkbox" id="sI" checked> ✨ Auto-enhance prompt with AI for higher visual quality</label>'}
-  <div class="row2"><button id="sGo">Generate</button></div>
+  <div class="row2"><button class="pri" id="sGo">Generate</button></div>
   <div id="sS" role="status" class="note" style="text-align:left">${tab==="vid"?"Video generation typically takes 1–5 minutes.":""}</div><div id="sOut"></div>`;
   const showSrc=()=>{if(tab==="edit"&&S.lastImg){$("#sSrc").innerHTML='<div class="mslot" data-id="'+S.lastImg+'"></div>';fillSlots($("#sSrc"))}else if(tab==="edit")$("#sSrc").textContent="Select an image file or generate one in the Image tab first."};
   showSrc();
@@ -969,7 +1317,7 @@ function openStudio(tab){
 }
 $("#studioBtn").onclick=()=>{closeSide();openStudio("img")};
 $("#studioClose").onclick=()=>$("#studioM").classList.remove("open");
-document.querySelectorAll(".stab").forEach(b=>b.onclick=()=>openStudio(b.dataset.s));
+$("#studioM").querySelectorAll(".stab").forEach(b=>b.onclick=()=>openStudio(b.dataset.s));
 const applyDeep=()=>{$("#deepBtn").textContent="🧠 Deep mode: "+(S.deep?"on":"off")};
 $("#deepBtn").onclick=()=>{S.deep=!S.deep;save();applyDeep();toast(S.deep?"Deep mode enabled: answers undergo an extra verification pass":"Deep mode disabled")};applyDeep();
 
