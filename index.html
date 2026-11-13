@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#000000">
-<title>Astra AGI v26.0 (Omni-Tools)</title>
+<title>Astra AGI v24.0 (Cloud-First)</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3Ccircle cx='256' cy='256' r='44' fill='%23fff'/%3E%3C/svg%3E" type="image/svg+xml">
 
@@ -13,6 +13,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -400,7 +404,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
 <!-- Command Center -->
 <div class="mbk" id="cmdM" role="dialog" aria-modal="true">
   <div class="mdl">
-    <div class="mtop"><span>Astra AGI v26.0 Command Center</span><button id="cmdClose">✕</button></div>
+    <div class="mtop"><span>Astra AGI v24.0 Command Center</span><button id="cmdClose">✕</button></div>
     <div class="ttabs" id="cmdTabs">
       <button class="stab on" data-tab="videdit">Video Director</button>
       <button class="stab" data-tab="imgedit">Image Studio</button>
@@ -419,7 +423,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   ASTRA AGI v26.0 — FULLY PATCHED & CLOUD FIRST
+   ASTRA AGI v24.0 — CLOUD-FIRST ARCHITECTURE
    ═══════════════════════════════════════════════════════════════ */
 
 const _dec=(arr)=>arr.map(c=>String.fromCharCode(c)).join("");
@@ -465,9 +469,11 @@ const $=s=>document.querySelector(s);
 const escapeHtml=s=>{const d=document.createElement("div");d.textContent=s??"";return d.innerHTML};
 
 /* ═══════════════════════════════════════════════════════════════
-   CLOUD MEMORY & SAFE SANDBOX
+   CLOUD MEMORY (ZERO RAM LOAD)
    ═══════════════════════════════════════════════════════════════ */
+// Replaced heavy Transformers.js with lightweight smart context manager
 async function queryMemory(text, topK = 5){
+  // Simple keyword search in local memory to save RAM
   if(!S.mem || !S.mem.length) return "";
   const words = text.toLowerCase().split(/\s+/).filter(w=>w.length > 3);
   const scored = S.mem.map(m => {
@@ -484,68 +490,8 @@ async function clearMemory(){
   save();
 }
 
-function runSafeJS(code) {
-  return new Promise((resolve) => {
-    const workerCode = `
-      self.onmessage = function(e) {
-        let logs = [];
-        const customConsole = {
-          log: (...a) => logs.push(a.map(x => typeof x === "object" ? JSON.stringify(x) : String(x)).join(" ")),
-          error: (...a) => logs.push("ERR: " + a.join(" ")),
-          warn: (...a) => logs.push("WARN: " + a.join(" "))
-        };
-        try {
-          const fn = new Function("console", e.data);
-          fn(customConsole);
-          self.postMessage({ ok: true, output: logs.join("\\n") || "(Executed)" });
-        } catch (err) {
-          self.postMessage({ ok: false, output: logs.join("\\n") + "\\n" + err.message });
-        }
-      };
-    `;
-    const blob = new Blob([workerCode], { type: 'application/javascript' });
-    const worker = new Worker(URL.createObjectURL(blob));
-    worker.onmessage = (e) => { resolve(e.data); worker.terminate(); };
-    worker.postMessage(code);
-    setTimeout(() => { worker.terminate(); resolve({ ok: false, output: "Timeout (Infinite loop prevented)" }); }, 5000);
-  });
-}
-
 /* ═══════════════════════════════════════════════════════════════
-   DYNAMIC LOADERS (Lazy Loading)
-   ═══════════════════════════════════════════════════════════════ */
-async function loadMermaid() {
-  if(window.mermaid) return;
-  await new Promise((resolve) => {
-    const script = document.createElement('script');
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js";
-    script.onload = resolve;
-    document.head.appendChild(script);
-  });
-}
-
-async function loadKaTeX() {
-  if(window.katex) return;
-  await new Promise((resolve) => {
-    const link = document.createElement('link');
-    link.rel = "stylesheet";
-    link.href = "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css";
-    document.head.appendChild(link);
-    
-    const script = document.createElement('script');
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js";
-    script.onload = () => {
-      const renderScript = document.createElement('script');
-      renderScript.src = "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js";
-      renderScript.onload = resolve;
-      document.head.appendChild(renderScript);
-    };
-    document.head.appendChild(script);
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   VISION & OCR
+   VISION WORKER (Lazy Loaded)
    ═══════════════════════════════════════════════════════════════ */
 let visionWorker = null, visionReady = false;
 function initVisionWorker(){
@@ -579,6 +525,7 @@ function getImageCaption(imgUrl){
   });
 }
 
+/* OCR & PDF */
 async function runOCR(file){
   toast("Running Local OCR...");
   const worker = await Tesseract.createWorker('eng+hin');
@@ -685,7 +632,7 @@ function setAgentState(s){ agentState = s; const el = $("#agentState"); if(el) e
    STATE
    ═══════════════════════════════════════════════════════════════ */
 let S = {};
-try{ S = JSON.parse(localStorage.agi_v26 || localStorage.agi_v25 || "{}"); }catch(e){}
+try{ S = JSON.parse(localStorage.agi_v24 || localStorage.agi_v23 || "{}"); }catch(e){}
 S.chats ??= {};
 S.cur ??= null;
 if(!S.model || !MODELS.some(m=>m[0]===S.model)) S.model = "auto";
@@ -714,7 +661,7 @@ S.artifacts ??= [];
 S.customTools ??= {};
 
 function save(){
-  try{ localStorage.agi_v26 = JSON.stringify(S); }
+  try{ localStorage.agi_v24 = JSON.stringify(S); }
   catch(e){
     const ids = Object.values(S.chats).sort((a,b)=>a.ts-b.ts).map(c=>c.id);
     if(ids.length > 1){ delete S.chats[ids[0]]; save(); }
@@ -881,7 +828,7 @@ async function generateAIStoryboardVideo(topicPrompt, onProg){
   let scenes = [
     { img: topicPrompt+", cinematic wide establishing shot, 8k masterpiece", cap: topicPrompt.slice(0,48) },
     { img: topicPrompt+", dramatic close-up action detail, studio lighting", cap: "Autonomous AI Motion Render" },
-    { img: topicPrompt+", epic finale atmosphere, ultra detailed", cap: "Directed by Astra AGI v26" }
+    { img: topicPrompt+", epic finale atmosphere, ultra detailed", cap: "Directed by Astra AGI v24" }
   ];
   try{
     const raw = await llm([
@@ -1050,7 +997,7 @@ $("#openCanvasHdr").onclick = ()=>$("#canvasPane").classList.toggle("open");
 $("#cZipBtn").onclick = ()=>{
   const files = [
     { name: S.canvasLang === "html" ? "index.html" : "main."+S.canvasLang, content: S.canvasCode },
-    { name: "README.md", content: "# Astra AGI Project\nBundled by Astra AGI v26." }
+    { name: "README.md", content: "# Astra AGI Project\nBundled by Astra AGI v24." }
   ];
   const blob = makeZip(files), a = document.createElement("a");
   a.href = URL.createObjectURL(blob); a.download = "astra-project-"+Date.now()+".zip"; a.click();
@@ -1077,12 +1024,7 @@ async function runCodeResilient(lang, code){
     return { ok:true, stdout:"Rendered live in Canvas.", stderr:"" };
   }
   
-  // Safe JS Sandbox
-  if(/^(js|javascript)$/.test(l)){
-    return await runSafeJS(code);
-  }
-
-  // Cloud Execution (Piston API)
+  // CLOUD EXECUTION (PISTON API) - Saves local RAM
   try{
     const r = await fetch("https://emkc.org/api/v2/piston/execute",{
       method:"POST", headers:{"Content-Type":"application/json"},
@@ -1110,7 +1052,7 @@ async function autoHealCode(lang, code, onUpdate){
     return { code, output: report };
   }
   for(let attempt=1; attempt<=3; attempt++){
-    onUpdate?.(`[Attempt ${attempt}/3] Executing ${l}…`);
+    onUpdate?.(`[Attempt ${attempt}/3] Executing ${l} on Cloud…`);
     const d = await runCodeResilient(l, code);
     if(d.ok) return { code, output:`Verified (attempt ${attempt}):\n`+(d.stdout||"(no stdout)") };
     if(attempt === 3) return { code, output:`After 3 attempts:\n${d.stdout||""}\n${d.stderr}` };
@@ -1423,67 +1365,6 @@ const tools = {
       const url = d.data.url.replace("tmpfiles.org/", "tmpfiles.org/dl/");
       return `Cloud URL: ${url}`;
     }catch(e){ return "Upload failed."; }
-  },
-  async get_weather(city){
-    try {
-      const geo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`).then(r=>r.json());
-      if(!geo.results || !geo.results.length) return "City not found.";
-      const { latitude, longitude, name, country } = geo.results[0];
-      
-      const weather = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,weather_code,wind_speed_10m&timezone=auto`).then(r=>r.json());
-      
-      const c = weather.current;
-      return `Weather in ${name}, ${country}:\nTemp: ${c.temperature_2m}°C (Feels like ${c.apparent_temperature}°C)\nHumidity: ${c.relative_humidity_2m}%\nWind: ${c.wind_speed_10m} km/h\nPrecipitation: ${c.precipitation} mm\nCode: ${c.weather_code}`;
-    } catch(e) { return "Weather API error."; }
-  },
-  async get_currency(from, to){
-    try {
-      const [f, t] = from.toUpperCase().split(" ");
-      const res = await fetch(`https://api.frankfurter.app/latest?from=${f}&to=${t}`).then(r=>r.json());
-      if(res.rates && res.rates[t]) {
-        return `1 ${f} = ${res.rates[t]} ${t} (Date: ${res.date})`;
-      }
-      return "Currency pair not found.";
-    } catch(e) { return "Currency API error."; }
-  },
-
-  /* ── NEW TOOLS v26.0 ── */
-  async get_crypto_price(coin){
-    try {
-      const ids = coin.toLowerCase().replace(' ', '-');
-      const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd,inr`);
-      const d = await r.json();
-      if (d[ids]) {
-        return `1 ${coin.toUpperCase()} = $${d[ids].usd} USD | ₹${d[ids].inr} INR`;
-      }
-      return "Coin not found. Use standard IDs like 'bitcoin', 'ethereum', 'solana'.";
-    } catch(e) { return "Crypto API error."; }
-  },
-  async search_books(query){
-    try {
-      const r = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=5`);
-      const d = await r.json();
-      if (!d.docs.length) return "No books found.";
-      return d.docs.map(b => `- **${b.title}** by ${b.author_name ? b.author_name.join(', ') : 'Unknown'}`).join('\n');
-    } catch(e) { return "Book API error."; }
-  },
-  async get_ip_info(ip){
-    try {
-      const r = await fetch(`https://ipapi.co/${ip.trim()}/json/`);
-      const d = await r.json();
-      if (d.error) return d.reason;
-      return `IP: ${d.ip}\nCity: ${d.city}\nRegion: ${d.region}\nCountry: ${d.country_name}\nISP: ${d.org}`;
-    } catch(e) { return "IP API error."; }
-  },
-  async generate_qr(text){
-    return `![QR Code](https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(text)})`;
-  },
-  async nasa_apod(){
-    try {
-      const r = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY`);
-      const d = await r.json();
-      return `**${d.title}** (${d.date})\n\n${d.explanation}\n\n![NASA APOD](${d.url})`;
-    } catch(e) { return "NASA API error."; }
   }
 };
 
@@ -1494,7 +1375,7 @@ for(const [name, data] of Object.entries(S.customTools || {})){
 let TOOL_NAMES = Object.keys(tools).join("|");
 let TOOLRE_G = new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F, "g");
 
-const sysPrompt = ()=>`You are Astra AGI v26.0 — an autonomous AI Engineer, Data Analyst, Video Director & Authorized Passive Security / SAST Auditor. Today is ${new Date().toDateString()}. Match user's language (English, Hindi, Hinglish).
+const sysPrompt = ()=>`You are Astra AGI v24.0 — an autonomous AI Engineer, Data Analyst, Video Director & Authorized Passive Security / SAST Auditor. Today is ${new Date().toDateString()}. Match user's language (English, Hindi, Hinglish).
 
 CRITICAL MANDATES:
 1. ZERO STALLING: Never reply with "I will now write the code" — output the complete implementation immediately.
@@ -1521,7 +1402,7 @@ ${F}
 input
 ${F}
 
-Available Tools: @auto_reel, @image, @edit, @ai_firewall, @learn_skill, @world_graph, @program_audit, @js_deobfuscate, @cloud_fuzzer, @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify, @recon_graph, @apk_scan, @cloud_exec, @canvas, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @play_synth, @create_tool, @github_user, @upload_cloud, @get_weather, @get_currency, @get_crypto_price, @search_books, @get_ip_info, @generate_qr, @nasa_apod.
+Available Tools: @auto_reel, @image, @edit, @ai_firewall, @learn_skill, @world_graph, @program_audit, @js_deobfuscate, @cloud_fuzzer, @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify, @recon_graph, @apk_scan, @cloud_exec, @canvas, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @play_synth, @create_tool, @github_user, @upload_cloud.
 Learned Skills: ${S.skills.map(s=>s.name+": "+s.rule).join(" | ")||"none"}
 Memory: ${S.mem.join(" | ")||"none"}`;
 
@@ -1550,7 +1431,7 @@ async function callOpenRouter(msgs, model, onTok){
   if(!k) throw new Error("OpenRouter key missing");
   const plain = msgs.map(({img,...r})=>({role:r.role, content:String(r.content||"")}));
   const r = await withTimeout(fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method:"POST", headers:{"Content-Type":"application/json","Authorization":"Bearer "+k,"HTTP-Referer":location.origin||"https://astra.agi","X-Title":"Astra AGI v26"},
+    method:"POST", headers:{"Content-Type":"application/json","Authorization":"Bearer "+k,"HTTP-Referer":location.origin||"https://astra.agi","X-Title":"Astra AGI v24"},
     body: JSON.stringify({ model: model||"openrouter/free", messages: plain })
   }), 50000, "OpenRouter timeout");
   const j = await r.json();
@@ -1708,65 +1589,53 @@ const bottom = (force=false)=>{ if(force || !userScrolledUp) chatEl.scrollTop = 
 $("#jumpBtn").onclick = ()=>{ userScrolledUp = false; bottom(true); };
 
 function dress(el, fullMarkdown=""){
-  const processDress = () => {
-    el.querySelectorAll("pre").forEach(pre=>{
-      if(pre.parentElement.classList.contains("cb")) return;
-      const code = pre.querySelector("code");
-      const lang = (((code?.className||"").match(/language-([\w+#-]+)/)||[])[1]||"").toLowerCase();
-      const src = pre.innerText;
-      if(lang === "mermaid" && window.mermaid){
-        const d = document.createElement("div"); d.className = "mm"; pre.replaceWith(d);
-        mermaid.render("m"+Math.random().toString(36).slice(2), src).then(r=>d.innerHTML = r.svg).catch(()=>d.textContent = src);
-        return;
-      }
-      if(code && window.hljs) try{ hljs.highlightElement(code); }catch(e){}
-      const lines = src.split("\n").length;
-      const w = document.createElement("div"); w.className = "cb"+(lines>14?" collapsed":"");
-      const bar = document.createElement("div"); bar.className = "cbar";
-      const lbl = document.createElement("span"); lbl.className = "clang";
-      lbl.textContent = (lang||"code")+" · "+lines+" lines";
-      bar.appendChild(lbl);
-      const out = document.createElement("div"); out.className = "ro"; out.hidden = true;
-      const add = (l,f,cls="")=>{ const b = document.createElement("button"); b.className = "cp "+(cls||""); b.textContent = l; b.onclick = ()=>f(b); bar.appendChild(b); };
+  el.querySelectorAll("pre").forEach(pre=>{
+    if(pre.parentElement.classList.contains("cb")) return;
+    const code = pre.querySelector("code");
+    const lang = (((code?.className||"").match(/language-([\w+#-]+)/)||[])[1]||"").toLowerCase();
+    const src = pre.innerText;
+    if(lang === "mermaid" && window.mermaid){
+      const d = document.createElement("div"); d.className = "mm"; pre.replaceWith(d);
+      mermaid.render("m"+Math.random().toString(36).slice(2), src).then(r=>d.innerHTML = r.svg).catch(()=>d.textContent = src);
+      return;
+    }
+    if(code && window.hljs) try{ hljs.highlightElement(code); }catch(e){}
+    const lines = src.split("\n").length;
+    const w = document.createElement("div"); w.className = "cb"+(lines>14?" collapsed":"");
+    const bar = document.createElement("div"); bar.className = "cbar";
+    const lbl = document.createElement("span"); lbl.className = "clang";
+    lbl.textContent = (lang||"code")+" · "+lines+" lines";
+    bar.appendChild(lbl);
+    const out = document.createElement("div"); out.className = "ro"; out.hidden = true;
+    const add = (l,f,cls="")=>{ const b = document.createElement("button"); b.className = "cp "+(cls||""); b.textContent = l; b.onclick = ()=>f(b); bar.appendChild(b); };
 
-      if(lang === "html" || src.trim().startsWith("<!DOCTYPE") || src.trim().startsWith("<html")){
-        const getBundled = ()=>bundleWebBlocks(fullMarkdown) || src;
-        add("Canvas", ()=>openCanvas(getBundled(), "html", "Bundled Web App"), "ac");
-      }else if(PISTON_MAP[lang] || /^(python|py|js|javascript|ts|cpp|c|rust|go|java|bash|sh|php|sql)$/i.test(lang)){
-        add("Auto-Heal & Run", async ()=>{
-          out.hidden = false;
-          const r = await autoHealCode(lang||"python", pre.innerText, msg=>{ out.textContent = msg; });
-          if(r.code !== pre.innerText){
-            code.textContent = r.code;
-            if(window.hljs) try{ hljs.highlightElement(code); }catch(_){}
-          }
-          out.textContent = r.output;
-        }, "ac");
-        add("Fuzz & Patch", ()=>ask(`/fuzz ${F}${lang}\n${pre.innerText}\n${F}`));
-        add("Canvas", ()=>openCanvas(pre.innerText, lang||"python", "Code Editor"));
-      }
-      add("Copy", b=>{ navigator.clipboard.writeText(pre.innerText); b.textContent = "Copied"; setTimeout(()=>b.textContent = "Copy", 1200); });
-      const exp = document.createElement("button"); exp.className = "cb-exp";
-      exp.textContent = `Show all ${lines} lines`;
-      exp.onclick = ()=>{
-        w.classList.toggle("collapsed");
-        exp.textContent = w.classList.contains("collapsed") ? `Show all ${lines} lines` : "Collapse code";
-      };
-      pre.replaceWith(w); w.append(bar, pre, exp, out);
-    });
-    fillSlots(el);
-    if(window.renderMathInElement) try{ renderMathInElement(el, { delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}], throwOnError:false }); }catch(e){}
-  };
-
-  const promises = [];
-  if(fullMarkdown.includes("```mermaid")) promises.push(loadMermaid());
-  if(fullMarkdown.includes("$$") || fullMarkdown.includes("\\(")) promises.push(loadKaTeX());
-
-  if(promises.length) {
-    Promise.all(promises).then(processDress);
-  } else {
-    processDress();
-  }
+    if(lang === "html" || src.trim().startsWith("<!DOCTYPE") || src.trim().startsWith("<html")){
+      const getBundled = ()=>bundleWebBlocks(fullMarkdown) || src;
+      add("Canvas", ()=>openCanvas(getBundled(), "html", "Bundled Web App"), "ac");
+    }else if(PISTON_MAP[lang] || /^(python|py|js|javascript|ts|cpp|c|rust|go|java|bash|sh|php|sql)$/i.test(lang)){
+      add("Auto-Heal & Run", async ()=>{
+        out.hidden = false;
+        const r = await autoHealCode(lang||"python", pre.innerText, msg=>{ out.textContent = msg; });
+        if(r.code !== pre.innerText){
+          code.textContent = r.code;
+          if(window.hljs) try{ hljs.highlightElement(code); }catch(_){}
+        }
+        out.textContent = r.output;
+      }, "ac");
+      add("Fuzz & Patch", ()=>ask(`/fuzz ${F}${lang}\n${pre.innerText}\n${F}`));
+      add("Canvas", ()=>openCanvas(pre.innerText, lang||"python", "Code Editor"));
+    }
+    add("Copy", b=>{ navigator.clipboard.writeText(pre.innerText); b.textContent = "Copied"; setTimeout(()=>b.textContent = "Copy", 1200); });
+    const exp = document.createElement("button"); exp.className = "cb-exp";
+    exp.textContent = `Show all ${lines} lines`;
+    exp.onclick = ()=>{
+      w.classList.toggle("collapsed");
+      exp.textContent = w.classList.contains("collapsed") ? `Show all ${lines} lines` : "Collapse code";
+    };
+    pre.replaceWith(w); w.append(bar, pre, exp, out);
+  });
+  fillSlots(el);
+  if(window.renderMathInElement) try{ renderMathInElement(el, { delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}], throwOnError:false }); }catch(e){}
 }
 
 function forkChat(idx){
