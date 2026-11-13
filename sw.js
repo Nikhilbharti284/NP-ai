@@ -1,4 +1,5 @@
-const CACHE_VERSION = "astra-agi-v19.0";
+// Purana version hata kar naya v22.0 daalein
+const CACHE_VERSION = "astra-agi-v22.0"; 
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const CDN_CACHE = `${CACHE_VERSION}-cdn`;
 
@@ -64,6 +65,7 @@ self.addEventListener("fetch", (e) => {
     e.respondWith((async () => {
       const s = await caches.open(STATIC_CACHE);
       try {
+        // Network first strategy for HTML to always get latest updates
         const fresh = await fetch(req);
         if (fresh?.status === 200) s.put(req, fresh.clone());
         return fresh;
