@@ -1,11 +1,10 @@
-const CACHE_VERSION = "astra-agi-v17.0";
+const CACHE_VERSION = "astra-agi-v19.0";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const CDN_CACHE = `${CACHE_VERSION}-cdn`;
 
 const APP_SHELL = ["./", "./index.html", "./manifest.json"];
 
 const CDN_ASSETS = [
-  "[https://js.puter.com/v2/](https://js.puter.com/v2/)",
   "[https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js](https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js)",
   "[https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js](https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js)",
   "[https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css](https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css)",
@@ -18,12 +17,11 @@ const CDN_ASSETS = [
 
 const BYPASS_HOSTS = [
   "127.0.0.1", "localhost", "generativelanguage.googleapis.com",
-  "aiplatform.googleapis.com", "api.puter.com", "puter.site",
-  "pollinations.ai", "text.pollinations.ai", "image.pollinations.ai",
-  "emkc.org", "r.jina.ai", "wikipedia.org", "algolia.com", "reddit.com",
-  "archive.org", "arxiv.org", "dns.google", "crt.sh", "rdap.org",
-  "shodan.io", "urlscan.io", "api.github.com", "stackexchange.com",
-  "nist.gov", "securityheaders.com"
+  "aiplatform.googleapis.com", "pollinations.ai", "text.pollinations.ai",
+  "image.pollinations.ai", "emkc.org", "r.jina.ai", "wikipedia.org",
+  "algolia.com", "reddit.com", "archive.org", "arxiv.org", "dns.google",
+  "crt.sh", "rdap.org", "shodan.io", "urlscan.io", "api.github.com",
+  "stackexchange.com", "nist.gov", "securityheaders.com"
 ];
 
 self.addEventListener("install", (e) => {
@@ -51,7 +49,7 @@ self.addEventListener("fetch", (e) => {
   if (!url.protocol.startsWith("http")) return;
   if (BYPASS_HOSTS.some(h => url.hostname === h || url.hostname.endsWith("." + h))) return;
 
-  if (url.hostname.includes("cdnjs.cloudflare.com") || url.hostname.includes("js.puter.com")) {
+  if (url.hostname.includes("cdnjs.cloudflare.com")) {
     e.respondWith((async () => {
       const c = await caches.open(CDN_CACHE);
       const hit = await c.match(req);
