@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#000000">
-<title>Astra AGI v26.0 (Omni-Tools)</title>
+<title>Astra AGI v27.0 (DevSecOps)</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3Ccircle cx='256' cy='256' r='44' fill='%23fff'/%3E%3C/svg%3E" type="image/svg+xml">
 
@@ -400,7 +400,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
 <!-- Command Center -->
 <div class="mbk" id="cmdM" role="dialog" aria-modal="true">
   <div class="mdl">
-    <div class="mtop"><span>Astra AGI v26.0 Command Center</span><button id="cmdClose">✕</button></div>
+    <div class="mtop"><span>Astra AGI v27.0 Command Center</span><button id="cmdClose">✕</button></div>
     <div class="ttabs" id="cmdTabs">
       <button class="stab on" data-tab="videdit">Video Director</button>
       <button class="stab" data-tab="imgedit">Image Studio</button>
@@ -419,7 +419,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   ASTRA AGI v26.0 — FULLY PATCHED & CLOUD FIRST
+   ASTRA AGI v27.0 — DEV SEC OPS CORE
    ═══════════════════════════════════════════════════════════════ */
 
 const _dec=(arr)=>arr.map(c=>String.fromCharCode(c)).join("");
@@ -561,7 +561,7 @@ function initVisionWorker(){
         try{ const out = await captioner(e.data.image); postMessage({ type:'result', caption: out[0].generated_text }); }
         catch(err){ postMessage({ type:'error', error: err.message }); }
       }
-    }
+    };
   `;
   visionWorker = new Worker(URL.createObjectURL(new Blob([code], {type:'application/javascript'})), { type: 'module' });
   visionWorker.onmessage = (e)=>{ if(e.data.type === 'ready') visionReady = true; };
@@ -685,7 +685,7 @@ function setAgentState(s){ agentState = s; const el = $("#agentState"); if(el) e
    STATE
    ═══════════════════════════════════════════════════════════════ */
 let S = {};
-try{ S = JSON.parse(localStorage.agi_v26 || localStorage.agi_v25 || "{}"); }catch(e){}
+try{ S = JSON.parse(localStorage.agi_v27 || localStorage.agi_v26 || "{}"); }catch(e){}
 S.chats ??= {};
 S.cur ??= null;
 if(!S.model || !MODELS.some(m=>m[0]===S.model)) S.model = "auto";
@@ -714,7 +714,7 @@ S.artifacts ??= [];
 S.customTools ??= {};
 
 function save(){
-  try{ localStorage.agi_v26 = JSON.stringify(S); }
+  try{ localStorage.agi_v27 = JSON.stringify(S); }
   catch(e){
     const ids = Object.values(S.chats).sort((a,b)=>a.ts-b.ts).map(c=>c.id);
     if(ids.length > 1){ delete S.chats[ids[0]]; save(); }
@@ -881,7 +881,7 @@ async function generateAIStoryboardVideo(topicPrompt, onProg){
   let scenes = [
     { img: topicPrompt+", cinematic wide establishing shot, 8k masterpiece", cap: topicPrompt.slice(0,48) },
     { img: topicPrompt+", dramatic close-up action detail, studio lighting", cap: "Autonomous AI Motion Render" },
-    { img: topicPrompt+", epic finale atmosphere, ultra detailed", cap: "Directed by Astra AGI v26" }
+    { img: topicPrompt+", epic finale atmosphere, ultra detailed", cap: "Directed by Astra AGI v27" }
   ];
   try{
     const raw = await llm([
@@ -1050,7 +1050,7 @@ $("#openCanvasHdr").onclick = ()=>$("#canvasPane").classList.toggle("open");
 $("#cZipBtn").onclick = ()=>{
   const files = [
     { name: S.canvasLang === "html" ? "index.html" : "main."+S.canvasLang, content: S.canvasCode },
-    { name: "README.md", content: "# Astra AGI Project\nBundled by Astra AGI v26." }
+    { name: "README.md", content: "# Astra AGI Project\nBundled by Astra AGI v27." }
   ];
   const blob = makeZip(files), a = document.createElement("a");
   a.href = URL.createObjectURL(blob); a.download = "astra-project-"+Date.now()+".zip"; a.click();
@@ -1446,8 +1446,6 @@ const tools = {
       return "Currency pair not found.";
     } catch(e) { return "Currency API error."; }
   },
-
-  /* ── NEW TOOLS v26.0 ── */
   async get_crypto_price(coin){
     try {
       const ids = coin.toLowerCase().replace(' ', '-');
@@ -1484,6 +1482,64 @@ const tools = {
       const d = await r.json();
       return `**${d.title}** (${d.date})\n\n${d.explanation}\n\n![NASA APOD](${d.url})`;
     } catch(e) { return "NASA API error."; }
+  },
+
+  /* ── NEW DEV & SEC TOOLS v27.0 ── */
+  async decode_jwt(token){
+    try {
+      const parts = token.trim().split('.');
+      if (parts.length !== 3) return "Invalid JWT format. Must have 3 parts.";
+      const header = JSON.parse(atob(parts[0]));
+      const payload = JSON.parse(atob(parts[1]));
+      return `**Header:**\n\`\`\`json\n${JSON.stringify(header, null, 2)}\n\`\`\`\n\n**Payload:**\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\`\n\n**Signature:**\n\`${parts[2]}\``;
+    } catch(e) { return "Error decoding JWT: " + e.message; }
+  },
+  async hash_text(inp){
+    // format: sha256\ntext
+    const parts = inp.trim().split('\n');
+    const alg = parts[0].toLowerCase();
+    const text = parts.slice(1).join('\n');
+    const algoMap = { 'sha1': 'SHA-1', 'sha256': 'SHA-256', 'sha512': 'SHA-512' };
+    const cryptoAlg = algoMap[alg];
+    if (!cryptoAlg) return "Supported algorithms: sha1, sha256, sha512.";
+    try {
+      const msgBuffer = new TextEncoder().encode(text);
+      const hashBuffer = await crypto.subtle.digest(cryptoAlg, msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return `**${cryptoAlg} Hash:**\n\`${hashHex}\``;
+    } catch(e) { return "Hash error: " + e.message; }
+  },
+  async format_json(inp){
+    try {
+      const obj = JSON.parse(inp);
+      return "```json\n" + JSON.stringify(obj, null, 2) + "\n```";
+    } catch(e) { return "Invalid JSON: " + e.message; }
+  },
+  async mac_lookup(mac){
+    try {
+      const r = await fetch(`https://api.macvendors.com/${encodeURIComponent(mac.trim())}`);
+      if (r.ok) return `**Vendor:** ${await r.text()}`;
+      return "Vendor not found for this MAC.";
+    } catch(e) { return "MAC Lookup error (rate limit or invalid)."; }
+  },
+  async generate_payload(type){
+    type = type.trim().toLowerCase();
+    return await llm([
+      {role:"system", content: "You are an authorized penetration testing assistant. Generate 5 common, safe-to-test payloads for the requested vulnerability type (e.g., xss, sqli, ssrf, lfi, xxe). Output ONLY the raw payloads in a code block, one per line. No explanations."},
+      {role:"user", content: type}
+    ], ()=>{});
+  },
+  async regex_test(inp){
+    // format: regex\nstring
+    const parts = inp.trim().split('\n');
+    const pattern = parts[0];
+    const str = parts.slice(1).join('\n');
+    try {
+      const re = new RegExp(pattern, 'g');
+      const matches = [...str.matchAll(re)].map(m => m[0]);
+      return matches.length ? `**Matches (${matches.length}):**\n` + matches.map(m=>`- \`${m}\``).join('\n') : "No matches found.";
+    } catch(e) { return "Regex Error: " + e.message; }
   }
 };
 
@@ -1494,11 +1550,11 @@ for(const [name, data] of Object.entries(S.customTools || {})){
 let TOOL_NAMES = Object.keys(tools).join("|");
 let TOOLRE_G = new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F, "g");
 
-const sysPrompt = ()=>`You are Astra AGI v26.0 — an autonomous AI Engineer, Data Analyst, Video Director & Authorized Passive Security / SAST Auditor. Today is ${new Date().toDateString()}. Match user's language (English, Hindi, Hinglish).
+const sysPrompt = ()=>`You are Astra AGI v27.0 — an autonomous AI Engineer, Data Analyst, Video Director & Authorized Passive Security / SAST Auditor. Today is ${new Date().toDateString()}. Match user's language (English, Hindi, Hinglish).
 
 CRITICAL MANDATES:
 1. ZERO STALLING: Never reply with "I will now write the code" — output the complete implementation immediately.
-2. FULL-STACK SINGLE-FILE & TAILWIND: When building websites, ALWAYS use Tailwind CSS via CDN (<script src="https://cdn.tailwindcss.com"><\/script>) for beautiful, modern, responsive UI. Output a single \`<!DOCTYPE html>\` file.
+2. FULL-STACK SINGLE-FILE & TAILWIND: When building websites, ALWAYS use Tailwind CSS via CDN (<script src="https://cdn.tailwindcss.com"></script>) for beautiful, modern, responsive UI. Output a single \`<!DOCTYPE html>\` file.
 3. 3D ENGINE: For 3D requests use Three.js CDN (<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>).
 4. VIDEO/IMAGE: Use @auto_reel for video, @image for images. Place [[media:ID]] on its own line.
 5. CHARTS: For data viz use:
@@ -1506,7 +1562,7 @@ CRITICAL MANDATES:
 {"type":"bar","title":"T","labels":["A"],"data":[10]}
 \`\`\`
 6. AUDIO: @play_synth with comma-separated freqs.
-7. LEGAL BOUNDARY: Only passive OSINT + static SAST.
+7. LEGAL BOUNDARY: Only passive OSINT + static SAST. For @generate_payload, act as an authorized Pen Testing Assistant.
 8. SELF-EVOLUTION: You can create NEW tools for yourself using @create_tool!
    Format:
    tool_name
@@ -1521,7 +1577,7 @@ ${F}
 input
 ${F}
 
-Available Tools: @auto_reel, @image, @edit, @ai_firewall, @learn_skill, @world_graph, @program_audit, @js_deobfuscate, @cloud_fuzzer, @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify, @recon_graph, @apk_scan, @cloud_exec, @canvas, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @play_synth, @create_tool, @github_user, @upload_cloud, @get_weather, @get_currency, @get_crypto_price, @search_books, @get_ip_info, @generate_qr, @nasa_apod.
+Available Tools: @auto_reel, @image, @edit, @ai_firewall, @learn_skill, @world_graph, @program_audit, @js_deobfuscate, @cloud_fuzzer, @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify, @recon_graph, @apk_scan, @cloud_exec, @canvas, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @play_synth, @create_tool, @github_user, @upload_cloud, @get_weather, @get_currency, @get_crypto_price, @search_books, @get_ip_info, @generate_qr, @nasa_apod, @decode_jwt, @hash_text, @format_json, @mac_lookup, @generate_payload, @regex_test.
 Learned Skills: ${S.skills.map(s=>s.name+": "+s.rule).join(" | ")||"none"}
 Memory: ${S.mem.join(" | ")||"none"}`;
 
@@ -1550,7 +1606,7 @@ async function callOpenRouter(msgs, model, onTok){
   if(!k) throw new Error("OpenRouter key missing");
   const plain = msgs.map(({img,...r})=>({role:r.role, content:String(r.content||"")}));
   const r = await withTimeout(fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method:"POST", headers:{"Content-Type":"application/json","Authorization":"Bearer "+k,"HTTP-Referer":location.origin||"https://astra.agi","X-Title":"Astra AGI v26"},
+    method:"POST", headers:{"Content-Type":"application/json","Authorization":"Bearer "+k,"HTTP-Referer":location.origin||"https://astra.agi","X-Title":"Astra AGI v27"},
     body: JSON.stringify({ model: model||"openrouter/free", messages: plain })
   }), 50000, "OpenRouter timeout");
   const j = await r.json();
