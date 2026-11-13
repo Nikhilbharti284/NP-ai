@@ -1,8 +1,8 @@
 /* ============================================================================
- * Astra Carbon X v10.0 — Omni-Research Service Worker (sw.js)
+ * Astra X v13.0 — Monochrome Service Worker (sw.js)
  * ============================================================================ */
 
-const CACHE_VERSION = "astra-carbon-v10.0";
+const CACHE_VERSION = "astra-monochrome-v13.0";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const CDN_CACHE = `${CACHE_VERSION}-cdn`;
 
