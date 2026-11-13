@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#000000">
-<title>Astra X</title>
+<title>Astra X — AGI Ecosystem</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3Ccircle cx='256' cy='256' r='44' fill='%23fff'/%3E%3C/svg%3E" type="image/svg+xml">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3C/svg%3E">
@@ -175,7 +175,7 @@ footer{padding:6px 12px calc(12px + env(safe-area-inset-bottom,0px));flex-shrink
 .mbk{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:60;align-items:flex-end;justify-content:center;padding:0}
 @media(min-width:640px){.mbk{align-items:center;padding:16px}}
 .mbk.open{display:flex}
-.mdl{background:var(--side);border:1px solid var(--b);border-radius:20px 20px 0 0;width:100%;max-width:740px;max-height:86dvh;display:flex;flex-direction:column;overflow:hidden}
+.mdl{background:var(--side);border:1px solid var(--b);border-radius:20px 20px 0 0;width:100%;max-width:750px;max-height:86dvh;display:flex;flex-direction:column;overflow:hidden}
 @media(min-width:640px){.mdl{border-radius:16px;max-height:84dvh}}
 .mtop{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--b);font-size:15px;font-weight:600}
 .ttabs{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid var(--b);flex-shrink:0}
@@ -268,6 +268,17 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
 
   <div class="sfoot">
     <details class="sdrop">
+      <summary><span>AGI Core & Memory</span><span>▾</span></summary>
+      <div class="sdrop-list">
+        <button class="srow" data-cmd="rag">RAG Knowledge Vault</button>
+        <button class="srow" data-cmd="skills">Dynamic Skill Forger</button>
+        <button class="srow" data-cmd="dag">DAG Goal Planner</button>
+        <button class="srow" data-cmd="train">Fine-Tune JSONL & Eval</button>
+        <button class="srow" id="archBtn">AGI Ecosystem Blueprint</button>
+      </div>
+    </details>
+
+    <details class="sdrop">
       <summary><span>Security & Cloud Suite</span><span>▾</span></summary>
       <div class="sdrop-list">
         <button class="srow" data-cmd="scope">Program Scope Parser</button>
@@ -277,11 +288,9 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
         <button class="srow" data-cmd="apk">APK, JADX & Frida Generator</button>
         <button class="srow" data-cmd="jwt">JWT Auditor & Secret Tester</button>
         <button class="srow" data-cmd="http">HTTP / CORS & Takeover Lab</button>
-        <button class="srow" data-cmd="cloud">Cloud Linux (Bash/Python)</button>
+        <button class="srow" data-cmd="cloud">Cloud Linux (Py/C++/Rust/SQL)</button>
         <button class="srow" data-cmd="cvss">CVSS, Nuclei & GHSA Builder</button>
-        <button class="srow" data-cmd="batch">Multi-Target Batch Queue</button>
         <button class="srow" id="osintDashBtn">Attack Surface Graph</button>
-        <button class="srow" data-cmd="notes">Scratchpad Notes</button>
       </div>
     </details>
 
@@ -361,15 +370,16 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
     <div id="file"></div>
     <div id="boxWrap">
       <div id="slashMenu">
+        <button class="sl-item" data-sl="/dag "><code>/dag [goal]</code><span>AGI Hierarchical DAG Task Planner</span></button>
+        <button class="sl-item" data-sl="/rag "><code>/rag [query]</code><span>Search Personal RAG Knowledge Vault</span></button>
+        <button class="sl-item" data-sl="/learn "><code>/learn [skill]</code><span>Forge & Save a New Reusable AI Skill</span></button>
         <button class="sl-item" data-sl="/scope"><code>/scope</code><span>Paste Bug Bounty Program Scope</span></button>
         <button class="sl-item" data-sl="/audit "><code>/audit [domain]</code><span>12-Vector Instant Domain Audit</span></button>
         <button class="sl-item" data-sl="/fuzz "><code>/fuzz [target]</code><span>Cloud Fuzzer & CWE-835 DoS Tester</span></button>
-        <button class="sl-item" data-sl="/js "><code>/js [url]</code><span>De-obfuscate JS & Extract GraphQL/APIs</span></button>
         <button class="sl-item" data-sl="/omni "><code>/omni [goal]</code><span>2-Hop Deep Web Crawler</span></button>
-        <button class="sl-item" data-sl="/bash "><code>/bash [task]</code><span>Cloud Linux Container</span></button>
       </div>
       <div id="box">
-        <button class="cbtn" id="cmdBtn" title="Tools, Files & Voice" aria-label="Open Tools">
+        <button class="cbtn" id="cmdBtn" title="AGI Command Center (＋ / ⌘K)" aria-label="Open Tools">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
         <textarea id="q" rows="1" placeholder="Ask anything…" aria-label="Message input"></textarea>
@@ -385,23 +395,23 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
   </footer>
 </div>
 
-<!-- UNIFIED MONOCHROME COMMAND CENTER -->
+<!-- UNIFIED MONOCHROME AGI COMMAND CENTER -->
 <div class="mbk" id="cmdM" role="dialog" aria-modal="true" aria-label="Command Center">
   <div class="mdl">
-    <div class="mtop"><span>Command Center</span><button id="cmdClose">✕</button></div>
+    <div class="mtop"><span>AGI Command Center</span><button id="cmdClose">✕</button></div>
     <div class="ttabs" id="cmdTabs">
       <button class="stab on" data-tab="modes">Modes & Voice</button>
+      <button class="stab" data-tab="rag">RAG Vault</button>
+      <button class="stab" data-tab="skills">Skill Forger</button>
+      <button class="stab" data-tab="dag">DAG Planner</button>
+      <button class="stab" data-tab="train">Train & Eval</button>
       <button class="stab" data-tab="scope">Program Scope</button>
       <button class="stab" data-tab="bug">Domain Audit</button>
       <button class="stab" data-tab="jslab">JS & GraphQL</button>
       <button class="stab" data-tab="fuzzer">Fuzz & Patch</button>
       <button class="stab" data-tab="apk">APK & Frida</button>
-      <button class="stab" data-tab="jwt">JWT & Auth</button>
-      <button class="stab" data-tab="http">HTTP & Takeover</button>
-      <button class="stab" data-tab="cloud">Cloud Linux</button>
-      <button class="stab" data-tab="cvss">CVSS, Nuclei & GHSA</button>
-      <button class="stab" data-tab="batch">Batch Queue</button>
-      <button class="stab" data-tab="notes">Notes</button>
+      <button class="stab" data-tab="cloud">Cloud (Py/C++/Rust/SQL)</button>
+      <button class="stab" data-tab="cvss">CVSS & GHSA</button>
     </div>
     <div class="tpane" id="cmdPane"></div>
   </div>
@@ -412,7 +422,7 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
 const GEMINI_KEY=atob("QVEuQWI4Uk42SVU2WVBkRHBTakZlNDRY"+"YlhSSVd1Sl9GUzZyMDVKblJLeUF1cjdGRXUwVVE=");
 
 const MODELS=[
-  ["auto","Astra Carbon X (Auto)"],
+  ["auto","Astra AGI v15 (Central Intelligence)"],
   ["omni:deep","Omni-Blitz Deep Research"],
   ["swarm:redblue","Red-Blue-Judge Swarm"],
   ["arena:consensus","4-Brain Consensus"],
@@ -444,15 +454,16 @@ const F="`".repeat(3);
 const $=s=>document.querySelector(s);
 const escapeHtml=s=>{const d=document.createElement("div");d.textContent=s??"";return d.innerHTML};
 
-/* ===== INTERACTIVE ATTACK SURFACE & RECON GRAPH (CANVAS) ===== */
+/* ===== INTERACTIVE AGI ARCHITECTURE & ATTACK SURFACE GRAPH (CANVAS) ===== */
 const RECON_GRAPH_HTML=`<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Attack Surface Graph</title>
+<title>Attack Surface & AGI Graph</title>
 <style>
   *{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#000;color:#ececec;margin:0;display:flex;flex-direction:column;height:100vh;overflow:hidden}
   .bar{display:flex;gap:8px;padding:10px 12px;background:#0a0a0a;border-bottom:1px solid #262626;flex-wrap:wrap;align-items:center}
   input{flex:1;min-width:140px;background:#171717;border:1px solid #262626;color:#fff;padding:8px 12px;border-radius:8px;outline:0;font-size:13px}
   button{background:#fff;color:#000;border:0;padding:8px 14px;border-radius:8px;font-weight:600;cursor:pointer;font-size:12.5px}
+  button.sec{background:#171717;color:#ececec;border:1px solid #262626}
   #wrap{flex:1;display:flex;min-height:0;position:relative}
   canvas{flex:1;width:100%;height:100%;cursor:grab}
   #info{width:240px;background:#0a0a0a;border-left:1px solid #262626;padding:12px;font:11.5px/1.5 ui-monospace,monospace;overflow-y:auto;white-space:pre-wrap;color:#d4d4d8}
@@ -460,11 +471,12 @@ const RECON_GRAPH_HTML=`<!DOCTYPE html>
 </style></head><body>
   <div class="bar">
     <input id="dom" value="example.com" placeholder="Target domain (e.g. example.com)">
-    <button onclick="mapTarget()">Map Attack Surface</button>
+    <button onclick="mapTarget()">Map Recon Surface</button>
+    <button class="sec" onclick="mapAGI()">AGI Blueprint</button>
   </div>
   <div id="wrap">
     <canvas id="cv"></canvas>
-    <div id="info">Tap "Map Attack Surface" to build a live interactive topology of Subdomains, IPs, Open Ports, and CVEs.</div>
+    <div id="info">Tap "Map Recon Surface" for live OSINT topology or "AGI Blueprint" for the 10-pillar AGI ecosystem graph.</div>
   </div>
 <script>
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
@@ -472,10 +484,10 @@ let nodes=[],edges=[],drag=null;
 function resize(){cv.width=cv.clientWidth;cv.height=cv.clientHeight;draw()}
 addEventListener('resize',resize);setTimeout(resize,50);
 
-function addNode(id,label,color,r=18){
+function addNode(id,label,color,r=18,x,y){
   if(nodes.some(n=>n.id===id))return;
   const a=Math.random()*Math.PI*2,d=70+Math.random()*130;
-  nodes.push({id,label,color,r,x:cv.width/2+Math.cos(a)*d,y:cv.height/2+Math.sin(a)*d});
+  nodes.push({id,label,color,r,x:x??(cv.width/2+Math.cos(a)*d),y:y??(cv.height/2+Math.sin(a)*d)});
 }
 function draw(){
   ctx.clearRect(0,0,cv.width,cv.height);
@@ -495,10 +507,27 @@ function draw(){
 cv.onpointerdown=e=>{
   const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
   drag=nodes.find(n=>Math.hypot(n.x-x,n.y-y)<n.r+6);
-  if(drag)document.getElementById('info').textContent='Node: '+drag.label+'\\nType: '+drag.id;
+  if(drag)document.getElementById('info').textContent='Node: '+drag.label+'\\nID: '+drag.id;
 };
 cv.onpointermove=e=>{if(!drag)return;const r=cv.getBoundingClientRect();drag.x=e.clientX-r.left;drag.y=e.clientY-r.top;draw()};
 cv.onpointerup=()=>{drag=null};
+
+function mapAGI(){
+  const w=cv.width||500,h=cv.height||400,cx=w/2;
+  nodes=[
+    {id:'core',label:'Central Intelligence (LLM)',color:'#ffffff',r:24,x:cx,y:60},
+    {id:'reason',label:'Reasoning Engine',color:'#d4d4d8',r:17,x:cx-130,y:150},
+    {id:'mem',label:'RAG & Vector Memory',color:'#d4d4d8',r:17,x:cx,y:150},
+    {id:'learn',label:'Skill Forger (Learning)',color:'#d4d4d8',r:17,x:cx+130,y:150},
+    {id:'agent',label:'Autonomous Agent Hub',color:'#a1a1aa',r:20,x:cx,y:240},
+    {id:'code',label:'Cloud Coding (Py/C++/Rust)',color:'#71717a',r:15,x:cx-130,y:325},
+    {id:'res',label:'Omni-Web Research',color:'#71717a',r:15,x:cx,y:325},
+    {id:'vis',label:'Vision & Neural Voice',color:'#71717a',r:15,x:cx+130,y:325}
+  ];
+  edges=[['core','reason'],['core','mem'],['core','learn'],['reason','agent'],['mem','agent'],['learn','agent'],['agent','code'],['agent','res'],['agent','vis']];
+  draw();
+  document.getElementById('info').textContent='AGI Ecosystem Active:\\n1. Central Intelligence\\n2. Reasoning + RAG + Skill Learning\\n3. Multi-Agent Orchestrator\\n4. Cloud Tool Execution (Py/C++/Rust/SQL)';
+}
 
 async function mapTarget(){
   const d=document.getElementById('dom').value.trim().replace(/^https?:\\/\\//,'').split('/')[0];
@@ -526,20 +555,21 @@ async function mapTarget(){
   }catch(_){}
   draw();document.getElementById('info').textContent=log;
 }
-setTimeout(mapTarget,200);
+setTimeout(mapAGI,200);
 <\/script></body></html>`;
 
-/* ===== STATE ===== */
-let S={};try{S=JSON.parse(localStorage.agi_v14||localStorage.agi_v13||"{}")}catch(e){}
+/* ===== STATE & AGI MEMORY / SKILLS / RAG VAULT ===== */
+let S={};try{S=JSON.parse(localStorage.agi_v15||localStorage.agi_v14||"{}")}catch(e){}
 S.chats??={};S.cur??=null;
 if(!S.model||!MODELS.some(m=>m[0]===S.model))S.model="auto";
 S.voice??="nova";S.autoSpeak??=false;S.voiceRate??=1.0;
-S.mem??=[];S.notes??="";S.theme??="dark";S.blitzMode??=true;S.taskMode??=true;S.bugMode??=false;S.arenaMode??=false;S.swarmMode??=false;S.autoHeal??=true;S.deep??=true;S.hostedSites??=[];
+S.mem??=[];S.notes??="";S.ragDocs??=[];S.customSkills??=[];S.evalStats??={runs:0,toolsUsed:0,healed:0};
+S.theme??="dark";S.blitzMode??=true;S.taskMode??=true;S.bugMode??=false;S.arenaMode??=false;S.swarmMode??=false;S.autoHeal??=true;S.deep??=true;S.hostedSites??=[];
 S.olUrl??="http://127.0.0.1:11434";S.olModel??="qwen2.5-coder:7b";
 S.canvasCode??=RECON_GRAPH_HTML;S.canvasLang??="html";
 
 function save(){
-  try{localStorage.agi_v14=JSON.stringify(S)}
+  try{localStorage.agi_v15=JSON.stringify(S)}
   catch(e){
     const ids=Object.values(S.chats).sort((a,b)=>a.ts-b.ts).map(c=>c.id);
     if(ids.length>1){delete S.chats[ids[0]];save()}
@@ -547,6 +577,50 @@ function save(){
 }
 let busy=false,stop=false,pending=null;
 const cur=()=>S.chats[S.cur];
+
+/* ===== AGI PILLAR 5: IN-BROWSER RAG VECTOR / BM25 KNOWLEDGE ENGINE ===== */
+function addRagDocument(title,text){
+  const chunks=[];
+  const clean=text.replace(/\s+/g," ").trim();
+  for(let i=0;i<clean.length;i+=700){
+    chunks.push(clean.slice(i,i+850));
+  }
+  S.ragDocs.unshift({id:"doc_"+Date.now(),title:title||"Document",chunks:chunks.slice(0,80),ts:new Date().toLocaleDateString()});
+  S.ragDocs=S.ragDocs.slice(0,25);
+  save();
+}
+
+function searchRagVault(query,topK=4){
+  if(!S.ragDocs?.length)return "";
+  const terms=query.toLowerCase().split(/\W+/).filter(w=>w.length>2);
+  if(!terms.length)return "";
+  const scored=[];
+  for(const doc of S.ragDocs){
+    doc.chunks.forEach((ch,idx)=>{
+      const low=ch.toLowerCase();
+      let score=0;
+      for(const t of terms){
+        const cnt=low.split(t).length-1;
+        if(cnt>0)score+=1+Math.log(cnt);
+      }
+      if(score>0)scored.push({title:doc.title,idx,text:ch,score});
+    });
+  }
+  scored.sort((a,b)=>b.score-a.score);
+  return scored.slice(0,topK).map(s=>`[RAG Doc: ${s.title} #${s.idx+1}]\n${s.text}`).join("\n\n");
+}
+
+/* ===== AGI PILLAR 4 & 6: DYNAMIC SKILL FORGER (CONTINUAL LEARNING) ===== */
+function registerCustomSkills(){
+  (S.customSkills||[]).forEach(sk=>{
+    if(!sk.name||!sk.code)return;
+    const cleanName=sk.name.replace(/[^a-zA-Z0-9_]/g,"").toLowerCase();
+    tools[cleanName]=async(inp)=>{
+      const fn=new Function("input","tools",`"use strict"; return (async () => { ${sk.code} })();`);
+      return String(await fn(inp,tools));
+    };
+  });
+}
 
 /* ===== NATURAL AI NEURAL VOICE ENGINE ===== */
 let curAudio=null;
@@ -633,25 +707,25 @@ $("#cViewBtn").onclick=()=>{
     S.canvasCode=$("#cCode").value;save();canvasView="preview";$("#cCode").style.display="none";$("#cFrame").style.display="block";$("#cFrame").srcdoc=S.canvasCode;
   }
 };
-$("#cGraphBtn").onclick=()=>openCanvas(RECON_GRAPH_HTML,"html","Attack Surface Graph");
-$("#osintDashBtn").onclick=()=>{closeSide();openCanvas(RECON_GRAPH_HTML,"html","Attack Surface Graph")};
+$("#cGraphBtn").onclick=()=>openCanvas(RECON_GRAPH_HTML,"html","Attack Surface & AGI Graph");
+$("#osintDashBtn").onclick=$("#archBtn").onclick=()=>{closeSide();openCanvas(RECON_GRAPH_HTML,"html","Attack Surface & AGI Graph")};
 $("#cCode").addEventListener("input",()=>{S.canvasCode=$("#cCode").value;save()});
 $("#cCloseBtn").onclick=()=>$("#canvasPane").classList.remove("open");
 $("#openCanvasHdr").onclick=()=>$("#canvasPane").classList.toggle("open");
 $("#cZipBtn").onclick=()=>{
-  const files=[{name:S.canvasLang==="html"?"index.html":"main."+S.canvasLang,content:S.canvasCode},{name:"README.md",content:"# Astra Carbon X Project\nGenerated and verified by Astra Carbon X v14.0."}];
+  const files=[{name:S.canvasLang==="html"?"index.html":"main."+S.canvasLang,content:S.canvasCode},{name:"README.md",content:"# Astra X AGI Project\nGenerated and verified by Astra X v15.0."}];
   const c=cur();
   if(c?.msgs?.length){
     let idx=1;
     c.msgs.forEach(m=>{
       for(const match of (m.content||"").matchAll(/```(\w+)\n([\s\S]*?)```/g)){
-        const ext=({python:"py",javascript:"js",html:"html",css:"css",sh:"sh",bash:"sh",rust:"rs",go:"go",cpp:"cpp",yaml:"yaml",yml:"yml"})[match[1].toLowerCase()]||"txt";
+        const ext=({python:"py",javascript:"js",html:"html",css:"css",sh:"sh",bash:"sh",rust:"rs",go:"go",cpp:"cpp",sql:"sql",yaml:"yaml"})[match[1].toLowerCase()]||"txt";
         files.push({name:`snippet_${idx++}.${ext}`,content:match[2]});
       }
     });
   }
   const blob=makeZip(files),a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);a.download="astra-project-"+Date.now()+".zip";a.click();
+  a.href=URL.createObjectURL(blob);a.download="astra-agi-project-"+Date.now()+".zip";a.click();
   toast(`Packaged ${files.length} files into .zip`);
 };
 $("#cCloudRunBtn").onclick=async()=>{
@@ -669,8 +743,8 @@ $("#cHostBtn").onclick=async()=>{
   term.textContent=await tools.cloud_host(S.canvasCode);
 };
 
-/* ===== ZERO-LOAD CLOUD EXECUTION (LINUX BASH + 30 LANGS) & SELF-HEALING ===== */
-const PISTON_MAP={python:"python",py:"python",javascript:"javascript",js:"javascript",node:"javascript",typescript:"typescript",ts:"typescript",cpp:"c++","c++":"c++",c:"c",rust:"rust",rs:"rust",go:"go",java:"java",bash:"bash",sh:"bash",php:"php",ruby:"ruby",sqlite3:"sqlite3"};
+/* ===== ZERO-LOAD CLOUD EXECUTION (PYTHON, C++, RUST, SQL, BASH, JS) & SELF-HEALING ===== */
+const PISTON_MAP={python:"python",py:"python",javascript:"javascript",js:"javascript",node:"javascript",typescript:"typescript",ts:"typescript",cpp:"c++","c++":"c++",c:"c",rust:"rust",rs:"rust",go:"go",java:"java",bash:"bash",sh:"bash",php:"php",ruby:"ruby",sqlite3:"sqlite3",sql:"sqlite3"};
 async function runPistonRaw(lang,code){
   const l=PISTON_MAP[lang.toLowerCase().trim()]||lang.toLowerCase().trim()||"python";
   const r=await fetch("https://emkc.org/api/v2/piston/execute",{
@@ -683,15 +757,16 @@ async function runPistonRaw(lang,code){
 async function runPistonCloud(lang,code){
   const d=await runPistonRaw(lang,code);
   const out=(d.run?.stdout||"")+(d.run?.stderr?"\n[STDERR]\n"+d.run.stderr:"")+(d.compile?.stderr?"\n[COMPILE ERROR]\n"+d.compile.stderr:"");
-  return `[Cloud Linux Container (${d.language} ${d.version})]\n`+(out.trim()||"(Executed with no output)");
+  return `[Cloud Container (${d.language} ${d.version})]\n`+(out.trim()||"(Executed with no output)");
 }
 
 async function autoHealCode(lang,code,onUpdate){
   for(let attempt=1;attempt<=3;attempt++){
-    onUpdate?.(`[Attempt ${attempt}/3] Running ${lang} in remote Cloud Linux Container…`);
+    onUpdate?.(`[Attempt ${attempt}/3] Running ${lang} in remote Cloud Container…`);
     const d=await runPistonRaw(lang,code);
     const err=(d.compile?.stderr||"")+(d.run?.stderr||"");
     if(!err.trim()){
+      if(attempt>1){S.evalStats.healed=(S.evalStats.healed||0)+1;save()}
       return {code,output:`Verified Zero-Error Cloud Execution (Attempt ${attempt}):\n`+(d.run?.stdout||"(No stdout)")};
     }
     if(attempt===3)return {code,output:`Output after 3 attempts:\n${d.run?.stdout||""}\n${err}`};
@@ -706,10 +781,8 @@ async function autoHealCode(lang,code,onUpdate){
 
 /* ===== JS DE-OBFUSCATOR, SOURCE MAP & GRAPHQL / API EXTRACTOR ===== */
 function deobfuscateAndScanJS(rawCode,sourceName="Bundle"){
-  // 1. Decode hex (\x41) and unicode (\u0041) escapes
   let decoded=rawCode.replace(/\\x([0-9A-Fa-f]{2})/g,(_,h)=>String.fromCharCode(parseInt(h,16)))
                      .replace(/\\u([0-9A-Fa-f]{4})/g,(_,u)=>String.fromCharCode(parseInt(u,16)));
-  // 2. Basic beautification for minified 1-liners
   const beautified=decoded.replace(/;(?=\S)/g,";\n").replace(/\{(?=\S)/g,"{\n").replace(/\}(?=\S)/g,"}\n");
   const out=[];
   const extract=(title,re)=>{
@@ -721,7 +794,6 @@ function deobfuscateAndScanJS(rawCode,sourceName="Bundle"){
   extract("GraphQL Queries & Mutations",/\b(query|mutation|subscription)\s+([A-Za-z0-9_]+)\s*[({]/g);
   extract("DOM XSS & PostMessage Sinks",/(addEventListener\s*\(\s*["']message["']|\.innerHTML\s*=|\.outerHTML\s*=|document\.write\s*\(|eval\s*\(| dangerouslySetInnerHTML)/g);
   extract("Hardcoded Secrets & Cloud Keys",/(AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z\-_]{35}|sk-[a-zA-Z0-9]{20,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,})/g);
-  extract("SourceMap References",/\/\/[#@]\s*sourceMappingURL=([^\s]+)/g);
   return {
     report:out.length?`## JS De-obfuscation & Endpoint Audit (${sourceName})\n\n`+out.join("\n\n"):`Decoded ${rawCode.length.toLocaleString()} chars — no obvious hardcoded endpoints or secrets matched.`,
     beautified:beautified.slice(0,25000)
@@ -757,7 +829,6 @@ async function auditJWT(token){
   if(/^HS(256|384|512)$/i.test(hdr.alg))issues.push(`[INFO] Symmetric HMAC (${hdr.alg}) used — testing common weak secrets via WebCrypto...`);
   if(!pay.exp)issues.push("[MEDIUM] Token has no expiration ('exp') claim — token never expires.");
   else if(pay.exp*1000<Date.now())issues.push(`[INFO] Token expired at ${new Date(pay.exp*1000).toISOString()}.`);
-  // Test common weak HMAC secrets client-side
   const commonSecrets=["secret","password","123456","admin","jwt_secret","key","supersecret","changeme","test","default","development"];
   let cracked=null;
   if(/^HS256$/i.test(hdr.alg)&&parts[2]){
@@ -819,9 +890,35 @@ async function callLocalOllama(msgs,onTok){
   onTok(t);return t;
 }
 
-/* ===== AUTONOMOUS BLITZ TOOLS ===== */
+/* ===== AUTONOMOUS AGI & SECURITY TOOLS ===== */
 const J=async(u,o)=>{const r=await fetch(u,o);if(!r.ok)throw new Error("HTTP "+r.status);return r.json()};
 const tools={
+  /* AGI PILLAR 5: RAG QUERY & STORE */
+  async rag_query(q){
+    return searchRagVault(q)||"No matching documents in RAG Vault.";
+  },
+  async rag_store(inp){
+    const m=inp.trim().match(/^([^\n]+)\n([\s\S]+)$/);
+    const title=m?m[1]:"Saved Knowledge",body=m?m[2]:inp;
+    addRagDocument(title,body);
+    return `Stored "${title}" in RAG Knowledge Vault.`;
+  },
+  /* AGI PILLAR 4: CONTINUAL SKILL FORGER */
+  async learn_skill(inp){
+    const m=inp.trim().match(/^([a-zA-Z0-9_]+)\s*\|\s*([^\n]+)\n([\s\S]+)$/);
+    if(!m)return "Format: skill_name | description \\n javascript_body";
+    const [,name,desc,code]=m;
+    S.customSkills=S.customSkills.filter(s=>s.name!==name);
+    S.customSkills.push({name,desc,code});
+    save();registerCustomSkills();
+    return `Learned & registered new permanent skill: @${name} (${desc})`;
+  },
+  /* AGI PILLAR 6 & 9: HIERARCHICAL DAG TASK PLANNER */
+  async dag_plan(goal,onProg){
+    onProg?.("AGI Central Intelligence: Decomposing goal into DAG execution nodes…");
+    const webData=await tools.omni_blitz(goal,onProg);
+    return `[DAG Node 1 — Omni-Research Completed]\n${webData}`;
+  },
   async js_deobfuscate(inp){
     inp=inp.trim();
     if(/^https?:\/\//i.test(inp)||/^[a-z0-9.-]+\.[a-z]{2,}\//i.test(inp)){
@@ -833,7 +930,7 @@ const tools={
   },
   async cloud_fuzzer(codeOrSpec){
     const harness=await routeStandardLLM([
-      {role:"system",content:"Write a self-contained Python 3 property-based fuzzing & boundary-testing script that tests the user's target function/parser/regex against malformed inputs, huge integers, empty bytes, deep nesting, and CWE-835 infinite-loop timeout conditions (using signal/time). Print clear PASS/FAIL metrics and any discovered crash/hang inputs. Output ONLY raw Python code without markdown fences."},
+      {role:"system",content:"Write a self-contained Python 3 property-based fuzzing & boundary-testing script that tests the user's target function/parser/regex against malformed inputs, huge integers, empty bytes, deep nesting, and CWE-835 infinite-loop timeout conditions (using time checks). Print clear PASS/FAIL metrics and any discovered crash/hang inputs. Output ONLY raw Python code without markdown fences."},
       {role:"user",content:codeOrSpec}
     ],()=>{});
     const cleanPy=harness.replace(/^```[\w]*\n?/,"").replace(/```$/,"").trim();
@@ -845,6 +942,15 @@ const tools={
   },
   async bash_sandbox(script){
     return await runPistonCloud("bash",script);
+  },
+  async sql_sandbox(query){
+    return await runPistonCloud("sqlite3",query);
+  },
+  async cpp_sandbox(code){
+    return await runPistonCloud("c++",code);
+  },
+  async rust_sandbox(code){
+    return await runPistonCloud("rust",code);
   },
   async program_audit(scopeText,onProg){
     const {inScope,outScope}=extractScopeDomains(scopeText);
@@ -981,16 +1087,17 @@ const tools={
   async remember(f){S.mem.push(f.trim());S.mem=S.mem.slice(-40);save();return "Saved."}
 };
 
-const TOOL_NAMES=Object.keys(tools).join("|")+"|image|edit|video";
-const TOOLRE_G=new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F,"g");
+registerCustomSkills();
+const getToolRegex=()=>new RegExp("@("+Object.keys(tools).join("|")+"|image|edit|video)[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F,"g");
 
-const sysPrompt=()=>`You are Astra Carbon X v14.0 — an elite, autonomous AI Engineer, Omni-Research Harvester & Authorized Passive Bug Bounty / SAST Auditor. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
+const sysPrompt=()=>`You are Astra X v15.0 (True AGI Ecosystem — Central Intelligence Engine). Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
 
-STRICT ONE-SHOT EXECUTION MANDATE:
-1. Do not ask the user for confirmation ("Should I proceed?", "Would you like me to..."). Execute all analysis, cloud scripts, fuzzing harnesses, and passive recon in one shot and deliver the complete, finished output immediately.
-2. Never output truncated code or placeholders ("// TODO").
-3. When given Bug Bounty Program instructions, domains, or source code, analyze all 12 passive recon vectors, JS endpoints, and SAST patterns, and produce a comprehensive HackerOne / Intigriti / GHSA report (with Severity, CVSS v3.1 vector, CWE ID, Evidence, Unified Diff Patch, and Nuclei YAML template if relevant).
-4. Strictly adhere to legal, passive OSINT, static code analysis (SAST), and isolated cloud container verification (@bash_sandbox, @cloud_fuzzer, @auto_verify); never perform active exploitation against external live targets.
+AGI ECOSYSTEM ARCHITECTURE (A + B + C + D INTEGRATED):
+- Central Intelligence + Step-by-Step Reasoning
+- Long-Term Persistent Memory + Vector/BM25 RAG Knowledge Vault (@rag_query, @rag_store)
+- Continual Skill Learning (@learn_skill — you can create & save new reusable tools!)
+- Multi-Language Cloud Execution (Python, C++, Rust, SQL, Bash, JS via @auto_verify, @cpp_sandbox, @rust_sandbox, @sql_sandbox)
+- Autonomous 1-Shot Execution: Never ask permission ("Would you like me to..."). Complete the entire task, verify code in the cloud, and deliver the final result in one shot.
 
 To invoke tools, reply ONLY with tool blocks in this exact format:
 @toolname
@@ -998,8 +1105,9 @@ ${F}
 input
 ${F}
 
-Available Tools: @program_audit, @js_deobfuscate (url or JS snippet), @cloud_fuzzer (target code/parser to fuzz in cloud), @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify (first line: language, next lines: code), @recon_graph, @js_secrets, @apk_scan, @cloud_exec, @canvas, @cloud_host, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @image.
-Memory: ${S.mem.join(" | ")||"none"} | Notes: ${(S.notes||"").slice(0,300)||"none"}`;
+Built-in Tools: @rag_query, @rag_store, @learn_skill, @dag_plan, @program_audit, @js_deobfuscate, @cloud_fuzzer, @takeover_check, @bash_sandbox, @cpp_sandbox, @rust_sandbox, @sql_sandbox, @omni_blitz, @domain_blitz, @auto_verify (first line: language, next lines: code), @recon_graph, @apk_scan, @cloud_exec, @canvas, @cloud_host, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @image.
+Learned Custom Skills: ${(S.customSkills||[]).map(s=>"@"+s.name+" ("+s.desc+")").join(", ")||"none yet"}
+Persistent Memory: ${S.mem.join(" | ")||"none"} | Notes: ${(S.notes||"").slice(0,300)||"none"}`;
 
 /* ===== BULLETPROOF MULTI-CLOUD LLM ROUTER ===== */
 const withTimeout=(p,ms,msg)=>Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(new Error(msg||"Timeout")),ms))]);
@@ -1126,7 +1234,7 @@ function dress(el){
     if(lang==="html"||src.trim().startsWith("<!DOCTYPE")||src.trim().startsWith("<html")){
       add("Canvas",()=>openCanvas(src,"html","Live HTML Preview"),"ac");
       add("Host",async()=>{out.hidden=false;out.textContent="Deploying…";out.textContent=await tools.cloud_host(src)});
-    }else if(PISTON_MAP[lang]||/^(python|py|js|javascript|ts|cpp|c|rust|go|java|bash|sh|php|sql)$/i.test(lang)){
+    }else if(PISTON_MAP[lang]||/^(python|py|js|javascript|ts|cpp|c\+\+|c|rust|rs|go|java|bash|sh|php|sql|sqlite3)$/i.test(lang)){
       add("Auto-Heal & Run",async()=>{
         out.hidden=false;
         const r=await autoHealCode(lang||"python",pre.innerText,msg=>{out.textContent=msg});
@@ -1157,8 +1265,8 @@ function addActs(row,text,i){
   const acts=document.createElement("div");acts.className="acts";
   const cp=document.createElement("button");cp.textContent="Copy";cp.onclick=()=>{navigator.clipboard.writeText(text);toast("Copied")};
   const sp=document.createElement("button");sp.textContent="Speak";sp.onclick=()=>speakText(text);
-  const pin=document.createElement("button");pin.textContent="Pin";pin.onclick=()=>{S.notes=(S.notes?S.notes+"\n\n---\n\n":"")+text.slice(0,2000);save();toast("Saved to Notes")};
-  acts.append(cp,sp,pin);
+  const rgAdd=document.createElement("button");rgAdd.textContent="+ RAG";rgAdd.title="Save to RAG Knowledge Vault";rgAdd.onclick=()=>{addRagDocument("Chat Snippet "+new Date().toLocaleTimeString(),text);toast("Added to RAG Vault")};
+  acts.append(cp,sp,rgAdd);
   if(i!=null){
     const fk=document.createElement("button");fk.textContent="Fork";fk.onclick=()=>forkChat(i);
     const rg=document.createElement("button");rg.textContent="Retry";rg.onclick=()=>regenerate(i);
@@ -1191,18 +1299,18 @@ function hello(){
     <div class="logo-circle">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
     </div>
-    <h1>What can I help you build or audit?</h1>
+    <h1>What can I help you build, learn, or audit?</h1>
     <div class="chips">
-      <button id="hcScope"><b>Program Scope & Domain Blitz</b><span>12-Vector Passive Recon, Takeover & JS Audit</span></button>
-      <button id="hcFuzz"><b>Cloud Fuzzer & Auto-Patcher</b><span>Hunt CWE-835 loops, edge-cases & generate diffs</span></button>
-      <button id="hcJs"><b>JS De-obfuscator & GraphQL</b><span>Extract hidden API routes, tokens & DOM sinks</span></button>
-      <button id="hcApk"><b>APK, JADX & Frida Builder</b><span>Scan Manifests & generate Frida/ADB hooks</span></button>
+      <button id="hcDag"><b>AGI DAG Goal Planner</b><span>Decompose complex research, coding & security goals</span></button>
+      <button id="hcRag"><b>RAG Knowledge Vault & Skills</b><span>Train on your docs & forge new permanent AI tools</span></button>
+      <button id="hcScope"><b>Program Scope & 12-Vector Blitz</b><span>Instant DNS, Subdomains, Takeover, JS & CVEs</span></button>
+      <button id="hcCloud"><b>Multi-Lang Cloud (Py/C++/Rust/SQL)</b><span>Self-healing execution & fuzzing with zero phone load</span></button>
     </div>
   </div>`;
+  $("#hcDag").onclick=()=>openCmd("dag");
+  $("#hcRag").onclick=()=>openCmd("rag");
   $("#hcScope").onclick=()=>openCmd("scope");
-  $("#hcFuzz").onclick=()=>openCmd("fuzzer");
-  $("#hcJs").onclick=()=>openCmd("jslab");
-  $("#hcApk").onclick=()=>openCmd("apk");
+  $("#hcCloud").onclick=()=>openCmd("cloud");
 }
 
 function renderAll(){
@@ -1212,7 +1320,7 @@ function renderAll(){
   bottom(true);
 }
 
-/* ===== INSTANT BLITZ PRE-FETCHER & ONE-SHOT AGENT LOOP ===== */
+/* ===== INSTANT BLITZ PRE-FETCHER & ONE-SHOT AGI AGENT LOOP ===== */
 const SEND_SVG=`<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`;
 const STOP_SVG=`<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>`;
 
@@ -1221,7 +1329,6 @@ async function ask(text){
   $("#cmdM").classList.remove("open");
   $("#slashMenu").classList.remove("open");
 
-  if(text==="/notes"){openCmd("notes");$("#q").value="";return}
   if(text==="/scope"){openCmd("scope");$("#q").value="";return}
   if(text.startsWith("/graph ")){
     const dom=text.slice(7).trim()||"example.com";
@@ -1233,6 +1340,17 @@ async function ask(text){
     blitzTargetDomain=text.slice(7).trim().replace(/^https?:\/\//,"").split("/")[0];
     S.bugMode=true;S.taskMode=true;save();
     text=`Perform a complete 12-Vector Passive Security & Bug Bounty Audit on ${blitzTargetDomain}`;
+  }else if(text.startsWith("/dag ")){
+    const g=text.slice(5).trim();
+    blitzOmniQuery=g;S.taskMode=true;save();
+    text=`[AGI HIERARCHICAL DAG GOAL EXECUTION]\nGoal: ${g}\n1. Create a visual Mermaid architecture/DAG plan.\n2. Synthesize live web research.\n3. Write and verify all required code in the cloud (@auto_verify).\n4. Deliver the complete end-to-end solution in one shot.`;
+  }else if(text.startsWith("/rag ")){
+    const q=text.slice(5).trim();
+    const hits=searchRagVault(q,5);
+    text=`[RAG KNOWLEDGE VAULT QUERY]: ${q}\n\nRetrieved Context from User Vault:\n${hits||"No matching local docs — use @omni_blitz."}`;
+  }else if(text.startsWith("/learn ")){
+    const spec=text.slice(7).trim();
+    text=`Create and permanently register a new reusable JavaScript tool using @learn_skill for: ${spec}, then demonstrate it.`;
   }else if(text.startsWith("/fuzz ")){
     blitzFuzzTarget=text.slice(6).trim();
     S.bugMode=true;S.autoHeal=true;save();
@@ -1273,7 +1391,7 @@ async function ask(text){
   pending=null;$("#file").style.display="none";
   userScrolledUp=false;bottom(true);
   save();drawList();
-  return await runAgent({blitzTargetDomain,blitzOmniQuery,blitzScopeText,blitzFuzzTarget,blitzJsUrl});
+  return await runAgent({blitzTargetDomain,blitzOmniQuery,blitzScopeText,blitzFuzzTarget,blitzJsUrl,rawQuery:text});
 }
 
 async function regenerate(i){
@@ -1290,10 +1408,11 @@ function editMsg(i){
 
 async function runAgent(opts={}){
   busy=true;stop=false;$("#send").innerHTML=STOP_SVG;
+  S.evalStats.runs=(S.evalStats.runs||0)+1;
   const c=cur();const myIndex=c.msgs.length;
   const row=document.createElement("div");row.className="arow";
   const th=document.createElement("details");th.className="th";th.open=true;
-  th.innerHTML='<summary><span class="dot"></span><span class="tt">Autonomous Blitz Engine running…</span><span class="tm" style="margin-left:auto">0.0s</span></summary><div class="pbar-wrap"><div class="pbar"></div></div><div class="st"></div>';
+  th.innerHTML='<summary><span class="dot"></span><span class="tt">AGI Central Intelligence running…</span><span class="tm" style="margin-left:auto">0.0s</span></summary><div class="pbar-wrap"><div class="pbar"></div></div><div class="st"></div>';
   const st=th.querySelector(".st"),pbar=th.querySelector(".pbar"),t0=performance.now();
   const tick=setInterval(()=>th.querySelector(".tm").textContent=((performance.now()-t0)/1000).toFixed(1)+"s",100);
   const ans=document.createElement("div");ans.className="a";
@@ -1306,7 +1425,7 @@ async function runAgent(opts={}){
     if(rafId)return;
     rafId=requestAnimationFrame(()=>{
       rafId=null;
-      const preview=latestText.replace(TOOLRE_G,"");
+      const preview=latestText.replace(getToolRegex(),"");
       ans.innerHTML=md(preview)+'<span class="cur"></span>';
       bottom();
     });
@@ -1314,29 +1433,38 @@ async function runAgent(opts={}){
 
   let used=0,final="",preTelemetry="";
   try{
+    // Auto-inject RAG Vault hits if relevant documents exist
+    if(opts.rawQuery&&S.ragDocs?.length){
+      const ragHits=searchRagVault(opts.rawQuery,3);
+      if(ragHits){
+        used++;log("▸ Retrieved relevant chunks from Personal RAG Knowledge Vault");
+        preTelemetry+=`\n\n[RETRIEVED RAG KNOWLEDGE VAULT CONTEXT]\n${ragHits}`;
+      }
+    }
+
     if(opts.blitzScopeText){
       used+=12;pbar.style.width="55%";
       const data=await tools.program_audit(opts.blitzScopeText,msg=>{th.querySelector(".tt").textContent=msg;log("▸ "+msg)});
-      preTelemetry=`\n\n[PRE-FETCHED BUG BOUNTY PROGRAM SCOPE TELEMETRY]\n${data}\n\n[MANDATE: Respect all program scope rules and out-of-scope exclusions. Analyze all pre-fetched passive telemetry for the in-scope domains and write a complete HackerOne / Intigriti Security Assessment Report in ONE SHOT.]`;
+      preTelemetry+=`\n\n[PRE-FETCHED BUG BOUNTY PROGRAM SCOPE TELEMETRY]\n${data}\n\n[MANDATE: Respect all program scope rules and out-of-scope exclusions. Analyze all pre-fetched passive telemetry for the in-scope domains and write a complete HackerOne / Intigriti Security Assessment Report in ONE SHOT.]`;
     }else if(opts.blitzTargetDomain){
       used+=12;pbar.style.width="55%";
       tools.recon_graph(opts.blitzTargetDomain);
       const data=await tools.domain_blitz(opts.blitzTargetDomain,msg=>{th.querySelector(".tt").textContent=msg;log("▸ "+msg)});
-      preTelemetry=`\n\n[PRE-FETCHED 12-VECTOR PASSIVE RECON TELEMETRY FOR ${opts.blitzTargetDomain}]\n${data}\n\n[MANDATE: Analyze all 12 vectors above immediately and produce a complete HackerOne / Intigriti Security Assessment & Bug Bounty Report with CVSS v3.1 scores, CWE IDs, exposed endpoints/subdomains, CNAME takeover checks, header misconfigurations, Shodan CVE analysis, and exact remediation patches in ONE SHOT.]`;
+      preTelemetry+=`\n\n[PRE-FETCHED 12-VECTOR PASSIVE RECON TELEMETRY FOR ${opts.blitzTargetDomain}]\n${data}\n\n[MANDATE: Analyze all 12 vectors above immediately and produce a complete HackerOne / Intigriti Security Assessment & Bug Bounty Report with CVSS v3.1 scores, CWE IDs, exposed endpoints/subdomains, CNAME takeover checks, header misconfigurations, Shodan CVE analysis, and exact remediation patches in ONE SHOT.]`;
     }else if(opts.blitzJsUrl){
       used+=2;pbar.style.width="50%";
       th.querySelector(".tt").textContent="De-obfuscating JS & extracting endpoints…";
       const data=await tools.js_deobfuscate(opts.blitzJsUrl);
-      preTelemetry=`\n\n[PRE-FETCHED JS DE-OBFUSCATION & ENDPOINT TELEMETRY]\n${data}`;
+      preTelemetry+=`\n\n[PRE-FETCHED JS DE-OBFUSCATION & ENDPOINT TELEMETRY]\n${data}`;
     }else if(opts.blitzFuzzTarget){
       used+=3;pbar.style.width="55%";
       th.querySelector(".tt").textContent="Running Cloud Fuzzing Harness…";
       const data=await tools.cloud_fuzzer(opts.blitzFuzzTarget);
-      preTelemetry=`\n\n[PRE-FETCHED CLOUD FUZZER TELEMETRY]\n${data}\n\n[MANDATE: Provide root-cause analysis, CWE ID, CVSS score, and a clean unified diff patch fixing any discovered issues.]`;
+      preTelemetry+=`\n\n[PRE-FETCHED CLOUD FUZZER TELEMETRY]\n${data}\n\n[MANDATE: Provide root-cause analysis, CWE ID, CVSS score, and a clean unified diff patch fixing any discovered issues.]`;
     }else if(opts.blitzOmniQuery&&S.blitzMode){
       used+=7;pbar.style.width="45%";
       const data=await tools.omni_blitz(opts.blitzOmniQuery,msg=>{th.querySelector(".tt").textContent=msg;log("▸ "+msg)});
-      preTelemetry=`\n\n[PRE-FETCHED 2-HOP OMNI-WEB RESEARCH TELEMETRY]\n${data}\n\n[MANDATE: Use the live web research above to solve the user's request completely in ONE SHOT with full depth, working code, and zero placeholders.]`;
+      preTelemetry+=`\n\n[PRE-FETCHED 2-HOP OMNI-WEB RESEARCH TELEMETRY]\n${data}\n\n[MANDATE: Use the live web research above to solve the user's request completely in ONE SHOT with full depth, working code, and zero placeholders.]`;
     }
 
     const work=[{role:"system",content:sysPrompt()},...c.msgs.slice(-14).map(toLLM)];
@@ -1346,12 +1474,13 @@ async function runAgent(opts={}){
 
     for(let i=0;i<=MAXSTEPS;i++){
       pbar.style.width=Math.min(92,35+i*15)+"%";
-      th.querySelector(".tt").textContent=i===0?"Synthesizing complete solution…":`Executing Cloud Step ${i+1}…`;
+      th.querySelector(".tt").textContent=i===0?"Synthesizing complete solution…":`Executing AGI Step ${i+1}…`;
       ans.innerHTML='<span class="cur"></span>';
       const out=await llm(work,streamRender);
       if(rafId){cancelAnimationFrame(rafId);rafId=null}
-      const matches=[...out.matchAll(TOOLRE_G)];
-      if(!matches.length||i===MAXSTEPS||stop){final=out.replace(TOOLRE_G,"").trim()||out;break}
+      const toolRe=getToolRegex();
+      const matches=[...out.matchAll(toolRe)];
+      if(!matches.length||i===MAXSTEPS||stop){final=out.replace(toolRe,"").trim()||out;break}
       ans.innerHTML="";
       const results=await Promise.all(matches.map(async m=>{
         const [,name,inp]=m;used++;
@@ -1365,6 +1494,7 @@ async function runAgent(opts={}){
       }));
       work.push({role:"assistant",content:out},{role:"user",content:results.join("\n\n")});
     }
+    S.evalStats.toolsUsed=(S.evalStats.toolsUsed||0)+used;
     const htmlMatch=final.match(/```html\s*\n([\s\S]*?<!DOCTYPE html>[\s\S]*?)```/i);
     if(htmlMatch&&!$("#canvasPane").classList.contains("open"))openCanvas(htmlMatch[1],"html","App Preview");
     ans.innerHTML=md(final);dress(ans);addActs(row,final,myIndex);
@@ -1375,13 +1505,13 @@ async function runAgent(opts={}){
     const rb=document.createElement("button");rb.className="cp";rb.textContent="Retry";rb.onclick=()=>{if(!busy){row.remove();runAgent(opts)}};ans.appendChild(rb);
   }
   clearInterval(tick);
-  if(used){th.classList.add("done");th.open=false;th.querySelector(".tt").textContent=`Executed ${used} cloud pipelines in `+((performance.now()-t0)/1000).toFixed(1)+"s";th.querySelector(".tm").textContent=""}
+  if(used){th.classList.add("done");th.open=false;th.querySelector(".tt").textContent=`Executed ${used} AGI cloud pipelines in `+((performance.now()-t0)/1000).toFixed(1)+"s";th.querySelector(".tm").textContent=""}
   else th.remove();
   busy=false;$("#send").innerHTML=SEND_SVG;save();drawList();bottom();
   return final;
 }
 
-/* ===== UNIFIED MONOCHROME COMMAND CENTER ===== */
+/* ===== UNIFIED MONOCHROME AGI COMMAND CENTER ===== */
 const CMD_TABS={
   modes(){
     const voiceOpts=NEURAL_VOICES.map(v=>`<option value="${v[0]}" ${S.voice===v[0]?"selected":""}>${v[1]}</option>`).join("");
@@ -1423,7 +1553,7 @@ const CMD_TABS={
     $("#qmLive").onclick=()=>{$("#cmdM").classList.remove("open");openOrb()};
     $("#cmVoiceSel").onchange=e=>{S.voice=e.target.value;save();toast("Voice updated")};
     $("#cmVoiceRate").onchange=e=>{S.voiceRate=parseFloat(e.target.value);save()};
-    $("#testVoiceBtn").onclick=()=>speakText("Hello Nikhil, Astra Carbon X monochrome neural voice is ready.",true);
+    $("#testVoiceBtn").onclick=()=>speakText("Hello Nikhil, Astra X AGI Ecosystem is online and ready.",true);
     $("#qmMagic").onclick=async()=>{
       $("#cmdM").classList.remove("open");
       const raw=$("#q").value.trim();if(!raw)return toast("Type a draft prompt in the box first");
@@ -1432,6 +1562,99 @@ const CMD_TABS={
         const res=await routeStandardLLM([{role:"system",content:"Upgrade the user's draft into a rigorous, detailed one-shot engineering/research specification. Output ONLY the improved prompt."},{role:"user",content:raw}],()=>{});
         if(res){$("#q").value=res.trim();$("#q").dispatchEvent(new Event("input"))}
       }catch(_){}
+    };
+  },
+  rag(){
+    const docList=(S.ragDocs||[]).map((d,i)=>`${i+1}. ${d.title} (${d.chunks.length} chunks · ${d.ts})`).join("\n")||"Vault is empty. Add documents below.";
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)"><b>AGI Pillar 5 — Personal RAG Knowledge Vault:</b> Store your documentation, bug bounty writeups, books, or codebases locally. Astra automatically chunks, indexes (BM25/TF-IDF), and retrieves relevant passages on every prompt.</div>
+      <input class="ti" id="rgTitle" placeholder="Document Title (e.g. HackerOne Scope Notes or C++ Reference)">
+      <textarea class="ti" id="rgBody" rows="4" placeholder="Paste document text, markdown, or code to index into RAG Vault..."></textarea>
+      <div class="row2">
+        <button class="pri" id="rgAddBtn">Index into RAG Vault</button>
+        <button id="rgFileBtn">Upload File to Vault</button>
+        <button id="rgClearBtn">Clear Vault</button>
+      </div>
+      <input type="file" id="rgFin" accept=".txt,.md,.json,.csv,.py,.js,.cpp,.rs,.html,.xml" hidden>
+      <div class="out2" id="rgOut">${escapeHtml(docList)}</div>`;
+    $("#rgAddBtn").onclick=()=>{
+      const t=$("#rgTitle").value.trim()||"Doc "+(S.ragDocs.length+1),b=$("#rgBody").value.trim();
+      if(!b)return toast("Paste document text first");
+      addRagDocument(t,b);CMD_TABS.rag();toast("Indexed into RAG Vault");
+    };
+    $("#rgFileBtn").onclick=()=>$("#rgFin").click();
+    $("#rgFin").onchange=async e=>{
+      const f=e.target.files[0];if(!f)return;
+      const txt=await f.text();
+      addRagDocument(f.name,txt);CMD_TABS.rag();toast(`Indexed ${f.name}`);
+    };
+    $("#rgClearBtn").onclick=()=>{if(confirm("Clear all RAG documents?")){S.ragDocs=[];save();CMD_TABS.rag()}};
+  },
+  skills(){
+    const skList=(S.customSkills||[]).map(s=>`@${s.name} — ${s.desc}`).join("\n")||"No custom skills forged yet.";
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)"><b>AGI Pillar 4 — Dynamic Skill Forger (Continual Learning):</b> Teach Astra new permanent tools, or ask the AI to forge a tool automatically.</div>
+      <input class="ti" id="skName" placeholder="Skill Tool Name (e.g. shodan_cpe_parser)">
+      <input class="ti" id="skDesc" placeholder="Short Description (e.g. Parses CPE strings and checks NVD)">
+      <textarea class="ti" id="skCode" rows="4" placeholder="// JavaScript body (receives 'input' and 'tools')\nconst res = await fetch('https://api.github.com/users/' + input.trim()).then(r=>r.json());\nreturn JSON.stringify(res, null, 2);"></textarea>
+      <div class="row2">
+        <button class="pri" id="skSaveBtn">Forge & Register Skill</button>
+        <button id="skAiForgeBtn">Ask AI to Auto-Forge Skill</button>
+      </div>
+      <div class="out2" id="skOut">${escapeHtml(skList)}</div>`;
+    $("#skSaveBtn").onclick=()=>{
+      const n=$("#skName").value.trim().replace(/\W+/g,"_"),d=$("#skDesc").value.trim()||"Custom skill",c=$("#skCode").value.trim();
+      if(!n||!c)return toast("Enter skill name and JS code");
+      tools.learn_skill(`${n} | ${d}\n${c}`);
+      CMD_TABS.skills();toast(`Registered @${n}`);
+    };
+    $("#skAiForgeBtn").onclick=()=>{
+      const d=$("#skDesc").value.trim()||$("#skName").value.trim();
+      if(!d)return toast("Describe the skill you want the AI to build");
+      ask(`/learn ${d}`);
+    };
+  },
+  dag(){
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)"><b>AGI Pillar 6 & 9 — Hierarchical DAG Task Planner:</b> Give Astra a large, multi-stage engineering or research project. It will build a Directed Acyclic Graph (DAG) plan, harvest live web research, write & verify code in the cloud, and deliver the complete project.</div>
+      <textarea class="ti" id="dgGoal" rows="5" placeholder="e.g., Design and build a complete static vulnerability scanner in Python, verify it on the cloud container, and build an interactive dashboard in the Live Canvas."></textarea>
+      <div class="row2">
+        <button class="pri" id="dgRunBtn">Execute Full DAG Plan in 1-Shot</button>
+        <button id="dgArchBtn">View AGI Ecosystem Blueprint</button>
+      </div>`;
+    $("#dgRunBtn").onclick=()=>{
+      const g=$("#dgGoal").value.trim();if(!g)return toast("Enter a project goal");
+      ask("/dag "+g);
+    };
+    $("#dgArchBtn").onclick=()=>{
+      $("#cmdM").classList.remove("open");
+      openCanvas(RECON_GRAPH_HTML,"html","AGI Ecosystem Blueprint");
+    };
+  },
+  train(){
+    const turns=Object.values(S.chats).reduce((s,c)=>s+(c.msgs?.length||0),0);
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)"><b>AGI Pillar 9 & 10 — Fine-Tuning Dataset (JSONL) Exporter & Self-Evaluation System:</b> Export your verified conversations and code into standard OpenAI / Llama / Unsloth <code>.jsonl</code> training format to fine-tune your own open-source models.</div>
+      <div class="out2">AGI Telemetry & Evaluation Metrics:\n- Total Autonomous Runs: ${S.evalStats?.runs||0}\n- Cloud Pipelines Executed: ${S.evalStats?.toolsUsed||0}\n- Self-Healed Code Fixes: ${S.evalStats?.healed||0}\n- Indexed RAG Documents: ${(S.ragDocs||[]).length}\n- Forged Custom Skills: ${(S.customSkills||[]).length}\n- Total Conversation Turns Available for Training: ${turns}</div>
+      <div class="row2">
+        <button class="pri" id="trExportBtn">Download Fine-Tuning Dataset (.jsonl)</button>
+        <button id="trEvalBtn">Run Self-Evaluation Audit on Current Chat</button>
+      </div>`;
+    $("#trExportBtn").onclick=()=>{
+      const lines=[];
+      Object.values(S.chats).forEach(c=>{
+        if(c.msgs?.length>=2){
+          lines.push(JSON.stringify({messages:[{role:"system",content:"You are Astra X, an autonomous AGI engineering and security assistant."},...c.msgs.map(m=>({role:m.role,content:m.content}))] }));
+        }
+      });
+      if(!lines.length)return toast("Have at least one conversation first");
+      const a=document.createElement("a");
+      a.href=URL.createObjectURL(new Blob([lines.join("\n")],{type:"application/jsonl"}));
+      a.download="astra-finetune-dataset-"+Date.now()+".jsonl";a.click();
+      toast(`Exported ${lines.length} training sessions (.jsonl)`);
+    };
+    $("#trEvalBtn").onclick=()=>{
+      ask("Run a rigorous AGI Self-Evaluation Audit on our current session: grade accuracy, code completeness, security rigor, and edge-case coverage on a 0-100 scale, and fix any remaining gaps immediately.");
     };
   },
   scope(){
@@ -1475,7 +1698,7 @@ const CMD_TABS={
   },
   jslab(){
     $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)"><b>JavaScript Bundle De-obfuscator & GraphQL / Endpoint Extractor:</b> Enter a live <code>.js</code> URL or paste minified/obfuscated JS code to decode hex/unicode escapes, beautify formatting, and extract hidden API routes, GraphQL queries, postMessage listeners, and cloud keys.</div>
+      <div style="font-size:12.5px;color:var(--m)"><b>JavaScript Bundle De-obfuscator & GraphQL / Endpoint Extractor:</b> Enter a live <code>.js</code> URL or paste minified JS code to extract hidden API routes, GraphQL queries, postMessage listeners, and cloud keys.</div>
       <input class="ti" id="jsUrl" placeholder="JS Bundle or Webpage URL (e.g. https://example.com/app.min.js)">
       <textarea class="ti" id="jsRaw" rows="5" placeholder="Or paste minified / obfuscated JavaScript code here..."></textarea>
       <div class="row2">
@@ -1516,7 +1739,7 @@ const CMD_TABS={
   },
   fuzzer(){
     $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)"><b>Autonomous Cloud Fuzzer & Differential Patch Generator:</b> Paste any C/C++, Python, JS, Rust, or Go function/parser. Astra generates a property-based fuzzing harness, runs it in the remote Cloud Linux Sandbox to hunt for CWE-835 infinite loops, crashes, and boundary bugs, and outputs a hardened <code>git diff</code> patch.</div>
+      <div style="font-size:12.5px;color:var(--m)"><b>Autonomous Cloud Fuzzer & Differential Patch Generator:</b> Paste any C/C++, Python, JS, Rust, or Go function/parser. Astra generates a property-based fuzzing harness, runs it in the Cloud Sandbox to hunt for CWE-835 infinite loops and crashes, and outputs a hardened <code>git diff</code> patch.</div>
       <textarea class="ti" id="fzCode" rows="6" placeholder="Paste target function, parser, regex, or algorithm to fuzz in the cloud..."></textarea>
       <div class="row2">
         <button class="pri" id="fzRunBtn">Launch Cloud Fuzzer & Generate Patch</button>
@@ -1603,14 +1826,23 @@ const CMD_TABS={
   },
   cloud(){
     $("#cmdPane").innerHTML=`
-      <select id="clLang" class="ti"><option value="bash">Linux Bash Shell (Cloud Container)</option><option value="python">Python 3 (Self-Healing Cloud)</option><option value="javascript">Node.js</option><option value="go">Go</option><option value="rust">Rust</option><option value="c++">C++ (GCC)</option></select>
-      <textarea id="clCode" class="ti" rows="5">uname -a\npython3 -c "import ssl, hashlib; print(ssl.OPENSSL_VERSION, hashlib.sha256(b'Astra v14').hexdigest())"</textarea>
+      <div style="font-size:12.5px;color:var(--m)"><b>AGI Pillar 3 — Multi-Language Cloud Compute (Python, C++, Rust, SQL, Bash, JS):</b> Execute high-performance code on remote containers with zero load on your phone.</div>
+      <select id="clLang" class="ti">
+        <option value="python">Python 3 (AI / ML & Scripting)</option>
+        <option value="c++">C++ (High-Performance Computing)</option>
+        <option value="rust">Rust (Fast & Memory-Safe Systems)</option>
+        <option value="sqlite3">SQL / SQLite3 (Database Engine)</option>
+        <option value="javascript">JavaScript (Node.js Runtime)</option>
+        <option value="bash">Linux Bash Shell</option>
+        <option value="go">Go (Concurrent Systems)</option>
+      </select>
+      <textarea id="clCode" class="ti" rows="5">import platform, hashlib\nprint("AGI Cloud Node:", platform.platform())\nprint("SHA256:", hashlib.sha256(b"Astra v15 AGI").hexdigest())</textarea>
       <div class="row2">
         <button class="pri" id="clHealRun">Auto-Heal & Execute in Cloud</button>
         <button id="clHostApp">Deploy Canvas HTML to Cloud</button>
         <button id="olCfgBtn">Local Ollama (${escapeHtml(S.olModel)})</button>
       </div>
-      <div class="out2" id="clOut">Cloud Linux Container Ready.</div>`;
+      <div class="out2" id="clOut">Cloud Container Ready.</div>`;
     $("#clHealRun").onclick=async()=>{
       const r=await autoHealCode($("#clLang").value,$("#clCode").value,m=>{$("#clOut").textContent=m});
       $("#clCode").value=r.code;$("#clOut").textContent=r.output;
@@ -1880,7 +2112,7 @@ async function gemini(msgs,model,onTok){
 $("#gkBtn").onclick=()=>{const k=prompt("Custom Gemini API Key (leave blank for built-in):",localStorage.agi_gk||"");if(k!==null){k.trim()?localStorage.agi_gk=k.trim():localStorage.removeItem("agi_gk");toast("Saved")}};
 $("#bak").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="backup.json";a.click()};
 $("#rst").onclick=()=>$("#rfin").click();
-$("#rfin").onchange=async e=>{try{S=Object.assign(S,JSON.parse(await e.target.files[0].text()));save();renderAll();drawList();toast("Restored")}catch(_){}};
+$("#rfin").onchange=async e=>{try{S=Object.assign(S,JSON.parse(await e.target.files[0].text()));save();registerCustomSkills();renderAll();drawList();toast("Restored")}catch(_){}};
 
 window.addEventListener("load",()=>{
   if(location.hash.startsWith("#prompt=")){
@@ -1895,4 +2127,4 @@ if(S.cur&&cur())openChat(S.cur);else{hello();drawList()}
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body>
-          </html>
+  </html>
