@@ -391,7 +391,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
 </div>
 
 <script>
-/* ===== OBFUSCATED MULTI-PROVIDER KEY VAULT (GitHub Scanner Safe) ===== */
+/* ===== OBFUSCATED MULTI-PROVIDER KEY VAULT ===== */
 const _dec=(arr)=>arr.map(c=>String.fromCharCode(c)).join("");
 const _OR_KEY = localStorage.agi_ork || (_dec([115,107,45,111,114,45,118,49,45]) + "1bb047473bdb9d0458eef701b16a7de450731a75242ac2008055b794dfbf959b");
 const _GR_KEY = localStorage.agi_grk || (_dec([103,115,107,95]) + "ufPXjapmvZYAhsjXTwf4WGdyb3FYKvPHXDJWjqovQsTqSK3SwVeN");
@@ -937,7 +937,7 @@ async function checkSubdomainTakeover(domain){
   const cnameResults=[];
   for(const s of subs){
     try{
-      const r=await J("[https://dns.google/resolve?name=](https://dns.google/resolve?name=)"+encodeURIComponent(s)+"&type=CNAME");
+      const r=await J("https://dns.google/resolve?name="+encodeURIComponent(s)+"&type=CNAME");
       const cname=(r.Answer||[]).filter(a=>a.type===5).map(a=>a.data).join(", ");
       if(cname){
         const dangling=/github\.io|herokuapp\.com|amazonaws\.com|azurewebsites\.net|cloudfront\.net|fastly\.net|pantheonsite\.io|zendesk\.com|shopify\.com|cargocollective\.com/i.test(cname);
@@ -958,7 +958,7 @@ const tools={
   async video(p){return await tools.auto_reel(p)},
   async image(p){
     p=p.trim();
-    const r=await fetch("[https://image.pollinations.ai/prompt/](https://image.pollinations.ai/prompt/)"+encodeURIComponent(p)+"?model=flux&width=1024&height=1024&nologo=true&seed="+Math.floor(Math.random()*1e6));
+    const r=await fetch("https://image.pollinations.ai/prompt/"+encodeURIComponent(p)+"?model=flux&width=1024&height=1024&nologo=true&seed="+Math.floor(Math.random()*1e6));
     const b=await r.blob(),id=newId();await mPut(id,{b,kind:"image"});S.lastImg=id;save();
     return `Image generated. Place this exact token on its own line in your final response:\n[[media:${id}]]`;
   },
@@ -981,7 +981,7 @@ const tools={
     inp=inp.trim();
     if(/^https?:\/\//i.test(inp)||/^[a-z0-9.-]+\.[a-z]{2,}\//i.test(inp)){
       const u=/^https?:\/\//i.test(inp)?inp:"https://"+inp;
-      const txt=await (await fetch("[https://r.jina.ai/](https://r.jina.ai/)"+u,{headers:{Accept:"text/plain"}})).text();
+      const txt=await (await fetch("https://r.jina.ai/"+u,{headers:{Accept:"text/plain"}})).text();
       return deobfuscateAndScanJS(txt,u).report;
     }
     return deobfuscateAndScanJS(inp,"Snippet").report;
@@ -1015,12 +1015,12 @@ const tools={
     q=q.trim();
     onProg?.("Hop 1: Harvesting 7 global networks (DuckDuckGo, Wiki, HN, Reddit, SO, GitHub, ArXiv)…");
     const tasks=[
-      fetch("[https://r.jina.ai/https://html.duckduckgo.com/html/?q=](https://r.jina.ai/https://html.duckduckgo.com/html/?q=)"+encodeURIComponent(q),{headers:{Accept:"text/plain"}}).then(r=>r.text()).then(t=>"[DuckDuckGo Live Web]\n"+t.slice(0,3200)).catch(()=>""),
-      fetch("[https://en.wikipedia.org/w/api.php?action=query&list=search&srlimit=5&format=json&origin=*&srsearch=](https://en.wikipedia.org/w/api.php?action=query&list=search&srlimit=5&format=json&origin=*&srsearch=)"+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[Wikipedia]\n"+(d.query?.search||[]).map(x=>x.title+": "+x.snippet.replace(/<[^>]+>/g,"")).join("\n")).catch(()=>""),
-      fetch("[https://hn.algolia.com/api/v1/search?hitsPerPage=5&query=](https://hn.algolia.com/api/v1/search?hitsPerPage=5&query=)"+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[HackerNews]\n"+(d.hits||[]).map(h=>h.title+" ("+(h.url||"")+")").join("\n")).catch(()=>""),
-      fetch("[https://www.reddit.com/search.json?limit=5&q=](https://www.reddit.com/search.json?limit=5&q=)"+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[Reddit]\n"+(d.data?.children||[]).map(c=>c.data.title+": "+(c.data.selftext||"").slice(0,240)).join("\n")).catch(()=>""),
-      fetch("[https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=relevance&pagesize=5&site=stackoverflow&q=](https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=relevance&pagesize=5&site=stackoverflow&q=)"+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[StackOverflow]\n"+(d.items||[]).map(i=>i.title+" ("+i.link+")").join("\n")).catch(()=>""),
-      fetch("[https://api.github.com/search/repositories?per_page=4&q=](https://api.github.com/search/repositories?per_page=4&q=)"+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[GitHub Repos]\n"+(d.items||[]).map(i=>i.full_name+" ⭐"+i.stargazers_count+": "+i.description).join("\n")).catch(()=>""),
+      fetch("https://r.jina.ai/https://html.duckduckgo.com/html/?q="+encodeURIComponent(q),{headers:{Accept:"text/plain"}}).then(r=>r.text()).then(t=>"[DuckDuckGo Live Web]\n"+t.slice(0,3200)).catch(()=>""),
+      fetch("https://en.wikipedia.org/w/api.php?action=query&list=search&srlimit=5&format=json&origin=*&srsearch="+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[Wikipedia]\n"+(d.query?.search||[]).map(x=>x.title+": "+x.snippet.replace(/<[^>]+>/g,"")).join("\n")).catch(()=>""),
+      fetch("https://hn.algolia.com/api/v1/search?hitsPerPage=5&query="+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[HackerNews]\n"+(d.hits||[]).map(h=>h.title+" ("+(h.url||"")+")").join("\n")).catch(()=>""),
+      fetch("https://www.reddit.com/search.json?limit=5&q="+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[Reddit]\n"+(d.data?.children||[]).map(c=>c.data.title+": "+(c.data.selftext||"").slice(0,240)).join("\n")).catch(()=>""),
+      fetch("https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=relevance&pagesize=5&site=stackoverflow&q="+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[StackOverflow]\n"+(d.items||[]).map(i=>i.title+" ("+i.link+")").join("\n")).catch(()=>""),
+      fetch("https://api.github.com/search/repositories?per_page=4&q="+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[GitHub Repos]\n"+(d.items||[]).map(i=>i.full_name+" ⭐"+i.stargazers_count+": "+i.description).join("\n")).catch(()=>""),
       tools.arxiv(q).then(t=>"[ArXiv Papers]\n"+t).catch(()=>"")
     ];
     const hop1=(await Promise.all(tasks)).filter(Boolean).join("\n\n");
@@ -1046,7 +1046,7 @@ const tools={
       tools.securityheaders(target).then(r=>"[7. HTTP Security Headers Analysis]\n"+r.slice(0,1600)).catch(()=>""),
       tools.wayback(target).then(r=>"[8. Wayback Machine Historical Endpoints]\n"+r.slice(0,1800)).catch(()=>""),
       tools.urlscan(target).then(r=>"[9. URLScan.io Passive Intel]\n"+r.slice(0,1400)).catch(()=>""),
-      fetch("[https://r.jina.ai/https://](https://r.jina.ai/https://)"+target,{headers:{Accept:"text/plain"}}).then(r=>r.text()).then(t=>"[10. Main Target Page & JS Endpoint Scan]\n"+deobfuscateAndScanJS(t,target).report+"\n\n[Page Snippet]\n"+t.slice(0,1400)).catch(()=>""),
+      fetch("https://r.jina.ai/https://"+target,{headers:{Accept:"text/plain"}}).then(r=>r.text()).then(t=>"[10. Main Target Page & JS Endpoint Scan]\n"+deobfuscateAndScanJS(t,target).report+"\n\n[Page Snippet]\n"+t.slice(0,1400)).catch(()=>""),
       checkSubdomainTakeover(target).then(r=>"[11. Subdomain CNAME & Takeover Check]\n"+r).catch(()=>"")
     ];
     const base=(await Promise.all(tasks)).filter(Boolean).join("\n\n");
@@ -1077,7 +1077,7 @@ const tools={
   async bughunt(target){return await tools.domain_blitz(target)},
   async js_secrets(url){
     url=url.trim();if(!/^https?:\/\//i.test(url))url="https://"+url;
-    const txt=await (await fetch("[https://r.jina.ai/](https://r.jina.ai/)"+url,{headers:{Accept:"text/plain"}})).text();
+    const txt=await (await fetch("https://r.jina.ai/"+url,{headers:{Accept:"text/plain"}})).text();
     return scanAndroidSource(txt,url);
   },
   async cloud_exec(inp){
@@ -1093,16 +1093,16 @@ const tools={
     return "Rendered in Side-by-Side Live Canvas.";
   },
   async deepsearch(q){return await tools.omni_blitz(q)},
-  async websearch(q){return (await (await fetch("[https://r.jina.ai/https://html.duckduckgo.com/html/?q=](https://r.jina.ai/https://html.duckduckgo.com/html/?q=)"+encodeURIComponent(q.trim()),{headers:{Accept:"text/plain"}})).text()).slice(0,5500)},
-  async fetch(u){u=u.trim();if(!/^https?:\/\//i.test(u))u="https://"+u;return (await (await fetch("[https://r.jina.ai/](https://r.jina.ai/)"+u,{headers:{Accept:"text/plain"}})).text()).slice(0,7000)},
+  async websearch(q){return (await (await fetch("https://r.jina.ai/https://html.duckduckgo.com/html/?q="+encodeURIComponent(q.trim()),{headers:{Accept:"text/plain"}})).text()).slice(0,5500)},
+  async fetch(u){u=u.trim();if(!/^https?:\/\//i.test(u))u="https://"+u;return (await (await fetch("https://r.jina.ai/"+u,{headers:{Accept:"text/plain"}})).text()).slice(0,7000)},
   async arxiv(q){
-    const r=await fetch("[https://export.arxiv.org/api/query?search_query=all](https://export.arxiv.org/api/query?search_query=all):"+encodeURIComponent(q.trim())+"&start=0&max_results=4");
+    const r=await fetch("https://export.arxiv.org/api/query?search_query=all:"+encodeURIComponent(q.trim())+"&start=0&max_results=4");
     const xml=new DOMParser().parseFromString(await r.text(),"text/xml");
     return [...xml.querySelectorAll("entry")].map(e=>e.querySelector("title")?.textContent.trim()+": "+(e.querySelector("summary")?.textContent.trim()||"").slice(0,300)).join("\n\n")||"None.";
   },
   async wayback(u){
     u=u.trim().replace(/^https?:\/\//,"");
-    const cdx=await J("[https://web.archive.org/cdx/search/cdx?url=](https://web.archive.org/cdx/search/cdx?url=)"+encodeURIComponent(u+"/*")+"&output=json&limit=30&fl=timestamp,original,statuscode&collapse=urlkey").catch(()=>[]);
+    const cdx=await J("https://web.archive.org/cdx/search/cdx?url="+encodeURIComponent(u+"/*")+"&output=json&limit=30&fl=timestamp,original,statuscode&collapse=urlkey").catch(()=>[]);
     return cdx.length>1?cdx.slice(1).map(r=>r.join(" | ")).join("\n"):"No Wayback records.";
   },
   async js(code){
@@ -1110,14 +1110,14 @@ const tools={
     return d.stdout||(d.stderr?"ERR: "+d.stderr:"(done)");
   },
   async python(code){return await tools.cloud_exec("python\n"+code)},
-  async dns(x){const [d,t="A"]=x.trim().split(/\s+/);const r=await J("[https://dns.google/resolve?name=](https://dns.google/resolve?name=)"+encodeURIComponent(d)+"&type="+t);return (r.Answer||[]).map(a=>a.name+" "+a.data).join("\n")||"None."},
-  async subdomains(d){const r=await J("[https://crt.sh/?output=json&q=%25](https://crt.sh/?output=json&q=%25)."+encodeURIComponent(d.trim()));return [...new Set(r.flatMap(e=>e.name_value.split("\n")))].filter(s=>!s.includes("*")).slice(0,80).join("\n")||"None."},
-  async whois(d){const r=await J("[https://rdap.org/domain/](https://rdap.org/domain/)"+encodeURIComponent(d.trim()));return JSON.stringify({name:r.ldhName,status:r.status,ns:(r.nameservers||[]).map(n=>n.ldhName)})},
-  async ip(a){return JSON.stringify(await J("[https://internetdb.shodan.io/](https://internetdb.shodan.io/)"+a.trim()))},
-  async urlscan(q){const d=await J("[https://urlscan.io/api/v1/search/?q=domain](https://urlscan.io/api/v1/search/?q=domain):"+encodeURIComponent(q.trim())+"&size=8");return (d.results||[]).map(r=>r.page?.url+" | "+(r.page?.ip||"")+" | "+(r.page?.server||"")).join("\n")||"None."},
-  async github(q){const r=await J("[https://api.github.com/search/repositories?per_page=6&q=](https://api.github.com/search/repositories?per_page=6&q=)"+encodeURIComponent(q.trim()));return (r.items||[]).map(i=>i.full_name+" ⭐"+i.stargazers_count+" - "+i.description).join("\n")},
-  async cve(q){q=q.trim();const u=/^CVE-/i.test(q)?"cveId="+q.toUpperCase():"resultsPerPage=6&keywordSearch="+encodeURIComponent(q);const r=await J("[https://services.nvd.nist.gov/rest/json/cves/2.0](https://services.nvd.nist.gov/rest/json/cves/2.0)?"+u);return (r.vulnerabilities||[]).map(v=>v.cve.id+": "+v.cve.descriptions?.[0]?.value?.slice(0,240)).join("\n")||"None."},
-  async securityheaders(host){host=host.trim().replace(/^https?:\/\//,"").split("/")[0];return (await (await fetch("[https://r.jina.ai/https://securityheaders.com/?q=](https://r.jina.ai/https://securityheaders.com/?q=)"+encodeURIComponent(host)+"&followRedirects=on",{headers:{Accept:"text/plain"}})).text()).slice(0,2500)},
+  async dns(x){const [d,t="A"]=x.trim().split(/\s+/);const r=await J("https://dns.google/resolve?name="+encodeURIComponent(d)+"&type="+t);return (r.Answer||[]).map(a=>a.name+" "+a.data).join("\n")||"None."},
+  async subdomains(d){const r=await J("https://crt.sh/?output=json&q=%25."+encodeURIComponent(d.trim()));return [...new Set(r.flatMap(e=>e.name_value.split("\n")))].filter(s=>!s.includes("*")).slice(0,80).join("\n")||"None."},
+  async whois(d){const r=await J("https://rdap.org/domain/"+encodeURIComponent(d.trim()));return JSON.stringify({name:r.ldhName,status:r.status,ns:(r.nameservers||[]).map(n=>n.ldhName)})},
+  async ip(a){return JSON.stringify(await J("https://internetdb.shodan.io/"+a.trim()))},
+  async urlscan(q){const d=await J("https://urlscan.io/api/v1/search/?q=domain:"+encodeURIComponent(q.trim())+"&size=8");return (d.results||[]).map(r=>r.page?.url+" | "+(r.page?.ip||"")+" | "+(r.page?.server||"")).join("\n")||"None."},
+  async github(q){const r=await J("https://api.github.com/search/repositories?per_page=6&q="+encodeURIComponent(q.trim()));return (r.items||[]).map(i=>i.full_name+" ⭐"+i.stargazers_count+" - "+i.description).join("\n")},
+  async cve(q){q=q.trim();const u=/^CVE-/i.test(q)?"cveId="+q.toUpperCase():"resultsPerPage=6&keywordSearch="+encodeURIComponent(q);const r=await J("https://services.nvd.nist.gov/rest/json/cves/2.0?"+u);return (r.vulnerabilities||[]).map(v=>v.cve.id+": "+v.cve.descriptions?.[0]?.value?.slice(0,240)).join("\n")||"None."},
+  async securityheaders(host){host=host.trim().replace(/^https?:\/\//,"").split("/")[0];return (await (await fetch("https://r.jina.ai/https://securityheaders.com/?q="+encodeURIComponent(host)+"&followRedirects=on",{headers:{Accept:"text/plain"}})).text()).slice(0,2500)},
   async remember(f){S.mem.push(f.trim());S.mem=S.mem.slice(-40);save();return "Saved."}
 };
 
@@ -1142,7 +1142,7 @@ Available Tools: @auto_reel, @image, @edit, @ai_firewall, @learn_skill, @world_g
 Learned Skills: ${S.skills.map(s=>s.name+": "+s.rule).join(" | ")}
 Long-Term Memory: ${S.mem.join(" | ")||"none"}`;
 
-/* ===== UNIFIED MULTI-PROVIDER LLM ENGINE (GROQ + OPENROUTER + GEMINI + POLLINATIONS) ===== */
+/* ===== UNIFIED MULTI-PROVIDER LLM ENGINE ===== */
 const withTimeout=(p,ms,msg)=>Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(new Error(msg||"Timeout")),ms))]);
 
 /* 1. GROQ ULTRA-FAST CLOUD ENGINE */
@@ -1150,7 +1150,7 @@ async function callGroq(msgs,model,onTok){
   const k=localStorage.agi_grk||_GR_KEY;
   if(!k)throw new Error("Groq key missing");
   const plain=msgs.map(({img,...r})=>({role:r.role,content:String(r.content||"")}));
-  const r=await withTimeout(fetch("[https://api.groq.com/openai/v1/chat/completions](https://api.groq.com/openai/v1/chat/completions)",{
+  const r=await withTimeout(fetch("https://api.groq.com/openai/v1/chat/completions",{
     method:"POST",
     headers:{"Content-Type":"application/json","Authorization":"Bearer "+k},
     body:JSON.stringify({model:model||"llama-3.3-70b-versatile",messages:plain,temperature:0.6,max_tokens:8192})
@@ -1167,12 +1167,12 @@ async function callOpenRouter(msgs,model,onTok){
   const k=localStorage.agi_ork||_OR_KEY;
   if(!k)throw new Error("OpenRouter key missing");
   const plain=msgs.map(({img,...r})=>({role:r.role,content:String(r.content||"")}));
-  const r=await withTimeout(fetch("[https://openrouter.ai/api/v1/chat/completions](https://openrouter.ai/api/v1/chat/completions)",{
+  const r=await withTimeout(fetch("https://openrouter.ai/api/v1/chat/completions",{
     method:"POST",
     headers:{
       "Content-Type":"application/json",
       "Authorization":"Bearer "+k,
-      "HTTP-Referer":location.origin||"[https://nikhilbharti284.github.io](https://nikhilbharti284.github.io)",
+      "HTTP-Referer":location.origin||"https://nikhilbharti284.github.io",
       "X-Title":"Astra AGI v19"
     },
     body:JSON.stringify({model:model||"openrouter/free",messages:plain})
@@ -1189,7 +1189,7 @@ const getGmKey=()=>localStorage.agi_gk||_GM_KEY||"";
 const gmId=m=>m==="gm:custom"?(localStorage.agi_gm||"gemini-2.5-flash"):m.slice(3);
 function gmReq(model,method,body,sig,forceAIza){
   const k=getGmKey(),aiza=forceAIza||k.startsWith("AIza"),sse=method==="streamGenerateContent";
-  const u=(aiza?"[https://generativelanguage.googleapis.com/v1beta/models/](https://generativelanguage.googleapis.com/v1beta/models/)":"[https://aiplatform.googleapis.com/v1/publishers/google/models/](https://aiplatform.googleapis.com/v1/publishers/google/models/)")+model+":"+method+(sse?"?alt=sse":"")+(aiza?"":(sse?"&":"?")+"key="+encodeURIComponent(k));
+  const u=(aiza?"https://generativelanguage.googleapis.com/v1beta/models/":"https://aiplatform.googleapis.com/v1/publishers/google/models/")+model+":"+method+(sse?"?alt=sse":"")+(aiza?"":(sse?"&":"?")+"key="+encodeURIComponent(k));
   return fetch(u,{method:"POST",headers:aiza?{"Content-Type":"application/json","x-goog-api-key":k}:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:sig});
 }
 async function callGemini(msgs,model,onTok){
@@ -1221,7 +1221,7 @@ async function callGemini(msgs,model,onTok){
 /* 4. POLLINATIONS KEYLESS BACKUP */
 async function callPollinations(msgs,model,onTok){
   const plain=msgs.map(({img,...r})=>({role:r.role,content:String(r.content||"")}));
-  const r=await withTimeout(fetch("[https://text.pollinations.ai/openai](https://text.pollinations.ai/openai)",{
+  const r=await withTimeout(fetch("https://text.pollinations.ai/openai",{
     method:"POST",headers:{"Content-Type":"application/json"},
     body:JSON.stringify({model:model||"openai",messages:plain})
   }),35000,"Pollinations timeout");
@@ -1233,7 +1233,7 @@ async function callPollinations(msgs,model,onTok){
 
 /* LOCAL OLLAMA */
 async function callLocalOllama(msgs,onTok){
-  const u=(S.olUrl||"[http://127.0.0.1:11434](http://127.0.0.1:11434)").replace(/\/$/,"")+"/api/chat";
+  const u=(S.olUrl||"http://127.0.0.1:11434").replace(/\/$/,"")+"/api/chat";
   const r=await fetch(u,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:S.olModel||"qwen2.5-coder:7b",messages:msgs.map(({img,...x})=>x),stream:false})});
   if(!r.ok)throw new Error("Ollama HTTP "+r.status);
   const t=(await r.json()).message?.content||"";
@@ -1284,7 +1284,6 @@ async function routeStandardLLM(msgs,onTok){
   }else if(m.startsWith("pl:")){
     add("pl",m.slice(3));add("gr","llama-3.3-70b-versatile");add("or","openrouter/free");
   }else{
-    // Auto Ultra Router: Fastest Groq 70B -> OpenRouter Gemma 4 31B Free -> Gemini 2.5 Flash -> OpenRouter Free -> Pollinations
     add("gr","llama-3.3-70b-versatile");
     add("or","google/gemma-4-31b-it:free");
     add("gm","gemini-2.5-flash");
@@ -1303,7 +1302,6 @@ async function routeStandardLLM(msgs,onTok){
   throw new Error("All providers failed: "+errs.slice(0,2).join(" | "));
 }
 
-/* DEFINED GLOBAL llm() FUNCTION (Fixes 'llm is not defined') */
 async function llm(msgs,onTok){
   if(S.model==="ol:local")return await callLocalOllama(msgs,onTok);
   if(S.swarmMode||S.model==="swarm:redblue")return await runRedBlueSwarm(msgs,onTok);
@@ -1760,7 +1758,7 @@ const CMD_TABS={
   },
   jslab(){
     $("#cmdPane").innerHTML=`
-      <input class="ti" id="jsUrl" placeholder="JS Bundle or Webpage URL (e.g. [https://example.com/app.min.js](https://example.com/app.min.js))">
+      <input class="ti" id="jsUrl" placeholder="JS Bundle or Webpage URL (e.g. https://example.com/app.min.js)">
       <textarea class="ti" id="jsRaw" rows="5" placeholder="Or paste minified / obfuscated JavaScript code here..."></textarea>
       <div class="row2">
         <button class="pri" id="jsScanBtn">De-obfuscate & Extract Endpoints</button>
@@ -1773,7 +1771,7 @@ const CMD_TABS={
       $("#jsOut").textContent="Decoding & scanning JS bundle...";
       if(u&&!raw){
         const target=/^https?:\/\//i.test(u)?u:"https://"+u;
-        const fetched=await (await fetch("[https://r.jina.ai/](https://r.jina.ai/)"+target,{headers:{Accept:"text/plain"}})).text().catch(()=>"");
+        const fetched=await (await fetch("https://r.jina.ai/"+target,{headers:{Accept:"text/plain"}})).text().catch(()=>"");
         const res=deobfuscateAndScanJS(fetched,target);
         $("#jsRaw").value=res.beautified;$("#jsOut").textContent=res.report;
       }else{
@@ -1981,4 +1979,4 @@ if(S.cur&&cur())openChat(S.cur);else{hello();drawList()}
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body>
-</html>
+  </html>
