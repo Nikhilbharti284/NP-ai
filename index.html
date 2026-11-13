@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
-<meta name="theme-color" content="#070a0f">
-<title>Astra Carbon X v10.0 — Omni-Research & Daily Security OS</title>
+<meta name="theme-color" content="#06080d">
+<title>Astra Carbon X v12.0 — Neural Voice & Scope Recon OS</title>
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23070a0f'/%3E%3Cpath d='M256 64l52 140 140 52-140 52-52 140-52-140-140-52 140-52z' fill='%2310a37f'/%3E%3Ccircle cx='256' cy='256' r='36' fill='%23070a0f'/%3E%3C/svg%3E" type="image/svg+xml">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23070a0f'/%3E%3Cpath d='M256 64l52 140 140 52-140 52-52 140-52-140-140-52 140-52z' fill='%2310a37f'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='125' fill='%2306080d'/%3E%3Cpath d='M256 56l56 144 144 56-144 56-56 144-56-144-144-56 144-56z' fill='%2310a37f'/%3E%3Ccircle cx='256' cy='256' r='38' fill='%2338bdf8'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='125' fill='%2306080d'/%3E%3Cpath d='M256 56l56 144 144 56-144 56-56 144-56-144-144-56 144-56z' fill='%2310a37f'/%3E%3C/svg%3E">
 
 <script src="https://js.puter.com/v2/"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
@@ -22,14 +22,14 @@
 
 <style>
 :root{
-  --bg:#070a0f;--side:#040609;--sur:#10151f;--hov:#192130;
-  --b:rgba(255,255,255,.08);--t:#f1f5f9;--m:#8b949e;
-  --ac:#10a37f;--ac-glow:rgba(16,163,127,.2);--danger:#ef4444;--warn:#f59e0b;
+  --bg:#06080d;--side:#030508;--sur:#0e131c;--hov:#171f2e;
+  --b:rgba(255,255,255,.075);--t:#f1f5f9;--m:#8b949e;
+  --ac:#10a37f;--ac-glow:rgba(16,163,127,.18);--danger:#ef4444;--bolt:#38bdf8;
 }
 :root[data-theme="light"]{
   --bg:#ffffff;--side:#f8fafc;--sur:#f1f5f9;--hov:#e2e8f0;
   --b:rgba(0,0,0,.08);--t:#0f172a;--m:#64748b;
-  --ac:#0d9488;--ac-glow:rgba(13,148,136,.14);
+  --ac:#0d9488;--ac-glow:rgba(13,148,136,.14);--bolt:#0284c7;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;height:100dvh;width:100%;overflow:hidden;background:var(--bg);color:var(--t);font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif;-webkit-font-smoothing:antialiased}
@@ -37,8 +37,8 @@ body{display:flex;padding-top:env(safe-area-inset-top,0px)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;user-select:none}
 :focus-visible{outline:2px solid var(--ac);outline-offset:2px;border-radius:8px}
 
-/* ===== 60FPS SMOOTH SIDEBAR ===== */
-#side{width:270px;background:var(--side);border-right:1px solid var(--b);display:flex;flex-direction:column;flex-shrink:0;z-index:40;will-change:transform;transition:transform .22s cubic-bezier(.22,1,.36,1)}
+/* ===== ULTRA-CLEAN SIDEBAR ===== */
+#side{width:266px;background:var(--side);border-right:1px solid var(--b);display:flex;flex-direction:column;flex-shrink:0;z-index:40;will-change:transform;transition:transform .22s cubic-bezier(.22,1,.36,1)}
 .brand-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 6px;gap:6px}
 .new-btn{flex:1;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:12px;font-size:13.5px;font-weight:600;background:var(--sur);border:1px solid var(--b);transition:all .15s}
 .new-btn:hover{background:var(--hov);border-color:var(--ac)}
@@ -63,25 +63,27 @@ details.sdrop summary:hover{background:var(--sur);color:var(--t)}
 .srow:hover{background:var(--sur)}
 .badge{font-size:9px;background:var(--ac);color:#fff;padding:1.5px 6px;border-radius:99px;margin-left:auto;font-weight:700}
 
-/* ===== GLASSMORPHIC MINIMAL HEADER + DAILY FOCUS TIMER ===== */
+/* ===== GLASSMORPHIC MINIMAL HEADER ===== */
 #main{flex:1;display:flex;flex-direction:column;min-width:0;height:100%}
-header{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;flex-shrink:0;border-bottom:1px solid var(--b);background:rgba(7,10,15,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:15}
-:root[data-theme="light"] header{background:rgba(255,255,255,.86)}
+header{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;flex-shrink:0;border-bottom:1px solid var(--b);background:rgba(6,8,13,.84);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:15;gap:6px}
+:root[data-theme="light"] header{background:rgba(255,255,255,.88)}
 .hleft{display:flex;align-items:center;gap:6px;min-width:0;flex:1}
 .hright{display:flex;align-items:center;gap:5px;flex-shrink:0}
 .hbtn{height:34px;padding:0 9px;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:4px;font-size:13px;color:var(--m);transition:all .15s}
 .hbtn:hover,.hbtn.active{background:var(--sur);color:var(--t)}
-#pomoBtn{font-family:ui-monospace,Menlo,monospace;font-size:12px;border:1px solid var(--b);background:var(--sur);color:var(--t);border-radius:99px;padding:0 10px}
-#pomoBtn.run{border-color:var(--ac);color:var(--ac)}
-.model-pill{display:flex;align-items:center;background:var(--sur);border:1px solid var(--b);border-radius:99px;padding:2px 10px 2px 12px;max-width:52vw}
-#model{background:transparent;color:var(--t);border:0;font-weight:600;font-size:13px;outline:0;padding:5px 0;width:100%;text-overflow:ellipsis}
-#model option{background:var(--side);color:var(--t)}
+.pill-sel{display:flex;align-items:center;background:var(--sur);border:1px solid var(--b);border-radius:99px;padding:2px 9px 2px 11px}
+.pill-sel select{background:transparent;color:var(--t);border:0;font-weight:600;font-size:12.5px;outline:0;padding:4px 0;text-overflow:ellipsis}
+.pill-sel select option{background:var(--side);color:var(--t)}
+#modelWrap{max-width:44vw}
+#voiceWrap{max-width:28vw}
+#autoSpeakBtn{font-size:12px;border:1px solid var(--b);background:var(--sur);border-radius:99px;padding:0 9px;height:32px}
+#autoSpeakBtn.on{border-color:var(--ac);color:var(--ac);background:var(--ac-glow);font-weight:600}
 #menu{display:none}
 
 /* ===== WORKSPACE & HARDWARE-ACCELERATED CHAT STREAM ===== */
 #workspace{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
 #chat{flex:1;overflow-y:auto;padding:18px 14px 28px;min-width:0;-webkit-overflow-scrolling:touch}
-#in{max-width:730px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+#in{max-width:740px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
 #jumpBtn{position:absolute;bottom:14px;right:18px;background:var(--sur);border:1px solid var(--b);color:var(--t);width:36px;height:36px;border-radius:50%;display:none;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.4);z-index:20;font-size:15px}
 #jumpBtn.show{display:flex}
 
@@ -100,24 +102,27 @@ header{height:52px;display:flex;align-items:center;justify-content:space-between
 .acts button:hover{background:var(--sur);color:var(--t)}
 
 /* ===== AUTO-COLLAPSING COMPACT CODE CARDS ===== */
-.cb{margin:12px 0;border:1px solid var(--b);border-radius:13px;overflow:hidden;background:#06090e;box-shadow:0 4px 16px rgba(0,0,0,.22)}
-.cbar{display:flex;gap:6px;align-items:center;padding:8px 12px;background:#0e131c;border-bottom:1px solid rgba(255,255,255,.07);flex-wrap:wrap}
+.cb{margin:12px 0;border:1px solid var(--b);border-radius:13px;overflow:hidden;background:#05080d;box-shadow:0 4px 16px rgba(0,0,0,.22)}
+.cbar{display:flex;gap:6px;align-items:center;padding:8px 12px;background:#0d121b;border-bottom:1px solid rgba(255,255,255,.07);flex-wrap:wrap}
 .clang{margin-right:auto;font-size:11px;color:#94a3b8;font-family:ui-monospace,Menlo,monospace;text-transform:uppercase;font-weight:700}
 .cp{font-size:11.5px;background:rgba(255,255,255,.07);color:#e2e8f0;padding:4px 9px;border-radius:7px;font-weight:500;transition:all .15s}
 .cp:hover{background:rgba(255,255,255,.15)}
 .cp.ac{background:var(--ac);color:#fff}
 .cb pre{color:#e6edf3;padding:12px 14px;overflow-x:auto;font-size:12.5px;line-height:1.55;max-height:320px;overflow-y:auto;margin:0}
 .cb.collapsed pre{max-height:130px;overflow:hidden;mask-image:linear-gradient(180deg,#000 55%,transparent);-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent)}
-.cb-exp{width:100%;text-align:center;padding:7px;font-size:12px;color:var(--ac);background:#0a0e16;border-top:1px solid rgba(255,255,255,.06);font-weight:600;display:none}
+.cb-exp{width:100%;text-align:center;padding:7px;font-size:12px;color:var(--ac);background:#090d14;border-top:1px solid rgba(255,255,255,.06);font-weight:600;display:none}
 .cb.collapsed .cb-exp{display:block}
 .cb pre code{background:none;padding:0;font-family:ui-monospace,Menlo,monospace}
-.ro{background:#030508;color:#7ee0c3;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 14px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;border-top:1px solid rgba(255,255,255,.08)}
+.ro{background:#020407;color:#7ee0c3;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 14px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;border-top:1px solid rgba(255,255,255,.08)}
 .ro[hidden]{display:none}
 
-/* ===== THINKING PILL ===== */
-details.th{border:1px solid var(--b);border-radius:12px;margin-bottom:8px;font-size:12.5px;color:var(--m);background:var(--sur)}
-details.th summary{padding:8px 12px;cursor:pointer;list-style:none;display:flex;gap:8px;align-items:center;font-weight:500}
+/* ===== BLITZ TELEMETRY & PROGRESS BAR ===== */
+details.th{border:1px solid var(--b);border-radius:12px;margin-bottom:8px;font-size:12.5px;color:var(--m);background:var(--sur);overflow:hidden}
+details.th summary{padding:8px 12px;cursor:pointer;list-style:none;display:flex;gap:8px;align-items:center;font-weight:600}
 details.th summary::-webkit-details-marker{display:none}
+.pbar-wrap{height:3px;width:100%;background:rgba(255,255,255,.05);overflow:hidden}
+.pbar{height:100%;width:18%;background:linear-gradient(90deg,var(--ac),var(--bolt));transition:width .25s ease}
+.done .pbar{width:100%!important}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--ac);animation:p 1s infinite}
 .done .dot{animation:none;background:var(--ac)}
 @keyframes p{50%{opacity:.25}}
@@ -125,9 +130,9 @@ details.th summary::-webkit-details-marker{display:none}
 .cur{display:inline-block;width:7px;height:15px;background:var(--ac);vertical-align:middle;margin-left:2px;animation:p .8s infinite}
 
 /* ===== CLEAN HERO EMPTY STATE ===== */
-#hello{text-align:center;padding:4vh 12px 0;max-width:610px;margin:0 auto}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--ac);background:var(--ac-glow);padding:4px 12px;border-radius:99px;margin-bottom:12px}
-#hello h1{font-size:24px;font-weight:700;margin-bottom:6px;letter-spacing:-.3px}
+#hello{text-align:center;padding:4vh 12px 0;max-width:620px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--ac);background:var(--ac-glow);padding:4px 12px;border-radius:99px;margin-bottom:12px}
+#hello h1{font-size:24px;font-weight:800;margin-bottom:6px;letter-spacing:-.3px}
 #hello p{font-size:13.5px;color:var(--m);margin-bottom:20px;line-height:1.45}
 .chips{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
 .chips button{border:1px solid var(--b);border-radius:14px;padding:12px 13px;font-size:13px;background:var(--sur);text-align:left;line-height:1.35;display:flex;align-items:flex-start;gap:10px;transition:all .15s}
@@ -139,15 +144,14 @@ details.th summary::-webkit-details-marker{display:none}
 
 /* ===== ULTRA-CLEAN BOTTOM COMPOSER + SLASH PALETTE ===== */
 footer{padding:6px 12px calc(10px + env(safe-area-inset-bottom,0px));flex-shrink:0;position:relative}
-#activePills{max-width:730px;margin:0 auto 6px;display:flex;gap:6px;flex-wrap:wrap}
+#activePills{max-width:740px;margin:0 auto 6px;display:flex;gap:6px;flex-wrap:wrap}
 .mpill{font-size:11.5px;background:var(--ac-glow);border:1px solid var(--ac);color:var(--ac);padding:3px 10px;border-radius:99px;display:inline-flex;align-items:center;gap:6px;font-weight:600}
 .mpill b{cursor:pointer}
-#file{max-width:730px;margin:0 auto 6px;display:none}
+#file{max-width:740px;margin:0 auto 6px;display:none}
 #file div{display:inline-flex;align-items:center;gap:8px;background:var(--sur);border:1px solid var(--b);border-radius:10px;padding:5px 10px;font-size:12.5px}
-#boxWrap{max-width:730px;margin:0 auto;position:relative}
+#boxWrap{max-width:740px;margin:0 auto;position:relative}
 
-/* SLASH COMMAND POPOVER */
-#slashMenu{display:none;position:absolute;bottom:56px;left:0;right:0;max-width:420px;background:var(--side);border:1px solid var(--b);border-radius:14px;padding:6px;box-shadow:0 12px 36px rgba(0,0,0,.5);z-index:50;flex-direction:column;gap:2px}
+#slashMenu{display:none;position:absolute;bottom:56px;left:0;right:0;max-width:440px;background:var(--side);border:1px solid var(--b);border-radius:14px;padding:6px;box-shadow:0 12px 36px rgba(0,0,0,.5);z-index:50;flex-direction:column;gap:2px}
 #slashMenu.open{display:flex}
 .sl-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:9px;font-size:13px;text-align:left}
 .sl-item:hover{background:var(--sur)}
@@ -159,18 +163,20 @@ footer{padding:6px 12px calc(10px + env(safe-area-inset-bottom,0px));flex-shrink
 #cmdBtn{width:36px;height:36px;border-radius:50%;background:var(--hov);color:var(--t);font-size:19px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
 #cmdBtn:hover{background:var(--ac);color:#fff;transform:rotate(90deg)}
 #box textarea{flex:1;background:none;border:0;outline:0;color:var(--t);font:inherit;font-size:15.5px;resize:none;max-height:130px;padding:7px 2px;line-height:1.4;min-width:0}
+#blitzBtn{height:36px;padding:0 11px;border-radius:99px;background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.4);color:var(--bolt);font-size:12px;font-weight:700;display:flex;align-items:center;gap:4px;flex-shrink:0}
+#blitzBtn.on{background:var(--bolt);color:#030712;border-color:transparent}
 #mic{width:36px;height:36px;border-radius:50%;flex-shrink:0;font-size:15px;color:var(--m);display:flex;align-items:center;justify-content:center}
 #mic:hover{background:var(--hov);color:var(--t)}
 #mic.rec{background:var(--danger);color:#fff}
 #send{width:36px;height:36px;border-radius:50%;background:var(--ac);color:#fff;font-weight:700;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
 
-/* ===== UNIFIED COMMAND CENTER BOTTOM-SHEET MODAL (⌘K / ＋) ===== */
+/* ===== UNIFIED COMMAND CENTER BOTTOM-SHEET MODAL ===== */
 #ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:35;backdrop-filter:blur(2px)}
 #ov.open{display:block}
 .mbk{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:60;align-items:flex-end;justify-content:center;padding:0}
 @media(min-width:640px){.mbk{align-items:center;padding:16px}}
 .mbk.open{display:flex}
-.mdl{background:var(--side);border:1px solid var(--b);border-radius:20px 20px 0 0;width:100%;max-width:730px;max-height:87dvh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -10px 40px rgba(0,0,0,.45)}
+.mdl{background:var(--side);border:1px solid var(--b);border-radius:20px 20px 0 0;width:100%;max-width:740px;max-height:87dvh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -10px 40px rgba(0,0,0,.45)}
 @media(min-width:640px){.mdl{border-radius:18px;max-height:85dvh}}
 .mtop{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--b);font-size:15px;font-weight:700}
 .ttabs{display:flex;gap:5px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid var(--b);flex-shrink:0}
@@ -256,15 +262,16 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
 
   <div class="sfoot">
     <details class="sdrop">
-      <summary><span>⚡ Omni-Suite & Daily Hub</span><span>▾</span></summary>
+      <summary><span>⚡ Scope & Blitz Suite</span><span>▾</span></summary>
       <div class="sdrop-list">
-        <button class="srow" data-cmd="modes">🚀 Command Center <span class="badge">⌘K</span></button>
-        <button class="srow" data-cmd="bug">🛡️ 7-Layer Domain Bug Auditor <span class="badge">Recon</span></button>
-        <button class="srow" data-cmd="notes">📌 Daily Scratchpad & Notes</button>
+        <button class="srow" data-cmd="scope">📋 Bug Bounty Scope Parser <span class="badge">New</span></button>
+        <button class="srow" data-cmd="bug">⚡ 12-Vector Domain Blitz <span class="badge">1-Shot</span></button>
+        <button class="srow" data-cmd="cloud">🐧 Cloud Linux (Bash/Python)</button>
+        <button class="srow" data-cmd="batch">📦 Multi-Target Batch Queue</button>
         <button class="srow" data-cmd="apk">📱 APK & JADX Static Scanner</button>
         <button class="srow" data-cmd="cvss">🎯 CVSS 3.1 & Bounty Report</button>
         <button class="srow" id="osintDashBtn">🕸️ Visual Attack Surface Graph</button>
-        <button class="srow" data-cmd="cloud">☁️ Self-Healing Cloud Runner</button>
+        <button class="srow" data-cmd="notes">📌 Daily Scratchpad & Notes</button>
         <button class="srow" data-cmd="p2p">📡 P2P Encrypted Live Drop</button>
       </div>
     </details>
@@ -292,13 +299,15 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
   <header>
     <div class="hleft">
       <button class="hbtn" id="menu" aria-label="Menu">☰</button>
-      <div class="model-pill">
+      <div class="pill-sel" id="modelWrap">
         <select id="model" aria-label="Select AI Model"></select>
+      </div>
+      <div class="pill-sel" id="voiceWrap" title="Select AI Neural Voice">
+        <select id="voiceSel" aria-label="Select AI Voice"></select>
       </div>
     </div>
     <div class="hright">
-      <button class="hbtn" id="pomoBtn" title="Daily Pomodoro Focus Timer (Tap to Start/Reset)">⏱️ 25:00</button>
-      <button class="hbtn" id="openNotesHdr" title="Daily Scratchpad & Pinned Notes">📌</button>
+      <button id="autoSpeakBtn" title="Toggle Auto-Speak AI Replies">🔊 Auto</button>
       <button class="hbtn" id="openCanvasHdr" title="Toggle Live Canvas & Graph">🖥️</button>
       <button class="hbtn" id="new2" title="New Chat">✎</button>
     </div>
@@ -329,21 +338,23 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
     </aside>
   </div>
 
-  <!-- ULTRA-CLEAN BOTTOM COMPOSER WITH SLASH PALETTE -->
+  <!-- ULTRA-CLEAN BOTTOM COMPOSER -->
   <footer>
     <div id="activePills"></div>
     <div id="file"></div>
     <div id="boxWrap">
       <div id="slashMenu">
-        <button class="sl-item" data-sl="/omni "><code>/omni [query]</code><span>Crawl 7 Web Sources + Deep Pages</span></button>
-        <button class="sl-item" data-sl="/audit "><code>/audit [domain]</code><span>7-Layer Passive Domain Security Audit</span></button>
-        <button class="sl-item" data-sl="/heal "><code>/heal [task]</code><span>Write & Auto-Fix Code in Cloud</span></button>
+        <button class="sl-item" data-sl="/scope"><code>/scope</code><span>Paste HackerOne/Intigriti Program Scope to Audit</span></button>
+        <button class="sl-item" data-sl="/audit "><code>/audit [domain]</code><span>12-Vector Instant Pre-Fetch + Full Bug Report</span></button>
+        <button class="sl-item" data-sl="/omni "><code>/omni [goal]</code><span>2-Hop Deep Web Crawler + Complete Execution</span></button>
+        <button class="sl-item" data-sl="/bash "><code>/bash [task]</code><span>Run Safe Linux Bash Analysis in Cloud Container</span></button>
         <button class="sl-item" data-sl="/graph "><code>/graph [domain]</code><span>Draw Interactive Attack Surface Graph</span></button>
         <button class="sl-item" data-sl="/notes"><code>/notes</code><span>Open Daily Scratchpad & Clips</span></button>
       </div>
       <div id="box">
         <button id="cmdBtn" title="Open Command Center (＋ / ⌘K)" aria-label="Open Command Center">＋</button>
-        <textarea id="q" rows="1" placeholder="Ask anything, or type / for quick commands…" aria-label="Message input"></textarea>
+        <textarea id="q" rows="1" placeholder="Paste program scope, domain, or task — Blitz executes in 1 shot…" aria-label="Message input"></textarea>
+        <button id="blitzBtn" class="on" title="1-Shot Autonomous Blitz Mode">⚡ Blitz</button>
         <button id="mic" title="Voice Input" aria-label="Voice Input">🎤</button>
         <button id="send" aria-label="Send">↑</button>
       </div>
@@ -355,15 +366,16 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
 <!-- UNIFIED COMMAND CENTER MODAL -->
 <div class="mbk" id="cmdM" role="dialog" aria-modal="true" aria-label="Command Center">
   <div class="mdl">
-    <div class="mtop"><span>⚡ Astra v10.0 Command Center</span><button id="cmdClose">✕</button></div>
+    <div class="mtop"><span>⚡ Astra v12.0 Command Center</span><button id="cmdClose">✕</button></div>
     <div class="ttabs" id="cmdTabs">
-      <button class="stab on" data-tab="modes">🚀 Modes</button>
-      <button class="stab" data-tab="bug">🛡️ Domain Audit</button>
-      <button class="stab" data-tab="notes">📌 Daily Notes</button>
+      <button class="stab on" data-tab="scope">📋 Program Scope</button>
+      <button class="stab" data-tab="bug">⚡ 1-Shot Audit</button>
+      <button class="stab" data-tab="cloud">🐧 Cloud Linux</button>
+      <button class="stab" data-tab="batch">📦 Batch Queue</button>
+      <button class="stab" data-tab="modes">🚀 Modes & Voice</button>
       <button class="stab" data-tab="apk">📱 APK / JADX</button>
       <button class="stab" data-tab="cvss">🎯 CVSS & PoC</button>
-      <button class="stab" data-tab="cloud">☁️ Cloud Lab</button>
-      <button class="stab" data-tab="p2p">📡 P2P & CLI</button>
+      <button class="stab" data-tab="notes">📌 Notes</button>
       <button class="stab" data-tab="tools">🛠 Dev Tools</button>
     </div>
     <div class="tpane" id="cmdPane"></div>
@@ -375,27 +387,35 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
 const GEMINI_KEY=atob("QVEuQWI4Uk42SVU2WVBkRHBTakZlNDRY"+"YlhSSVd1Sl9GUzZyMDVKblJLeUF1cjdGRXUwVVE=");
 
 const MODELS=[
-  ["auto","⚡ Auto Cloud Router (Fastest Free Model)"],
-  ["omni:deep","🌐 Omni-Web Deep Research Engine (Multi-Hop Crawler)"],
-  ["swarm:redblue","🛡️ Adversarial Red-Blue-Judge Swarm (Builder vs Breaker)"],
-  ["carbon:ultra","💎 Gemini Carbon Ultra (Self-Healing Swarm)"],
-  ["arena:consensus","⚔️ 4-Brain Consensus (Multi-Model Synth)"],
+  ["auto","⚡ Auto Blitz Router (Fastest Cloud)"],
+  ["omni:deep","🌐 Omni-Blitz 2-Hop Deep Research"],
+  ["swarm:redblue","🛡️ Red-Blue-Judge Swarm"],
+  ["carbon:ultra","💎 Gemini Carbon Ultra"],
+  ["arena:consensus","⚔️ 4-Brain Consensus"],
   ["gm:gemini-2.5-pro","Gemini 2.5 Pro"],
   ["gm:gemini-2.5-flash","Gemini 2.5 Flash"],
   ["claude-sonnet-4-5","Claude 4.5 Sonnet"],
   ["claude-opus-4-1","Claude 4.1 Opus"],
   ["gpt-4o","GPT-4o"],
-  ["o3-mini","OpenAI o3-mini"],
-  ["deepseek-reasoner","DeepSeek R1 Reasoning"],
-  ["deepseek-chat","DeepSeek V3"],
-  ["grok-2","xAI Grok-2"],
-  ["pl:openai-large","GPT-4.1 Large (Keyless Cloud)"],
-  ["pl:qwen-coder","Qwen 2.5 Coder 32B (Keyless Cloud)"],
-  ["pl:deepseek-r1","DeepSeek R1 (Keyless Cloud)"],
-  ["ol:local","🔌 Local Ollama (Termux / Localhost)"]
+  ["deepseek-reasoner","DeepSeek R1"],
+  ["pl:openai-large","GPT-4.1 Large (Keyless)"],
+  ["pl:qwen-coder","Qwen 2.5 Coder 32B"],
+  ["ol:local","🔌 Local Ollama (Termux)"]
 ];
 
-const MAXSTEPS=22;
+const NEURAL_VOICES=[
+  ["nova","🎙️ Nova (Natural AI Female)"],
+  ["alloy","🎙️ Alloy (Balanced AI)"],
+  ["onyx","🎙️ Onyx (Deep AI Male)"],
+  ["echo","🎙️ Echo (Warm AI Male)"],
+  ["shimmer","🎙️ Shimmer (Clear AI Female)"],
+  ["fable","🎙️ Fable (Expressive AI)"],
+  ["sys:hi-IN","🇮🇳 System Hindi / Hinglish"],
+  ["sys:en-IN","🇮🇳 System Indian English"],
+  ["sys:en-US","🇺🇸 System US English"]
+];
+
+const MAXSTEPS=25;
 const F="`".repeat(3);
 const $=s=>document.querySelector(s);
 const escapeHtml=s=>{const d=document.createElement("div");d.textContent=s??"";return d.innerHTML};
@@ -405,13 +425,13 @@ const RECON_GRAPH_HTML=`<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Interactive Attack Surface Graph</title>
 <style>
-  *{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#070a10;color:#e2e8f0;margin:0;display:flex;flex-direction:column;height:100vh;overflow:hidden}
-  .bar{display:flex;gap:8px;padding:10px 12px;background:#0d131f;border-bottom:1px solid #1e293b;flex-wrap:wrap;align-items:center}
+  *{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#06080d;color:#e2e8f0;margin:0;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+  .bar{display:flex;gap:8px;padding:10px 12px;background:#0d121c;border-bottom:1px solid #1e293b;flex-wrap:wrap;align-items:center}
   input{flex:1;min-width:140px;background:#161f30;border:1px solid #334155;color:#fff;padding:8px 12px;border-radius:9px;outline:0;font-size:13px}
   button{background:#10a37f;color:#fff;border:0;padding:8px 14px;border-radius:9px;font-weight:600;cursor:pointer;font-size:12.5px}
   #wrap{flex:1;display:flex;min-height:0;position:relative}
   canvas{flex:1;width:100%;height:100%;cursor:grab}
-  #info{width:240px;background:#0b101b;border-left:1px solid #1e293b;padding:12px;font:11.5px/1.5 ui-monospace,monospace;overflow-y:auto;white-space:pre-wrap;color:#93c5fd}
+  #info{width:240px;background:#090d16;border-left:1px solid #1e293b;padding:12px;font:11.5px/1.5 ui-monospace,monospace;overflow-y:auto;white-space:pre-wrap;color:#93c5fd}
   @media(max-width:600px){#info{position:absolute;bottom:0;left:0;right:0;width:100%;height:130px;border-left:0;border-top:1px solid #1e293b}}
 </style></head><body>
   <div class="bar">
@@ -486,15 +506,16 @@ setTimeout(mapTarget,200);
 <\/script></body></html>`;
 
 /* ===== STATE ===== */
-let S={};try{S=JSON.parse(localStorage.agi_v10||localStorage.agi_v9||"{}")}catch(e){}
+let S={};try{S=JSON.parse(localStorage.agi_v12||localStorage.agi_v11||"{}")}catch(e){}
 S.chats??={};S.cur??=null;
 if(!S.model||!MODELS.some(m=>m[0]===S.model))S.model="auto";
-S.mem??=[];S.notes??="";S.theme??="dark";S.taskMode??=true;S.bugMode??=false;S.arenaMode??=false;S.swarmMode??=false;S.autoHeal??=true;S.deep??=true;S.hostedSites??=[];
+S.voice??="nova";S.autoSpeak??=false;S.voiceRate??=1.0;
+S.mem??=[];S.notes??="";S.theme??="dark";S.blitzMode??=true;S.taskMode??=true;S.bugMode??=false;S.arenaMode??=false;S.swarmMode??=false;S.autoHeal??=true;S.deep??=true;S.hostedSites??=[];
 S.olUrl??="http://127.0.0.1:11434";S.olModel??="qwen2.5-coder:7b";
 S.canvasCode??=RECON_GRAPH_HTML;S.canvasLang??="html";
 
 function save(){
-  try{localStorage.agi_v10=JSON.stringify(S)}
+  try{localStorage.agi_v12=JSON.stringify(S)}
   catch(e){
     const ids=Object.values(S.chats).sort((a,b)=>a.ts-b.ts).map(c=>c.id);
     if(ids.length>1){delete S.chats[ids[0]];save()}
@@ -503,28 +524,80 @@ function save(){
 let busy=false,stop=false,pending=null;
 const cur=()=>S.chats[S.cur];
 
-/* ===== DAILY POMODORO FOCUS TIMER ===== */
-let pomoSec=25*60,pomoTick=null;
-$("#pomoBtn").onclick=()=>{
-  if(pomoTick){
-    clearInterval(pomoTick);pomoTick=null;pomoSec=25*60;
-    $("#pomoBtn").textContent="⏱️ 25:00";$("#pomoBtn").classList.remove("run");
-    toast("Focus timer reset");return;
+/* ===== NATURAL AI NEURAL VOICE ENGINE (6 CLOUD VOICES + SYSTEM VOICES) ===== */
+let curAudio=null;
+function populateVoices(){
+  const sel=$("#voiceSel");
+  sel.innerHTML=NEURAL_VOICES.map(v=>`<option value="${v[0]}">${v[1]}</option>`).join("");
+  if(window.speechSynthesis){
+    const sysVoices=speechSynthesis.getVoices();
+    sysVoices.slice(0,15).forEach(v=>{
+      const o=document.createElement("option");
+      o.value=" name:"+v.name;
+      o.textContent=`🗣️ ${v.name.slice(0,22)} (${v.lang})`;
+      sel.appendChild(o);
+    });
   }
-  $("#pomoBtn").classList.add("run");
-  toast("⏱️ 25-Min Deep Focus Session Started!");
-  pomoTick=setInterval(()=>{
-    pomoSec--;
-    if(pomoSec<=0){
-      clearInterval(pomoTick);pomoTick=null;pomoSec=25*60;
-      $("#pomoBtn").textContent="⏱️ 25:00";$("#pomoBtn").classList.remove("run");
-      toast("🎉 Focus session complete! Take a 5-min break.");return;
-    }
-    const m=String(Math.floor(pomoSec/60)).padStart(2,"0"),s=String(pomoSec%60).padStart(2,"0");
-    $("#pomoBtn").textContent=`⏱️ ${m}:${s}`;
-  },1000);
+  if([...sel.options].some(o=>o.value===S.voice))sel.value=S.voice;
+}
+populateVoices();
+if(window.speechSynthesis)speechSynthesis.onvoiceschanged=populateVoices;
+$("#voiceSel").onchange=e=>{S.voice=e.target.value;save();toast("Voice: "+e.target.options[e.target.selectedIndex].text)};
+
+function syncAutoSpeakUI(){
+  $("#autoSpeakBtn").classList.toggle("on",!!S.autoSpeak);
+  $("#autoSpeakBtn").textContent=S.autoSpeak?"🔊 Auto: ON":"🔊 Auto";
+}
+syncAutoSpeakUI();
+$("#autoSpeakBtn").onclick=()=>{
+  S.autoSpeak=!S.autoSpeak;save();syncAutoSpeakUI();
+  if(!S.autoSpeak){if(curAudio){curAudio.pause();curAudio=null}if(window.speechSynthesis)speechSynthesis.cancel()}
+  toast(S.autoSpeak?"🔊 Auto-Speak Enabled (AI will speak every reply naturally)":"Auto-Speak Off");
 };
-$("#openNotesHdr").onclick=()=>openCmd("notes");
+
+function speakText(text,force=false){
+  if(!force&&curAudio){curAudio.pause();curAudio=null;return}
+  if(!force&&window.speechSynthesis?.speaking){speechSynthesis.cancel();return}
+  if(curAudio){curAudio.pause();curAudio=null}
+  if(window.speechSynthesis)speechSynthesis.cancel();
+
+  const clean=text.replace(/```[\s\S]*?```/g," ").replace(/[#*`_~\[\]()>|]/g," ").replace(/https?:\/\/\S+/g," link ").replace(/\s+/g," ").trim().slice(0,550);
+  if(!clean)return;
+
+  const v=S.voice||"nova";
+  const fallbackSys=()=>{
+    if(!window.speechSynthesis)return;
+    const u=new SpeechSynthesisUtterance(clean);
+    u.rate=S.voiceRate||1.0;
+    const all=speechSynthesis.getVoices();
+    if(v.startsWith(" name:")){
+      const match=all.find(x=>x.name===v.slice(6));if(match)u.voice=match;
+    }else if(v.startsWith("sys:")){
+      const lang=v.slice(4);
+      const match=all.find(x=>x.lang.toLowerCase().includes(lang.toLowerCase()))||all.find(x=>x.name.toLowerCase().includes("natural"));
+      if(match)u.voice=match;
+      u.lang=lang;
+    }else{
+      const natural=all.find(x=>/natural|google|online/i.test(x.name)&&/hi|in|en/i.test(x.lang));
+      if(natural)u.voice=natural;
+    }
+    speechSynthesis.speak(u);
+  };
+
+  if(!v.startsWith("sys:")&&!v.startsWith(" name:")){
+    try{
+      const url=`https://text.pollinations.ai/${encodeURIComponent("Say naturally: "+clean)}?model=openai-audio&voice=${encodeURIComponent(v)}`;
+      const a=new Audio(url);
+      a.playbackRate=S.voiceRate||1.0;
+      curAudio=a;
+      a.onended=()=>{curAudio=null};
+      a.onerror=()=>{curAudio=null;fallbackSys()};
+      a.play().catch(()=>{curAudio=null;fallbackSys()});
+      return;
+    }catch(_){}
+  }
+  fallbackSys();
+}
 
 /* ===== PURE JS CRC32 & MULTI-FILE ZIP PACKAGER ===== */
 const CRC_TABLE=(()=>{let c,t=new Uint32Array(256);for(let n=0;n<256;n++){c=n;for(let k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;t[n]=c}return t})();
@@ -573,13 +646,13 @@ $("#cCode").addEventListener("input",()=>{S.canvasCode=$("#cCode").value;save()}
 $("#cCloseBtn").onclick=()=>$("#canvasPane").classList.remove("open");
 $("#openCanvasHdr").onclick=()=>$("#canvasPane").classList.toggle("open");
 $("#cZipBtn").onclick=()=>{
-  const files=[{name:S.canvasLang==="html"?"index.html":"main."+S.canvasLang,content:S.canvasCode},{name:"README.md",content:"# Astra Carbon X Project\nGenerated and verified by Astra Carbon X v10.0."}];
+  const files=[{name:S.canvasLang==="html"?"index.html":"main."+S.canvasLang,content:S.canvasCode},{name:"README.md",content:"# Astra Carbon X Project\nGenerated and verified by Astra Carbon X v12.0."}];
   const c=cur();
   if(c?.msgs?.length){
     let idx=1;
     c.msgs.forEach(m=>{
       for(const match of (m.content||"").matchAll(/```(\w+)\n([\s\S]*?)```/g)){
-        const ext=({python:"py",javascript:"js",html:"html",css:"css",sh:"sh",rust:"rs",go:"go",cpp:"cpp"})[match[1].toLowerCase()]||"txt";
+        const ext=({python:"py",javascript:"js",html:"html",css:"css",sh:"sh",bash:"sh",rust:"rs",go:"go",cpp:"cpp"})[match[1].toLowerCase()]||"txt";
         files.push({name:`snippet_${idx++}.${ext}`,content:match[2]});
       }
     });
@@ -603,7 +676,7 @@ $("#cHostBtn").onclick=async()=>{
   term.textContent=await tools.cloud_host(S.canvasCode);
 };
 
-/* ===== ZERO-LOAD CLOUD EXECUTION & SELF-HEALING COMPILER ===== */
+/* ===== ZERO-LOAD CLOUD EXECUTION (LINUX BASH + 30 LANGS) & SELF-HEALING ===== */
 const PISTON_MAP={python:"python",py:"python",javascript:"javascript",js:"javascript",node:"javascript",typescript:"typescript",ts:"typescript",cpp:"c++","c++":"c++",c:"c",rust:"rust",rs:"rust",go:"go",java:"java",bash:"bash",sh:"bash",php:"php",ruby:"ruby",sqlite3:"sqlite3"};
 async function runPistonRaw(lang,code){
   const l=PISTON_MAP[lang.toLowerCase().trim()]||lang.toLowerCase().trim()||"python";
@@ -617,19 +690,19 @@ async function runPistonRaw(lang,code){
 async function runPistonCloud(lang,code){
   const d=await runPistonRaw(lang,code);
   const out=(d.run?.stdout||"")+(d.run?.stderr?"\n[STDERR]\n"+d.run.stderr:"")+(d.compile?.stderr?"\n[COMPILE ERROR]\n"+d.compile.stderr:"");
-  return `[Cloud Executed (${d.language} ${d.version})]\n`+(out.trim()||"(Executed with no output)");
+  return `[Cloud Linux Container (${d.language} ${d.version})]\n`+(out.trim()||"(Executed with no output)");
 }
 
 async function autoHealCode(lang,code,onUpdate){
   for(let attempt=1;attempt<=3;attempt++){
-    onUpdate?.(`🔄 [Attempt ${attempt}/3] Running ${lang} on remote Cloud Sandbox…`);
+    onUpdate?.(`🔄 [Attempt ${attempt}/3] Running ${lang} in remote Cloud Linux Container…`);
     const d=await runPistonRaw(lang,code);
     const err=(d.compile?.stderr||"")+(d.run?.stderr||"");
     if(!err.trim()){
-      return {code,output:`✔ Verified Zero-Error Execution (Attempt ${attempt}):\n`+(d.run?.stdout||"(No stdout)")};
+      return {code,output:`✔ Verified Zero-Error Cloud Execution (Attempt ${attempt}):\n`+(d.run?.stdout||"(No stdout)")};
     }
     if(attempt===3)return {code,output:`⚠️ Output after 3 attempts:\n${d.run?.stdout||""}\n${err}`};
-    onUpdate?.(`🛠️ Bug detected in cloud run! Self-healing code automatically…\n${err.slice(0,180)}`);
+    onUpdate?.(`🛠️ Fixing stderr automatically in Cloud…\n${err.slice(0,180)}`);
     const fixed=await routeStandardLLM([
       {role:"system",content:`You are an autonomous self-healing compiler. Fix the bug in the following ${lang} code based on the stderr. Output ONLY the raw corrected code without markdown fences.`},
       {role:"user",content:`CODE:\n${code}\n\nSTDERR:\n${err}`}
@@ -638,23 +711,41 @@ async function autoHealCode(lang,code,onUpdate){
   }
 }
 
-/* ===== STATIC APK / JADX / MANIFEST VULNERABILITY SCANNER ===== */
+/* ===== STATIC APK / JADX / JS SECRET SCANNER ===== */
 function scanAndroidSource(text,filename="source"){
   const findings=[];
   const rules=[
-    ["CRITICAL · Hardcoded Cloud / API Keys",/(AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z\-_]{35}|sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36})/g],
-    ["HIGH · Firebase / S3 Storage URLs",/([a-z0-9.-]+\.firebaseio\.com|[a-z0-9.-]+\.firebasestorage\.app|[a-z0-9.-]+\.s3\.amazonaws\.com)/gi],
-    ["HIGH · Exported Android Components (Attack Surface)",/(android:exported\s*=\s*["']true["']|<activity[^>]+exported=["']true["']|<service[^>]+exported=["']true["']|<receiver[^>]+exported=["']true["']|<provider[^>]+exported=["']true["'])/gi],
-    ["HIGH · Custom Deep-Link / Intent Schemes (Hijack/XSS Risk)",/(android:scheme\s*=\s*["'][^"']+["']|android:host\s*=\s*["'][^"']+["']|intent:\/\/)/gi],
-    ["HIGH · WebView JavaScript / File Access Sinks",/(setJavaScriptEnabled\s*\(\s*true\s*\)|addJavascriptInterface\s*\(|setAllowFileAccess\s*\(\s*true\s*\)|setAllowUniversalAccessFromFileURLs)/g],
-    ["MEDIUM · Cleartext Traffic / Debuggable Flag",/(android:debuggable\s*=\s*["']true["']|android:usesCleartextTraffic\s*=\s*["']true["']|checkServerTrusted)/gi],
-    ["MEDIUM · Internal API & GraphQL Endpoints",/["'](https?:\/\/[^"'\s]+\/api\/[^"'\s]+|\/v[1-9]\/[a-zA-Z0-9_\/-]+|\/graphql)["']/g]
+    ["CRITICAL · Hardcoded Cloud / API Keys",/(AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z\-_]{35}|sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36}|xox[baprs]-[0-9a-zA-Z-]{10,})/g],
+    ["HIGH · JWT / Bearer Tokens",/(eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,})/g],
+    ["HIGH · Firebase / S3 / Cloud Buckets",/([a-z0-9.-]+\.firebaseio\.com|[a-z0-9.-]+\.firebasestorage\.app|[a-z0-9.-]+\.s3\.amazonaws\.com)/gi],
+    ["HIGH · Exported Android Components",/(android:exported\s*=\s*["']true["']|<activity[^>]+exported=["']true["']|<service[^>]+exported=["']true["']|<receiver[^>]+exported=["']true["']|<provider[^>]+exported=["']true["'])/gi],
+    ["HIGH · Custom Deep-Link / Intent Schemes",/(android:scheme\s*=\s*["'][^"']+["']|android:host\s*=\s*["'][^"']+["']|intent:\/\/)/gi],
+    ["HIGH · Dangerous WebView / DOM Sinks",/(setJavaScriptEnabled\s*\(\s*true\s*\)|addJavascriptInterface\s*\(|setAllowFileAccess\s*\(\s*true\s*\)|innerHTML\s*=|document\.write\(|eval\()/g],
+    ["MEDIUM · API, Admin & GraphQL Endpoints",/["'](https?:\/\/[^"'\s]+\/api\/[^"'\s]+|\/api\/v?[0-9]*\/[a-zA-Z0-9_\/-]+|\/v[1-9]\/[a-zA-Z0-9_\/-]+|\/graphql|\/admin[a-zA-Z0-9_\/-]*)["']/g]
   ];
   for(const [title,re] of rules){
-    const matches=[...new Set([...text.matchAll(re)].map(m=>m[0]))].slice(0,25);
+    const matches=[...new Set([...text.matchAll(re)].map(m=>m[1]||m[0]))].slice(0,25);
     if(matches.length)findings.push(`### ${title} (${matches.length})\n`+matches.map(x=>"- `"+x+"`").join("\n"));
   }
-  return findings.length?`## 📱 Static APK / JADX Audit Report (${filename})\n\n`+findings.join("\n\n"):`Scanned ${text.length.toLocaleString()} bytes in ${filename} — no immediate static regex signatures matched. Send to AI for deep logic & CWE-835/IDOR analysis.`;
+  return findings.length?`## 🔍 Static SAST & Secret Scan (${filename})\n\n`+findings.join("\n\n"):`Scanned ${text.length.toLocaleString()} bytes in ${filename} — no immediate regex signatures matched.`;
+}
+
+/* ===== BUG BOUNTY PROGRAM SCOPE PARSER ===== */
+function extractScopeDomains(rawText){
+  const lines=rawText.split(/\n/);
+  const inScope=[],outScope=[];
+  let mode="in";
+  for(const l of lines){
+    if(/out[\s-]*of[\s-]*scope|excluded/i.test(l))mode="out";
+    else if(/in[\s-]*scope|eligible|target/i.test(l))mode="in";
+    const doms=[...l.matchAll(/(?:\*\.)?([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+)/g)].map(m=>m[1].toLowerCase()).filter(d=>!/\.(png|jpg|svg|js|css|json|md|txt|pdf|html)$/i.test(d));
+    for(const d of doms){
+      if(mode==="out")outScope.push(d);
+      else inScope.push(d);
+    }
+  }
+  const cleanIn=[...new Set(inScope)].filter(d=>!outScope.includes(d)).slice(0,6);
+  return {inScope:cleanIn,outScope:[...new Set(outScope)]};
 }
 
 /* ===== LOCAL OLLAMA BRIDGE ===== */
@@ -666,50 +757,77 @@ async function callLocalOllama(msgs,onTok){
   onTok(t);return t;
 }
 
-/* ===== AUTONOMOUS AGENT TOOLS (WITH @omni_research & @domain_audit) ===== */
+/* ===== AUTONOMOUS BLITZ TOOLS ===== */
 const J=async(u,o)=>{const r=await fetch(u,o);if(!r.ok)throw new Error("HTTP "+r.status);return r.json()};
 const tools={
-  /* NEW: 7-SOURCE MULTI-HOP OMNI-WEB RESEARCH HARVESTER */
-  async omni_research(q){
+  /* CLOUD LINUX BASH SANDBOX */
+  async bash_sandbox(script){
+    return await runPistonCloud("bash",script);
+  },
+  /* BUG BOUNTY PROGRAM SCOPE AUDITOR */
+  async program_audit(scopeText,onProg){
+    const {inScope,outScope}=extractScopeDomains(scopeText);
+    if(!inScope.length)return "No clear domain names detected in scope text.";
+    onProg?.(`📋 Parsed Scope: ${inScope.length} In-Scope domains (${inScope.join(", ")}) | ${outScope.length} Out-of-Scope excluded.`);
+    const reports=[];
+    for(const d of inScope.slice(0,3)){
+      const r=await tools.domain_blitz(d,onProg);
+      reports.push(`=== IN-SCOPE TARGET AUDIT: ${d} ===\n${r}`);
+    }
+    return `Parsed In-Scope Domains: ${inScope.join(", ")}\nExcluded Out-of-Scope: ${outScope.join(", ")||"None"}\n\n`+reports.join("\n\n");
+  },
+  async omni_blitz(q,onProg){
     q=q.trim();
+    onProg?.("🌐 Hop 1: Harvesting 7 global networks (DuckDuckGo, Wiki, HN, Reddit, SO, GitHub, ArXiv)…");
     const tasks=[
       fetch("https://r.jina.ai/https://html.duckduckgo.com/html/?q="+encodeURIComponent(q),{headers:{Accept:"text/plain"}}).then(r=>r.text()).then(t=>"[DuckDuckGo Live Web]\n"+t.slice(0,3200)).catch(()=>""),
       fetch("https://en.wikipedia.org/w/api.php?action=query&list=search&srlimit=5&format=json&origin=*&srsearch="+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[Wikipedia]\n"+(d.query?.search||[]).map(x=>x.title+": "+x.snippet.replace(/<[^>]+>/g,"")).join("\n")).catch(()=>""),
       fetch("https://hn.algolia.com/api/v1/search?hitsPerPage=5&query="+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[HackerNews]\n"+(d.hits||[]).map(h=>h.title+" ("+(h.url||"")+")").join("\n")).catch(()=>""),
-      fetch("https://www.reddit.com/search.json?limit=5&q="+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[Reddit]\n"+(d.data?.children||[]).map(c=>c.data.title+": "+(c.data.selftext||"").slice(0,220)).join("\n")).catch(()=>""),
+      fetch("https://www.reddit.com/search.json?limit=5&q="+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[Reddit]\n"+(d.data?.children||[]).map(c=>c.data.title+": "+(c.data.selftext||"").slice(0,240)).join("\n")).catch(()=>""),
       fetch("https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=relevance&pagesize=5&site=stackoverflow&q="+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[StackOverflow]\n"+(d.items||[]).map(i=>i.title+" ("+i.link+")").join("\n")).catch(()=>""),
       fetch("https://api.github.com/search/repositories?per_page=4&q="+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[GitHub Repos]\n"+(d.items||[]).map(i=>i.full_name+" ⭐"+i.stargazers_count+": "+i.description).join("\n")).catch(()=>""),
       tools.arxiv(q).then(t=>"[ArXiv Papers]\n"+t).catch(()=>"")
     ];
-    return (await Promise.all(tasks)).filter(Boolean).join("\n\n").slice(0,11000)||"No results found.";
+    const hop1=(await Promise.all(tasks)).filter(Boolean).join("\n\n");
+    const urls=[...new Set([...hop1.matchAll(/https?:\/\/[^\s)"'<>]+/g)].map(m=>m[0]))].filter(u=>!u.includes("duckduckgo.com")&&!u.includes("ycombinator.com")).slice(0,2);
+    let hop2="";
+    if(urls.length){
+      onProg?.(`🚀 Hop 2: Auto-Crawling full page text from ${urls.length} top sources…`);
+      const pages=await Promise.all(urls.map(u=>tools.fetch(u).then(t=>`[Deep Crawled Page: ${u}]\n`+t.slice(0,2800)).catch(()=>"")));
+      hop2="\n\n"+pages.filter(Boolean).join("\n\n");
+    }
+    return (hop1+hop2).slice(0,14000)||"No results found.";
   },
-  /* NEW: 7-LAYER PASSIVE DOMAIN SECURITY & POSTURE AUDITOR */
-  async domain_audit(target){
+  async domain_blitz(target,onProg){
     target=target.trim().replace(/^https?:\/\//,"").split("/")[0];
+    onProg?.(`⚡ Launching 12-Vector Parallel Recon on ${target}…`);
     const tasks=[
       tools.dns(target+" A").then(r=>"[1. DNS A Records]\n"+r).catch(()=>""),
-      tools.dns(target+" TXT").then(r=>"[2. DNS TXT / SPF / DMARC]\n"+r).catch(()=>""),
-      tools.dns(target+" MX").then(r=>"[3. DNS MX Mail Servers]\n"+r).catch(()=>""),
-      tools.subdomains(target).then(r=>"[4. Certificate Transparency Subdomains (crt.sh)]\n"+r.slice(0,1800)).catch(()=>""),
-      tools.securityheaders(target).then(r=>"[5. HTTP Security Headers Grade]\n"+r.slice(0,1600)).catch(()=>""),
-      tools.wayback(target).then(r=>"[6. Wayback Historical Endpoints]\n"+r.slice(0,1600)).catch(()=>""),
-      tools.urlscan(target).then(r=>"[7. URLScan Passive Intel]\n"+r.slice(0,1400)).catch(()=>"")
+      tools.dns(target+" MX").then(r=>"[2. DNS MX Records]\n"+r).catch(()=>""),
+      tools.dns(target+" TXT").then(r=>"[3. DNS TXT / SPF / DMARC]\n"+r).catch(()=>""),
+      tools.dns(target+" NS").then(r=>"[4. DNS Nameservers]\n"+r).catch(()=>""),
+      tools.subdomains(target).then(r=>"[5. Certificate Transparency Subdomains (crt.sh)]\n"+r.slice(0,2000)).catch(()=>""),
+      tools.whois(target).then(r=>"[6. RDAP / WHOIS Ownership & Status]\n"+r).catch(()=>""),
+      tools.securityheaders(target).then(r=>"[7. HTTP Security Headers Analysis]\n"+r.slice(0,1600)).catch(()=>""),
+      tools.wayback(target).then(r=>"[8. Wayback Machine Historical Endpoints]\n"+r.slice(0,1800)).catch(()=>""),
+      tools.urlscan(target).then(r=>"[9. URLScan.io Passive Intel]\n"+r.slice(0,1400)).catch(()=>""),
+      fetch("https://r.jina.ai/https://"+target,{headers:{Accept:"text/plain"}}).then(r=>r.text()).then(t=>"[10. Main Target Page & JS Scan]\n"+scanAndroidSource(t,target)+"\n\n[Page Snippet]\n"+t.slice(0,1400)).catch(()=>"")
     ];
     const base=(await Promise.all(tasks)).filter(Boolean).join("\n\n");
-    // Also resolve Shodan InternetDB if an IPv4 is present
+    let extra="";
     const ipMatch=base.match(/\b(\d{1,3}(?:\.\d{1,3}){3})\b/);
-    let shodan="";
     if(ipMatch){
-      try{shodan="\n\n[8. Shodan InternetDB Passive Ports & CVEs for "+ipMatch[1]+"]\n"+await tools.ip(ipMatch[1])}catch(_){}
+      onProg?.(`🛰️ Querying Shodan InternetDB Ports & CVEs for IP ${ipMatch[1]}…`);
+      try{extra+="\n\n[11. Shodan InternetDB Passive Ports, Hostnames & CVEs for "+ipMatch[1]+"]\n"+await tools.ip(ipMatch[1])}catch(_){}
     }
-    return (base+shodan)||"No passive records found for "+target;
+    const sens=[...base.matchAll(/https?:\/\/[^\s|]+(\.(?:js|json|xml|env|bak|sql|config|yml)|\?[a-zA-Z0-9_]+=)/gi)].map(m=>m[0]).slice(0,15);
+    if(sens.length)extra+="\n\n[12. High-Interest Historical URLs / Parameters]\n"+sens.join("\n");
+    return (base+extra).slice(0,15000)||"No passive records found for "+target;
   },
-  async swarm_audit(q){
-    return await runRedBlueSwarm([{role:"user",content:q.trim()}],()=>{});
-  },
-  async apk_scan(inp){
-    return scanAndroidSource(inp,"Agent Input");
-  },
+  async omni_research(q){return await tools.omni_blitz(q)},
+  async domain_audit(t){return await tools.domain_blitz(t)},
+  async swarm_audit(q){return await runRedBlueSwarm([{role:"user",content:q.trim()}],()=>{})},
+  async apk_scan(inp){return scanAndroidSource(inp,"Agent Input")},
   async auto_verify(inp){
     const m=inp.trim().match(/^([a-zA-Z0-9+#_-]+)\n([\s\S]*)$/);
     const lang=m?m[1]:"python",code=m?m[2]:inp;
@@ -722,9 +840,7 @@ const tools={
     openCanvas(custom,"html","Attack Surface: "+d);
     return `Interactive Attack Surface Graph for ${d} launched in Live Canvas.`;
   },
-  async bughunt(target){
-    return await tools.domain_audit(target);
-  },
+  async bughunt(target){return await tools.domain_blitz(target)},
   async js_secrets(url){
     url=url.trim();if(!/^https?:\/\//i.test(url))url="https://"+url;
     const txt=await (await fetch("https://r.jina.ai/"+url,{headers:{Accept:"text/plain"}})).text();
@@ -759,7 +875,7 @@ const tools={
     }
     return "Previewed in Live Canvas.";
   },
-  async deepsearch(q){return await tools.omni_research(q)},
+  async deepsearch(q){return await tools.omni_blitz(q)},
   async websearch(q){return (await (await fetch("https://r.jina.ai/https://html.duckduckgo.com/html/?q="+encodeURIComponent(q.trim()),{headers:{Accept:"text/plain"}})).text()).slice(0,5500)},
   async fetch(u){u=u.trim();if(!/^https?:\/\//i.test(u))u="https://"+u;return (await (await fetch("https://r.jina.ai/"+u,{headers:{Accept:"text/plain"}})).text()).slice(0,7000)},
   async arxiv(q){
@@ -769,7 +885,7 @@ const tools={
   },
   async wayback(u){
     u=u.trim().replace(/^https?:\/\//,"");
-    const cdx=await J("https://web.archive.org/cdx/search/cdx?url="+encodeURIComponent(u+"/*")+"&output=json&limit=25&fl=timestamp,original,statuscode&collapse=urlkey").catch(()=>[]);
+    const cdx=await J("https://web.archive.org/cdx/search/cdx?url="+encodeURIComponent(u+"/*")+"&output=json&limit=30&fl=timestamp,original,statuscode&collapse=urlkey").catch(()=>[]);
     return cdx.length>1?cdx.slice(1).map(r=>r.join(" | ")).join("\n"):"No Wayback records.";
   },
   async js(code){
@@ -782,9 +898,9 @@ const tools={
   async subdomains(d){const r=await J("https://crt.sh/?output=json&q=%25."+encodeURIComponent(d.trim()));return [...new Set(r.flatMap(e=>e.name_value.split("\n")))].filter(s=>!s.includes("*")).slice(0,80).join("\n")||"None."},
   async whois(d){const r=await J("https://rdap.org/domain/"+encodeURIComponent(d.trim()));return JSON.stringify({name:r.ldhName,status:r.status,ns:(r.nameservers||[]).map(n=>n.ldhName)})},
   async ip(a){return JSON.stringify(await J("https://internetdb.shodan.io/"+a.trim()))},
-  async urlscan(q){const d=await J("https://urlscan.io/api/v1/search/?q=domain:"+encodeURIComponent(q.trim())+"&size=6");return (d.results||[]).map(r=>r.page?.url+" | "+(r.page?.ip||"")).join("\n")||"None."},
+  async urlscan(q){const d=await J("https://urlscan.io/api/v1/search/?q=domain:"+encodeURIComponent(q.trim())+"&size=8");return (d.results||[]).map(r=>r.page?.url+" | "+(r.page?.ip||"")+" | "+(r.page?.server||"")).join("\n")||"None."},
   async github(q){const r=await J("https://api.github.com/search/repositories?per_page=6&q="+encodeURIComponent(q.trim()));return (r.items||[]).map(i=>i.full_name+" ⭐"+i.stargazers_count+" - "+i.description).join("\n")},
-  async cve(q){q=q.trim();const u=/^CVE-/i.test(q)?"cveId="+q.toUpperCase():"resultsPerPage=5&keywordSearch="+encodeURIComponent(q);const r=await J("https://services.nvd.nist.gov/rest/json/cves/2.0?"+u);return (r.vulnerabilities||[]).map(v=>v.cve.id+": "+v.cve.descriptions?.[0]?.value?.slice(0,240)).join("\n")||"None."},
+  async cve(q){q=q.trim();const u=/^CVE-/i.test(q)?"cveId="+q.toUpperCase():"resultsPerPage=6&keywordSearch="+encodeURIComponent(q);const r=await J("https://services.nvd.nist.gov/rest/json/cves/2.0?"+u);return (r.vulnerabilities||[]).map(v=>v.cve.id+": "+v.cve.descriptions?.[0]?.value?.slice(0,240)).join("\n")||"None."},
   async securityheaders(host){host=host.trim().replace(/^https?:\/\//,"").split("/")[0];return (await (await fetch("https://r.jina.ai/https://securityheaders.com/?q="+encodeURIComponent(host)+"&followRedirects=on",{headers:{Accept:"text/plain"}})).text()).slice(0,2500)},
   async remember(f){S.mem.push(f.trim());S.mem=S.mem.slice(-40);save();return "Saved."}
 };
@@ -792,24 +908,24 @@ const tools={
 const TOOL_NAMES=Object.keys(tools).join("|")+"|image|edit|video";
 const TOOLRE_G=new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F,"g");
 
-const sysPrompt=()=>`You are Astra Carbon X v10.0 — an elite, proactive, autonomous Omni-Research AI, Cloud Architect & Defensive Security / SAST Auditor. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
+const sysPrompt=()=>`You are Astra Carbon X v12.0 — an elite, autonomous AI Engineer, Omni-Research Harvester & Authorized Passive Bug Bounty / SAST Auditor. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
 
-PROACTIVE FULFILLMENT & DEEP RESEARCH MANDATE:
-1. Deliver complete, exhaustive, production-ready answers, code, and architectural breakdowns on the first try. Never give lazy placeholders or stop halfway.
-2. When given a complex problem or obscure topic, chain @omni_research and @fetch to gather real-time facts across the entire web, and use @auto_verify to test algorithms in the cloud.
-3. When given a domain or codebase for security auditing, perform a comprehensive legal, passive security posture assessment (@domain_audit, @recon_graph, @js_secrets, @apk_scan, @cve) and identify misconfigurations, missing security headers, exposed endpoints, CWE logic flaws, CVSS v3.1 scores, and exact remediation patches.
-4. Whenever you build an HTML app, dashboard, or visual tool, invoke @canvas so it renders in the Side-by-Side Live Canvas.
+STRICT ONE-SHOT EXECUTION MANDATE:
+1. NEVER ask the user for confirmation ("Should I proceed?", "Would you like me to..."). Execute all analysis, cloud scripts, and passive recon in one shot and deliver the complete, finished output immediately.
+2. NEVER output truncated code or placeholders ("// TODO").
+3. When given Bug Bounty Program instructions or scope, parse the in-scope assets, respect all out-of-scope exclusions, analyze the 12-vector passive recon telemetry, and produce a comprehensive HackerOne / Intigriti vulnerability & security posture report (with Severity, CVSS v3.1 vector, CWE ID, Evidence, and Remediation Patch).
+4. Strictly adhere to legal, passive OSINT, static code analysis (SAST), and isolated cloud container verification (@bash_sandbox, @auto_verify); never perform active exploitation against external live targets.
 
-To invoke tools (you can call multiple tools in parallel!), reply ONLY with tool blocks in this exact format:
+To invoke tools, reply ONLY with tool blocks in this exact format:
 @toolname
 ${F}
 input
 ${F}
 
-Available Tools: @omni_research (7-source web/wiki/HN/Reddit/SO/GitHub/ArXiv harvester), @domain_audit (7-layer passive DNS/SPF/DMARC/Subdomains/Headers/Wayback/Shodan domain audit), @swarm_audit, @apk_scan, @auto_verify (first line: language, next lines: code), @recon_graph (domain), @bughunt, @js_secrets, @cloud_exec, @canvas, @cloud_host, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @image, @edit, @video.
-Memory: ${S.mem.join(" | ")||"none"} | Pinned Notes: ${(S.notes||"").slice(0,300)||"none"}`;
+Available Tools: @program_audit (parses bug bounty scope & runs 12-vector passive audit on in-scope domains), @bash_sandbox (runs analytical Linux bash script in isolated cloud container), @omni_blitz (2-hop 7-source deep web crawler), @domain_blitz (12-vector passive domain recon), @auto_verify (first line: language, next lines: code), @recon_graph (domain), @js_secrets (url), @apk_scan, @cloud_exec, @canvas, @cloud_host, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @image.
+Memory: ${S.mem.join(" | ")||"none"} | Notes: ${(S.notes||"").slice(0,300)||"none"}`;
 
-/* ===== BULLETPROOF MULTI-CLOUD LLM ROUTER & RED-BLUE-JUDGE SWARM ===== */
+/* ===== BULLETPROOF MULTI-CLOUD LLM ROUTER ===== */
 const withTimeout=(p,ms,msg)=>Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(new Error(msg||"Timeout")),ms))]);
 
 async function pollinations(msgs,model,onTok){
@@ -901,13 +1017,6 @@ async function llm(msgs,onTok){
 }
 
 const toLLM=m=>m.file?.imgId?{img:m.file.imgId,role:m.role,content:m.content+"\n\n[Attached Image: "+m.file.name+"]"}:m.file?{role:m.role,content:m.content+"\n\n[File: "+m.file.name+"]\n"+F+"\n"+m.file.text+"\n"+F}:{role:m.role,content:m.content};
-
-/* ===== SPEECH SYNTHESIS ===== */
-function speakText(text){
-  if(window.speechSynthesis?.speaking){speechSynthesis.cancel();return}
-  const clean=text.replace(/```[\s\S]*?```/g," ").replace(/[#*`_~\[\]()]/g," ").replace(/\s+/g," ").trim().slice(0,420);
-  if(clean&&window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(clean));
-}
 
 /* ===== 60FPS HARDWARE-ACCELERATED RENDERING & SMART SCROLL LOCK ===== */
 const md=t=>{let h;try{h=DOMPurify.sanitize(marked.parse(t||"",{breaks:true,gfm:true}))}catch(e){h="<pre>"+escapeHtml(t)+"</pre>"}return h.replace(/\[\[media:(m[a-z0-9]+)\]\]/g,'<div class="mslot" data-id="$1"></div>')};
@@ -1002,22 +1111,20 @@ function addAI(content,i){
 
 function hello(){
   $("#in").innerHTML=`<div id="hello">
-    <div class="hero-badge">⚡ Astra Carbon X v10.0 · Omni-Research & Daily Security OS</div>
-    <h1>Give one command. I handle the rest.</h1>
-    <p>7-Source Omni-Web Crawler · 7-Layer Passive Domain Bug Auditor · 60fps Smooth UI · Type <code>/</code> for quick commands</p>
+    <div class="hero-badge">⚡ Astra Carbon X v12.0 · Neural Voice & Scope Recon OS</div>
+    <h1>Paste Program Scope or Any Goal. Done in 1-Shot.</h1>
+    <p>Bug Bounty Scope Parser · 12-Vector Passive Domain Blitz · Cloud Linux Sandbox · Natural AI Voices</p>
     <div class="chips">
-      <button id="hcAudit"><i>🛡️</i><div><b>7-Layer Domain Bug Audit</b><span>DNS, SPF/DMARC, Subdomains, Headers & CVEs</span></div></button>
-      <button id="hcOmni"><i>🌐</i><div><b>Omni-Web Deep Research</b><span>Crawls 7 live networks to solve complex problems</span></div></button>
-      <button id="hcApk"><i>📱</i><div><b>APK & JADX Static Scanner</b><span>Scan Manifest, Deep-Links, Keys & Sinks</span></div></button>
-      <button id="hcGraph"><i>🕸️</i><div><b>Attack Surface Graph</b><span>Visual Subdomain, IP, Port & CVE topology</span></div></button>
+      <button id="hcScope"><i>📋</i><div><b>Bug Bounty Scope Parser</b><span>Paste HackerOne/Intigriti rules to auto-audit in-scope assets</span></div></button>
+      <button id="hcAudit"><i>⚡</i><div><b>1-Shot 12-Vector Domain Blitz</b><span>Instant DNS, Subdomains, JS Secrets, Ports & CVEs</span></div></button>
+      <button id="hcLinux"><i>🐧</i><div><b>Cloud Linux (Bash/Python) Lab</b><span>Run analytical scripts & parsers in zero-load cloud</span></div></button>
+      <button id="hcOmni"><i>🌐</i><div><b>2-Hop Omni-Web Deep Solver</b><span>Crawls 7 live networks + full pages in 1 shot</span></div></button>
     </div>
   </div>`;
+  $("#hcScope").onclick=()=>openCmd("scope");
   $("#hcAudit").onclick=()=>openCmd("bug");
-  $("#hcOmni").onclick=()=>{
-    $("#q").value="/omni ";$("#q").focus();$("#q").dispatchEvent(new Event("input"));
-  };
-  $("#hcApk").onclick=()=>openCmd("apk");
-  $("#hcGraph").onclick=()=>openCanvas(RECON_GRAPH_HTML,"html","Attack Surface Graph");
+  $("#hcLinux").onclick=()=>openCmd("cloud");
+  $("#hcOmni").onclick=()=>{$("#q").value="/omni ";$("#q").focus();$("#q").dispatchEvent(new Event("input"))};
 }
 
 function renderAll(){
@@ -1027,29 +1134,43 @@ function renderAll(){
   bottom(true);
 }
 
-/* ===== SLASH COMMAND INTERCEPTOR & AGENT EXECUTION LOOP ===== */
+/* ===== INSTANT BLITZ PRE-FETCHER & ONE-SHOT AGENT LOOP ===== */
 async function ask(text){
   text=(text||"").trim();if((!text&&!pending)||busy)return;
   $("#cmdM").classList.remove("open");
   $("#slashMenu").classList.remove("open");
 
-  // Handle Slash Commands
   if(text==="/notes"){openCmd("notes");$("#q").value="";return}
-  if(text.startsWith("/audit ")){
-    const dom=text.slice(7).trim();
-    S.bugMode=true;S.taskMode=true;save();syncModesUI();
-    text=`[🛡️ 7-LAYER PASSIVE DOMAIN SECURITY AUDIT]\nTarget Domain: ${dom}\nRun @domain_audit, @recon_graph, and @js_secrets on ${dom}. Analyze DNS/SPF/DMARC, exposed CT subdomains, HTTP security headers, Shodan ports/CVEs, and archived endpoints. Produce a comprehensive security assessment report with CVSS v3.1 scores, CWE classifications, and remediation configurations.`;
-  }else if(text.startsWith("/omni ")){
-    const query=text.slice(6).trim();
-    S.taskMode=true;save();syncModesUI();
-    text=`[🌐 OMNI-WEB DEEP RESEARCH & PROBLEM SOLVER]\nProblem / Topic: ${query}\nUse @omni_research and @fetch to gather comprehensive real-time information across the internet, verify any code or math with @auto_verify, and provide a complete, deeply detailed solution.`;
-  }else if(text.startsWith("/heal ")){
-    const goal=text.slice(6).trim();
-    S.autoHeal=true;S.taskMode=true;save();syncModesUI();
-    text=`Write and verify code in the cloud using @auto_verify for: ${goal}`;
-  }else if(text.startsWith("/graph ")){
+  if(text==="/scope"){openCmd("scope");$("#q").value="";return}
+  if(text.startsWith("/graph ")){
     const dom=text.slice(7).trim()||"example.com";
     $("#q").value="";tools.recon_graph(dom);return;
+  }
+
+  let blitzTargetDomain=null,blitzOmniQuery=null,blitzScopeText=null;
+  if(text.startsWith("/audit ")){
+    blitzTargetDomain=text.slice(7).trim().replace(/^https?:\/\//,"").split("/")[0];
+    S.bugMode=true;S.taskMode=true;save();syncModesUI();
+    text=`Perform a complete 12-Vector Passive Security & Bug Bounty Audit on ${blitzTargetDomain}`;
+  }else if(text.startsWith("/omni ")){
+    blitzOmniQuery=text.slice(6).trim();
+    S.taskMode=true;save();syncModesUI();
+    text=blitzOmniQuery;
+  }else if(text.startsWith("/bash ")){
+    const goal=text.slice(6).trim();
+    S.autoHeal=true;S.taskMode=true;save();syncModesUI();
+    text=`Write and execute a Linux Bash / Python analytical script in the cloud container (@bash_sandbox or @auto_verify) for: ${goal}`;
+  }else if(S.blitzMode){
+    const domMatch=text.match(/^(?:audit|scan|bug\s*hunt|recon)?\s*([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+)\s*$/i);
+    if(domMatch){
+      blitzTargetDomain=domMatch[1].toLowerCase();
+      S.bugMode=true;S.taskMode=true;save();syncModesUI();
+    }else if(/in[\s-]*scope|out[\s-]*of[\s-]*scope|bounty|hackerone|intigriti/i.test(text)&&text.length>60){
+      blitzScopeText=text;
+      S.bugMode=true;S.taskMode=true;save();syncModesUI();
+    }else if(text.length>18&&!/^(hi|hello|hey|thanks|ok)\b/i.test(text)){
+      blitzOmniQuery=text;
+    }
   }
 
   if(!S.cur||!cur())newChat(true);
@@ -1063,7 +1184,7 @@ async function ask(text){
   pending=null;$("#file").style.display="none";
   userScrolledUp=false;bottom(true);
   save();drawList();
-  return await runAgent();
+  return await runAgent({blitzTargetDomain,blitzOmniQuery,blitzScopeText});
 }
 
 async function regenerate(i){
@@ -1078,19 +1199,18 @@ function editMsg(i){
   save();drawList();
 }
 
-async function runAgent(){
+async function runAgent(opts={}){
   busy=true;stop=false;$("#send").textContent="■";
   const c=cur();const myIndex=c.msgs.length;
   const row=document.createElement("div");row.className="arow";
-  const th=document.createElement("details");th.className="th";
-  th.innerHTML='<summary><span class="dot"></span><span class="tt">Autonomous Agent Working…</span><span class="tm" style="margin-left:auto">0.0s</span></summary><div class="st"></div>';
-  const st=th.querySelector(".st"),t0=performance.now();
+  const th=document.createElement("details");th.className="th";th.open=true;
+  th.innerHTML='<summary><span class="dot"></span><span class="tt">⚡ Autonomous Blitz Engine Initializing…</span><span class="tm" style="margin-left:auto">0.0s</span></summary><div class="pbar-wrap"><div class="pbar"></div></div><div class="st"></div>';
+  const st=th.querySelector(".st"),pbar=th.querySelector(".pbar"),t0=performance.now();
   const tick=setInterval(()=>th.querySelector(".tm").textContent=((performance.now()-t0)/1000).toFixed(1)+"s",100);
   const ans=document.createElement("div");ans.className="a";
   row.append(th,ans);$("#in").appendChild(row);bottom();
   const log=s=>{st.textContent+=(st.textContent?"\n":"")+s};
 
-  // 60FPS RAF THROTTLED STREAM RENDERER (Zero UI Jank)
   let rafId=null,latestText="";
   const streamRender=t=>{
     latestText=t;
@@ -1103,10 +1223,31 @@ async function runAgent(){
     });
   };
 
-  let used=0,final="";
+  let used=0,final="",preTelemetry="";
   try{
+    if(opts.blitzScopeText){
+      used+=12;pbar.style.width="55%";
+      const data=await tools.program_audit(opts.blitzScopeText,msg=>{th.querySelector(".tt").textContent=msg;log("▸ "+msg)});
+      preTelemetry=`\n\n[📋 PRE-FETCHED BUG BOUNTY PROGRAM SCOPE TELEMETRY]\n${data}\n\n[MANDATE: Respect all program scope rules and out-of-scope exclusions. Analyze all pre-fetched passive telemetry for the in-scope domains and write a complete HackerOne / Intigriti Security Assessment Report in ONE SHOT.]`;
+    }else if(opts.blitzTargetDomain){
+      used+=12;pbar.style.width="55%";
+      tools.recon_graph(opts.blitzTargetDomain);
+      const data=await tools.domain_blitz(opts.blitzTargetDomain,msg=>{th.querySelector(".tt").textContent=msg;log("▸ "+msg)});
+      preTelemetry=`\n\n[⚡ PRE-FETCHED 12-VECTOR PASSIVE RECON TELEMETRY FOR ${opts.blitzTargetDomain}]\n${data}\n\n[MANDATE: Analyze all 12 vectors above immediately and produce a complete, exhaustive HackerOne / Intigriti Security Assessment & Bug Bounty Report with CVSS v3.1 scores, CWE IDs, exposed endpoints/subdomains, header misconfigurations, Shodan CVE analysis, and exact remediation patches in ONE SHOT.]`;
+    }else if(opts.blitzOmniQuery&&S.blitzMode){
+      used+=7;pbar.style.width="45%";
+      const data=await tools.omni_blitz(opts.blitzOmniQuery,msg=>{th.querySelector(".tt").textContent=msg;log("▸ "+msg)});
+      preTelemetry=`\n\n[⚡ PRE-FETCHED 2-HOP OMNI-WEB RESEARCH TELEMETRY]\n${data}\n\n[MANDATE: Use the live web research above to solve the user's request completely in ONE SHOT with full depth, working code, and zero placeholders.]`;
+    }
+
     const work=[{role:"system",content:sysPrompt()},...c.msgs.slice(-14).map(toLLM)];
+    if(preTelemetry){
+      work[work.length-1]={...work[work.length-1],content:work[work.length-1].content+preTelemetry};
+    }
+
     for(let i=0;i<=MAXSTEPS;i++){
+      pbar.style.width=Math.min(92,35+i*15)+"%";
+      th.querySelector(".tt").textContent=i===0?"🧠 Synthesizing complete solution…":`⚡ Executing Cloud Step ${i+1}…`;
       ans.innerHTML='<span class="cur"></span>';
       const out=await llm(work,streamRender);
       if(rafId){cancelAnimationFrame(rafId);rafId=null}
@@ -1115,7 +1256,7 @@ async function runAgent(){
       ans.innerHTML="";
       const results=await Promise.all(matches.map(async m=>{
         const [,name,inp]=m;used++;
-        th.querySelector(".tt").textContent=`Running @${name} (Step ${used})…`;
+        th.querySelector(".tt").textContent=`Running @${name} (Pipeline ${used})…`;
         log(`▸ @${name}: `+inp.trim().slice(0,140).replace(/\n/g," "));
         let res;
         try{res=await withTimeout(tools[name](inp),65000,"Timeout")}
@@ -1129,12 +1270,13 @@ async function runAgent(){
     if(htmlMatch&&!$("#canvasPane").classList.contains("open"))openCanvas(htmlMatch[1],"html","App Preview");
     ans.innerHTML=md(final);dress(ans);addActs(row,final,myIndex);
     c.msgs.push({role:"assistant",content:final});
+    if(S.autoSpeak&&final&&!stop)speakText(final,true);
   }catch(e){
     ans.innerHTML='<span style="color:#ef4444">⚠️ '+escapeHtml(e.message||"Connection error")+'</span> ';
-    const rb=document.createElement("button");rb.className="cp";rb.textContent="↻ Retry";rb.onclick=()=>{if(!busy){row.remove();runAgent()}};ans.appendChild(rb);
+    const rb=document.createElement("button");rb.className="cp";rb.textContent="↻ Retry";rb.onclick=()=>{if(!busy){row.remove();runAgent(opts)}};ans.appendChild(rb);
   }
   clearInterval(tick);
-  if(used){th.classList.add("done");th.querySelector(".tt").textContent=`Completed ${used} cloud step${used>1?"s":""} in `+((performance.now()-t0)/1000).toFixed(1)+"s";th.querySelector(".tm").textContent=""}
+  if(used){th.classList.add("done");th.open=false;th.querySelector(".tt").textContent=`⚡ Blitz executed ${used} parallel cloud pipelines in `+((performance.now()-t0)/1000).toFixed(1)+"s";th.querySelector(".tm").textContent=""}
   else th.remove();
   busy=false;$("#send").textContent="↑";save();drawList();bottom();
   return final;
@@ -1142,64 +1284,58 @@ async function runAgent(){
 
 /* ===== UNIFIED COMMAND CENTER (⌘K / ＋) ===== */
 function syncModesUI(){
+  $("#blitzBtn").classList.toggle("on",!!S.blitzMode);
   const pills=$("#activePills");pills.innerHTML="";
   const addPill=(lbl,key)=>{
     const p=document.createElement("span");p.className="mpill";p.innerHTML=`${lbl} <b>✕</b>`;
     p.querySelector("b").onclick=()=>{S[key]=false;save();syncModesUI()};
     pills.appendChild(p);
   };
+  if(S.blitzMode)addPill("⚡ 1-Shot Blitz","blitzMode");
   if(S.swarmMode)addPill("🛡️ Red-Blue Swarm","swarmMode");
   if(S.bugMode)addPill("🐞 Domain Auditor","bugMode");
-  if(S.taskMode)addPill("🚀 Omni-Task","taskMode");
   if(S.arenaMode)addPill("⚔️ Consensus","arenaMode");
   if(S.autoHeal)addPill("🧬 Self-Heal","autoHeal");
 }
 syncModesUI();
+$("#blitzBtn").onclick=()=>{S.blitzMode=!S.blitzMode;save();syncModesUI();toast(S.blitzMode?"⚡ 1-Shot Autonomous Blitz: ON":"Blitz Mode: OFF")};
 
 const CMD_TABS={
-  modes(){
+  scope(){
     $("#cmdPane").innerHTML=`
-      <div class="qgrid">
-        <button class="qcard ${S.bugMode?"on":""}" id="qmBug"><span>🛡️</span><div><b>7-Layer Domain Auditor</b><span>Passive Recon, Headers, JS & CVEs</span></div></button>
-        <button class="qcard ${S.taskMode?"on":""}" id="qmTask"><span>🌐</span><div><b>Omni-Web Deep Research</b><span>7-Source Crawler + Multi-Hop Solver</span></div></button>
-        <button class="qcard ${S.swarmMode?"on":""}" id="qmSwarm"><span>⚖️</span><div><b>Red-Blue-Judge Swarm</b><span>Builder vs Breaker adversarial audit</span></div></button>
-        <button class="qcard ${S.arenaMode?"on":""}" id="qmArena"><span>⚔️</span><div><b>Multi-Brain Consensus</b><span>Parallel Claude + Gemini + GPT</span></div></button>
-        <button class="qcard ${S.autoHeal?"on":""}" id="qmHeal"><span>🧬</span><div><b>Self-Healing Code Loop</b><span>Auto-fixes stderr in Cloud</span></div></button>
-        <button class="qcard" id="qmAttach"><span>📎</span><div><b>Attach File / APK / Code</b><span>Manifest, Java/Kotlin, logs, image</span></div></button>
-        <button class="qcard" id="qmMagic"><span>✨</span><div><b>Magic Prompt Upgrade</b><span>Rewrite draft into master spec</span></div></button>
-        <button class="qcard" id="qmLive"><span>🎙️</span><div><b>Astra Live Voice Orb</b><span>Hands-free neural voice chat</span></div></button>
-      </div>`;
-    $("#qmSwarm").onclick=()=>{S.swarmMode=!S.swarmMode;save();syncModesUI();CMD_TABS.modes()};
-    $("#qmBug").onclick=()=>{S.bugMode=!S.bugMode;save();syncModesUI();CMD_TABS.modes()};
-    $("#qmTask").onclick=()=>{S.taskMode=!S.taskMode;save();syncModesUI();CMD_TABS.modes()};
-    $("#qmArena").onclick=()=>{S.arenaMode=!S.arenaMode;save();syncModesUI();CMD_TABS.modes()};
-    $("#qmHeal").onclick=()=>{S.autoHeal=!S.autoHeal;save();syncModesUI();CMD_TABS.modes()};
-    $("#qmAttach").onclick=()=>{$("#cmdM").classList.remove("open");$("#fin").click()};
-    $("#qmLive").onclick=()=>{$("#cmdM").classList.remove("open");openOrb()};
-    $("#qmMagic").onclick=async()=>{
-      $("#cmdM").classList.remove("open");
-      const raw=$("#q").value.trim();if(!raw)return toast("Type a draft prompt in the box first!");
-      toast("✨ Upgrading prompt…");
-      try{
-        const res=await routeStandardLLM([{role:"system",content:"Upgrade the user's draft into a rigorous, detailed engineering/research specification. Output ONLY the improved prompt."},{role:"user",content:raw}],()=>{});
-        if(res){$("#q").value=res.trim();$("#q").dispatchEvent(new Event("input"))}
-      }catch(_){}
+      <div style="font-size:12.5px;color:var(--m)">📋 <b>Bug Bounty Program Scope Parser & Passive Auditor:</b> Paste the raw rules, scope table, or instructions from any HackerOne, Intigriti, or Bugcrowd program. Astra will automatically extract the in-scope domains, ignore out-of-scope assets, run a 12-vector passive recon & SAST audit across the targets, and generate a compliant report.</div>
+      <textarea class="ti" id="scText" rows="6" placeholder="Paste Bug Bounty Program Scope & Rules here...\nExample:\nIn-Scope:\n*.example.com\napi.example.org\n\nOut-of-Scope:\nblog.example.com"></textarea>
+      <div class="row2">
+        <button class="pri" id="scRunBtn">⚡ Parse Scope & Run 1-Shot Passive Audit</button>
+        <button id="scExtractBtn">🔍 Preview Extracted Scope</button>
+      </div>
+      <div class="out2" id="scOut">Waiting for program scope...</div>`;
+    $("#scExtractBtn").onclick=()=>{
+      const {inScope,outScope}=extractScopeDomains($("#scText").value);
+      $("#scOut").textContent=`✔ In-Scope Targets (${inScope.length}): ${inScope.join(", ")||"None detected"}\n🚫 Out-of-Scope Excluded (${outScope.length}): ${outScope.join(", ")||"None"}`;
+    };
+    $("#scRunBtn").onclick=()=>{
+      const txt=$("#scText").value.trim();
+      if(!txt)return toast("Paste program scope instructions first");
+      S.blitzMode=true;S.bugMode=true;save();syncModesUI();
+      ask(txt);
     };
   },
   bug(){
     $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)">🛡️ <b>7-Layer Passive Domain Security Auditor:</b> Enter any authorized domain to run DNS (A/MX/TXT/SPF/DMARC), Certificate Transparency Subdomains, HTTP Security Headers, Wayback Historical Endpoints, URLScan, and Shodan InternetDB Port/CVE checks simultaneously.</div>
+      <div style="font-size:12.5px;color:var(--m)">⚡ <b>1-Shot 12-Vector Domain Blitz Auditor:</b> Enter any authorized domain to pre-fetch DNS (A/MX/TXT/NS), Certificate Transparency Subdomains, RDAP WHOIS, Security Headers, Wayback Sensitive URLs, URLScan, Shodan Ports/CVEs, and Live JS Bundles in one shot.</div>
       <input class="ti" id="bhTarget" placeholder="Target Domain (e.g., example.com)">
-      <textarea class="ti" id="bhCode" rows="3" placeholder="Optional: Paste specific source code, JS bundle URL, or HTTP headers for deep SAST auditing..."></textarea>
+      <textarea class="ti" id="bhCode" rows="3" placeholder="Optional: Paste source code, JS bundle URL, or HTTP headers for deep SAST auditing..."></textarea>
       <div class="row2">
-        <button class="red" id="startBugBtn">🛡️ Run 7-Layer Domain Audit</button>
+        <button class="red" id="startBugBtn">⚡ Launch 1-Shot 12-Vector Blitz Audit</button>
         <button id="graphBugBtn">🕸️ Open Visual Attack Surface Graph</button>
       </div>`;
     $("#startBugBtn").onclick=()=>{
       const t=$("#bhTarget").value.trim(),c=$("#bhCode").value.trim();
       if(!t&&!c)return toast("Enter a target domain or paste code");
-      S.bugMode=true;S.taskMode=true;save();syncModesUI();
-      ask(`[🛡️ 7-LAYER PASSIVE DOMAIN & SAST SECURITY AUDIT]\nTarget: ${t||"Provided Code"}\nAdditional Context: ${c||"Run @domain_audit, @recon_graph, and @js_secrets. Analyze all 7 layers (DNS/SPF/DMARC, CT Subdomains, Security Headers, Shodan Ports/CVEs, Wayback URLs, and JS endpoints) and produce a prioritized HackerOne/Intigriti security report with CVSS v3.1 scores, CWE IDs, and remediation patches."}`);
+      if(t&&!c){ask("/audit "+t);return}
+      S.bugMode=true;S.blitzMode=true;save();syncModesUI();
+      ask(`[⚡ 1-SHOT DOMAIN & SAST SECURITY AUDIT]\nTarget: ${t||"Provided Code"}\nContext:\n${c}`);
     };
     $("#graphBugBtn").onclick=()=>{
       const t=$("#bhTarget").value.trim()||"example.com";
@@ -1207,25 +1343,85 @@ const CMD_TABS={
       tools.recon_graph(t);
     };
   },
-  notes(){
+  cloud(){
     $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)">📌 <b>Daily Scratchpad & Pinned Notes:</b> Save bug bounty targets, recon snippets, daily todo lists, or reusable prompts. The AI automatically reads your pinned notes as context!</div>
-      <textarea class="ti" id="ntArea" rows="7" placeholder="Write daily notes, target scopes, or code snippets here...">${escapeHtml(S.notes||"")}</textarea>
+      <div style="font-size:12.5px;color:var(--m)">🐧 <b>Zero-Load Cloud Linux Container (Bash & 30+ Languages):</b> Run Linux shell scripts, Python parsers, or C++/Rust tools on remote cloud servers without using your phone's CPU.</div>
+      <select id="clLang" class="ti"><option value="bash">🐧 Linux Bash Shell (Cloud Container)</option><option value="python">🐍 Python 3 (Self-Healing Cloud)</option><option value="javascript">⚡ Node.js</option><option value="go">🔵 Go</option><option value="rust">🦀 Rust</option><option value="c++">⚙️ C++ (GCC)</option></select>
+      <textarea id="clCode" class="ti" rows="5">uname -a\nlscpu | head -n 8 || true\npython3 -c "import ssl; print('OpenSSL:', ssl.OPENSSL_VERSION)"</textarea>
       <div class="row2">
-        <button class="pri" id="ntSave">💾 Save Notes</button>
-        <button id="ntAsk">🧠 Ask AI to Analyze Notes</button>
-        <button id="ntDl">⬇ Download (.md)</button>
-      </div>`;
-    $("#ntArea").addEventListener("input",e=>{S.notes=e.target.value;save()});
-    $("#ntSave").onclick=()=>{S.notes=$("#ntArea").value;save();toast("📌 Notes saved!")};
-    $("#ntAsk").onclick=()=>{
-      const v=$("#ntArea").value.trim();if(!v)return toast("Write some notes first");
-      ask("Analyze my pinned scratchpad notes and organize them into an actionable plan:\n\n"+v);
+        <button class="pri" id="clHealRun">🧬 Auto-Heal & Execute in Cloud</button>
+        <button id="clHostApp">🌐 Deploy Canvas HTML to Cloud</button>
+        <button id="olCfgBtn">🔌 Local Ollama (${escapeHtml(S.olModel)})</button>
+      </div>
+      <div class="out2" id="clOut">Cloud Linux Container Ready.</div>`;
+    $("#clHealRun").onclick=async()=>{
+      const r=await autoHealCode($("#clLang").value,$("#clCode").value,m=>{$("#clOut").textContent=m});
+      $("#clCode").value=r.code;$("#clOut").textContent=r.output;
     };
-    $("#ntDl").onclick=()=>{
-      const a=document.createElement("a");
-      a.href=URL.createObjectURL(new Blob([S.notes||""],{type:"text/markdown"}));
-      a.download="astra-notes.md";a.click();
+    $("#clHostApp").onclick=async()=>{$("#clOut").textContent="Deploying…";$("#clOut").textContent=await tools.cloud_host(S.canvasCode)};
+    $("#olCfgBtn").onclick=()=>{
+      const u=prompt("Local Ollama URL (run with OLLAMA_ORIGINS=* ollama serve):",S.olUrl);
+      if(u){S.olUrl=u.trim();const m=prompt("Local Model Name:",S.olModel);if(m)S.olModel=m.trim();S.model="ol:local";$("#model").value="ol:local";save();toast("Switched to Local Ollama")}
+    };
+  },
+  batch(){
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)">📦 <b>Multi-Target Autonomous Batch Queue:</b> Enter multiple domains or complex tasks (one per line). Astra will process every single item sequentially on full autopilot.</div>
+      <textarea class="ti" id="bqList" rows="5" placeholder="example.com\niana.org\nWrite and verify a Python log analyzer in the cloud"></textarea>
+      <div class="row2">
+        <button class="pri" id="bqStartBtn">🚀 Run Entire Batch Queue on Autopilot</button>
+      </div>`;
+    $("#bqStartBtn").onclick=async()=>{
+      const items=$("#bqList").value.split("\n").map(x=>x.trim()).filter(Boolean);
+      if(!items.length)return toast("Enter at least one domain or task");
+      $("#cmdM").classList.remove("open");
+      toast(`📦 Starting Batch Queue (${items.length} targets)…`);
+      for(let i=0;i<items.length;i++){
+        if(stop)break;
+        const item=items[i];
+        const isDom=/^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$/.test(item);
+        await ask(isDom?`/audit ${item}`:`[Batch Task ${i+1}/${items.length}] ${item}`);
+      }
+      toast("🎉 Batch Queue 100% Completed!");
+    };
+  },
+  modes(){
+    $("#cmdPane").innerHTML=`
+      <div class="qgrid">
+        <button class="qcard ${S.blitzMode?"on":""}" id="qmBlitz"><span>⚡</span><div><b>1-Shot Autonomous Blitz</b><span>Pre-fetches 12 vectors & never asks</span></div></button>
+        <button class="qcard ${S.autoSpeak?"on":""}" id="qmSpeak"><span>🔊</span><div><b>Auto-Speak AI Replies</b><span>Reads every response in selected voice</span></div></button>
+        <button class="qcard ${S.swarmMode?"on":""}" id="qmSwarm"><span>⚖️</span><div><b>Red-Blue-Judge Swarm</b><span>Builder vs Breaker adversarial audit</span></div></button>
+        <button class="qcard ${S.arenaMode?"on":""}" id="qmArena"><span>⚔️</span><div><b>Multi-Brain Consensus</b><span>Parallel Claude + Gemini + GPT</span></div></button>
+        <button class="qcard ${S.autoHeal?"on":""}" id="qmHeal"><span>🧬</span><div><b>Self-Healing Code Loop</b><span>Auto-fixes stderr in Cloud</span></div></button>
+        <button class="qcard" id="qmAttach"><span>📎</span><div><b>Attach File / APK / Code</b><span>Manifest, Java/Kotlin, logs, image</span></div></button>
+        <button class="qcard" id="qmMagic"><span>✨</span><div><b>Magic Prompt Upgrade</b><span>Rewrite draft into master spec</span></div></button>
+        <button class="qcard" id="qmLive"><span>🎙️</span><div><b>Astra Live Voice Orb</b><span>Hands-free neural voice chat</span></div></button>
+      </div>
+      <div class="row2" style="margin-top:6px">
+        <span style="font-size:12.5px;color:var(--m)">🗣️ Voice Speed:</span>
+        <button data-rate="0.9">0.9x</button>
+        <button data-rate="1.0">1.0x</button>
+        <button data-rate="1.15">1.15x</button>
+        <button data-rate="1.3">1.3x</button>
+        <button class="pri" id="testVoiceBtn">🔊 Test Selected Voice</button>
+      </div>`;
+    $("#qmBlitz").onclick=()=>{S.blitzMode=!S.blitzMode;save();syncModesUI();CMD_TABS.modes()};
+    $("#qmSpeak").onclick=()=>{S.autoSpeak=!S.autoSpeak;save();syncAutoSpeakUI();CMD_TABS.modes()};
+    $("#qmSwarm").onclick=()=>{S.swarmMode=!S.swarmMode;save();syncModesUI();CMD_TABS.modes()};
+    $("#qmArena").onclick=()=>{S.arenaMode=!S.arenaMode;save();syncModesUI();CMD_TABS.modes()};
+    $("#qmHeal").onclick=()=>{S.autoHeal=!S.autoHeal;save();syncModesUI();CMD_TABS.modes()};
+    $("#qmAttach").onclick=()=>{$("#cmdM").classList.remove("open");$("#fin").click()};
+    $("#qmLive").onclick=()=>{$("#cmdM").classList.remove("open");openOrb()};
+    $("#cmdPane").querySelectorAll("[data-rate]").forEach(b=>b.onclick=()=>{S.voiceRate=parseFloat(b.dataset.rate);save();toast("Voice Speed: "+S.voiceRate+"x")});
+    $("#testVoiceBtn").onclick=()=>speakText("Hello Nikhil, Astra Carbon X voice engine is online and ready for your command.",true);
+    $("#qmMagic").onclick=async()=>{
+      $("#cmdM").classList.remove("open");
+      const raw=$("#q").value.trim();if(!raw)return toast("Type a draft prompt in the box first!");
+      toast("✨ Upgrading prompt…");
+      try{
+        const res=await routeStandardLLM([{role:"system",content:"Upgrade the user's draft into a rigorous, detailed one-shot engineering/research specification. Output ONLY the improved prompt."},{role:"user",content:raw}],()=>{});
+        if(res){$("#q").value=res.trim();$("#q").dispatchEvent(new Event("input"))}
+      }catch(_){}
     };
   },
   apk(){
@@ -1235,7 +1431,7 @@ const CMD_TABS={
       <textarea class="ti" id="apkIn" rows="4" placeholder="Or paste AndroidManifest.xml / JADX Java source code here..."></textarea>
       <div class="row2">
         <button class="pri" id="apkScanBtn">⚡ Instant Static Scan</button>
-        <button class="red" id="apkAiBtn">🐞 Deep AI SAST Audit</button>
+        <button class="red" id="apkAiBtn">🐞 Deep 1-Shot AI SAST Audit</button>
       </div>
       <div class="out2" id="apkOut">Ready.</div>`;
     $("#apkFile").onchange=async e=>{
@@ -1256,7 +1452,7 @@ const CMD_TABS={
       const txt=$("#apkIn").value.trim();if(!txt)return toast("Paste Manifest/JADX code first");
       const preScan=scanAndroidSource(txt,"Target APK");
       S.bugMode=true;save();syncModesUI();
-      ask(`[📱 ANDROID APK & JADX SAST AUDIT]\nStatic Scanner Findings:\n${preScan}\n\nSource Snippet:\n${F}\n${txt.slice(0,12000)}\n${F}\n\nAnalyze all exported components, intent filters, WebView settings, and hardcoded keys, and provide remediation patches.`);
+      ask(`[📱 ANDROID APK & JADX SAST AUDIT]\nStatic Scanner Findings:\n${preScan}\n\nSource Snippet:\n${F}\n${txt.slice(0,12000)}\n${F}\n\nAnalyze all exported components, intent filters, WebView settings, and hardcoded keys, and provide complete remediation patches in one shot.`);
     };
   },
   cvss(){
@@ -1292,54 +1488,28 @@ const CMD_TABS={
     $("#cvGenBtn").onclick=()=>{
       const {vec,score,sev}=calc();
       const title=$("#cvTitle").value.trim()||"Security Vulnerability Finding";
-      ask(`Write a complete, professional HackerOne / Intigriti Bug Bounty Report for:\n- **Title:** ${title}\n- **Severity:** ${sev} (${score})\n- **Vector:** \`${vec}\`\n\nInclude: Executive Summary, CWE Classification, Affected Component, Verification Steps, Impact Analysis, and Exact Remediation Code Patch.`);
+      ask(`Write a complete, submission-ready HackerOne / Intigriti Bug Bounty Report for:\n- **Title:** ${title}\n- **Severity:** ${sev} (${score})\n- **Vector:** \`${vec}\`\n\nInclude: Executive Summary, CWE Classification, Affected Component, Verification Steps, Impact Analysis, and Exact Remediation Code Patch.`);
     };
   },
-  cloud(){
+  notes(){
     $("#cmdPane").innerHTML=`
-      <select id="clLang" class="ti"><option value="python">Python 3 (Self-Healing Cloud)</option><option value="javascript">Node.js</option><option value="c++">C++ (GCC)</option><option value="rust">Rust</option><option value="go">Go</option><option value="bash">Bash</option></select>
-      <textarea id="clCode" class="ti" rows="5">import platform, hashlib\nprint("Cloud Container:", platform.platform())\nprint("SHA256:", hashlib.sha256(b"Astra v10 Omni").hexdigest())</textarea>
+      <div style="font-size:12.5px;color:var(--m)">📌 <b>Daily Scratchpad & Pinned Notes:</b> Save bug bounty targets, recon snippets, or daily todo lists.</div>
+      <textarea class="ti" id="ntArea" rows="7" placeholder="Write daily notes, target scopes, or code snippets here...">${escapeHtml(S.notes||"")}</textarea>
       <div class="row2">
-        <button class="pri" id="clHealRun">🧬 Auto-Heal & Execute</button>
-        <button id="clHostApp">🌐 Deploy Canvas HTML to Cloud</button>
-        <button id="olCfgBtn">🔌 Local Ollama (${escapeHtml(S.olModel)})</button>
-      </div>
-      <div class="out2" id="clOut">Zero-Load Cloud Container Ready.</div>`;
-    $("#clHealRun").onclick=async()=>{
-      const r=await autoHealCode($("#clLang").value,$("#clCode").value,m=>{$("#clOut").textContent=m});
-      $("#clCode").value=r.code;$("#clOut").textContent=r.output;
+        <button class="pri" id="ntSave">💾 Save Notes</button>
+        <button id="ntAsk">🧠 Execute / Analyze Notes in 1-Shot</button>
+        <button id="ntDl">⬇ Download (.md)</button>
+      </div>`;
+    $("#ntArea").addEventListener("input",e=>{S.notes=e.target.value;save()});
+    $("#ntSave").onclick=()=>{S.notes=$("#ntArea").value;save();toast("📌 Notes saved!")};
+    $("#ntAsk").onclick=()=>{
+      const v=$("#ntArea").value.trim();if(!v)return toast("Write some notes first");
+      ask("Execute and solve everything in my pinned notes completely in one shot:\n\n"+v);
     };
-    $("#clHostApp").onclick=async()=>{$("#clOut").textContent="Deploying…";$("#clOut").textContent=await tools.cloud_host(S.canvasCode)};
-    $("#olCfgBtn").onclick=()=>{
-      const u=prompt("Local Ollama URL (run with OLLAMA_ORIGINS=* ollama serve):",S.olUrl);
-      if(u){S.olUrl=u.trim();const m=prompt("Local Model Name:",S.olModel);if(m)S.olModel=m.trim();S.model="ol:local";$("#model").value="ol:local";save();toast("Switched to Local Ollama")}
-    };
-  },
-  p2p(){
-    $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)">📡 <b>Serverless P2P Cloud Drop & Termux Pipe:</b> Share recon notes, JADX outputs, or code between Termux and this browser using a Room Code.</div>
-      <input class="ti" id="p2pKey" value="nikhil-lab-99" placeholder="Enter secret room code">
-      <textarea class="ti" id="p2pData" rows="4" placeholder="Paste text, code, or recon findings to beam across devices..."></textarea>
-      <div class="row2">
-        <button class="pri" id="p2pSend">📤 Beam to Room</button>
-        <button id="p2pRecv">📥 Pull from Room</button>
-        <button id="p2pAnalyze">🧠 Pull & Audit with AI</button>
-      </div>
-      <div class="out2" id="p2pOut">Ready.</div>`;
-    $("#p2pSend").onclick=async()=>{
-      const k="astra_p2p_"+$("#p2pKey").value.trim(),v=$("#p2pData").value;
-      try{await puter.kv.set(k,JSON.stringify({v,ts:new Date().toLocaleTimeString()}));$("#p2pOut").textContent="✔ Beamed to room '"+$("#p2pKey").value+"'"}
-      catch(e){$("#p2pOut").textContent="⚠️ "+e.message}
-    };
-    $("#p2pRecv").onclick=async()=>{
-      const k="astra_p2p_"+$("#p2pKey").value.trim();
-      try{const raw=await puter.kv.get(k);if(!raw)return $("#p2pOut").textContent="Room is empty.";const d=JSON.parse(raw);$("#p2pData").value=d.v;$("#p2pOut").textContent="✔ Pulled payload from "+d.ts}
-      catch(e){$("#p2pOut").textContent="⚠️ "+e.message}
-    };
-    $("#p2pAnalyze").onclick=async()=>{
-      const v=$("#p2pData").value.trim();
-      if(!v)return toast("Pull or paste data first");
-      ask(`Analyze this piped terminal / recon payload and highlight key findings or vulnerabilities:\n\n${F}\n${v.slice(0,14000)}\n${F}`);
+    $("#ntDl").onclick=()=>{
+      const a=document.createElement("a");
+      a.href=URL.createObjectURL(new Blob([S.notes||""],{type:"text/markdown"}));
+      a.download="astra-notes.md";a.click();
     };
   },
   tools(){
@@ -1367,13 +1537,13 @@ const CMD_TABS={
   }
 };
 
-function openCmd(tab="modes"){
+function openCmd(tab="scope"){
   closeSide();
   $("#cmdM").classList.add("open");
   $("#cmdTabs").querySelectorAll(".stab").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
   CMD_TABS[tab]?.();
 }
-$("#cmdBtn").onclick=()=>openCmd("modes");
+$("#cmdBtn").onclick=()=>openCmd("scope");
 $("#cmdClose").onclick=()=>$("#cmdM").classList.remove("open");
 $("#cmdTabs").querySelectorAll(".stab").forEach(b=>b.onclick=()=>openCmd(b.dataset.tab));
 document.querySelectorAll("[data-cmd]").forEach(b=>b.onclick=()=>openCmd(b.dataset.cmd));
@@ -1383,6 +1553,7 @@ let orbRec=null,orbActive=false;
 function openOrb(){closeSide();$("#orbM").classList.add("open")}
 $("#orbCloseBtn").onclick=()=>{
   orbActive=false;try{orbRec?.stop()}catch(_){}
+  if(curAudio){curAudio.pause();curAudio=null}
   if(window.speechSynthesis)speechSynthesis.cancel();
   $("#orbCircle").className="orb";$("#orbM").classList.remove("open");
 };
@@ -1398,7 +1569,7 @@ $("#orbToggleBtn").onclick=$("#orbCircle").onclick=()=>{
     const rep=await ask(txt);
     if(!rep||!$("#orbM").classList.contains("open"))return;
     const clean=rep.replace(/```[\s\S]*?```/g,"").replace(/[#*`_~]/g,"").slice(0,420);
-    $("#orbSub").textContent=clean;$("#orbCircle").className="orb speak";speakText(clean);
+    $("#orbSub").textContent=clean;$("#orbCircle").className="orb speak";speakText(clean,true);
   };
   orbRec.onend=()=>{orbActive=false;$("#orbToggleBtn").textContent="🎙️ Start Listening"};
   orbRec.start();
@@ -1438,11 +1609,12 @@ document.querySelectorAll(".sl-item").forEach(b=>b.onclick=()=>{
   const cmd=b.dataset.sl;
   $("#slashMenu").classList.remove("open");
   if(cmd==="/notes"){openCmd("notes");return}
+  if(cmd==="/scope"){openCmd("scope");return}
   $("#q").value=cmd;$("#q").focus();
 });
 $("#q").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&innerWidth>768){e.preventDefault();ask($("#q").value)}});
 document.addEventListener("keydown",e=>{
-  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openCmd("modes")}
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openCmd("scope")}
   if(e.key==="Escape"){$("#cmdM").classList.remove("open");$("#orbM").classList.remove("open");$("#slashMenu").classList.remove("open");closeSide()}
 });
 $("#new").onclick=$("#new2").onclick=()=>!busy&&newChat();
@@ -1550,4 +1722,4 @@ if(S.cur&&cur())openChat(S.cur);else{hello();drawList()}
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body>
-            </html>
+        </html>
