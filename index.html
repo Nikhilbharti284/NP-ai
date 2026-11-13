@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
-<meta name="theme-color" content="#06080d">
-<title>Astra Carbon X v12.0 — Neural Voice & Scope Recon OS</title>
+<meta name="theme-color" content="#000000">
+<title>Astra X</title>
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='125' fill='%2306080d'/%3E%3Cpath d='M256 56l56 144 144 56-144 56-56 144-56-144-144-56 144-56z' fill='%2310a37f'/%3E%3Ccircle cx='256' cy='256' r='38' fill='%2338bdf8'/%3E%3C/svg%3E" type="image/svg+xml">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='125' fill='%2306080d'/%3E%3Cpath d='M256 56l56 144 144 56-144 56-56 144-56-144-144-56 144-56z' fill='%2310a37f'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3Ccircle cx='256' cy='256' r='44' fill='%23fff'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3C/svg%3E">
 
 <script src="https://js.puter.com/v2/"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
@@ -22,213 +22,214 @@
 
 <style>
 :root{
-  --bg:#06080d;--side:#030508;--sur:#0e131c;--hov:#171f2e;
-  --b:rgba(255,255,255,.075);--t:#f1f5f9;--m:#8b949e;
-  --ac:#10a37f;--ac-glow:rgba(16,163,127,.18);--danger:#ef4444;--bolt:#38bdf8;
+  --bg:#000000;
+  --side:#0a0a0a;
+  --sur:#171717;
+  --hov:#262626;
+  --b:#262626;
+  --t:#ececec;
+  --m:#8e8e93;
+  --inv-bg:#ffffff;
+  --inv-t:#000000;
 }
 :root[data-theme="light"]{
-  --bg:#ffffff;--side:#f8fafc;--sur:#f1f5f9;--hov:#e2e8f0;
-  --b:rgba(0,0,0,.08);--t:#0f172a;--m:#64748b;
-  --ac:#0d9488;--ac-glow:rgba(13,148,136,.14);--bolt:#0284c7;
+  --bg:#ffffff;
+  --side:#f9f9f9;
+  --sur:#f2f2f2;
+  --hov:#e5e5e5;
+  --b:#e5e5e5;
+  --t:#0d0d0d;
+  --m:#6b6b6b;
+  --inv-bg:#0d0d0d;
+  --inv-t:#ffffff;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;height:100dvh;width:100%;overflow:hidden;background:var(--bg);color:var(--t);font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif;-webkit-font-smoothing:antialiased}
 body{display:flex;padding-top:env(safe-area-inset-top,0px)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;user-select:none}
-:focus-visible{outline:2px solid var(--ac);outline-offset:2px;border-radius:8px}
+svg{display:block;flex-shrink:0}
+:focus-visible{outline:1.5px solid var(--t);outline-offset:2px;border-radius:8px}
 
-/* ===== ULTRA-CLEAN SIDEBAR ===== */
-#side{width:266px;background:var(--side);border-right:1px solid var(--b);display:flex;flex-direction:column;flex-shrink:0;z-index:40;will-change:transform;transition:transform .22s cubic-bezier(.22,1,.36,1)}
-.brand-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 6px;gap:6px}
-.new-btn{flex:1;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:12px;font-size:13.5px;font-weight:600;background:var(--sur);border:1px solid var(--b);transition:all .15s}
-.new-btn:hover{background:var(--hov);border-color:var(--ac)}
+/* ===== MONOCHROME SIDEBAR ===== */
+#side{width:265px;background:var(--side);border-right:1px solid var(--b);display:flex;flex-direction:column;flex-shrink:0;z-index:40;will-change:transform;transition:transform .22s cubic-bezier(.22,1,.36,1)}
+.brand-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 6px}
+.new-btn{flex:1;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;font-size:13.5px;font-weight:500;background:var(--sur);border:1px solid var(--b)}
+.new-btn:hover{background:var(--hov)}
 .ssearch{margin:6px 12px;padding:8px 12px;border-radius:10px;background:var(--sur);border:1px solid var(--b);color:var(--t);font-size:13px;outline:0;width:calc(100% - 24px)}
-.ssearch:focus{border-color:var(--ac)}
-.lab{font-size:10.5px;color:var(--m);padding:10px 16px 4px;text-transform:uppercase;letter-spacing:.7px;font-weight:700}
+.lab{font-size:11px;color:var(--m);padding:12px 16px 4px;font-weight:600}
 #list{flex:1;overflow-y:auto;padding:0 8px;-webkit-overflow-scrolling:touch}
-.ci{display:flex;align-items:center;padding:9px 12px;border-radius:10px;font-size:13.5px;cursor:pointer;gap:8px;margin-bottom:2px;color:var(--m);transition:background .12s}
-.ci:hover{background:var(--sur);color:var(--t)}
-.ci.on{background:var(--sur);color:var(--t);font-weight:500}
+.ci{display:flex;align-items:center;padding:9px 10px;border-radius:10px;font-size:13.5px;cursor:pointer;gap:8px;margin-bottom:2px;color:var(--m)}
+.ci:hover,.ci.on{background:var(--sur);color:var(--t)}
 .ci span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ci b{font-weight:400;opacity:.6;padding:0 4px}
-.ci b:hover{opacity:1;color:var(--danger)}
+.ci b:hover{opacity:1;color:var(--t)}
 
-.sfoot{padding:8px;border-top:1px solid var(--b);display:flex;flex-direction:column;gap:4px}
+.sfoot{padding:8px;border-top:1px solid var(--b);display:flex;flex-direction:column;gap:2px}
 details.sdrop{border-radius:10px}
-details.sdrop summary{padding:9px 12px;font-size:13px;font-weight:600;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;border-radius:10px;color:var(--m)}
+details.sdrop summary{padding:9px 10px;font-size:13px;font-weight:500;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;border-radius:10px;color:var(--m)}
 details.sdrop summary::-webkit-details-marker{display:none}
 details.sdrop summary:hover{background:var(--sur);color:var(--t)}
 .sdrop-list{display:flex;flex-direction:column;gap:2px;padding:4px 0 4px 8px;max-height:32vh;overflow-y:auto}
-.srow{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:12.5px;text-align:left;color:var(--t)}
+.srow{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:13px;text-align:left;color:var(--t)}
 .srow:hover{background:var(--sur)}
-.badge{font-size:9px;background:var(--ac);color:#fff;padding:1.5px 6px;border-radius:99px;margin-left:auto;font-weight:700}
 
-/* ===== GLASSMORPHIC MINIMAL HEADER ===== */
+/* ===== ULTRA-CLEAN CHATGPT HEADER (NO OVERLAP) ===== */
 #main{flex:1;display:flex;flex-direction:column;min-width:0;height:100%}
-header{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;flex-shrink:0;border-bottom:1px solid var(--b);background:rgba(6,8,13,.84);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:15;gap:6px}
-:root[data-theme="light"] header{background:rgba(255,255,255,.88)}
-.hleft{display:flex;align-items:center;gap:6px;min-width:0;flex:1}
-.hright{display:flex;align-items:center;gap:5px;flex-shrink:0}
-.hbtn{height:34px;padding:0 9px;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:4px;font-size:13px;color:var(--m);transition:all .15s}
-.hbtn:hover,.hbtn.active{background:var(--sur);color:var(--t)}
-.pill-sel{display:flex;align-items:center;background:var(--sur);border:1px solid var(--b);border-radius:99px;padding:2px 9px 2px 11px}
-.pill-sel select{background:transparent;color:var(--t);border:0;font-weight:600;font-size:12.5px;outline:0;padding:4px 0;text-overflow:ellipsis}
-.pill-sel select option{background:var(--side);color:var(--t)}
-#modelWrap{max-width:44vw}
-#voiceWrap{max-width:28vw}
-#autoSpeakBtn{font-size:12px;border:1px solid var(--b);background:var(--sur);border-radius:99px;padding:0 9px;height:32px}
-#autoSpeakBtn.on{border-color:var(--ac);color:var(--ac);background:var(--ac-glow);font-weight:600}
+header{height:52px;display:grid;grid-template-columns:40px 1fr 80px;align-items:center;padding:0 10px;flex-shrink:0;border-bottom:1px solid var(--b);background:var(--bg);z-index:15}
+.hcenter{display:flex;justify-content:center;min-width:0}
+.hright{display:flex;align-items:center;justify-content:flex-end;gap:4px}
+.ibtn{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--t)}
+.ibtn:hover{background:var(--sur)}
+.model-wrap{display:inline-flex;align-items:center;max-width:100%;padding:6px 12px;border-radius:10px}
+.model-wrap:hover{background:var(--sur)}
+#model{background:transparent;color:var(--t);border:0;font-weight:600;font-size:15px;outline:0;max-width:52vw;text-overflow:ellipsis;text-align:center;appearance:none;-webkit-appearance:none;cursor:pointer}
+#model option{background:var(--side);color:var(--t)}
 #menu{display:none}
 
-/* ===== WORKSPACE & HARDWARE-ACCELERATED CHAT STREAM ===== */
+/* ===== WORKSPACE & CHAT STREAM ===== */
 #workspace{flex:1;display:flex;min-height:0;overflow:hidden;position:relative}
-#chat{flex:1;overflow-y:auto;padding:18px 14px 28px;min-width:0;-webkit-overflow-scrolling:touch}
-#in{max-width:740px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
-#jumpBtn{position:absolute;bottom:14px;right:18px;background:var(--sur);border:1px solid var(--b);color:var(--t);width:36px;height:36px;border-radius:50%;display:none;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.4);z-index:20;font-size:15px}
+#chat{flex:1;overflow-y:auto;padding:20px 16px 28px;min-width:0;-webkit-overflow-scrolling:touch}
+#in{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+#jumpBtn{position:absolute;bottom:16px;right:18px;background:var(--sur);border:1px solid var(--b);color:var(--t);width:36px;height:36px;border-radius:50%;display:none;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.4);z-index:20}
 #jumpBtn.show{display:flex}
 
-.urow{display:flex;flex-direction:column;align-items:flex-end;gap:4px;content-visibility:auto}
-.u{background:var(--sur);border:1px solid var(--b);padding:11px 16px;border-radius:20px 20px 4px 20px;max-width:86%;white-space:pre-wrap;line-height:1.5;overflow-wrap:anywhere;font-size:15px}
-.fchip{display:inline-block;margin-top:6px;font-size:11.5px;background:var(--ac-glow);color:var(--ac);padding:3px 9px;border-radius:8px;font-weight:600}
+.urow{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.u{background:var(--sur);padding:10px 16px;border-radius:20px;max-width:85%;white-space:pre-wrap;line-height:1.5;overflow-wrap:anywhere;font-size:15.5px}
+.fchip{display:inline-block;margin-top:6px;font-size:12px;background:var(--hov);color:var(--t);padding:3px 9px;border-radius:8px}
 
-.arow{display:flex;flex-direction:column;gap:6px;content-visibility:auto}
+.arow{display:flex;flex-direction:column;gap:6px}
 .a{line-height:1.7;font-size:15.5px;overflow-wrap:anywhere;min-width:0}
-.a p{margin-bottom:12px}.a ul,.a ol{padding-left:22px;margin-bottom:12px}.a a{color:var(--ac);text-decoration:none}.a a:hover{text-decoration:underline}
+.a p{margin-bottom:12px}.a ul,.a ol{padding-left:22px;margin-bottom:12px}.a a{color:var(--t);text-decoration:underline}
 .a img{max-width:100%;border-radius:12px;margin:6px 0}
 .a table{border-collapse:collapse;display:block;overflow-x:auto;margin-bottom:12px;font-size:13.5px}.a td,.a th{border:1px solid var(--b);padding:7px 11px}
 .a :not(pre)>code{background:var(--sur);border:1px solid var(--b);padding:1.5px 6px;border-radius:6px;font-size:.86em;font-family:ui-monospace,Menlo,monospace;word-break:break-word}
-.acts{display:flex;gap:10px;font-size:12px;color:var(--m);align-items:center;flex-wrap:wrap}
-.acts button{padding:3px 7px;border-radius:6px}
+.acts{display:flex;gap:8px;font-size:12px;color:var(--m);align-items:center;flex-wrap:wrap}
+.acts button{padding:4px 8px;border-radius:6px}
 .acts button:hover{background:var(--sur);color:var(--t)}
 
-/* ===== AUTO-COLLAPSING COMPACT CODE CARDS ===== */
-.cb{margin:12px 0;border:1px solid var(--b);border-radius:13px;overflow:hidden;background:#05080d;box-shadow:0 4px 16px rgba(0,0,0,.22)}
-.cbar{display:flex;gap:6px;align-items:center;padding:8px 12px;background:#0d121b;border-bottom:1px solid rgba(255,255,255,.07);flex-wrap:wrap}
-.clang{margin-right:auto;font-size:11px;color:#94a3b8;font-family:ui-monospace,Menlo,monospace;text-transform:uppercase;font-weight:700}
-.cp{font-size:11.5px;background:rgba(255,255,255,.07);color:#e2e8f0;padding:4px 9px;border-radius:7px;font-weight:500;transition:all .15s}
-.cp:hover{background:rgba(255,255,255,.15)}
-.cp.ac{background:var(--ac);color:#fff}
-.cb pre{color:#e6edf3;padding:12px 14px;overflow-x:auto;font-size:12.5px;line-height:1.55;max-height:320px;overflow-y:auto;margin:0}
+/* ===== MONOCHROME COMPACT CODE CARDS ===== */
+.cb{margin:12px 0;border:1px solid var(--b);border-radius:12px;overflow:hidden;background:#0a0a0a}
+.cbar{display:flex;gap:6px;align-items:center;padding:8px 12px;background:#141414;border-bottom:1px solid #262626;flex-wrap:wrap}
+.clang{margin-right:auto;font-size:11px;color:#8e8e93;font-family:ui-monospace,Menlo,monospace;text-transform:uppercase;font-weight:600}
+.cp{font-size:11.5px;background:#262626;color:#ececec;padding:4px 10px;border-radius:6px;font-weight:500}
+.cp:hover{background:#363636}
+.cp.ac{background:#ffffff;color:#000000}
+.cb pre{color:#ececec;padding:12px 14px;overflow-x:auto;font-size:12.5px;line-height:1.55;max-height:320px;overflow-y:auto;margin:0}
 .cb.collapsed pre{max-height:130px;overflow:hidden;mask-image:linear-gradient(180deg,#000 55%,transparent);-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent)}
-.cb-exp{width:100%;text-align:center;padding:7px;font-size:12px;color:var(--ac);background:#090d14;border-top:1px solid rgba(255,255,255,.06);font-weight:600;display:none}
+.cb-exp{width:100%;text-align:center;padding:7px;font-size:12px;color:#ececec;background:#111111;border-top:1px solid #222222;font-weight:500;display:none}
 .cb.collapsed .cb-exp{display:block}
 .cb pre code{background:none;padding:0;font-family:ui-monospace,Menlo,monospace}
-.ro{background:#020407;color:#7ee0c3;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 14px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;border-top:1px solid rgba(255,255,255,.08)}
+.ro{background:#050505;color:#d4d4d8;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 14px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;border-top:1px solid #262626}
 .ro[hidden]{display:none}
 
-/* ===== BLITZ TELEMETRY & PROGRESS BAR ===== */
+/* ===== MINIMAL THINKING PILL ===== */
 details.th{border:1px solid var(--b);border-radius:12px;margin-bottom:8px;font-size:12.5px;color:var(--m);background:var(--sur);overflow:hidden}
-details.th summary{padding:8px 12px;cursor:pointer;list-style:none;display:flex;gap:8px;align-items:center;font-weight:600}
+details.th summary{padding:8px 12px;cursor:pointer;list-style:none;display:flex;gap:8px;align-items:center;font-weight:500}
 details.th summary::-webkit-details-marker{display:none}
-.pbar-wrap{height:3px;width:100%;background:rgba(255,255,255,.05);overflow:hidden}
-.pbar{height:100%;width:18%;background:linear-gradient(90deg,var(--ac),var(--bolt));transition:width .25s ease}
+.pbar-wrap{height:2px;width:100%;background:var(--b);overflow:hidden}
+.pbar{height:100%;width:20%;background:var(--t);transition:width .25s ease}
 .done .pbar{width:100%!important}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--ac);animation:p 1s infinite}
-.done .dot{animation:none;background:var(--ac)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--t);animation:p 1s infinite}
+.done .dot{animation:none}
 @keyframes p{50%{opacity:.25}}
-.st{padding:8px 14px 10px;border-top:1px solid var(--b);font-family:ui-monospace,Menlo,monospace;font-size:11.5px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;max-height:190px;overflow-y:auto}
-.cur{display:inline-block;width:7px;height:15px;background:var(--ac);vertical-align:middle;margin-left:2px;animation:p .8s infinite}
+.st{padding:8px 14px 10px;border-top:1px solid var(--b);font-family:ui-monospace,Menlo,monospace;font-size:11.5px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;max-height:180px;overflow-y:auto}
+.cur{display:inline-block;width:7px;height:15px;background:var(--t);vertical-align:middle;margin-left:2px;animation:p .8s infinite}
 
-/* ===== CLEAN HERO EMPTY STATE ===== */
-#hello{text-align:center;padding:4vh 12px 0;max-width:620px;margin:0 auto}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--ac);background:var(--ac-glow);padding:4px 12px;border-radius:99px;margin-bottom:12px}
-#hello h1{font-size:24px;font-weight:800;margin-bottom:6px;letter-spacing:-.3px}
-#hello p{font-size:13.5px;color:var(--m);margin-bottom:20px;line-height:1.45}
-.chips{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
-.chips button{border:1px solid var(--b);border-radius:14px;padding:12px 13px;font-size:13px;background:var(--sur);text-align:left;line-height:1.35;display:flex;align-items:flex-start;gap:10px;transition:all .15s}
-.chips button:hover{border-color:var(--ac);background:var(--hov);transform:translateY(-1px)}
-.chips button i{font-style:normal;font-size:18px;line-height:1}
-.chips button div b{display:block;font-size:13px;margin-bottom:2px;color:var(--t)}
-.chips button div span{font-size:11.5px;color:var(--m)}
-@media(max-width:520px){.chips{grid-template-columns:1fr}#hello{padding-top:2vh}}
+/* ===== CLEAN CHATGPT-STYLE EMPTY STATE ===== */
+#hello{text-align:center;padding:8vh 12px 0;max-width:560px;margin:0 auto}
+.logo-circle{width:46px;height:46px;border-radius:50%;background:var(--inv-bg);color:var(--inv-t);display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
+#hello h1{font-size:23px;font-weight:600;margin-bottom:22px;letter-spacing:-.2px}
+.chips{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.chips button{border:1px solid var(--b);border-radius:14px;padding:13px 14px;background:transparent;text-align:left;line-height:1.35;display:flex;flex-direction:column;gap:3px;transition:background .15s}
+.chips button:hover{background:var(--sur)}
+.chips button b{font-size:13.5px;font-weight:600;color:var(--t)}
+.chips button span{font-size:12px;color:var(--m)}
+@media(max-width:520px){.chips{grid-template-columns:1fr}#hello{padding-top:4vh}}
 
-/* ===== ULTRA-CLEAN BOTTOM COMPOSER + SLASH PALETTE ===== */
-footer{padding:6px 12px calc(10px + env(safe-area-inset-bottom,0px));flex-shrink:0;position:relative}
-#activePills{max-width:740px;margin:0 auto 6px;display:flex;gap:6px;flex-wrap:wrap}
-.mpill{font-size:11.5px;background:var(--ac-glow);border:1px solid var(--ac);color:var(--ac);padding:3px 10px;border-radius:99px;display:inline-flex;align-items:center;gap:6px;font-weight:600}
-.mpill b{cursor:pointer}
-#file{max-width:740px;margin:0 auto 6px;display:none}
+/* ===== PURE CHATGPT BOTTOM INPUT BAR (NO CRAMPING) ===== */
+footer{padding:6px 12px calc(12px + env(safe-area-inset-bottom,0px));flex-shrink:0;position:relative}
+#file{max-width:720px;margin:0 auto 6px;display:none}
 #file div{display:inline-flex;align-items:center;gap:8px;background:var(--sur);border:1px solid var(--b);border-radius:10px;padding:5px 10px;font-size:12.5px}
-#boxWrap{max-width:740px;margin:0 auto;position:relative}
+#boxWrap{max-width:720px;margin:0 auto;position:relative}
 
-#slashMenu{display:none;position:absolute;bottom:56px;left:0;right:0;max-width:440px;background:var(--side);border:1px solid var(--b);border-radius:14px;padding:6px;box-shadow:0 12px 36px rgba(0,0,0,.5);z-index:50;flex-direction:column;gap:2px}
+#slashMenu{display:none;position:absolute;bottom:56px;left:0;right:0;max-width:420px;background:var(--side);border:1px solid var(--b);border-radius:14px;padding:6px;box-shadow:0 12px 36px rgba(0,0,0,.5);z-index:50;flex-direction:column;gap:2px}
 #slashMenu.open{display:flex}
-.sl-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:9px;font-size:13px;text-align:left}
+.sl-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:9px;font-size:13px;text-align:left}
 .sl-item:hover{background:var(--sur)}
-.sl-item code{color:var(--ac);font-weight:700;font-family:ui-monospace,Menlo,monospace}
+.sl-item code{color:var(--t);font-weight:700;font-family:ui-monospace,Menlo,monospace}
 .sl-item span{color:var(--m);font-size:11.5px}
 
-#box{background:var(--sur);border-radius:26px;padding:6px 8px;display:flex;align-items:flex-end;gap:6px;border:1px solid var(--b);box-shadow:0 4px 20px rgba(0,0,0,.15);transition:border-color .15s}
-#box:focus-within{border-color:var(--ac)}
-#cmdBtn{width:36px;height:36px;border-radius:50%;background:var(--hov);color:var(--t);font-size:19px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
-#cmdBtn:hover{background:var(--ac);color:#fff;transform:rotate(90deg)}
-#box textarea{flex:1;background:none;border:0;outline:0;color:var(--t);font:inherit;font-size:15.5px;resize:none;max-height:130px;padding:7px 2px;line-height:1.4;min-width:0}
-#blitzBtn{height:36px;padding:0 11px;border-radius:99px;background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.4);color:var(--bolt);font-size:12px;font-weight:700;display:flex;align-items:center;gap:4px;flex-shrink:0}
-#blitzBtn.on{background:var(--bolt);color:#030712;border-color:transparent}
-#mic{width:36px;height:36px;border-radius:50%;flex-shrink:0;font-size:15px;color:var(--m);display:flex;align-items:center;justify-content:center}
-#mic:hover{background:var(--hov);color:var(--t)}
-#mic.rec{background:var(--danger);color:#fff}
-#send{width:36px;height:36px;border-radius:50%;background:var(--ac);color:#fff;font-weight:700;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
+#box{background:var(--sur);border-radius:26px;padding:7px 9px;display:flex;align-items:flex-end;gap:8px;border:1px solid var(--b)}
+.cbtn{width:36px;height:36px;border-radius:50%;background:var(--hov);color:var(--t);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cbtn:hover{opacity:.85}
+#box textarea{flex:1;background:none;border:0;outline:0;color:var(--t);font:inherit;font-size:16px;resize:none;max-height:135px;padding:6px 2px;line-height:1.4;min-width:0}
+#box textarea::placeholder{color:var(--m)}
+#mic{background:transparent;color:var(--m)}
+#mic:hover{color:var(--t);background:var(--hov)}
+#mic.rec{background:var(--inv-bg);color:var(--inv-t)}
+#send{width:36px;height:36px;border-radius:50%;background:var(--inv-bg);color:var(--inv-t);flex-shrink:0;display:flex;align-items:center;justify-content:center}
 
-/* ===== UNIFIED COMMAND CENTER BOTTOM-SHEET MODAL ===== */
-#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:35;backdrop-filter:blur(2px)}
+/* ===== UNIFIED MONOCHROME COMMAND SHEET ===== */
+#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:35}
 #ov.open{display:block}
 .mbk{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:60;align-items:flex-end;justify-content:center;padding:0}
 @media(min-width:640px){.mbk{align-items:center;padding:16px}}
 .mbk.open{display:flex}
-.mdl{background:var(--side);border:1px solid var(--b);border-radius:20px 20px 0 0;width:100%;max-width:740px;max-height:87dvh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -10px 40px rgba(0,0,0,.45)}
-@media(min-width:640px){.mdl{border-radius:18px;max-height:85dvh}}
-.mtop{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--b);font-size:15px;font-weight:700}
-.ttabs{display:flex;gap:5px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid var(--b);flex-shrink:0}
-.stab{padding:7px 12px;border-radius:99px;font-size:12.5px;white-space:nowrap;color:var(--m);font-weight:600}
-.stab.on{background:var(--ac);color:#fff}
+.mdl{background:var(--side);border:1px solid var(--b);border-radius:20px 20px 0 0;width:100%;max-width:720px;max-height:86dvh;display:flex;flex-direction:column;overflow:hidden}
+@media(min-width:640px){.mdl{border-radius:16px;max-height:84dvh}}
+.mtop{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--b);font-size:15px;font-weight:600}
+.ttabs{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid var(--b);flex-shrink:0}
+.stab{padding:7px 13px;border-radius:99px;font-size:12.5px;white-space:nowrap;color:var(--m);font-weight:500}
+.stab.on{background:var(--inv-bg);color:var(--inv-t);font-weight:600}
 .tpane{padding:16px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:12px}
 .qgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 @media(max-width:480px){.qgrid{grid-template-columns:1fr}}
-.qcard{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:12px;background:var(--sur);border:1px solid var(--b);text-align:left;font-size:13px;transition:all .15s}
-.qcard:hover,.qcard.on{border-color:var(--ac);background:var(--hov)}
-.qcard b{display:block;font-size:13px;color:var(--t)}
-.qcard span{font-size:11px;color:var(--m)}
-.ti{width:100%;background:var(--sur);border:1px solid var(--b);border-radius:11px;padding:10px 12px;color:var(--t);font:inherit;font-size:13.5px;outline:0}
-.ti:focus{border-color:var(--ac)}
+.qcard{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:12px;background:var(--sur);border:1px solid var(--b);text-align:left;font-size:13px}
+.qcard:hover{background:var(--hov)}
+.qcard.on{border-color:var(--t)}
+.qcard b{display:block;font-size:13.5px;color:var(--t);margin-bottom:2px}
+.qcard span{font-size:11.5px;color:var(--m)}
+.dot-ind{width:8px;height:8px;border-radius:50%;background:var(--b)}
+.qcard.on .dot-ind{background:var(--t)}
+
+.ti{width:100%;background:var(--sur);border:1px solid var(--b);border-radius:10px;padding:10px 12px;color:var(--t);font:inherit;font-size:13.5px;outline:0}
+.ti:focus{border-color:var(--t)}
 textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px}
-.out2{background:#05070a;color:#e6edf3;border-radius:11px;padding:12px;font-family:ui-monospace,Menlo,monospace;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:220px;overflow:auto;border:1px solid var(--b)}
+.out2{background:#080808;color:#e5e5e5;border-radius:10px;padding:12px;font-family:ui-monospace,Menlo,monospace;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:220px;overflow:auto;border:1px solid var(--b)}
 .row2{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.row2 button{border:1px solid var(--b);border-radius:10px;padding:8px 14px;font-size:12.5px;font-weight:600;background:var(--sur)}
+.row2 button{border:1px solid var(--b);border-radius:10px;padding:8px 14px;font-size:12.5px;font-weight:500;background:var(--sur)}
 .row2 button:hover{background:var(--hov)}
-.row2 button.pri{background:var(--ac);color:#fff;border-color:transparent}
-.row2 button.red{background:var(--danger);color:#fff;border-color:transparent}
+.row2 button.pri{background:var(--inv-bg);color:var(--inv-t);border-color:transparent;font-weight:600}
 
 .cvss-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 @media(max-width:500px){.cvss-grid{grid-template-columns:1fr}}
 .cvss-box{background:var(--sur);border:1px solid var(--b);border-radius:10px;padding:8px 10px}
-.cvss-box label{font-size:11px;color:var(--m);font-weight:700;text-transform:uppercase;display:block;margin-bottom:4px}
+.cvss-box label{font-size:11px;color:var(--m);font-weight:600;text-transform:uppercase;display:block;margin-bottom:4px}
 .cvss-box select{width:100%;background:var(--side);border:1px solid var(--b);color:var(--t);padding:6px 8px;border-radius:8px;font-size:12.5px}
 
 /* ===== SIDE-BY-SIDE LIVE CANVAS ===== */
 #canvasPane{width:50%;border-left:1px solid var(--b);background:var(--side);display:none;flex-direction:column;z-index:25}
 #canvasPane.open{display:flex}
 .ctop{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--b);gap:6px;flex-wrap:wrap}
-.ctop .ctitle{font-size:13px;font-weight:700}
+.ctop .ctitle{font-size:13px;font-weight:600}
 .cbar2{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
-.cbar2 button{font-size:11.5px;padding:5px 9px;border-radius:8px;border:1px solid var(--b);background:var(--sur);font-weight:500}
-.cbar2 button.pri{background:var(--ac);color:#fff;border-color:transparent}
+.cbar2 button{font-size:11.5px;padding:5px 10px;border-radius:8px;border:1px solid var(--b);background:var(--sur)}
+.cbar2 button.pri{background:var(--inv-bg);color:var(--inv-t);border-color:transparent;font-weight:600}
 #cBody{flex:1;display:flex;flex-direction:column;min-height:0;position:relative}
 #cFrame{flex:1;width:100%;border:0;background:#fff}
-#cCode{flex:1;width:100%;border:0;background:#05070a;color:#e6edf3;font:13px/1.5 ui-monospace,Menlo,monospace;padding:12px;resize:none;outline:0;display:none}
-#cTerm{height:150px;background:#020305;color:#7ee0c3;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 12px;border-top:1px solid var(--b);overflow:auto;white-space:pre-wrap;display:none}
+#cCode{flex:1;width:100%;border:0;background:#080808;color:#ececec;font:13px/1.5 ui-monospace,Menlo,monospace;padding:12px;resize:none;outline:0;display:none}
+#cTerm{height:150px;background:#050505;color:#d4d4d8;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px 12px;border-top:1px solid var(--b);overflow:auto;white-space:pre-wrap;display:none}
 
-/* ===== LIVE VOICE ORB ===== */
-#orbM{display:none;position:fixed;inset:0;background:radial-gradient(circle at center,#0f172a 0%,#02040a 100%);z-index:80;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:24px;text-align:center;color:#fff}
+/* ===== MONOCHROME VOICE ORB ===== */
+#orbM{display:none;position:fixed;inset:0;background:#000000;z-index:80;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:24px;text-align:center;color:#fff}
 #orbM.open{display:flex}
-.orb{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#34d399,#10a37f 55%,#1e40af);box-shadow:0 0 60px rgba(16,163,127,.55);animation:orbPulse 2.4s infinite ease-in-out;cursor:pointer}
-.orb.listen{background:radial-gradient(circle at 35% 35%,#f87171,#ef4444 55%,#991b1b);box-shadow:0 0 75px rgba(239,68,68,.7)}
-.orb.speak{background:radial-gradient(circle at 35% 35%,#60a5fa,#3b82f6 55%,#1d4ed8);box-shadow:0 0 80px rgba(59,130,246,.8)}
-@keyframes orbPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
-#orbSub{max-width:520px;font-size:16px;color:#e2e8f0;line-height:1.5;min-height:48px}
+.orb{width:140px;height:140px;border-radius:50%;background:#ffffff;box-shadow:0 0 50px rgba(255,255,255,.35);animation:orbPulse 2.4s infinite ease-in-out;cursor:pointer}
+.orb.listen{box-shadow:0 0 80px rgba(255,255,255,.75);transform:scale(1.08)}
+@keyframes orbPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+#orbSub{max-width:520px;font-size:16px;color:#d4d4d8;line-height:1.5;min-height:48px}
 
 #toasts{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:90;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
-.toast{background:var(--sur);color:var(--t);border:1px solid var(--b);padding:8px 15px;border-radius:99px;font-size:12.5px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.35);transition:opacity .3s}
+.toast{background:var(--inv-bg);color:var(--inv-t);padding:8px 16px;border-radius:99px;font-size:12.5px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:opacity .3s}
 .toast.out{opacity:0}
 .mslot{margin:8px 0}.gm{max-width:100%;border-radius:12px;display:block}
 
@@ -241,54 +242,54 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
 <div id="toasts" role="status" aria-live="polite"></div>
 
 <!-- LIVE VOICE ORB OVERLAY -->
-<div id="orbM" role="dialog" aria-modal="true" aria-label="Astra Live Voice">
-  <div style="font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:#94a3b8">⚡ Astra Live Neural Voice</div>
+<div id="orbM" role="dialog" aria-modal="true" aria-label="Live Voice">
+  <div style="font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:#8e8e93">Astra Live Voice</div>
   <div class="orb" id="orbCircle"></div>
-  <div id="orbSub">Tap the orb and speak in Hindi, English, or Hinglish…</div>
+  <div id="orbSub">Tap the circle and speak naturally…</div>
   <div class="row2">
-    <button class="pri" id="orbToggleBtn">🎙️ Start Listening</button>
-    <button id="orbCloseBtn" style="border-color:rgba(255,255,255,.25);color:#fff">✕ Close</button>
+    <button class="pri" id="orbToggleBtn">Start Listening</button>
+    <button id="orbCloseBtn" style="border-color:#333;color:#fff;background:#171717">Close</button>
   </div>
 </div>
 
-<!-- CLEAN SIDEBAR -->
+<!-- CLEAN MONOCHROME SIDEBAR -->
 <aside id="side">
   <div class="brand-bar">
-    <button class="new-btn" id="new"><span>✎ New Chat</span><span style="color:var(--m);font-size:11.5px">⌘K</span></button>
+    <button class="new-btn" id="new"><span>New chat</span><span style="color:var(--m);font-size:12px">⌘K</span></button>
   </div>
-  <input class="ssearch" id="chatSearch" placeholder="🔍 Search chats…">
-  <div class="lab">Workspaces</div>
+  <input class="ssearch" id="chatSearch" placeholder="Search chats…">
+  <div class="lab">Chats</div>
   <div id="list"></div>
 
   <div class="sfoot">
     <details class="sdrop">
-      <summary><span>⚡ Scope & Blitz Suite</span><span>▾</span></summary>
+      <summary><span>Tools & Security Suite</span><span>▾</span></summary>
       <div class="sdrop-list">
-        <button class="srow" data-cmd="scope">📋 Bug Bounty Scope Parser <span class="badge">New</span></button>
-        <button class="srow" data-cmd="bug">⚡ 12-Vector Domain Blitz <span class="badge">1-Shot</span></button>
-        <button class="srow" data-cmd="cloud">🐧 Cloud Linux (Bash/Python)</button>
-        <button class="srow" data-cmd="batch">📦 Multi-Target Batch Queue</button>
-        <button class="srow" data-cmd="apk">📱 APK & JADX Static Scanner</button>
-        <button class="srow" data-cmd="cvss">🎯 CVSS 3.1 & Bounty Report</button>
-        <button class="srow" id="osintDashBtn">🕸️ Visual Attack Surface Graph</button>
-        <button class="srow" data-cmd="notes">📌 Daily Scratchpad & Notes</button>
-        <button class="srow" data-cmd="p2p">📡 P2P Encrypted Live Drop</button>
+        <button class="srow" data-cmd="scope">Program Scope Parser</button>
+        <button class="srow" data-cmd="bug">12-Vector Domain Blitz</button>
+        <button class="srow" data-cmd="http">HTTP / CORS & Takeover Lab</button>
+        <button class="srow" data-cmd="cloud">Cloud Linux (Bash/Python)</button>
+        <button class="srow" data-cmd="batch">Multi-Target Batch Queue</button>
+        <button class="srow" data-cmd="apk">APK & JADX Static Scanner</button>
+        <button class="srow" data-cmd="cvss">CVSS 3.1 Report Builder</button>
+        <button class="srow" id="osintDashBtn">Attack Surface Graph</button>
+        <button class="srow" data-cmd="notes">Scratchpad Notes</button>
       </div>
     </details>
 
     <details class="sdrop">
-      <summary><span>⚙️ Settings & Backup</span><span>▾</span></summary>
+      <summary><span>Settings & Voice</span><span>▾</span></summary>
       <div class="sdrop-list">
-        <button class="srow" id="themeBtn">🌓 Theme: dark</button>
-        <button class="srow" id="deepBtn">🧠 Auto Self-Verify: on</button>
-        <button class="srow" id="gkBtn">🔑 Gemini API Key</button>
-        <button class="srow" id="mem">🧠 Persistent Memory</button>
-        <button class="srow" id="installBtn" hidden>📲 Install Native App</button>
-        <button class="srow" id="exp">📥 Export Markdown (.md)</button>
-        <button class="srow" id="bak">💾 Backup (.json)</button>
-        <button class="srow" id="rst">♻️ Restore Backup</button>
+        <button class="srow" data-cmd="modes">Voice & AI Modes</button>
+        <button class="srow" id="themeBtn">Theme: dark</button>
+        <button class="srow" id="gkBtn">Gemini API Key</button>
+        <button class="srow" id="mem">Persistent Memory</button>
+        <button class="srow" id="installBtn" hidden>Install App</button>
+        <button class="srow" id="exp">Export Markdown (.md)</button>
+        <button class="srow" id="bak">Backup (.json)</button>
+        <button class="srow" id="rst">Restore Backup</button>
         <input type="file" id="rfin" accept=".json,application/json" hidden>
-        <button class="srow" id="wipe" style="color:var(--danger)">🗑 Clear All History</button>
+        <button class="srow" id="wipe">Clear All Chats</button>
       </div>
     </details>
   </div>
@@ -296,37 +297,45 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
 
 <!-- MAIN WORKSPACE -->
 <div id="main">
+  <!-- ULTRA-CLEAN 3-COLUMN HEADER -->
   <header>
-    <div class="hleft">
-      <button class="hbtn" id="menu" aria-label="Menu">☰</button>
-      <div class="pill-sel" id="modelWrap">
+    <div>
+      <button class="ibtn" id="menu" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="16" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+      </button>
+    </div>
+    <div class="hcenter">
+      <div class="model-wrap">
         <select id="model" aria-label="Select AI Model"></select>
-      </div>
-      <div class="pill-sel" id="voiceWrap" title="Select AI Neural Voice">
-        <select id="voiceSel" aria-label="Select AI Voice"></select>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:4px;opacity:.6;pointer-events:none"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
     </div>
     <div class="hright">
-      <button id="autoSpeakBtn" title="Toggle Auto-Speak AI Replies">🔊 Auto</button>
-      <button class="hbtn" id="openCanvasHdr" title="Toggle Live Canvas & Graph">🖥️</button>
-      <button class="hbtn" id="new2" title="New Chat">✎</button>
+      <button class="ibtn" id="openCanvasHdr" title="Toggle Live Canvas">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+      </button>
+      <button class="ibtn" id="new2" title="New Chat">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </button>
     </div>
   </header>
 
   <div id="workspace">
     <main id="chat"><div id="in" role="log" aria-live="polite"></div></main>
-    <button id="jumpBtn" title="Scroll to bottom">↓</button>
+    <button id="jumpBtn" title="Scroll to bottom">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+    </button>
 
-    <!-- SIDE-BY-SIDE LIVE CANVAS & MULTI-FILE ZIP PACKAGER -->
+    <!-- SIDE-BY-SIDE LIVE CANVAS -->
     <aside id="canvasPane" aria-label="Live Cloud Canvas">
       <div class="ctop">
-        <div class="ctitle">🖥️ <span id="cTitle">Live Canvas</span></div>
+        <div class="ctitle" id="cTitle">Live Canvas</div>
         <div class="cbar2">
           <button id="cViewBtn">Code / Preview</button>
-          <button id="cGraphBtn" title="Interactive Attack Surface & Recon Graph">🕸️ Graph</button>
-          <button id="cCloudRunBtn" class="pri" title="Execute & Auto-Verify in Cloud">☁️ Run</button>
-          <button id="cHostBtn" title="Deploy to Free Public URL">🌐 Host</button>
-          <button id="cZipBtn" title="Package & Download Multi-File Project (.zip)">📦 ZIP</button>
+          <button id="cGraphBtn">Graph</button>
+          <button id="cCloudRunBtn" class="pri">Run</button>
+          <button id="cHostBtn">Host</button>
+          <button id="cZipBtn">ZIP</button>
           <button id="cCloseBtn">✕</button>
         </div>
       </div>
@@ -338,45 +347,48 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
     </aside>
   </div>
 
-  <!-- ULTRA-CLEAN BOTTOM COMPOSER -->
+  <!-- PURE CHATGPT-STYLE BOTTOM COMPOSER -->
   <footer>
-    <div id="activePills"></div>
     <div id="file"></div>
     <div id="boxWrap">
       <div id="slashMenu">
-        <button class="sl-item" data-sl="/scope"><code>/scope</code><span>Paste HackerOne/Intigriti Program Scope to Audit</span></button>
-        <button class="sl-item" data-sl="/audit "><code>/audit [domain]</code><span>12-Vector Instant Pre-Fetch + Full Bug Report</span></button>
-        <button class="sl-item" data-sl="/omni "><code>/omni [goal]</code><span>2-Hop Deep Web Crawler + Complete Execution</span></button>
-        <button class="sl-item" data-sl="/bash "><code>/bash [task]</code><span>Run Safe Linux Bash Analysis in Cloud Container</span></button>
-        <button class="sl-item" data-sl="/graph "><code>/graph [domain]</code><span>Draw Interactive Attack Surface Graph</span></button>
-        <button class="sl-item" data-sl="/notes"><code>/notes</code><span>Open Daily Scratchpad & Clips</span></button>
+        <button class="sl-item" data-sl="/scope"><code>/scope</code><span>Paste Bug Bounty Program Scope</span></button>
+        <button class="sl-item" data-sl="/audit "><code>/audit [domain]</code><span>12-Vector Instant Domain Audit</span></button>
+        <button class="sl-item" data-sl="/omni "><code>/omni [goal]</code><span>2-Hop Deep Web Crawler</span></button>
+        <button class="sl-item" data-sl="/bash "><code>/bash [task]</code><span>Cloud Linux Container</span></button>
+        <button class="sl-item" data-sl="/graph "><code>/graph [domain]</code><span>Attack Surface Graph</span></button>
       </div>
       <div id="box">
-        <button id="cmdBtn" title="Open Command Center (＋ / ⌘K)" aria-label="Open Command Center">＋</button>
-        <textarea id="q" rows="1" placeholder="Paste program scope, domain, or task — Blitz executes in 1 shot…" aria-label="Message input"></textarea>
-        <button id="blitzBtn" class="on" title="1-Shot Autonomous Blitz Mode">⚡ Blitz</button>
-        <button id="mic" title="Voice Input" aria-label="Voice Input">🎤</button>
-        <button id="send" aria-label="Send">↑</button>
+        <button class="cbtn" id="cmdBtn" title="Tools, Files & Voice" aria-label="Open Tools">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <textarea id="q" rows="1" placeholder="Ask anything…" aria-label="Message input"></textarea>
+        <button class="cbtn" id="mic" title="Voice Input" aria-label="Voice Input">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+        <button id="send" aria-label="Send">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+        </button>
       </div>
     </div>
     <input type="file" id="fin" accept=".txt,.md,.csv,.json,.log,.yml,.yaml,.xml,.py,.js,.html,.css,.sh,.cpp,.rs,.go,.java,.kt,.smali,.apk,.zip,image/*" hidden>
   </footer>
 </div>
 
-<!-- UNIFIED COMMAND CENTER MODAL -->
+<!-- UNIFIED MONOCHROME COMMAND CENTER -->
 <div class="mbk" id="cmdM" role="dialog" aria-modal="true" aria-label="Command Center">
   <div class="mdl">
-    <div class="mtop"><span>⚡ Astra v12.0 Command Center</span><button id="cmdClose">✕</button></div>
+    <div class="mtop"><span>Command Center</span><button id="cmdClose">✕</button></div>
     <div class="ttabs" id="cmdTabs">
-      <button class="stab on" data-tab="scope">📋 Program Scope</button>
-      <button class="stab" data-tab="bug">⚡ 1-Shot Audit</button>
-      <button class="stab" data-tab="cloud">🐧 Cloud Linux</button>
-      <button class="stab" data-tab="batch">📦 Batch Queue</button>
-      <button class="stab" data-tab="modes">🚀 Modes & Voice</button>
-      <button class="stab" data-tab="apk">📱 APK / JADX</button>
-      <button class="stab" data-tab="cvss">🎯 CVSS & PoC</button>
-      <button class="stab" data-tab="notes">📌 Notes</button>
-      <button class="stab" data-tab="tools">🛠 Dev Tools</button>
+      <button class="stab on" data-tab="modes">Modes & Voice</button>
+      <button class="stab" data-tab="scope">Program Scope</button>
+      <button class="stab" data-tab="bug">Domain Audit</button>
+      <button class="stab" data-tab="http">HTTP & Takeover</button>
+      <button class="stab" data-tab="cloud">Cloud Linux</button>
+      <button class="stab" data-tab="batch">Batch Queue</button>
+      <button class="stab" data-tab="apk">APK / JADX</button>
+      <button class="stab" data-tab="cvss">CVSS 3.1</button>
+      <button class="stab" data-tab="notes">Notes</button>
     </div>
     <div class="tpane" id="cmdPane"></div>
   </div>
@@ -387,32 +399,31 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
 const GEMINI_KEY=atob("QVEuQWI4Uk42SVU2WVBkRHBTakZlNDRY"+"YlhSSVd1Sl9GUzZyMDVKblJLeUF1cjdGRXUwVVE=");
 
 const MODELS=[
-  ["auto","⚡ Auto Blitz Router (Fastest Cloud)"],
-  ["omni:deep","🌐 Omni-Blitz 2-Hop Deep Research"],
-  ["swarm:redblue","🛡️ Red-Blue-Judge Swarm"],
-  ["carbon:ultra","💎 Gemini Carbon Ultra"],
-  ["arena:consensus","⚔️ 4-Brain Consensus"],
+  ["auto","Astra Carbon X (Auto)"],
+  ["omni:deep","Omni-Blitz Deep Research"],
+  ["swarm:redblue","Red-Blue-Judge Swarm"],
+  ["arena:consensus","4-Brain Consensus"],
   ["gm:gemini-2.5-pro","Gemini 2.5 Pro"],
   ["gm:gemini-2.5-flash","Gemini 2.5 Flash"],
   ["claude-sonnet-4-5","Claude 4.5 Sonnet"],
   ["claude-opus-4-1","Claude 4.1 Opus"],
   ["gpt-4o","GPT-4o"],
   ["deepseek-reasoner","DeepSeek R1"],
-  ["pl:openai-large","GPT-4.1 Large (Keyless)"],
+  ["pl:openai-large","GPT-4.1 Large"],
   ["pl:qwen-coder","Qwen 2.5 Coder 32B"],
-  ["ol:local","🔌 Local Ollama (Termux)"]
+  ["ol:local","Local Ollama (Termux)"]
 ];
 
 const NEURAL_VOICES=[
-  ["nova","🎙️ Nova (Natural AI Female)"],
-  ["alloy","🎙️ Alloy (Balanced AI)"],
-  ["onyx","🎙️ Onyx (Deep AI Male)"],
-  ["echo","🎙️ Echo (Warm AI Male)"],
-  ["shimmer","🎙️ Shimmer (Clear AI Female)"],
-  ["fable","🎙️ Fable (Expressive AI)"],
-  ["sys:hi-IN","🇮🇳 System Hindi / Hinglish"],
-  ["sys:en-IN","🇮🇳 System Indian English"],
-  ["sys:en-US","🇺🇸 System US English"]
+  ["nova","Nova (Natural AI Female)"],
+  ["alloy","Alloy (Balanced AI)"],
+  ["onyx","Onyx (Deep AI Male)"],
+  ["echo","Echo (Warm AI Male)"],
+  ["shimmer","Shimmer (Clear AI Female)"],
+  ["fable","Fable (Expressive AI)"],
+  ["sys:hi-IN","System Hindi / Hinglish"],
+  ["sys:en-IN","System Indian English"],
+  ["sys:en-US","System US English"]
 ];
 
 const MAXSTEPS=25;
@@ -423,20 +434,20 @@ const escapeHtml=s=>{const d=document.createElement("div");d.textContent=s??"";r
 /* ===== INTERACTIVE ATTACK SURFACE & RECON GRAPH (CANVAS) ===== */
 const RECON_GRAPH_HTML=`<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Interactive Attack Surface Graph</title>
+<title>Attack Surface Graph</title>
 <style>
-  *{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#06080d;color:#e2e8f0;margin:0;display:flex;flex-direction:column;height:100vh;overflow:hidden}
-  .bar{display:flex;gap:8px;padding:10px 12px;background:#0d121c;border-bottom:1px solid #1e293b;flex-wrap:wrap;align-items:center}
-  input{flex:1;min-width:140px;background:#161f30;border:1px solid #334155;color:#fff;padding:8px 12px;border-radius:9px;outline:0;font-size:13px}
-  button{background:#10a37f;color:#fff;border:0;padding:8px 14px;border-radius:9px;font-weight:600;cursor:pointer;font-size:12.5px}
+  *{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#000;color:#ececec;margin:0;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+  .bar{display:flex;gap:8px;padding:10px 12px;background:#0a0a0a;border-bottom:1px solid #262626;flex-wrap:wrap;align-items:center}
+  input{flex:1;min-width:140px;background:#171717;border:1px solid #262626;color:#fff;padding:8px 12px;border-radius:8px;outline:0;font-size:13px}
+  button{background:#fff;color:#000;border:0;padding:8px 14px;border-radius:8px;font-weight:600;cursor:pointer;font-size:12.5px}
   #wrap{flex:1;display:flex;min-height:0;position:relative}
   canvas{flex:1;width:100%;height:100%;cursor:grab}
-  #info{width:240px;background:#090d16;border-left:1px solid #1e293b;padding:12px;font:11.5px/1.5 ui-monospace,monospace;overflow-y:auto;white-space:pre-wrap;color:#93c5fd}
-  @media(max-width:600px){#info{position:absolute;bottom:0;left:0;right:0;width:100%;height:130px;border-left:0;border-top:1px solid #1e293b}}
+  #info{width:240px;background:#0a0a0a;border-left:1px solid #262626;padding:12px;font:11.5px/1.5 ui-monospace,monospace;overflow-y:auto;white-space:pre-wrap;color:#d4d4d8}
+  @media(max-width:600px){#info{position:absolute;bottom:0;left:0;right:0;width:100%;height:130px;border-left:0;border-top:1px solid #262626}}
 </style></head><body>
   <div class="bar">
     <input id="dom" value="example.com" placeholder="Target domain (e.g. example.com)">
-    <button onclick="mapTarget()">🕸️ Map Attack Surface</button>
+    <button onclick="mapTarget()">Map Attack Surface</button>
   </div>
   <div id="wrap">
     <canvas id="cv"></canvas>
@@ -455,7 +466,7 @@ function addNode(id,label,color,r=18){
 }
 function draw(){
   ctx.clearRect(0,0,cv.width,cv.height);
-  ctx.strokeStyle='rgba(148,163,184,0.28)';ctx.lineWidth=1.2;
+  ctx.strokeStyle='rgba(255,255,255,0.22)';ctx.lineWidth=1.2;
   edges.forEach(([a,b])=>{
     const na=nodes.find(n=>n.id===a),nb=nodes.find(n=>n.id===b);
     if(na&&nb){ctx.beginPath();ctx.moveTo(na.x,na.y);ctx.lineTo(nb.x,nb.y);ctx.stroke()}
@@ -463,8 +474,8 @@ function draw(){
   nodes.forEach(n=>{
     ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
     ctx.fillStyle=n.color;ctx.fill();
-    ctx.strokeStyle='#0f172a';ctx.lineWidth=2;ctx.stroke();
-    ctx.fillStyle='#f8fafc';ctx.font='600 11px system-ui';ctx.textAlign='center';
+    ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.stroke();
+    ctx.fillStyle='#fff';ctx.font='600 11px system-ui';ctx.textAlign='center';
     ctx.fillText(n.label.slice(0,22),n.x,n.y+n.r+13);
   });
 }
@@ -479,17 +490,17 @@ cv.onpointerup=()=>{drag=null};
 async function mapTarget(){
   const d=document.getElementById('dom').value.trim().replace(/^https?:\\/\\//,'').split('/')[0];
   if(!d)return;
-  nodes=[{id:'root',label:d,color:'#10a37f',r:24,x:cv.width/2,y:cv.height/2}];edges=[];draw();
+  nodes=[{id:'root',label:d,color:'#ffffff',r:22,x:cv.width/2,y:cv.height/2}];edges=[];draw();
   document.getElementById('info').textContent='Scanning DNS, Shodan & CT logs for '+d+'...';
   let log='Target: '+d+'\\n';
   try{
     const dns=await fetch('https://dns.google/resolve?name='+encodeURIComponent(d)+'&type=A').then(r=>r.json());
     for(const a of (dns.Answer||[]).slice(0,4)){
-      const ip=a.data;addNode('ip:'+ip,ip,'#3b82f6',18);edges.push(['root','ip:'+ip]);draw();
+      const ip=a.data;addNode('ip:'+ip,ip,'#a1a1aa',17);edges.push(['root','ip:'+ip]);draw();
       if(/^\\d+\\.\\d+\\.\\d+\\.\\d+$/.test(ip)){
         const sh=await fetch('https://internetdb.shodan.io/'+ip).then(r=>r.json()).catch(()=>({}));
-        (sh.ports||[]).slice(0,6).forEach(p=>{addNode('p:'+p,'Port '+p,'#f59e0b',14);edges.push(['ip:'+ip,'p:'+p])});
-        (sh.vulns||[]).slice(0,5).forEach(v=>{addNode('v:'+v,v,'#ef4444',15);edges.push(['ip:'+ip,'v:'+v])});
+        (sh.ports||[]).slice(0,6).forEach(p=>{addNode('p:'+p,'Port '+p,'#71717a',13);edges.push(['ip:'+ip,'p:'+p])});
+        (sh.vulns||[]).slice(0,5).forEach(v=>{addNode('v:'+v,v,'#d4d4d8',14);edges.push(['ip:'+ip,'v:'+v])});
         log+='IP: '+ip+'\\nPorts: '+(sh.ports||[]).join(', ')+'\\nVulns: '+(sh.vulns||[]).join(', ')+'\\n';
       }
     }
@@ -497,7 +508,7 @@ async function mapTarget(){
   try{
     const ct=await fetch('https://crt.sh/?output=json&q=%25.'+encodeURIComponent(d)).then(r=>r.json());
     const subs=[...new Set(ct.flatMap(x=>x.name_value.split('\\n')))].filter(s=>!s.includes('*')&&s!==d).slice(0,10);
-    subs.forEach(s=>{addNode('sub:'+s,s,'#8b5cf6',15);edges.push(['root','sub:'+s])});
+    subs.forEach(s=>{addNode('sub:'+s,s,'#52525b',14);edges.push(['root','sub:'+s])});
     log+='Subdomains ('+subs.length+'):\\n'+subs.join('\\n');
   }catch(_){}
   draw();document.getElementById('info').textContent=log;
@@ -506,7 +517,7 @@ setTimeout(mapTarget,200);
 <\/script></body></html>`;
 
 /* ===== STATE ===== */
-let S={};try{S=JSON.parse(localStorage.agi_v12||localStorage.agi_v11||"{}")}catch(e){}
+let S={};try{S=JSON.parse(localStorage.agi_v13||localStorage.agi_v12||"{}")}catch(e){}
 S.chats??={};S.cur??=null;
 if(!S.model||!MODELS.some(m=>m[0]===S.model))S.model="auto";
 S.voice??="nova";S.autoSpeak??=false;S.voiceRate??=1.0;
@@ -515,7 +526,7 @@ S.olUrl??="http://127.0.0.1:11434";S.olModel??="qwen2.5-coder:7b";
 S.canvasCode??=RECON_GRAPH_HTML;S.canvasLang??="html";
 
 function save(){
-  try{localStorage.agi_v12=JSON.stringify(S)}
+  try{localStorage.agi_v13=JSON.stringify(S)}
   catch(e){
     const ids=Object.values(S.chats).sort((a,b)=>a.ts-b.ts).map(c=>c.id);
     if(ids.length>1){delete S.chats[ids[0]];save()}
@@ -524,37 +535,8 @@ function save(){
 let busy=false,stop=false,pending=null;
 const cur=()=>S.chats[S.cur];
 
-/* ===== NATURAL AI NEURAL VOICE ENGINE (6 CLOUD VOICES + SYSTEM VOICES) ===== */
+/* ===== NATURAL AI NEURAL VOICE ENGINE ===== */
 let curAudio=null;
-function populateVoices(){
-  const sel=$("#voiceSel");
-  sel.innerHTML=NEURAL_VOICES.map(v=>`<option value="${v[0]}">${v[1]}</option>`).join("");
-  if(window.speechSynthesis){
-    const sysVoices=speechSynthesis.getVoices();
-    sysVoices.slice(0,15).forEach(v=>{
-      const o=document.createElement("option");
-      o.value=" name:"+v.name;
-      o.textContent=`🗣️ ${v.name.slice(0,22)} (${v.lang})`;
-      sel.appendChild(o);
-    });
-  }
-  if([...sel.options].some(o=>o.value===S.voice))sel.value=S.voice;
-}
-populateVoices();
-if(window.speechSynthesis)speechSynthesis.onvoiceschanged=populateVoices;
-$("#voiceSel").onchange=e=>{S.voice=e.target.value;save();toast("Voice: "+e.target.options[e.target.selectedIndex].text)};
-
-function syncAutoSpeakUI(){
-  $("#autoSpeakBtn").classList.toggle("on",!!S.autoSpeak);
-  $("#autoSpeakBtn").textContent=S.autoSpeak?"🔊 Auto: ON":"🔊 Auto";
-}
-syncAutoSpeakUI();
-$("#autoSpeakBtn").onclick=()=>{
-  S.autoSpeak=!S.autoSpeak;save();syncAutoSpeakUI();
-  if(!S.autoSpeak){if(curAudio){curAudio.pause();curAudio=null}if(window.speechSynthesis)speechSynthesis.cancel()}
-  toast(S.autoSpeak?"🔊 Auto-Speak Enabled (AI will speak every reply naturally)":"Auto-Speak Off");
-};
-
 function speakText(text,force=false){
   if(!force&&curAudio){curAudio.pause();curAudio=null;return}
   if(!force&&window.speechSynthesis?.speaking){speechSynthesis.cancel();return}
@@ -570,11 +552,9 @@ function speakText(text,force=false){
     const u=new SpeechSynthesisUtterance(clean);
     u.rate=S.voiceRate||1.0;
     const all=speechSynthesis.getVoices();
-    if(v.startsWith(" name:")){
-      const match=all.find(x=>x.name===v.slice(6));if(match)u.voice=match;
-    }else if(v.startsWith("sys:")){
+    if(v.startsWith("sys:")){
       const lang=v.slice(4);
-      const match=all.find(x=>x.lang.toLowerCase().includes(lang.toLowerCase()))||all.find(x=>x.name.toLowerCase().includes("natural"));
+      const match=all.find(x=>x.lang.toLowerCase().includes(lang.toLowerCase()));
       if(match)u.voice=match;
       u.lang=lang;
     }else{
@@ -584,7 +564,7 @@ function speakText(text,force=false){
     speechSynthesis.speak(u);
   };
 
-  if(!v.startsWith("sys:")&&!v.startsWith(" name:")){
+  if(!v.startsWith("sys:")){
     try{
       const url=`https://text.pollinations.ai/${encodeURIComponent("Say naturally: "+clean)}?model=openai-audio&voice=${encodeURIComponent(v)}`;
       const a=new Audio(url);
@@ -646,7 +626,7 @@ $("#cCode").addEventListener("input",()=>{S.canvasCode=$("#cCode").value;save()}
 $("#cCloseBtn").onclick=()=>$("#canvasPane").classList.remove("open");
 $("#openCanvasHdr").onclick=()=>$("#canvasPane").classList.toggle("open");
 $("#cZipBtn").onclick=()=>{
-  const files=[{name:S.canvasLang==="html"?"index.html":"main."+S.canvasLang,content:S.canvasCode},{name:"README.md",content:"# Astra Carbon X Project\nGenerated and verified by Astra Carbon X v12.0."}];
+  const files=[{name:S.canvasLang==="html"?"index.html":"main."+S.canvasLang,content:S.canvasCode},{name:"README.md",content:"# Astra Carbon X Project\nGenerated and verified by Astra Carbon X v13.0."}];
   const c=cur();
   if(c?.msgs?.length){
     let idx=1;
@@ -659,20 +639,20 @@ $("#cZipBtn").onclick=()=>{
   }
   const blob=makeZip(files),a=document.createElement("a");
   a.href=URL.createObjectURL(blob);a.download="astra-project-"+Date.now()+".zip";a.click();
-  toast(`📦 Packaged ${files.length} files into .zip!`);
+  toast(`Packaged ${files.length} files into .zip`);
 };
 $("#cCloudRunBtn").onclick=async()=>{
   S.canvasCode=$("#cCode").value||S.canvasCode;save();
   if(S.canvasLang==="html"||S.canvasCode.trim().startsWith("<")){
     canvasView="preview";$("#cCode").style.display="none";$("#cFrame").style.display="block";$("#cFrame").srcdoc=S.canvasCode;
-    return toast("Preview updated ✔");
+    return toast("Preview updated");
   }
-  const term=$("#cTerm");term.style.display="block";term.textContent="☁️ Running in Cloud...";
+  const term=$("#cTerm");term.style.display="block";term.textContent="Running in Cloud...";
   term.textContent=await tools.cloud_exec(S.canvasLang+"\n"+S.canvasCode);
 };
 $("#cHostBtn").onclick=async()=>{
   S.canvasCode=$("#cCode").value||S.canvasCode;save();
-  const term=$("#cTerm");term.style.display="block";term.textContent="🌐 Deploying...";
+  const term=$("#cTerm");term.style.display="block";term.textContent="Deploying...";
   term.textContent=await tools.cloud_host(S.canvasCode);
 };
 
@@ -695,14 +675,14 @@ async function runPistonCloud(lang,code){
 
 async function autoHealCode(lang,code,onUpdate){
   for(let attempt=1;attempt<=3;attempt++){
-    onUpdate?.(`🔄 [Attempt ${attempt}/3] Running ${lang} in remote Cloud Linux Container…`);
+    onUpdate?.(`[Attempt ${attempt}/3] Running ${lang} in remote Cloud Linux Container…`);
     const d=await runPistonRaw(lang,code);
     const err=(d.compile?.stderr||"")+(d.run?.stderr||"");
     if(!err.trim()){
-      return {code,output:`✔ Verified Zero-Error Cloud Execution (Attempt ${attempt}):\n`+(d.run?.stdout||"(No stdout)")};
+      return {code,output:`Verified Zero-Error Cloud Execution (Attempt ${attempt}):\n`+(d.run?.stdout||"(No stdout)")};
     }
-    if(attempt===3)return {code,output:`⚠️ Output after 3 attempts:\n${d.run?.stdout||""}\n${err}`};
-    onUpdate?.(`🛠️ Fixing stderr automatically in Cloud…\n${err.slice(0,180)}`);
+    if(attempt===3)return {code,output:`Output after 3 attempts:\n${d.run?.stdout||""}\n${err}`};
+    onUpdate?.(`Fixing stderr automatically in Cloud…\n${err.slice(0,180)}`);
     const fixed=await routeStandardLLM([
       {role:"system",content:`You are an autonomous self-healing compiler. Fix the bug in the following ${lang} code based on the stderr. Output ONLY the raw corrected code without markdown fences.`},
       {role:"user",content:`CODE:\n${code}\n\nSTDERR:\n${err}`}
@@ -727,7 +707,7 @@ function scanAndroidSource(text,filename="source"){
     const matches=[...new Set([...text.matchAll(re)].map(m=>m[1]||m[0]))].slice(0,25);
     if(matches.length)findings.push(`### ${title} (${matches.length})\n`+matches.map(x=>"- `"+x+"`").join("\n"));
   }
-  return findings.length?`## 🔍 Static SAST & Secret Scan (${filename})\n\n`+findings.join("\n\n"):`Scanned ${text.length.toLocaleString()} bytes in ${filename} — no immediate regex signatures matched.`;
+  return findings.length?`## Static SAST & Secret Scan (${filename})\n\n`+findings.join("\n\n"):`Scanned ${text.length.toLocaleString()} bytes in ${filename} — no immediate regex signatures matched.`;
 }
 
 /* ===== BUG BOUNTY PROGRAM SCOPE PARSER ===== */
@@ -748,6 +728,24 @@ function extractScopeDomains(rawText){
   return {inScope:cleanIn,outScope:[...new Set(outScope)]};
 }
 
+/* ===== SUBDOMAIN TAKEOVER & CNAME AUDITOR ===== */
+async function checkSubdomainTakeover(domain){
+  const subsRaw=await tools.subdomains(domain).catch(()=>"");
+  const subs=subsRaw.split("\n").filter(s=>s&&s!=="None.").slice(0,15);
+  const cnameResults=[];
+  for(const s of subs){
+    try{
+      const r=await J("https://dns.google/resolve?name="+encodeURIComponent(s)+"&type=CNAME");
+      const cname=(r.Answer||[]).filter(a=>a.type===5).map(a=>a.data).join(", ");
+      if(cname){
+        const dangling=/github\.io|herokuapp\.com|amazonaws\.com|azurewebsites\.net|cloudfront\.net|fastly\.net|pantheonsite\.io|zendesk\.com|shopify\.com|cargocollective\.com/i.test(cname);
+        cnameResults.push(`${s} -> CNAME: ${cname} ${dangling?"[POTENTIAL TAKEOVER FINGERPRINT]":""}`);
+      }
+    }catch(_){}
+  }
+  return cnameResults.length?cnameResults.join("\n"):`Checked ${subs.length} subdomains for ${domain} — no dangling CNAME records detected.`;
+}
+
 /* ===== LOCAL OLLAMA BRIDGE ===== */
 async function callLocalOllama(msgs,onTok){
   const u=(S.olUrl||"http://127.0.0.1:11434").replace(/\/$/,"")+"/api/chat";
@@ -760,15 +758,16 @@ async function callLocalOllama(msgs,onTok){
 /* ===== AUTONOMOUS BLITZ TOOLS ===== */
 const J=async(u,o)=>{const r=await fetch(u,o);if(!r.ok)throw new Error("HTTP "+r.status);return r.json()};
 const tools={
-  /* CLOUD LINUX BASH SANDBOX */
+  async takeover_check(domain){
+    return await checkSubdomainTakeover(domain.trim().replace(/^https?:\/\//,"").split("/")[0]);
+  },
   async bash_sandbox(script){
     return await runPistonCloud("bash",script);
   },
-  /* BUG BOUNTY PROGRAM SCOPE AUDITOR */
   async program_audit(scopeText,onProg){
     const {inScope,outScope}=extractScopeDomains(scopeText);
     if(!inScope.length)return "No clear domain names detected in scope text.";
-    onProg?.(`📋 Parsed Scope: ${inScope.length} In-Scope domains (${inScope.join(", ")}) | ${outScope.length} Out-of-Scope excluded.`);
+    onProg?.(`Parsed Scope: ${inScope.length} In-Scope domains (${inScope.join(", ")})`);
     const reports=[];
     for(const d of inScope.slice(0,3)){
       const r=await tools.domain_blitz(d,onProg);
@@ -778,7 +777,7 @@ const tools={
   },
   async omni_blitz(q,onProg){
     q=q.trim();
-    onProg?.("🌐 Hop 1: Harvesting 7 global networks (DuckDuckGo, Wiki, HN, Reddit, SO, GitHub, ArXiv)…");
+    onProg?.("Hop 1: Harvesting 7 global networks (DuckDuckGo, Wiki, HN, Reddit, SO, GitHub, ArXiv)…");
     const tasks=[
       fetch("https://r.jina.ai/https://html.duckduckgo.com/html/?q="+encodeURIComponent(q),{headers:{Accept:"text/plain"}}).then(r=>r.text()).then(t=>"[DuckDuckGo Live Web]\n"+t.slice(0,3200)).catch(()=>""),
       fetch("https://en.wikipedia.org/w/api.php?action=query&list=search&srlimit=5&format=json&origin=*&srsearch="+encodeURIComponent(q)).then(r=>r.json()).then(d=>"[Wikipedia]\n"+(d.query?.search||[]).map(x=>x.title+": "+x.snippet.replace(/<[^>]+>/g,"")).join("\n")).catch(()=>""),
@@ -792,7 +791,7 @@ const tools={
     const urls=[...new Set([...hop1.matchAll(/https?:\/\/[^\s)"'<>]+/g)].map(m=>m[0]))].filter(u=>!u.includes("duckduckgo.com")&&!u.includes("ycombinator.com")).slice(0,2);
     let hop2="";
     if(urls.length){
-      onProg?.(`🚀 Hop 2: Auto-Crawling full page text from ${urls.length} top sources…`);
+      onProg?.(`Hop 2: Auto-Crawling full page text from ${urls.length} top sources…`);
       const pages=await Promise.all(urls.map(u=>tools.fetch(u).then(t=>`[Deep Crawled Page: ${u}]\n`+t.slice(0,2800)).catch(()=>"")));
       hop2="\n\n"+pages.filter(Boolean).join("\n\n");
     }
@@ -800,7 +799,7 @@ const tools={
   },
   async domain_blitz(target,onProg){
     target=target.trim().replace(/^https?:\/\//,"").split("/")[0];
-    onProg?.(`⚡ Launching 12-Vector Parallel Recon on ${target}…`);
+    onProg?.(`Launching 12-Vector Parallel Recon on ${target}…`);
     const tasks=[
       tools.dns(target+" A").then(r=>"[1. DNS A Records]\n"+r).catch(()=>""),
       tools.dns(target+" MX").then(r=>"[2. DNS MX Records]\n"+r).catch(()=>""),
@@ -811,17 +810,16 @@ const tools={
       tools.securityheaders(target).then(r=>"[7. HTTP Security Headers Analysis]\n"+r.slice(0,1600)).catch(()=>""),
       tools.wayback(target).then(r=>"[8. Wayback Machine Historical Endpoints]\n"+r.slice(0,1800)).catch(()=>""),
       tools.urlscan(target).then(r=>"[9. URLScan.io Passive Intel]\n"+r.slice(0,1400)).catch(()=>""),
-      fetch("https://r.jina.ai/https://"+target,{headers:{Accept:"text/plain"}}).then(r=>r.text()).then(t=>"[10. Main Target Page & JS Scan]\n"+scanAndroidSource(t,target)+"\n\n[Page Snippet]\n"+t.slice(0,1400)).catch(()=>"")
+      fetch("https://r.jina.ai/https://"+target,{headers:{Accept:"text/plain"}}).then(r=>r.text()).then(t=>"[10. Main Target Page & JS Scan]\n"+scanAndroidSource(t,target)+"\n\n[Page Snippet]\n"+t.slice(0,1400)).catch(()=>""),
+      checkSubdomainTakeover(target).then(r=>"[11. Subdomain CNAME & Takeover Check]\n"+r).catch(()=>"")
     ];
     const base=(await Promise.all(tasks)).filter(Boolean).join("\n\n");
     let extra="";
     const ipMatch=base.match(/\b(\d{1,3}(?:\.\d{1,3}){3})\b/);
     if(ipMatch){
-      onProg?.(`🛰️ Querying Shodan InternetDB Ports & CVEs for IP ${ipMatch[1]}…`);
-      try{extra+="\n\n[11. Shodan InternetDB Passive Ports, Hostnames & CVEs for "+ipMatch[1]+"]\n"+await tools.ip(ipMatch[1])}catch(_){}
+      onProg?.(`Querying Shodan InternetDB Ports & CVEs for IP ${ipMatch[1]}…`);
+      try{extra+="\n\n[12. Shodan InternetDB Passive Ports, Hostnames & CVEs for "+ipMatch[1]+"]\n"+await tools.ip(ipMatch[1])}catch(_){}
     }
-    const sens=[...base.matchAll(/https?:\/\/[^\s|]+(\.(?:js|json|xml|env|bak|sql|config|yml)|\?[a-zA-Z0-9_]+=)/gi)].map(m=>m[0]).slice(0,15);
-    if(sens.length)extra+="\n\n[12. High-Interest Historical URLs / Parameters]\n"+sens.join("\n");
     return (base+extra).slice(0,15000)||"No passive records found for "+target;
   },
   async omni_research(q){return await tools.omni_blitz(q)},
@@ -908,11 +906,11 @@ const tools={
 const TOOL_NAMES=Object.keys(tools).join("|")+"|image|edit|video";
 const TOOLRE_G=new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F,"g");
 
-const sysPrompt=()=>`You are Astra Carbon X v12.0 — an elite, autonomous AI Engineer, Omni-Research Harvester & Authorized Passive Bug Bounty / SAST Auditor. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
+const sysPrompt=()=>`You are Astra Carbon X v13.0 — an elite, autonomous AI Engineer, Omni-Research Harvester & Authorized Passive Bug Bounty / SAST Auditor. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
 
 STRICT ONE-SHOT EXECUTION MANDATE:
-1. NEVER ask the user for confirmation ("Should I proceed?", "Would you like me to..."). Execute all analysis, cloud scripts, and passive recon in one shot and deliver the complete, finished output immediately.
-2. NEVER output truncated code or placeholders ("// TODO").
+1. Do not ask the user for confirmation ("Should I proceed?", "Would you like me to..."). Execute all analysis, cloud scripts, and passive recon in one shot and deliver the complete, finished output immediately.
+2. Never output truncated code or placeholders ("// TODO").
 3. When given Bug Bounty Program instructions or scope, parse the in-scope assets, respect all out-of-scope exclusions, analyze the 12-vector passive recon telemetry, and produce a comprehensive HackerOne / Intigriti vulnerability & security posture report (with Severity, CVSS v3.1 vector, CWE ID, Evidence, and Remediation Patch).
 4. Strictly adhere to legal, passive OSINT, static code analysis (SAST), and isolated cloud container verification (@bash_sandbox, @auto_verify); never perform active exploitation against external live targets.
 
@@ -922,7 +920,7 @@ ${F}
 input
 ${F}
 
-Available Tools: @program_audit (parses bug bounty scope & runs 12-vector passive audit on in-scope domains), @bash_sandbox (runs analytical Linux bash script in isolated cloud container), @omni_blitz (2-hop 7-source deep web crawler), @domain_blitz (12-vector passive domain recon), @auto_verify (first line: language, next lines: code), @recon_graph (domain), @js_secrets (url), @apk_scan, @cloud_exec, @canvas, @cloud_host, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @image.
+Available Tools: @program_audit, @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify (first line: language, next lines: code), @recon_graph, @js_secrets, @apk_scan, @cloud_exec, @canvas, @cloud_host, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @image.
 Memory: ${S.mem.join(" | ")||"none"} | Notes: ${(S.notes||"").slice(0,300)||"none"}`;
 
 /* ===== BULLETPROOF MULTI-CLOUD LLM ROUTER ===== */
@@ -959,15 +957,15 @@ async function callSingleBrain(kind,model,msgs,onTok){
 
 async function runRedBlueSwarm(msgs,onTok){
   const plain=msgs.map(({img,...r})=>r);
-  onTok("🛡️ **Adversarial Swarm Phase 1/3 (Blue Team Builder):** Architecting initial solution…");
+  onTok("**Adversarial Swarm Phase 1/3 (Blue Team Builder):** Architecting initial solution…");
   const blueDraft=await routeStandardLLM(msgs,()=>{});
-  onTok("⚔️ **Adversarial Swarm Phase 2/3 (Red Team Auditor):** Auditing draft for CWE flaws, edge cases & security gaps…");
+  onTok("**Adversarial Swarm Phase 2/3 (Red Team Auditor):** Auditing draft for CWE flaws, edge cases & security gaps…");
   const redCritique=await routeStandardLLM([
     ...plain,
     {role:"assistant",content:blueDraft},
     {role:"user",content:"Act as a Senior Security Auditor. Review the solution above: identify any security vulnerabilities (IDOR, XSS, SSRF, SQLi, CWE-835 infinite loops), race conditions, missing edge cases, or logic bugs. Be concise and specific."}
   ],()=>{});
-  onTok("⚖️ **Adversarial Swarm Phase 3/3 (Chief Judge):** Synthesizing hardened final deliverable…");
+  onTok("**Adversarial Swarm Phase 3/3 (Chief Judge):** Synthesizing hardened final deliverable…");
   return await routeStandardLLM([
     ...plain,
     {role:"user",content:`Produce the final, complete, hardened deliverable by combining the Blue Team draft and resolving every valid flaw identified in the Red Team review.\n\n[BLUE TEAM DRAFT]\n${blueDraft}\n\n[RED TEAM REVIEW]\n${redCritique}`}
@@ -975,7 +973,7 @@ async function runRedBlueSwarm(msgs,onTok){
 }
 
 async function runConsensus(msgs,onTok){
-  onTok("⚔️ **Multi-Brain Consensus Active:** Synthesizing parallel cloud models…");
+  onTok("**Multi-Brain Consensus Active:** Synthesizing parallel cloud models…");
   const tasks=[
     callSingleBrain("pu","claude-sonnet-4-5",msgs,()=>{}).then(t=>"[Claude 4.5]\n"+t).catch(()=>""),
     callSingleBrain("gm","gemini-2.5-flash",msgs,()=>{}).then(t=>"[Gemini 2.5]\n"+t).catch(()=>""),
@@ -1048,20 +1046,20 @@ function dress(el){
     const add=(l,f,cls="")=>{const b=document.createElement("button");b.className="cp "+(cls||"");b.textContent=l;b.onclick=()=>f(b);bar.appendChild(b)};
 
     if(lang==="html"||src.trim().startsWith("<!DOCTYPE")||src.trim().startsWith("<html")){
-      add("🖥️ Canvas",()=>openCanvas(src,"html","Live HTML Preview"),"ac");
-      add("🌐 Host",async()=>{out.hidden=false;out.textContent="Deploying…";out.textContent=await tools.cloud_host(src)});
+      add("Canvas",()=>openCanvas(src,"html","Live HTML Preview"),"ac");
+      add("Host",async()=>{out.hidden=false;out.textContent="Deploying…";out.textContent=await tools.cloud_host(src)});
     }else if(PISTON_MAP[lang]||/^(python|py|js|javascript|ts|cpp|c|rust|go|java|bash|sh|php|sql)$/i.test(lang)){
-      add("🛠️ Auto-Heal & Run",async()=>{
+      add("Auto-Heal & Run",async()=>{
         out.hidden=false;
         const r=await autoHealCode(lang||"python",pre.innerText,msg=>{out.textContent=msg});
         if(r.code!==pre.innerText){code.textContent=r.code;if(window.hljs)try{hljs.highlightElement(code)}catch(_){}}
         out.textContent=r.output;
       },"ac");
-      add("🖥️ Canvas",()=>openCanvas(pre.innerText,lang||"python","Code Editor"));
+      add("Canvas",()=>openCanvas(pre.innerText,lang||"python","Code Editor"));
     }
     add("Copy",b=>{navigator.clipboard.writeText(pre.innerText);b.textContent="Copied";setTimeout(()=>b.textContent="Copy",1200)});
-    const exp=document.createElement("button");exp.className="cb-exp";exp.textContent=`▾ Show all ${lines} lines`;
-    exp.onclick=()=>{w.classList.toggle("collapsed");exp.textContent=w.classList.contains("collapsed")?`▾ Show all ${lines} lines`:"▴ Collapse code"};
+    const exp=document.createElement("button");exp.className="cb-exp";exp.textContent=`Show all ${lines} lines`;
+    exp.onclick=()=>{w.classList.toggle("collapsed");exp.textContent=w.classList.contains("collapsed")?`Show all ${lines} lines`:"Collapse code"};
     pre.replaceWith(w);w.append(bar,pre,exp,out);
   });
   fillSlots(el);
@@ -1071,20 +1069,20 @@ function dress(el){
 function forkChat(idx){
   const c=cur();if(!c)return;
   const id="c"+Date.now();
-  S.chats[id]={id,title:"🌿 "+c.title.slice(0,28),msgs:JSON.parse(JSON.stringify(c.msgs.slice(0,idx+1))),ts:Date.now()};
+  S.chats[id]={id,title:"Fork: "+c.title.slice(0,26),msgs:JSON.parse(JSON.stringify(c.msgs.slice(0,idx+1))),ts:Date.now()};
   S.cur=id;save();renderAll();drawList();
-  toast("🌿 Branched into a new timeline!");
+  toast("Branched into a new chat");
 }
 
 function addActs(row,text,i){
   const acts=document.createElement("div");acts.className="acts";
-  const cp=document.createElement("button");cp.textContent="📋 Copy";cp.onclick=()=>{navigator.clipboard.writeText(text);toast("Copied")};
-  const sp=document.createElement("button");sp.textContent="🔊 Speak";sp.onclick=()=>speakText(text);
-  const pin=document.createElement("button");pin.textContent="📌 Pin";pin.onclick=()=>{S.notes=(S.notes?S.notes+"\n\n---\n\n":"")+text.slice(0,2000);save();toast("📌 Saved to Daily Notes!")};
+  const cp=document.createElement("button");cp.textContent="Copy";cp.onclick=()=>{navigator.clipboard.writeText(text);toast("Copied")};
+  const sp=document.createElement("button");sp.textContent="Speak";sp.onclick=()=>speakText(text);
+  const pin=document.createElement("button");pin.textContent="Pin";pin.onclick=()=>{S.notes=(S.notes?S.notes+"\n\n---\n\n":"")+text.slice(0,2000);save();toast("Saved to Notes")};
   acts.append(cp,sp,pin);
   if(i!=null){
-    const fk=document.createElement("button");fk.textContent="🌿 Fork";fk.onclick=()=>forkChat(i);
-    const rg=document.createElement("button");rg.textContent="↻ Retry";rg.onclick=()=>regenerate(i);
+    const fk=document.createElement("button");fk.textContent="Fork";fk.onclick=()=>forkChat(i);
+    const rg=document.createElement("button");rg.textContent="Retry";rg.onclick=()=>regenerate(i);
     acts.append(fk,rg);
   }
   row.appendChild(acts);
@@ -1093,11 +1091,11 @@ function addActs(row,text,i){
 function addUser(text,i,file){
   const wrap=document.createElement("div");wrap.className="urow";
   const pill=document.createElement("div");pill.className="u";pill.textContent=text||"(attachment)";
-  if(file){const c=document.createElement("div");c.className="fchip";c.textContent="📎 "+file.name;pill.appendChild(c)}
+  if(file){const c=document.createElement("div");c.className="fchip";c.textContent=file.name;pill.appendChild(c)}
   wrap.appendChild(pill);
   const acts=document.createElement("div");acts.className="acts";
   const eb=document.createElement("button");eb.textContent="Edit";eb.onclick=()=>editMsg(i);
-  const fk=document.createElement("button");fk.textContent="🌿 Fork";fk.onclick=()=>forkChat(i);
+  const fk=document.createElement("button");fk.textContent="Fork";fk.onclick=()=>forkChat(i);
   acts.append(eb,fk);wrap.appendChild(acts);
   $("#in").appendChild(wrap);
 }
@@ -1111,14 +1109,15 @@ function addAI(content,i){
 
 function hello(){
   $("#in").innerHTML=`<div id="hello">
-    <div class="hero-badge">⚡ Astra Carbon X v12.0 · Neural Voice & Scope Recon OS</div>
-    <h1>Paste Program Scope or Any Goal. Done in 1-Shot.</h1>
-    <p>Bug Bounty Scope Parser · 12-Vector Passive Domain Blitz · Cloud Linux Sandbox · Natural AI Voices</p>
+    <div class="logo-circle">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+    </div>
+    <h1>What can I help you build or audit?</h1>
     <div class="chips">
-      <button id="hcScope"><i>📋</i><div><b>Bug Bounty Scope Parser</b><span>Paste HackerOne/Intigriti rules to auto-audit in-scope assets</span></div></button>
-      <button id="hcAudit"><i>⚡</i><div><b>1-Shot 12-Vector Domain Blitz</b><span>Instant DNS, Subdomains, JS Secrets, Ports & CVEs</span></div></button>
-      <button id="hcLinux"><i>🐧</i><div><b>Cloud Linux (Bash/Python) Lab</b><span>Run analytical scripts & parsers in zero-load cloud</span></div></button>
-      <button id="hcOmni"><i>🌐</i><div><b>2-Hop Omni-Web Deep Solver</b><span>Crawls 7 live networks + full pages in 1 shot</span></div></button>
+      <button id="hcScope"><b>Program Scope Parser</b><span>Paste HackerOne/Intigriti rules for 1-shot audit</span></button>
+      <button id="hcAudit"><b>12-Vector Domain Blitz</b><span>DNS, Subdomains, Takeover, JS Secrets & CVEs</span></button>
+      <button id="hcLinux"><b>Cloud Linux Sandbox</b><span>Run Bash, Python & 30+ languages in cloud</span></button>
+      <button id="hcOmni"><b>Omni-Web Deep Solver</b><span>Crawls 7 networks + full pages automatically</span></button>
     </div>
   </div>`;
   $("#hcScope").onclick=()=>openCmd("scope");
@@ -1135,6 +1134,9 @@ function renderAll(){
 }
 
 /* ===== INSTANT BLITZ PRE-FETCHER & ONE-SHOT AGENT LOOP ===== */
+const SEND_SVG=`<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`;
+const STOP_SVG=`<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>`;
+
 async function ask(text){
   text=(text||"").trim();if((!text&&!pending)||busy)return;
   $("#cmdM").classList.remove("open");
@@ -1150,24 +1152,24 @@ async function ask(text){
   let blitzTargetDomain=null,blitzOmniQuery=null,blitzScopeText=null;
   if(text.startsWith("/audit ")){
     blitzTargetDomain=text.slice(7).trim().replace(/^https?:\/\//,"").split("/")[0];
-    S.bugMode=true;S.taskMode=true;save();syncModesUI();
+    S.bugMode=true;S.taskMode=true;save();
     text=`Perform a complete 12-Vector Passive Security & Bug Bounty Audit on ${blitzTargetDomain}`;
   }else if(text.startsWith("/omni ")){
     blitzOmniQuery=text.slice(6).trim();
-    S.taskMode=true;save();syncModesUI();
+    S.taskMode=true;save();
     text=blitzOmniQuery;
   }else if(text.startsWith("/bash ")){
     const goal=text.slice(6).trim();
-    S.autoHeal=true;S.taskMode=true;save();syncModesUI();
+    S.autoHeal=true;S.taskMode=true;save();
     text=`Write and execute a Linux Bash / Python analytical script in the cloud container (@bash_sandbox or @auto_verify) for: ${goal}`;
   }else if(S.blitzMode){
     const domMatch=text.match(/^(?:audit|scan|bug\s*hunt|recon)?\s*([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+)\s*$/i);
     if(domMatch){
       blitzTargetDomain=domMatch[1].toLowerCase();
-      S.bugMode=true;S.taskMode=true;save();syncModesUI();
+      S.bugMode=true;S.taskMode=true;save();
     }else if(/in[\s-]*scope|out[\s-]*of[\s-]*scope|bounty|hackerone|intigriti/i.test(text)&&text.length>60){
       blitzScopeText=text;
-      S.bugMode=true;S.taskMode=true;save();syncModesUI();
+      S.bugMode=true;S.taskMode=true;save();
     }else if(text.length>18&&!/^(hi|hello|hey|thanks|ok)\b/i.test(text)){
       blitzOmniQuery=text;
     }
@@ -1200,11 +1202,11 @@ function editMsg(i){
 }
 
 async function runAgent(opts={}){
-  busy=true;stop=false;$("#send").textContent="■";
+  busy=true;stop=false;$("#send").innerHTML=STOP_SVG;
   const c=cur();const myIndex=c.msgs.length;
   const row=document.createElement("div");row.className="arow";
   const th=document.createElement("details");th.className="th";th.open=true;
-  th.innerHTML='<summary><span class="dot"></span><span class="tt">⚡ Autonomous Blitz Engine Initializing…</span><span class="tm" style="margin-left:auto">0.0s</span></summary><div class="pbar-wrap"><div class="pbar"></div></div><div class="st"></div>';
+  th.innerHTML='<summary><span class="dot"></span><span class="tt">Autonomous Blitz Engine running…</span><span class="tm" style="margin-left:auto">0.0s</span></summary><div class="pbar-wrap"><div class="pbar"></div></div><div class="st"></div>';
   const st=th.querySelector(".st"),pbar=th.querySelector(".pbar"),t0=performance.now();
   const tick=setInterval(()=>th.querySelector(".tm").textContent=((performance.now()-t0)/1000).toFixed(1)+"s",100);
   const ans=document.createElement("div");ans.className="a";
@@ -1228,16 +1230,16 @@ async function runAgent(opts={}){
     if(opts.blitzScopeText){
       used+=12;pbar.style.width="55%";
       const data=await tools.program_audit(opts.blitzScopeText,msg=>{th.querySelector(".tt").textContent=msg;log("▸ "+msg)});
-      preTelemetry=`\n\n[📋 PRE-FETCHED BUG BOUNTY PROGRAM SCOPE TELEMETRY]\n${data}\n\n[MANDATE: Respect all program scope rules and out-of-scope exclusions. Analyze all pre-fetched passive telemetry for the in-scope domains and write a complete HackerOne / Intigriti Security Assessment Report in ONE SHOT.]`;
+      preTelemetry=`\n\n[PRE-FETCHED BUG BOUNTY PROGRAM SCOPE TELEMETRY]\n${data}\n\n[MANDATE: Respect all program scope rules and out-of-scope exclusions. Analyze all pre-fetched passive telemetry for the in-scope domains and write a complete HackerOne / Intigriti Security Assessment Report in ONE SHOT.]`;
     }else if(opts.blitzTargetDomain){
       used+=12;pbar.style.width="55%";
       tools.recon_graph(opts.blitzTargetDomain);
       const data=await tools.domain_blitz(opts.blitzTargetDomain,msg=>{th.querySelector(".tt").textContent=msg;log("▸ "+msg)});
-      preTelemetry=`\n\n[⚡ PRE-FETCHED 12-VECTOR PASSIVE RECON TELEMETRY FOR ${opts.blitzTargetDomain}]\n${data}\n\n[MANDATE: Analyze all 12 vectors above immediately and produce a complete, exhaustive HackerOne / Intigriti Security Assessment & Bug Bounty Report with CVSS v3.1 scores, CWE IDs, exposed endpoints/subdomains, header misconfigurations, Shodan CVE analysis, and exact remediation patches in ONE SHOT.]`;
+      preTelemetry=`\n\n[PRE-FETCHED 12-VECTOR PASSIVE RECON TELEMETRY FOR ${opts.blitzTargetDomain}]\n${data}\n\n[MANDATE: Analyze all 12 vectors above immediately and produce a complete HackerOne / Intigriti Security Assessment & Bug Bounty Report with CVSS v3.1 scores, CWE IDs, exposed endpoints/subdomains, CNAME takeover checks, header misconfigurations, Shodan CVE analysis, and exact remediation patches in ONE SHOT.]`;
     }else if(opts.blitzOmniQuery&&S.blitzMode){
       used+=7;pbar.style.width="45%";
       const data=await tools.omni_blitz(opts.blitzOmniQuery,msg=>{th.querySelector(".tt").textContent=msg;log("▸ "+msg)});
-      preTelemetry=`\n\n[⚡ PRE-FETCHED 2-HOP OMNI-WEB RESEARCH TELEMETRY]\n${data}\n\n[MANDATE: Use the live web research above to solve the user's request completely in ONE SHOT with full depth, working code, and zero placeholders.]`;
+      preTelemetry=`\n\n[PRE-FETCHED 2-HOP OMNI-WEB RESEARCH TELEMETRY]\n${data}\n\n[MANDATE: Use the live web research above to solve the user's request completely in ONE SHOT with full depth, working code, and zero placeholders.]`;
     }
 
     const work=[{role:"system",content:sysPrompt()},...c.msgs.slice(-14).map(toLLM)];
@@ -1247,7 +1249,7 @@ async function runAgent(opts={}){
 
     for(let i=0;i<=MAXSTEPS;i++){
       pbar.style.width=Math.min(92,35+i*15)+"%";
-      th.querySelector(".tt").textContent=i===0?"🧠 Synthesizing complete solution…":`⚡ Executing Cloud Step ${i+1}…`;
+      th.querySelector(".tt").textContent=i===0?"Synthesizing complete solution…":`Executing Cloud Step ${i+1}…`;
       ans.innerHTML='<span class="cur"></span>';
       const out=await llm(work,streamRender);
       if(rafId){cancelAnimationFrame(rafId);rafId=null}
@@ -1272,86 +1274,136 @@ async function runAgent(opts={}){
     c.msgs.push({role:"assistant",content:final});
     if(S.autoSpeak&&final&&!stop)speakText(final,true);
   }catch(e){
-    ans.innerHTML='<span style="color:#ef4444">⚠️ '+escapeHtml(e.message||"Connection error")+'</span> ';
-    const rb=document.createElement("button");rb.className="cp";rb.textContent="↻ Retry";rb.onclick=()=>{if(!busy){row.remove();runAgent(opts)}};ans.appendChild(rb);
+    ans.innerHTML='<span style="color:#ef4444">Error: '+escapeHtml(e.message||"Connection error")+'</span> ';
+    const rb=document.createElement("button");rb.className="cp";rb.textContent="Retry";rb.onclick=()=>{if(!busy){row.remove();runAgent(opts)}};ans.appendChild(rb);
   }
   clearInterval(tick);
-  if(used){th.classList.add("done");th.open=false;th.querySelector(".tt").textContent=`⚡ Blitz executed ${used} parallel cloud pipelines in `+((performance.now()-t0)/1000).toFixed(1)+"s";th.querySelector(".tm").textContent=""}
+  if(used){th.classList.add("done");th.open=false;th.querySelector(".tt").textContent=`Executed ${used} cloud pipelines in `+((performance.now()-t0)/1000).toFixed(1)+"s";th.querySelector(".tm").textContent=""}
   else th.remove();
-  busy=false;$("#send").textContent="↑";save();drawList();bottom();
+  busy=false;$("#send").innerHTML=SEND_SVG;save();drawList();bottom();
   return final;
 }
 
-/* ===== UNIFIED COMMAND CENTER (⌘K / ＋) ===== */
-function syncModesUI(){
-  $("#blitzBtn").classList.toggle("on",!!S.blitzMode);
-  const pills=$("#activePills");pills.innerHTML="";
-  const addPill=(lbl,key)=>{
-    const p=document.createElement("span");p.className="mpill";p.innerHTML=`${lbl} <b>✕</b>`;
-    p.querySelector("b").onclick=()=>{S[key]=false;save();syncModesUI()};
-    pills.appendChild(p);
-  };
-  if(S.blitzMode)addPill("⚡ 1-Shot Blitz","blitzMode");
-  if(S.swarmMode)addPill("🛡️ Red-Blue Swarm","swarmMode");
-  if(S.bugMode)addPill("🐞 Domain Auditor","bugMode");
-  if(S.arenaMode)addPill("⚔️ Consensus","arenaMode");
-  if(S.autoHeal)addPill("🧬 Self-Heal","autoHeal");
-}
-syncModesUI();
-$("#blitzBtn").onclick=()=>{S.blitzMode=!S.blitzMode;save();syncModesUI();toast(S.blitzMode?"⚡ 1-Shot Autonomous Blitz: ON":"Blitz Mode: OFF")};
-
+/* ===== UNIFIED MONOCHROME COMMAND CENTER ===== */
 const CMD_TABS={
+  modes(){
+    const voiceOpts=NEURAL_VOICES.map(v=>`<option value="${v[0]}" ${S.voice===v[0]?"selected":""}>${v[1]}</option>`).join("");
+    $("#cmdPane").innerHTML=`
+      <div class="qgrid">
+        <button class="qcard ${S.blitzMode?"on":""}" id="qmBlitz"><div><b>1-Shot Autonomous Blitz</b><span>Pre-fetches 12 vectors & never asks</span></div><span class="dot-ind"></span></button>
+        <button class="qcard ${S.autoSpeak?"on":""}" id="qmSpeak"><div><b>Auto-Speak AI Replies</b><span>Reads every response in natural voice</span></div><span class="dot-ind"></span></button>
+        <button class="qcard ${S.swarmMode?"on":""}" id="qmSwarm"><div><b>Red-Blue-Judge Swarm</b><span>Builder vs Breaker adversarial audit</span></div><span class="dot-ind"></span></button>
+        <button class="qcard ${S.arenaMode?"on":""}" id="qmArena"><div><b>Multi-Brain Consensus</b><span>Parallel Claude + Gemini + GPT</span></div><span class="dot-ind"></span></button>
+        <button class="qcard ${S.autoHeal?"on":""}" id="qmHeal"><div><b>Self-Healing Code Loop</b><span>Auto-fixes stderr in Cloud</span></div><span class="dot-ind"></span></button>
+        <button class="qcard" id="qmAttach"><div><b>Attach File / APK / Image</b><span>Upload Manifest, code, or screenshot</span></div><span>↑</span></button>
+        <button class="qcard" id="qmMagic"><div><b>Magic Prompt Upgrade</b><span>Rewrite draft into master spec</span></div><span>→</span></button>
+        <button class="qcard" id="qmLive"><div><b>Live Voice Orb</b><span>Full-screen hands-free voice chat</span></div><span>●</span></button>
+      </div>
+      <div class="cvss-grid" style="margin-top:4px">
+        <div class="cvss-box">
+          <label>Select AI Neural Voice</label>
+          <select id="cmVoiceSel">${voiceOpts}</select>
+        </div>
+        <div class="cvss-box">
+          <label>Voice Playback Speed</label>
+          <select id="cmVoiceRate">
+            <option value="0.9" ${S.voiceRate===0.9?"selected":""}>0.9x (Calm)</option>
+            <option value="1" ${S.voiceRate===1?"selected":""}>1.0x (Natural)</option>
+            <option value="1.15" ${S.voiceRate===1.15?"selected":""}>1.15x (Fast)</option>
+            <option value="1.3" ${S.voiceRate===1.3?"selected":""}>1.3x (Rapid)</option>
+          </select>
+        </div>
+      </div>
+      <div class="row2">
+        <button class="pri" id="testVoiceBtn">Test Selected Voice</button>
+      </div>`;
+    $("#qmBlitz").onclick=()=>{S.blitzMode=!S.blitzMode;save();CMD_TABS.modes()};
+    $("#qmSpeak").onclick=()=>{S.autoSpeak=!S.autoSpeak;save();CMD_TABS.modes()};
+    $("#qmSwarm").onclick=()=>{S.swarmMode=!S.swarmMode;save();CMD_TABS.modes()};
+    $("#qmArena").onclick=()=>{S.arenaMode=!S.arenaMode;save();CMD_TABS.modes()};
+    $("#qmHeal").onclick=()=>{S.autoHeal=!S.autoHeal;save();CMD_TABS.modes()};
+    $("#qmAttach").onclick=()=>{$("#cmdM").classList.remove("open");$("#fin").click()};
+    $("#qmLive").onclick=()=>{$("#cmdM").classList.remove("open");openOrb()};
+    $("#cmVoiceSel").onchange=e=>{S.voice=e.target.value;save();toast("Voice updated")};
+    $("#cmVoiceRate").onchange=e=>{S.voiceRate=parseFloat(e.target.value);save()};
+    $("#testVoiceBtn").onclick=()=>speakText("Hello Nikhil, Astra Carbon X monochrome neural voice is ready.",true);
+    $("#qmMagic").onclick=async()=>{
+      $("#cmdM").classList.remove("open");
+      const raw=$("#q").value.trim();if(!raw)return toast("Type a draft prompt in the box first");
+      toast("Upgrading prompt…");
+      try{
+        const res=await routeStandardLLM([{role:"system",content:"Upgrade the user's draft into a rigorous, detailed one-shot engineering/research specification. Output ONLY the improved prompt."},{role:"user",content:raw}],()=>{});
+        if(res){$("#q").value=res.trim();$("#q").dispatchEvent(new Event("input"))}
+      }catch(_){}
+    };
+  },
   scope(){
     $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)">📋 <b>Bug Bounty Program Scope Parser & Passive Auditor:</b> Paste the raw rules, scope table, or instructions from any HackerOne, Intigriti, or Bugcrowd program. Astra will automatically extract the in-scope domains, ignore out-of-scope assets, run a 12-vector passive recon & SAST audit across the targets, and generate a compliant report.</div>
-      <textarea class="ti" id="scText" rows="6" placeholder="Paste Bug Bounty Program Scope & Rules here...\nExample:\nIn-Scope:\n*.example.com\napi.example.org\n\nOut-of-Scope:\nblog.example.com"></textarea>
+      <div style="font-size:12.5px;color:var(--m)"><b>Bug Bounty Program Scope Parser:</b> Paste raw rules or scope tables from HackerOne / Intigriti. Astra extracts in-scope domains, excludes out-of-scope assets, and runs a 12-vector passive audit in one shot.</div>
+      <textarea class="ti" id="scText" rows="6" placeholder="In-Scope:\n*.example.com\napi.example.org\n\nOut-of-Scope:\nblog.example.com"></textarea>
       <div class="row2">
-        <button class="pri" id="scRunBtn">⚡ Parse Scope & Run 1-Shot Passive Audit</button>
-        <button id="scExtractBtn">🔍 Preview Extracted Scope</button>
+        <button class="pri" id="scRunBtn">Parse Scope & Run 1-Shot Audit</button>
+        <button id="scExtractBtn">Preview Extracted Scope</button>
       </div>
       <div class="out2" id="scOut">Waiting for program scope...</div>`;
     $("#scExtractBtn").onclick=()=>{
       const {inScope,outScope}=extractScopeDomains($("#scText").value);
-      $("#scOut").textContent=`✔ In-Scope Targets (${inScope.length}): ${inScope.join(", ")||"None detected"}\n🚫 Out-of-Scope Excluded (${outScope.length}): ${outScope.join(", ")||"None"}`;
+      $("#scOut").textContent=`In-Scope (${inScope.length}): ${inScope.join(", ")||"None"}\nOut-of-Scope Excluded (${outScope.length}): ${outScope.join(", ")||"None"}`;
     };
     $("#scRunBtn").onclick=()=>{
-      const txt=$("#scText").value.trim();
-      if(!txt)return toast("Paste program scope instructions first");
-      S.blitzMode=true;S.bugMode=true;save();syncModesUI();
-      ask(txt);
+      const txt=$("#scText").value.trim();if(!txt)return toast("Paste program scope first");
+      S.blitzMode=true;S.bugMode=true;save();ask(txt);
     };
   },
   bug(){
     $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)">⚡ <b>1-Shot 12-Vector Domain Blitz Auditor:</b> Enter any authorized domain to pre-fetch DNS (A/MX/TXT/NS), Certificate Transparency Subdomains, RDAP WHOIS, Security Headers, Wayback Sensitive URLs, URLScan, Shodan Ports/CVEs, and Live JS Bundles in one shot.</div>
+      <div style="font-size:12.5px;color:var(--m)"><b>12-Vector Domain Blitz Auditor:</b> Enter any authorized domain to pre-fetch DNS, CT Subdomains, CNAME Takeover checks, RDAP WHOIS, Security Headers, Wayback URLs, URLScan, Shodan Ports/CVEs, and JS Secrets in one shot.</div>
       <input class="ti" id="bhTarget" placeholder="Target Domain (e.g., example.com)">
-      <textarea class="ti" id="bhCode" rows="3" placeholder="Optional: Paste source code, JS bundle URL, or HTTP headers for deep SAST auditing..."></textarea>
+      <textarea class="ti" id="bhCode" rows="3" placeholder="Optional: Paste source code, JS bundle URL, or HTTP headers for SAST auditing..."></textarea>
       <div class="row2">
-        <button class="red" id="startBugBtn">⚡ Launch 1-Shot 12-Vector Blitz Audit</button>
-        <button id="graphBugBtn">🕸️ Open Visual Attack Surface Graph</button>
+        <button class="pri" id="startBugBtn">Launch 1-Shot Domain Audit</button>
+        <button id="graphBugBtn">Open Attack Surface Graph</button>
       </div>`;
     $("#startBugBtn").onclick=()=>{
       const t=$("#bhTarget").value.trim(),c=$("#bhCode").value.trim();
       if(!t&&!c)return toast("Enter a target domain or paste code");
       if(t&&!c){ask("/audit "+t);return}
-      S.bugMode=true;S.blitzMode=true;save();syncModesUI();
-      ask(`[⚡ 1-SHOT DOMAIN & SAST SECURITY AUDIT]\nTarget: ${t||"Provided Code"}\nContext:\n${c}`);
+      S.bugMode=true;S.blitzMode=true;save();
+      ask(`[1-SHOT DOMAIN & SAST SECURITY AUDIT]\nTarget: ${t||"Provided Code"}\nContext:\n${c}`);
     };
     $("#graphBugBtn").onclick=()=>{
       const t=$("#bhTarget").value.trim()||"example.com";
-      $("#cmdM").classList.remove("open");
-      tools.recon_graph(t);
+      $("#cmdM").classList.remove("open");tools.recon_graph(t);
+    };
+  },
+  http(){
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)"><b>Subdomain Takeover, CORS & HTTP cURL Lab:</b> Check subdomain CNAME records for dangling cloud services or convert raw HTTP requests into Python/cURL verification scripts.</div>
+      <input class="ti" id="htDom" placeholder="Domain for Subdomain CNAME Takeover Check (e.g. example.com)">
+      <textarea class="ti" id="htRaw" rows="4" placeholder="Or paste raw HTTP Request / Headers from Burp Suite to analyze for CORS, Auth Bypass & IDOR..."></textarea>
+      <div class="row2">
+        <button class="pri" id="htTakeoverBtn">Check Subdomain Takeovers</button>
+        <button id="htAnalyzeBtn">Audit Raw HTTP Request & Generate PoC</button>
+      </div>
+      <div class="out2" id="htOut">Ready.</div>`;
+    $("#htTakeoverBtn").onclick=async()=>{
+      const d=$("#htDom").value.trim();if(!d)return toast("Enter a domain first");
+      $("#htOut").textContent="Scanning CT subdomains and resolving CNAME records...";
+      $("#htOut").textContent=await checkSubdomainTakeover(d);
+    };
+    $("#htAnalyzeBtn").onclick=()=>{
+      const r=$("#htRaw").value.trim();if(!r)return toast("Paste raw HTTP headers/request first");
+      ask(`Analyze this raw HTTP request/response for security flaws (CORS misconfigurations, IDOR, broken authentication, header injection) and generate a clean Python requests & cURL PoC script:\n\n${F}http\n${r}\n${F}`);
     };
   },
   cloud(){
     $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)">🐧 <b>Zero-Load Cloud Linux Container (Bash & 30+ Languages):</b> Run Linux shell scripts, Python parsers, or C++/Rust tools on remote cloud servers without using your phone's CPU.</div>
-      <select id="clLang" class="ti"><option value="bash">🐧 Linux Bash Shell (Cloud Container)</option><option value="python">🐍 Python 3 (Self-Healing Cloud)</option><option value="javascript">⚡ Node.js</option><option value="go">🔵 Go</option><option value="rust">🦀 Rust</option><option value="c++">⚙️ C++ (GCC)</option></select>
-      <textarea id="clCode" class="ti" rows="5">uname -a\nlscpu | head -n 8 || true\npython3 -c "import ssl; print('OpenSSL:', ssl.OPENSSL_VERSION)"</textarea>
+      <select id="clLang" class="ti"><option value="bash">Linux Bash Shell (Cloud Container)</option><option value="python">Python 3 (Self-Healing Cloud)</option><option value="javascript">Node.js</option><option value="go">Go</option><option value="rust">Rust</option><option value="c++">C++ (GCC)</option></select>
+      <textarea id="clCode" class="ti" rows="5">uname -a\npython3 -c "import ssl, hashlib; print(ssl.OPENSSL_VERSION, hashlib.sha256(b'Astra v13').hexdigest())"</textarea>
       <div class="row2">
-        <button class="pri" id="clHealRun">🧬 Auto-Heal & Execute in Cloud</button>
-        <button id="clHostApp">🌐 Deploy Canvas HTML to Cloud</button>
-        <button id="olCfgBtn">🔌 Local Ollama (${escapeHtml(S.olModel)})</button>
+        <button class="pri" id="clHealRun">Auto-Heal & Execute in Cloud</button>
+        <button id="clHostApp">Deploy Canvas HTML to Cloud</button>
+        <button id="olCfgBtn">Local Ollama (${escapeHtml(S.olModel)})</button>
       </div>
       <div class="out2" id="clOut">Cloud Linux Container Ready.</div>`;
     $("#clHealRun").onclick=async()=>{
@@ -1360,78 +1412,37 @@ const CMD_TABS={
     };
     $("#clHostApp").onclick=async()=>{$("#clOut").textContent="Deploying…";$("#clOut").textContent=await tools.cloud_host(S.canvasCode)};
     $("#olCfgBtn").onclick=()=>{
-      const u=prompt("Local Ollama URL (run with OLLAMA_ORIGINS=* ollama serve):",S.olUrl);
+      const u=prompt("Local Ollama URL:",S.olUrl);
       if(u){S.olUrl=u.trim();const m=prompt("Local Model Name:",S.olModel);if(m)S.olModel=m.trim();S.model="ol:local";$("#model").value="ol:local";save();toast("Switched to Local Ollama")}
     };
   },
   batch(){
     $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)">📦 <b>Multi-Target Autonomous Batch Queue:</b> Enter multiple domains or complex tasks (one per line). Astra will process every single item sequentially on full autopilot.</div>
-      <textarea class="ti" id="bqList" rows="5" placeholder="example.com\niana.org\nWrite and verify a Python log analyzer in the cloud"></textarea>
+      <div style="font-size:12.5px;color:var(--m)"><b>Multi-Target Autonomous Batch Queue:</b> Enter multiple domains or tasks (one per line) to run sequentially on autopilot.</div>
+      <textarea class="ti" id="bqList" rows="5" placeholder="example.com\niana.org\nWrite and verify a Python port-banner parser in the cloud"></textarea>
       <div class="row2">
-        <button class="pri" id="bqStartBtn">🚀 Run Entire Batch Queue on Autopilot</button>
+        <button class="pri" id="bqStartBtn">Run Entire Batch Queue</button>
       </div>`;
     $("#bqStartBtn").onclick=async()=>{
       const items=$("#bqList").value.split("\n").map(x=>x.trim()).filter(Boolean);
       if(!items.length)return toast("Enter at least one domain or task");
       $("#cmdM").classList.remove("open");
-      toast(`📦 Starting Batch Queue (${items.length} targets)…`);
       for(let i=0;i<items.length;i++){
         if(stop)break;
         const item=items[i];
         const isDom=/^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$/.test(item);
         await ask(isDom?`/audit ${item}`:`[Batch Task ${i+1}/${items.length}] ${item}`);
       }
-      toast("🎉 Batch Queue 100% Completed!");
-    };
-  },
-  modes(){
-    $("#cmdPane").innerHTML=`
-      <div class="qgrid">
-        <button class="qcard ${S.blitzMode?"on":""}" id="qmBlitz"><span>⚡</span><div><b>1-Shot Autonomous Blitz</b><span>Pre-fetches 12 vectors & never asks</span></div></button>
-        <button class="qcard ${S.autoSpeak?"on":""}" id="qmSpeak"><span>🔊</span><div><b>Auto-Speak AI Replies</b><span>Reads every response in selected voice</span></div></button>
-        <button class="qcard ${S.swarmMode?"on":""}" id="qmSwarm"><span>⚖️</span><div><b>Red-Blue-Judge Swarm</b><span>Builder vs Breaker adversarial audit</span></div></button>
-        <button class="qcard ${S.arenaMode?"on":""}" id="qmArena"><span>⚔️</span><div><b>Multi-Brain Consensus</b><span>Parallel Claude + Gemini + GPT</span></div></button>
-        <button class="qcard ${S.autoHeal?"on":""}" id="qmHeal"><span>🧬</span><div><b>Self-Healing Code Loop</b><span>Auto-fixes stderr in Cloud</span></div></button>
-        <button class="qcard" id="qmAttach"><span>📎</span><div><b>Attach File / APK / Code</b><span>Manifest, Java/Kotlin, logs, image</span></div></button>
-        <button class="qcard" id="qmMagic"><span>✨</span><div><b>Magic Prompt Upgrade</b><span>Rewrite draft into master spec</span></div></button>
-        <button class="qcard" id="qmLive"><span>🎙️</span><div><b>Astra Live Voice Orb</b><span>Hands-free neural voice chat</span></div></button>
-      </div>
-      <div class="row2" style="margin-top:6px">
-        <span style="font-size:12.5px;color:var(--m)">🗣️ Voice Speed:</span>
-        <button data-rate="0.9">0.9x</button>
-        <button data-rate="1.0">1.0x</button>
-        <button data-rate="1.15">1.15x</button>
-        <button data-rate="1.3">1.3x</button>
-        <button class="pri" id="testVoiceBtn">🔊 Test Selected Voice</button>
-      </div>`;
-    $("#qmBlitz").onclick=()=>{S.blitzMode=!S.blitzMode;save();syncModesUI();CMD_TABS.modes()};
-    $("#qmSpeak").onclick=()=>{S.autoSpeak=!S.autoSpeak;save();syncAutoSpeakUI();CMD_TABS.modes()};
-    $("#qmSwarm").onclick=()=>{S.swarmMode=!S.swarmMode;save();syncModesUI();CMD_TABS.modes()};
-    $("#qmArena").onclick=()=>{S.arenaMode=!S.arenaMode;save();syncModesUI();CMD_TABS.modes()};
-    $("#qmHeal").onclick=()=>{S.autoHeal=!S.autoHeal;save();syncModesUI();CMD_TABS.modes()};
-    $("#qmAttach").onclick=()=>{$("#cmdM").classList.remove("open");$("#fin").click()};
-    $("#qmLive").onclick=()=>{$("#cmdM").classList.remove("open");openOrb()};
-    $("#cmdPane").querySelectorAll("[data-rate]").forEach(b=>b.onclick=()=>{S.voiceRate=parseFloat(b.dataset.rate);save();toast("Voice Speed: "+S.voiceRate+"x")});
-    $("#testVoiceBtn").onclick=()=>speakText("Hello Nikhil, Astra Carbon X voice engine is online and ready for your command.",true);
-    $("#qmMagic").onclick=async()=>{
-      $("#cmdM").classList.remove("open");
-      const raw=$("#q").value.trim();if(!raw)return toast("Type a draft prompt in the box first!");
-      toast("✨ Upgrading prompt…");
-      try{
-        const res=await routeStandardLLM([{role:"system",content:"Upgrade the user's draft into a rigorous, detailed one-shot engineering/research specification. Output ONLY the improved prompt."},{role:"user",content:raw}],()=>{});
-        if(res){$("#q").value=res.trim();$("#q").dispatchEvent(new Event("input"))}
-      }catch(_){}
+      toast("Batch Queue Completed");
     };
   },
   apk(){
     $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)">📱 <b>Static APK, JADX & Manifest Scanner:</b> Select an <code>AndroidManifest.xml</code>, JADX Java/Kotlin file, or <code>.apk</code> to scan for exported components, deep-links, WebView XSS sinks, and hardcoded keys.</div>
       <input type="file" id="apkFile" accept=".xml,.java,.kt,.smali,.txt,.json,.apk,.zip" class="ti">
-      <textarea class="ti" id="apkIn" rows="4" placeholder="Or paste AndroidManifest.xml / JADX Java source code here..."></textarea>
+      <textarea class="ti" id="apkIn" rows="4" placeholder="Paste AndroidManifest.xml / JADX Java source code here..."></textarea>
       <div class="row2">
-        <button class="pri" id="apkScanBtn">⚡ Instant Static Scan</button>
-        <button class="red" id="apkAiBtn">🐞 Deep 1-Shot AI SAST Audit</button>
+        <button class="pri" id="apkScanBtn">Instant Static Scan</button>
+        <button id="apkAiBtn">Deep 1-Shot AI SAST Audit</button>
       </div>
       <div class="out2" id="apkOut">Ready.</div>`;
     $("#apkFile").onchange=async e=>{
@@ -1451,8 +1462,8 @@ const CMD_TABS={
     $("#apkAiBtn").onclick=()=>{
       const txt=$("#apkIn").value.trim();if(!txt)return toast("Paste Manifest/JADX code first");
       const preScan=scanAndroidSource(txt,"Target APK");
-      S.bugMode=true;save();syncModesUI();
-      ask(`[📱 ANDROID APK & JADX SAST AUDIT]\nStatic Scanner Findings:\n${preScan}\n\nSource Snippet:\n${F}\n${txt.slice(0,12000)}\n${F}\n\nAnalyze all exported components, intent filters, WebView settings, and hardcoded keys, and provide complete remediation patches in one shot.`);
+      S.bugMode=true;save();
+      ask(`[ANDROID APK & JADX SAST AUDIT]\nStatic Findings:\n${preScan}\n\nSource:\n${F}\n${txt.slice(0,12000)}\n${F}\n\nAnalyze all exported components, intent filters, WebView settings, and hardcoded keys, and provide complete remediation patches.`);
     };
   },
   cvss(){
@@ -1465,11 +1476,11 @@ const CMD_TABS={
         <div class="cvss-box"><label>Confidentiality (C)</label><select id="cvC"><option value="H:0.56">High (H)</option><option value="L:0.22">Low (L)</option><option value="N:0">None (N)</option></select></div>
         <div class="cvss-box"><label>Integrity / Availability (I/A)</label><select id="cvIA"><option value="H:0.56">High (H)</option><option value="L:0.22">Low (L)</option><option value="N:0">None (N)</option></select></div>
       </div>
-      <input class="ti" id="cvTitle" placeholder="Finding Title & Component (e.g. Missing Authorization on /api/v1/export)">
+      <input class="ti" id="cvTitle" placeholder="Finding Title & Component">
       <div class="out2" id="cvOut">CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H — Score: 9.8 (CRITICAL)</div>
       <div class="row2">
-        <button class="red" id="cvGenBtn">🎯 Draft Full Vulnerability Report</button>
-        <button id="cvCopyBtn">📋 Copy Vector</button>
+        <button class="pri" id="cvGenBtn">Draft Full Vulnerability Report</button>
+        <button id="cvCopyBtn">Copy Vector</button>
       </div>`;
     const calc=()=>{
       const g=id=>$("#"+id).value.split(":");
@@ -1484,24 +1495,23 @@ const CMD_TABS={
     };
     $("#cmdPane").querySelectorAll("select").forEach(s=>s.onchange=calc);
     calc();
-    $("#cvCopyBtn").onclick=()=>{navigator.clipboard.writeText($("#cvOut").textContent);toast("CVSS Vector copied ✔")};
+    $("#cvCopyBtn").onclick=()=>{navigator.clipboard.writeText($("#cvOut").textContent);toast("CVSS Vector copied")};
     $("#cvGenBtn").onclick=()=>{
       const {vec,score,sev}=calc();
       const title=$("#cvTitle").value.trim()||"Security Vulnerability Finding";
-      ask(`Write a complete, submission-ready HackerOne / Intigriti Bug Bounty Report for:\n- **Title:** ${title}\n- **Severity:** ${sev} (${score})\n- **Vector:** \`${vec}\`\n\nInclude: Executive Summary, CWE Classification, Affected Component, Verification Steps, Impact Analysis, and Exact Remediation Code Patch.`);
+      ask(`Write a complete HackerOne / Intigriti Bug Bounty Report for:\n- **Title:** ${title}\n- **Severity:** ${sev} (${score})\n- **Vector:** \`${vec}\`\n\nInclude: Summary, CWE ID, Affected Component, Verification Steps, Impact, and Remediation Patch.`);
     };
   },
   notes(){
     $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)">📌 <b>Daily Scratchpad & Pinned Notes:</b> Save bug bounty targets, recon snippets, or daily todo lists.</div>
       <textarea class="ti" id="ntArea" rows="7" placeholder="Write daily notes, target scopes, or code snippets here...">${escapeHtml(S.notes||"")}</textarea>
       <div class="row2">
-        <button class="pri" id="ntSave">💾 Save Notes</button>
-        <button id="ntAsk">🧠 Execute / Analyze Notes in 1-Shot</button>
-        <button id="ntDl">⬇ Download (.md)</button>
+        <button class="pri" id="ntSave">Save Notes</button>
+        <button id="ntAsk">Execute Notes in 1-Shot</button>
+        <button id="ntDl">Download (.md)</button>
       </div>`;
     $("#ntArea").addEventListener("input",e=>{S.notes=e.target.value;save()});
-    $("#ntSave").onclick=()=>{S.notes=$("#ntArea").value;save();toast("📌 Notes saved!")};
+    $("#ntSave").onclick=()=>{S.notes=$("#ntArea").value;save();toast("Notes saved")};
     $("#ntAsk").onclick=()=>{
       const v=$("#ntArea").value.trim();if(!v)return toast("Write some notes first");
       ask("Execute and solve everything in my pinned notes completely in one shot:\n\n"+v);
@@ -1511,39 +1521,16 @@ const CMD_TABS={
       a.href=URL.createObjectURL(new Blob([S.notes||""],{type:"text/markdown"}));
       a.download="astra-notes.md";a.click();
     };
-  },
-  tools(){
-    $("#cmdPane").innerHTML=`
-      <textarea class="ti" id="tIn" rows="4" placeholder="Paste JSON, Base64, JWT, URL, or text to hash…"></textarea>
-      <div class="row2">
-        <button id="tJson">JSON Format</button>
-        <button id="tB64E">B64 Encode</button>
-        <button id="tB64D">B64 Decode</button>
-        <button id="tJwt">JWT Decode</button>
-        <button id="tSha">SHA-256</button>
-        <button id="tImg">🎨 Generate Image</button>
-      </div>
-      <div class="out2" id="tOut">Output will appear here.</div>`;
-    $("#tJson").onclick=()=>{try{$("#tOut").textContent=JSON.stringify(JSON.parse($("#tIn").value),null,2)}catch(e){$("#tOut").textContent=e.message}};
-    $("#tB64E").onclick=()=>$("#tOut").textContent=btoa(unescape(encodeURIComponent($("#tIn").value)));
-    $("#tB64D").onclick=()=>{try{$("#tOut").textContent=decodeURIComponent(escape(atob($("#tIn").value.trim())))}catch(_){$("#tOut").textContent="Invalid Base64"}};
-    $("#tJwt").onclick=()=>{try{const p=$("#tIn").value.trim().split(".");const dec=s=>JSON.stringify(JSON.parse(atob(s.replace(/-/g,"+").replace(/_/g,"/"))),null,2);$("#tOut").textContent=dec(p[0])+"\n\n"+dec(p[1])}catch(_){$("#tOut").textContent="Invalid JWT"}};
-    $("#tSha").onclick=async()=>{const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode($("#tIn").value));$("#tOut").textContent=[...new Uint8Array(buf)].map(x=>x.toString(16).padStart(2,"0")).join("")};
-    $("#tImg").onclick=async()=>{
-      const p=$("#tIn").value.trim();if(!p)return toast("Enter an image prompt above");
-      $("#tOut").textContent="Generating image…";
-      try{const res=await tools.image(p);const id=res.match(/m[a-z0-9]+/)[0];$("#tOut").innerHTML=`<div class="mslot" data-id="${id}"></div>`;fillSlots($("#tOut"))}catch(e){$("#tOut").textContent=e.message}
-    };
   }
 };
 
-function openCmd(tab="scope"){
+function openCmd(tab="modes"){
   closeSide();
   $("#cmdM").classList.add("open");
   $("#cmdTabs").querySelectorAll(".stab").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
   CMD_TABS[tab]?.();
 }
-$("#cmdBtn").onclick=()=>openCmd("scope");
+$("#cmdBtn").onclick=()=>openCmd("modes");
 $("#cmdClose").onclick=()=>$("#cmdM").classList.remove("open");
 $("#cmdTabs").querySelectorAll(".stab").forEach(b=>b.onclick=()=>openCmd(b.dataset.tab));
 document.querySelectorAll("[data-cmd]").forEach(b=>b.onclick=()=>openCmd(b.dataset.cmd));
@@ -1560,18 +1547,18 @@ $("#orbCloseBtn").onclick=()=>{
 $("#orbToggleBtn").onclick=$("#orbCircle").onclick=()=>{
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR)return toast("Voice recognition not supported");
-  if(orbActive){orbActive=false;try{orbRec?.stop()}catch(_){}$("#orbCircle").className="orb";$("#orbToggleBtn").textContent="🎙️ Start Listening";return}
+  if(orbActive){orbActive=false;try{orbRec?.stop()}catch(_){}$("#orbCircle").className="orb";$("#orbToggleBtn").textContent="Start Listening";return}
   orbRec=new SR();orbRec.lang="en-IN";orbActive=true;
-  $("#orbCircle").className="orb listen";$("#orbSub").textContent="Listening…";$("#orbToggleBtn").textContent="⏹ Stop";
+  $("#orbCircle").className="orb listen";$("#orbSub").textContent="Listening…";$("#orbToggleBtn").textContent="Stop";
   orbRec.onresult=async e=>{
     const txt=e.results[0][0].transcript;
     $("#orbSub").textContent="You: "+txt;$("#orbCircle").className="orb";
     const rep=await ask(txt);
     if(!rep||!$("#orbM").classList.contains("open"))return;
     const clean=rep.replace(/```[\s\S]*?```/g,"").replace(/[#*`_~]/g,"").slice(0,420);
-    $("#orbSub").textContent=clean;$("#orbCircle").className="orb speak";speakText(clean,true);
+    $("#orbSub").textContent=clean;speakText(clean,true);
   };
-  orbRec.onend=()=>{orbActive=false;$("#orbToggleBtn").textContent="🎙️ Start Listening"};
+  orbRec.onend=()=>{orbActive=false;$("#orbToggleBtn").textContent="Start Listening"};
   orbRec.start();
 };
 
@@ -1602,19 +1589,18 @@ $("#model").innerHTML=MODELS.map(m=>`<option value="${m[0]}">${m[1]}</option>`).
 $("#model").value=S.model;$("#model").onchange=e=>{S.model=e.target.value;save()};
 $("#send").onclick=()=>{if(busy)stop=true;else ask($("#q").value)};
 $("#q").addEventListener("input",function(){
-  this.style.height="auto";this.style.height=Math.min(this.scrollHeight,130)+"px";
+  this.style.height="auto";this.style.height=Math.min(this.scrollHeight,135)+"px";
   $("#slashMenu").classList.toggle("open",this.value.startsWith("/")&&!this.value.includes(" "));
 });
 document.querySelectorAll(".sl-item").forEach(b=>b.onclick=()=>{
   const cmd=b.dataset.sl;
   $("#slashMenu").classList.remove("open");
-  if(cmd==="/notes"){openCmd("notes");return}
   if(cmd==="/scope"){openCmd("scope");return}
   $("#q").value=cmd;$("#q").focus();
 });
 $("#q").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&innerWidth>768){e.preventDefault();ask($("#q").value)}});
 document.addEventListener("keydown",e=>{
-  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openCmd("scope")}
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openCmd("modes")}
   if(e.key==="Escape"){$("#cmdM").classList.remove("open");$("#orbM").classList.remove("open");$("#slashMenu").classList.remove("open");closeSide()}
 });
 $("#new").onclick=$("#new2").onclick=()=>!busy&&newChat();
@@ -1623,9 +1609,8 @@ $("#ov").onclick=closeSide;
 $("#mem").onclick=()=>{const v=prompt("Persistent Memory:",S.mem.join(" | "));if(v!==null){S.mem=v.split("|").map(x=>x.trim()).filter(Boolean);save()}};
 $("#exp").onclick=()=>{const c=cur();if(!c?.msgs.length)return;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([c.msgs.map(m=>"## "+m.role+"\n\n"+m.content).join("\n\n")],{type:"text/markdown"}));a.download="chat.md";a.click()};
 $("#wipe").onclick=()=>{if(confirm("Clear all chats?")){S.chats={};S.cur=null;save();renderAll();drawList()}};
-function applyTheme(){document.documentElement.setAttribute("data-theme",S.theme==="light"?"light":"dark");$("#themeBtn").textContent="🌓 Theme: "+S.theme}
+function applyTheme(){document.documentElement.setAttribute("data-theme",S.theme==="light"?"light":"dark");$("#themeBtn").textContent="Theme: "+S.theme}
 $("#themeBtn").onclick=()=>{S.theme=S.theme==="dark"?"light":"dark";applyTheme();save()};
-$("#deepBtn").onclick=()=>{S.deep=!S.deep;save();$("#deepBtn").textContent="🧠 Auto Self-Verify: "+(S.deep?"on":"off")};
 
 const idb=new Promise((ok,no)=>{const r=indexedDB.open("agi_media",1);r.onupgradeneeded=()=>r.result.createObjectStore("m");r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
 const idbOp=(mode,fn)=>idb.then(db=>new Promise((ok,no)=>{const t=db.transaction("m",mode),q=fn(t.objectStore("m"));t.oncomplete=()=>ok(q.result);t.onerror=()=>no(t.error)}));
@@ -1649,7 +1634,7 @@ $("#fin").onchange=async e=>{
     for(let i=0;i<bytes.length;i++){const b=bytes[i];if(b>=32&&b<=126)cur+=String.fromCharCode(b);else{if(cur.length>=6)ascii+=cur+"\n";cur=""}}
     pending={name:f.name,text:scanAndroidSource(ascii,f.name)+"\n\n[Extracted Printable Strings]\n"+ascii.slice(0,12000)};
   }else pending={name:f.name,text:(await f.text()).slice(0,18000)};
-  $("#file").style.display="block";$("#file").innerHTML=`<div>📎 ${escapeHtml(pending.name)} <b id="rmf" style="cursor:pointer">✕</b></div>`;
+  $("#file").style.display="block";$("#file").innerHTML=`<div>${escapeHtml(pending.name)} <b id="rmf" style="cursor:pointer">✕</b></div>`;
   $("#rmf").onclick=()=>{pending=null;$("#file").style.display="none"};
 };
 
@@ -1704,10 +1689,10 @@ async function gemini(msgs,model,onTok){
     return t;
   }finally{clearTimeout(to)}
 }
-$("#gkBtn").onclick=()=>{const k=prompt("Custom Gemini API Key (leave blank for built-in):",localStorage.agi_gk||"");if(k!==null){k.trim()?localStorage.agi_gk=k.trim():localStorage.removeItem("agi_gk");toast("Saved ✔")}};
+$("#gkBtn").onclick=()=>{const k=prompt("Custom Gemini API Key (leave blank for built-in):",localStorage.agi_gk||"");if(k!==null){k.trim()?localStorage.agi_gk=k.trim():localStorage.removeItem("agi_gk");toast("Saved")}};
 $("#bak").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="backup.json";a.click()};
 $("#rst").onclick=()=>$("#rfin").click();
-$("#rfin").onchange=async e=>{try{S=Object.assign(S,JSON.parse(await e.target.files[0].text()));save();renderAll();drawList();toast("Restored ✔")}catch(_){}};
+$("#rfin").onchange=async e=>{try{S=Object.assign(S,JSON.parse(await e.target.files[0].text()));save();renderAll();drawList();toast("Restored")}catch(_){}};
 
 window.addEventListener("load",()=>{
   if(location.hash.startsWith("#prompt=")){
@@ -1722,4 +1707,4 @@ if(S.cur&&cur())openChat(S.cur);else{hello();drawList()}
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body>
-        </html>
+          </html>
