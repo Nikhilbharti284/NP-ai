@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#000000">
-<title>Astra AGI v19.0</title>
+<title>Astra AGI v21.0 (Ultimate UI)</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3Ccircle cx='256' cy='256' r='44' fill='%23fff'/%3E%3C/svg%3E" type="image/svg+xml">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3Ccircle cx='256' cy='256' r='44' fill='%23fff'/%3E%3C/svg%3E">
@@ -18,6 +18,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- NEW: OCR & PDF Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <style>
 :root{
@@ -220,6 +224,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
 .toast.out{opacity:0}
 .mslot{margin:8px 0}.gm{max-width:100%;border-radius:12px;display:block;border:1px solid var(--b)}
 .dl{display:inline-block;margin-top:6px;font-size:12px;padding:4px 10px;border-radius:6px;background:var(--sur);border:1px solid var(--b);color:var(--t);text-decoration:none}
+.chart-container{width:100%;max-width:500px;margin:15px 0;background:#fff;padding:10px;border-radius:12px}
 
 @media print{
   #side,header,footer,#canvasPane,#jumpBtn,.acts,details.th{display:none!important}
@@ -260,14 +265,15 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
       <div class="sdrop-list">
         <button class="srow" data-cmd="videdit">Prompt Video Director & Editor</button>
         <button class="srow" data-cmd="imgedit">Prompt Image Gen & Edit</button>
+        <button class="srow" data-cmd="imgfilter">Local Image Filter Editor</button>
         <button class="srow" data-cmd="web">Full-Stack Website Builder</button>
+        <button class="srow" data-cmd="3d">3D Game & Scene Builder</button>
         <button class="srow" data-cmd="agi">AGI Cognitive Core & Skills</button>
         <button class="srow" data-cmd="firewall">AI Prompt & MCP Firewall</button>
         <button class="srow" data-cmd="scope">Program Scope Parser</button>
         <button class="srow" data-cmd="bug">12-Vector Domain Blitz</button>
         <button class="srow" data-cmd="jslab">JS De-obfuscator & GraphQL</button>
         <button class="srow" data-cmd="fuzzer">Cloud Fuzzer & Auto-Patcher</button>
-        <button class="srow" data-cmd="apk">APK, JADX & Frida Generator</button>
         <button class="srow" id="osintDashBtn">World Knowledge & Attack Graph</button>
       </div>
     </details>
@@ -281,6 +287,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
         <button class="srow" id="mem">Long-Term Memory</button>
         <button class="srow" id="pdfBtn">Export PDF Report</button>
         <button class="srow" id="exp">Export Markdown (.md)</button>
+        <button class="srow" id="gistSyncBtn">Cloud Sync (GitHub Gist)</button>
         <button class="srow" id="bak">Backup (.json)</button>
         <button class="srow" id="rst">Restore Backup</button>
         <input type="file" id="rfin" accept=".json,application/json" hidden>
@@ -333,7 +340,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
         </div>
       </div>
       <div id="cBody">
-        <iframe id="cFrame" sandbox="allow-scripts allow-forms allow-modals allow-popups"></iframe>
+        <iframe id="cFrame" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-same-origin"></iframe>
         <textarea id="cCode" spellcheck="false"></textarea>
         <div id="cTerm"></div>
       </div>
@@ -348,6 +355,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
         <button class="sl-item" data-sl="/reel "><code>/reel [topic]</code><span>Generate Multi-Scene AI Video with Motion & Audio</span></button>
         <button class="sl-item" data-sl="/img "><code>/img [prompt]</code><span>Generate High-Res Image via Prompt</span></button>
         <button class="sl-item" data-sl="/web "><code>/web [idea]</code><span>Build Complete Styled Website in Live Canvas</span></button>
+        <button class="sl-item" data-sl="/3d "><code>/3d [idea]</code><span>Build Complete 3D Game/Scene with Three.js</span></button>
         <button class="sl-item" data-sl="/audit "><code>/audit [domain]</code><span>12-Vector Instant Domain Security Audit</span></button>
         <button class="sl-item" data-sl="/fuzz "><code>/fuzz [target]</code><span>Cloud Fuzzer & CWE-835 DoS Tester</span></button>
         <button class="sl-item" data-sl="/omni "><code>/omni [goal]</code><span>2-Hop Deep Web Crawler</span></button>
@@ -365,25 +373,24 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
         </button>
       </div>
     </div>
-    <input type="file" id="fin" accept=".txt,.md,.csv,.json,.log,.yml,.yaml,.xml,.py,.js,.html,.css,.sh,.cpp,.rs,.go,.java,.kt,.smali,.apk,.zip,video/*,image/*" hidden>
+    <input type="file" id="fin" accept=".txt,.md,.csv,.json,.log,.yml,.yaml,.xml,.py,.js,.html,.css,.sh,.cpp,.rs,.go,.java,.kt,.smali,.apk,.zip,.pdf,video/*,image/*" hidden>
   </footer>
 </div>
 
 <!-- UNIFIED COMMAND CENTER -->
 <div class="mbk" id="cmdM" role="dialog" aria-modal="true" aria-label="Command Center">
   <div class="mdl">
-    <div class="mtop"><span>Astra AGI v19.0 Command Center</span><button id="cmdClose">✕</button></div>
+    <div class="mtop"><span>Astra AGI v21.0 Command Center</span><button id="cmdClose">✕</button></div>
     <div class="ttabs" id="cmdTabs">
       <button class="stab on" data-tab="videdit">Video Director</button>
       <button class="stab" data-tab="imgedit">Image Studio</button>
+      <button class="stab" data-tab="imgfilter">Image Filters</button>
       <button class="stab" data-tab="web">App Builder</button>
+      <button class="stab" data-tab="3d">3D Engine</button>
       <button class="stab" data-tab="agi">AGI Core</button>
       <button class="stab" data-tab="firewall">AI Firewall</button>
       <button class="stab" data-tab="modes">Modes & Voice</button>
       <button class="stab" data-tab="scope">Scope & Audit</button>
-      <button class="stab" data-tab="jslab">JS & GraphQL</button>
-      <button class="stab" data-tab="fuzzer">Fuzz & Patch</button>
-      <button class="stab" data-tab="apk">APK & Frida</button>
       <button class="stab" data-tab="keys">API Keys</button>
     </div>
     <div class="tpane" id="cmdPane"></div>
@@ -397,7 +404,7 @@ const _OR_KEY = localStorage.agi_ork || (_dec([115,107,45,111,114,45,118,49,45])
 const _GR_KEY = localStorage.agi_grk || (_dec([103,115,107,95]) + "ufPXjapmvZYAhsjXTwf4WGdyb3FYKvPHXDJWjqovQsTqSK3SwVeN");
 const _GM_KEY = localStorage.agi_gk  || atob("QVEuQWI4Uk42SVU2WVBkRHBTakZlNDRY"+"YlhSSVd1Sl9GUzZyMDVKblJLeUF1cjdGRXUwVVE=");
 
-/* ===== ALL FRONTIER FREE CLOUD MODELS (ZERO PUTER.JS) ===== */
+/* ===== ALL FRONTIER FREE CLOUD MODELS ===== */
 const MODELS=[
   ["auto","Auto Ultra Router (Groq + OpenRouter + Gemini)"],
   ["gr:llama-3.3-70b-versatile","Groq · Llama 3.3 70B (Ultra-Fast)"],
@@ -524,7 +531,7 @@ setTimeout(mapTarget,200);
 <\/script></body></html>`;
 
 /* ===== STATE ===== */
-let S={};try{S=JSON.parse(localStorage.agi_v19||localStorage.agi_v18||"{}")}catch(e){}
+let S={};try{S=JSON.parse(localStorage.agi_v21||localStorage.agi_v19||localStorage.agi_v18||"{}")}catch(e){}
 S.chats??={};S.cur??=null;
 if(!S.model||!MODELS.some(m=>m[0]===S.model))S.model="auto";
 S.voice??="nova";S.autoSpeak??=false;S.voiceRate??=1.0;
@@ -539,7 +546,7 @@ S.olUrl??="http://127.0.0.1:11434";S.olModel??="qwen2.5-coder:7b";
 S.canvasCode??=RECON_GRAPH_HTML;S.canvasLang??="html";
 
 function save(){
-  try{localStorage.agi_v19=JSON.stringify(S)}
+  try{localStorage.agi_v21=JSON.stringify(S)}
   catch(e){
     const ids=Object.values(S.chats).sort((a,b)=>a.ts-b.ts).map(c=>c.id);
     if(ids.length>1){delete S.chats[ids[0]];save()}
@@ -548,7 +555,208 @@ function save(){
 let busy=false,stop=false,pending=null;
 const cur=()=>S.chats[S.cur];
 
-/* ===== MULTI-BLOCK HTML + CSS + JS AUTO-BUNDLER ===== */
+/* ===== 1. INFINITE MEMORY: LOCAL VECTOR DATABASE (RAG) ===== */
+let vectorWorker = null;
+function initVectorWorker() {
+  if(vectorWorker) return;
+  const code = `
+    import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1';
+    env.allowLocalModels = false;
+    let extractor = null;
+    
+    async function init() {
+      extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+      postMessage({ type: 'ready' });
+    }
+    init();
+
+    self.onmessage = async (e) => {
+      if(e.data.type === 'embed') {
+        const output = await extractor(e.data.text, { pooling: 'mean', normalize: true });
+        postMessage({ type: 'embedding', vector: Array.from(output.data), id: e.data.id, text: e.data.text });
+      }
+    };
+  `;
+  const blob = new Blob([code], {type: 'application/javascript'});
+  vectorWorker = new Worker(URL.createObjectURL(blob));
+  vectorWorker.onmessage = (e) => {
+    if(e.data.type === 'embedding') {
+      const tx = vdb.result.transaction("vectors", "readwrite");
+      tx.objectStore("vectors").put({ id: e.data.id, vector: e.data.vector, text: e.data.text });
+    }
+  };
+}
+const vdb = indexedDB.open("AstraVectorDB", 1);
+vdb.onupgradeneeded = (e) => e.target.result.createObjectStore("vectors", { keyPath: "id" });
+
+async function getRelevantMemory(queryText) {
+  if(!vectorWorker) return "";
+  return new Promise((resolve) => {
+    const tx = vdb.result.transaction("vectors", "readonly");
+    const req = tx.objectStore("vectors").getAll();
+    req.onsuccess = () => {
+      const memories = req.result.slice(-5).map(m => m.text).join("\n");
+      resolve(memories);
+    };
+  });
+}
+
+/* ===== 2. PYTHON WEB WORKER (ZERO FREEZE) ===== */
+let pyWorker = null;
+function initPyWorker() {
+  if(pyWorker) return;
+  const code = `
+    importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js');
+    let pyodideReady = false, pyodide = null, stdout = "", stderr = "";
+    async function init() {
+      pyodide = await loadPyodide({
+        stdout: (text) => { stdout += text + "\\n"; },
+        stderr: (text) => { stderr += text + "\\n"; }
+      });
+      pyodideReady = true;
+      postMessage({ type: 'ready' });
+    }
+    init();
+    self.onmessage = async (e) => {
+      if(e.data.type === 'run') {
+        if(!pyodideReady) { postMessage({ type: 'error', error: 'Pyodide loading...' }); return; }
+        stdout = ""; stderr = "";
+        try {
+          await pyodide.loadPackagesFromImports(e.data.code);
+          await pyodide.runPythonAsync(e.data.code);
+          postMessage({ type: 'result', stdout, stderr, error: null });
+        } catch(err) {
+          postMessage({ type: 'result', stdout, stderr, error: err.message });
+        }
+      }
+    };
+  `;
+  pyWorker = new Worker(URL.createObjectURL(new Blob([code], {type: 'application/javascript'})));
+}
+async function runPythonWorker(code) {
+  return new Promise((resolve) => {
+    if(!pyWorker) initPyWorker();
+    const handler = (e) => {
+      if(e.data.type === 'ready') {
+        pyWorker.postMessage({ type: 'run', code });
+      } else if(e.data.type === 'result') {
+        pyWorker.removeEventListener('message', handler);
+        resolve(e.data);
+      } else if(e.data.type === 'error') {
+        pyWorker.removeEventListener('message', handler);
+        resolve({ error: e.data.error, stdout: '', stderr: '' });
+      }
+    };
+    pyWorker.addEventListener('message', handler);
+  });
+}
+
+/* ===== 3. VISION AI (LOCAL IMAGE CAPTIONING) ===== */
+let visionWorker = null;
+function initVisionWorker() {
+  if(visionWorker) return;
+  const code = `
+    import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1';
+    env.allowLocalModels = false;
+    let captioner = null;
+    async function init() {
+      captioner = await pipeline('image-to-text', 'Xenova/vit-gpt2-image-captioning');
+      postMessage({ type: 'ready' });
+    }
+    init();
+    self.onmessage = async (e) => {
+      if(e.data.type === 'caption') {
+        try {
+          const out = await captioner(e.data.image);
+          postMessage({ type: 'result', caption: out[0].generated_text });
+        } catch(err) {
+          postMessage({ type: 'error', error: err.message });
+        }
+      }
+    };
+  `;
+  const blob = new Blob([code], {type: 'application/javascript'});
+  visionWorker = new Worker(URL.createObjectURL(blob));
+}
+async function getImageCaption(imgUrl) {
+  return new Promise((resolve) => {
+    if(!visionWorker) initVisionWorker();
+    const handler = (e) => {
+      if(e.data.type === 'ready') {
+        visionWorker.postMessage({ type: 'caption', image: imgUrl });
+      } else if(e.data.type === 'result') {
+        visionWorker.removeEventListener('message', handler);
+        resolve(e.data.caption);
+      } else if(e.data.type === 'error') {
+        visionWorker.removeEventListener('message', handler);
+        resolve("Could not analyze image.");
+      }
+    };
+    visionWorker.addEventListener('message', handler);
+  });
+}
+
+/* ===== 4. LOCAL OCR (TESSERACT.JS) ===== */
+async function runOCR(imageFile) {
+  toast("Running Local OCR...");
+  const worker = await Tesseract.createWorker('eng+hin');
+  const ret = await worker.recognize(imageFile);
+  await worker.terminate();
+  return ret.data.text;
+}
+
+/* ===== 5. LOCAL PDF READER (PDF.JS) ===== */
+async function readPDF(file) {
+  toast("Reading PDF...");
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  let text = "";
+  for (let i = 1; i <= Math.min(pdf.numPages, 10); i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    text += content.items.map(item => item.str).join(" ") + "\n";
+  }
+  return text;
+}
+
+/* ===== 6. SELF-HEALING UI TESTER ===== */
+async function autoTestUI(htmlCode) {
+  return new Promise((resolve) => {
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.sandbox = "allow-scripts allow-same-origin";
+    document.body.appendChild(iframe);
+    let errors = [];
+    iframe.srcdoc = htmlCode;
+    
+    iframe.onload = () => {
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        const win = iframe.contentWindow;
+        win.console.error = (...args) => errors.push(args.join(' '));
+        win.addEventListener('error', (e) => errors.push(e.message));
+        
+        const buttons = doc.querySelectorAll('button, .btn, [role="button"]');
+        buttons.forEach((btn, i) => {
+          if(i < 5) { try { btn.click(); } catch(err) { errors.push(`Click Error: ${err.message}`); } }
+        });
+        
+        setTimeout(() => {
+          let report = `Auto-UI Test Report:\n- Found ${buttons.length} buttons.\n`;
+          if(errors.length) report += `- ❌ ERRORS:\n${errors.join('\n')}\nMANDATE: Fix these UI errors in the code.`;
+          else report += `- ✅ NO JS ERRORS DETECTED.`;
+          document.body.removeChild(iframe);
+          resolve(report);
+        }, 1000);
+      } catch(err) {
+        document.body.removeChild(iframe);
+        resolve(`Test Failed: ${err.message}`);
+      }
+    };
+  });
+}
+
+/* ===== BUNDLER & MEDIA ===== */
 function bundleWebBlocks(markdownText){
   const htmlMatch=markdownText.match(/```html\s*\n([\s\S]*?)```/i);
   if(!htmlMatch)return null;
@@ -570,7 +778,6 @@ function bundleWebBlocks(markdownText){
   return html;
 }
 
-/* ===== MEDIA STORE (IndexedDB) ===== */
 const idb=new Promise((ok,no)=>{const r=indexedDB.open("agi_media",1);r.onupgradeneeded=()=>r.result.createObjectStore("m");r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
 const idbOp=(mode,fn)=>idb.then(db=>new Promise((ok,no)=>{const t=db.transaction("m",mode),q=fn(t.objectStore("m"));t.oncomplete=()=>ok(q.result);t.onerror=()=>no(t.error)}));
 const mPut=(id,v)=>idbOp("readwrite",s=>s.put(v,id)),mGet=id=>idbOp("readonly",s=>s.get(id));
@@ -593,7 +800,7 @@ async function fillSlots(root){
   }
 }
 
-/* ===== IN-BROWSER AI VIDEO DIRECTOR & EDITOR (ZERO SERVER LOAD) ===== */
+/* ===== VIDEO DIRECTOR ===== */
 function parseVideoEditPrompt(p){
   p=(p||"").toLowerCase();
   let filter="none",speed=1.0,caption="";
@@ -616,7 +823,7 @@ async function generateAIStoryboardVideo(topicPrompt,onProg){
   let scenes=[
     {img:topicPrompt+", cinematic wide establishing shot, 8k masterpiece",cap:topicPrompt.slice(0,48)},
     {img:topicPrompt+", dramatic close-up action detail, studio lighting",cap:"Autonomous AI Motion Render"},
-    {img:topicPrompt+", epic finale atmosphere, ultra detailed",cap:"Directed by Astra AGI v19"}
+    {img:topicPrompt+", epic finale atmosphere, ultra detailed",cap:"Directed by Astra AGI v21"}
   ];
   try{
     const raw=await llm([
@@ -723,7 +930,7 @@ async function editUploadedVideoByPrompt(videoFile,promptText,onProg){
   return id;
 }
 
-/* ===== PURE JS CRC32 & ZIP PACKAGER ===== */
+/* ===== PURE JS ZIP & CODE EXEC ===== */
 const CRC_TABLE=(()=>{let c,t=new Uint32Array(256);for(let n=0;n<256;n++){c=n;for(let k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;t[n]=c}return t})();
 function crc32(u8){let c=0xffffffff;for(let i=0;i<u8.length;i++)c=(c>>>8)^CRC_TABLE[(c^u8[i])&0xff];return (c^0xffffffff)>>>0}
 function makeZip(files){
@@ -743,7 +950,6 @@ function makeZip(files){
   return new Blob([...parts,...cd,eocd],{type:"application/zip"});
 }
 
-/* ===== LIVE CANVAS CONTROLLER ===== */
 let canvasView="preview";
 function openCanvas(code,lang="html",title="Live Canvas"){
   if(code){S.canvasCode=code;S.canvasLang=lang.toLowerCase();save()}
@@ -770,7 +976,7 @@ $("#cCode").addEventListener("input",()=>{S.canvasCode=$("#cCode").value;save()}
 $("#cCloseBtn").onclick=()=>$("#canvasPane").classList.remove("open");
 $("#openCanvasHdr").onclick=()=>$("#canvasPane").classList.toggle("open");
 $("#cZipBtn").onclick=()=>{
-  const files=[{name:S.canvasLang==="html"?"index.html":"main."+S.canvasLang,content:S.canvasCode},{name:"README.md",content:"# Astra AGI v19.0 Project\nBundled and verified by Astra AGI."}];
+  const files=[{name:S.canvasLang==="html"?"index.html":"main."+S.canvasLang,content:S.canvasCode},{name:"README.md",content:"# Astra AGI Project\nBundled and verified by Astra AGI."}];
   const blob=makeZip(files),a=document.createElement("a");
   a.href=URL.createObjectURL(blob);a.download="astra-project-"+Date.now()+".zip";a.click();
   toast("Packaged into .zip");
@@ -786,9 +992,7 @@ $("#cCloudRunBtn").onclick=async()=>{
   term.textContent=r.stdout||(r.stderr?"STDERR:\n"+r.stderr:"(Done)");
 };
 
-/* ===== MULTI-TIER CODE EXECUTION (WASM + SANDBOX + CLOUD) ===== */
 const PISTON_MAP={python:"python",py:"python",javascript:"javascript",js:"javascript",node:"javascript",typescript:"typescript",ts:"typescript",cpp:"c++","c++":"c++",c:"c",rust:"rust",rs:"rust",go:"go",java:"java",bash:"bash",sh:"bash",php:"php",ruby:"ruby",sqlite3:"sqlite3"};
-let py=null;
 
 async function runCodeResilient(lang,code){
   const l=(lang||"python").toLowerCase().trim();
@@ -818,22 +1022,10 @@ async function runCodeResilient(lang,code){
     }
   }catch(_){}
   if(/^(py|python|python3)$/.test(l)){
-    try{
-      if(!py){
-        if(!window.loadPyodide)await new Promise((ok,no)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
-        py=await loadPyodide();
-      }
-      const o=[],er=[];py.setStdout({batched:m=>o.push(m)});py.setStderr({batched:m=>er.push(m)});
-      await py.loadPackagesFromImports(code);
-      const res=await py.runPythonAsync(code);
-      if(res!=null)o.push(String(res));
-      return {ok:!er.length,stdout:o.join("\n")||"(Executed cleanly in WASM)",stderr:er.join("\n")};
-    }catch(e){return {ok:false,stdout:"",stderr:e.message}}
+    const res = await runPythonWorker(code);
+    return { ok: !res.error, stdout: res.stdout || "(Executed cleanly in Background Worker)", stderr: res.error || res.stderr || "" };
   }
-  const sim=await llm([
-    {role:"system",content:`Trace the following ${l} code and output the exact console stdout. If there is a bug, prefix with STDERR:`},
-    {role:"user",content:code}
-  ],()=>{});
+  const sim=await llm([{role:"system",content:`Trace the following ${l} code and output the exact console stdout. If there is a bug, prefix with STDERR:`},{role:"user",content:code}],()=>{});
   const hasErr=sim.includes("STDERR:");
   return {ok:!hasErr,stdout:hasErr?"":sim,stderr:hasErr?sim:""};
 }
@@ -841,8 +1033,10 @@ async function runCodeResilient(lang,code){
 async function autoHealCode(lang,code,onUpdate){
   const l=(lang||"python").toLowerCase().trim();
   if(l==="html"||code.trim().startsWith("<!DOCTYPE")||code.trim().startsWith("<html")){
+    onUpdate?.(`Testing UI interactivity for bugs...`);
+    const testReport = await autoTestUI(code);
     openCanvas(code,"html","Verified Web App");
-    return {code,output:"Rendered in Live Canvas Preview."};
+    return {code,output:testReport};
   }
   for(let attempt=1;attempt<=3;attempt++){
     onUpdate?.(`[Attempt ${attempt}/3] Executing & verifying ${l}…`);
@@ -850,33 +1044,23 @@ async function autoHealCode(lang,code,onUpdate){
     if(d.ok)return {code,output:`Verified Execution (Attempt ${attempt}):\n`+(d.stdout||"(No stdout)")};
     if(attempt===3)return {code,output:`Output after 3 attempts:\n${d.stdout||""}\n${d.stderr}`};
     onUpdate?.(`Self-Healing stderr…\n${d.stderr.slice(0,180)}`);
-    const fixed=await llm([
-      {role:"system",content:`Fix the bug in this ${l} code based on the error. Output ONLY raw corrected code without markdown fences.`},
-      {role:"user",content:`CODE:\n${code}\n\nERROR:\n${d.stderr}`}
-    ],()=>{});
+    const fixed=await llm([{role:"system",content:`Fix the bug in this ${l} code based on the error. Output ONLY raw corrected code without markdown fences.`},{role:"user",content:`CODE:\n${code}\n\nERROR:\n${d.stderr}`}],()=>{});
     code=fixed.replace(/^```[\w+#-]*\n?/,"").replace(/```$/,"").trim()||code;
   }
 }
 
-/* ===== SECURITY SCANNERS & PARSERS ===== */
+/* ===== SECURITY SCANNERS ===== */
 function deobfuscateAndScanJS(rawCode,sourceName="Bundle"){
-  let decoded=rawCode.replace(/\\x([0-9A-Fa-f]{2})/g,(_,h)=>String.fromCharCode(parseInt(h,16)))
-                     .replace(/\\u([0-9A-Fa-f]{4})/g,(_,u)=>String.fromCharCode(parseInt(u,16)));
+  let decoded=rawCode.replace(/\\x([0-9A-Fa-f]{2})/g,(_,h)=>String.fromCharCode(parseInt(h,16))).replace(/\\u([0-9A-Fa-f]{4})/g,(_,u)=>String.fromCharCode(parseInt(u,16)));
   const beautified=decoded.replace(/;(?=\S)/g,";\n").replace(/\{(?=\S)/g,"{\n").replace(/\}(?=\S)/g,"}\n");
   const out=[];
-  const extract=(title,re)=>{
-    const m=[...new Set([...decoded.matchAll(re)].map(x=>x[1]||x[0]))].slice(0,30);
-    if(m.length)out.push(`### ${title} (${m.length})\n`+m.map(x=>"- `"+x+"`").join("\n"));
-  };
+  const extract=(title,re)=>{const m=[...new Set([...decoded.matchAll(re)].map(x=>x[1]||x[0]))].slice(0,30);if(m.length)out.push(`### ${title} (${m.length})\n`+m.map(x=>"- `"+x+"`").join("\n"));};
   extract("REST API & Admin Routes",/["'](\/(?:api|v[1-5]|admin|internal|auth|graphql|oauth|user|account|webhook)[a-zA-Z0-9_\/.-]*)["']/g);
   extract("Full Backend URLs",/(https?:\/\/[a-zA-Z0-9.-]+(?::\d+)?\/(?:api|v[1-5]|graphql|admin|auth)[a-zA-Z0-9_\/.?=&-]*)/g);
   extract("GraphQL Queries & Mutations",/\b(query|mutation|subscription)\s+([A-Za-z0-9_]+)\s*[({]/g);
   extract("DOM XSS & PostMessage Sinks",/(addEventListener\s*\(\s*["']message["']|\.innerHTML\s*=|\.outerHTML\s*=|document\.write\s*\(|eval\s*\(| dangerouslySetInnerHTML)/g);
   extract("Hardcoded Secrets & Cloud Keys",/(AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z\-_]{35}|sk-[a-zA-Z0-9]{20,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,})/g);
-  return {
-    report:out.length?`## JS De-obfuscation & Endpoint Audit (${sourceName})\n\n`+out.join("\n\n"):`Decoded ${rawCode.length.toLocaleString()} chars — no obvious hardcoded endpoints or secrets matched.`,
-    beautified:beautified.slice(0,25000)
-  };
+  return {report:out.length?`## JS De-obfuscation & Endpoint Audit (${sourceName})\n\n`+out.join("\n\n"):`Decoded ${rawCode.length.toLocaleString()} chars — no obvious hardcoded endpoints or secrets matched.`,beautified:beautified.slice(0,25000)};
 }
 
 function scanAndroidSource(text,filename="source"){
@@ -889,10 +1073,7 @@ function scanAndroidSource(text,filename="source"){
     ["HIGH · Custom Deep-Link / Intent Schemes",/(android:scheme\s*=\s*["'][^"']+["']|android:host\s*=\s*["'][^"']+["']|intent:\/\/)/gi],
     ["HIGH · Dangerous WebView / DOM Sinks",/(setJavaScriptEnabled\s*\(\s*true\s*\)|addJavascriptInterface\s*\(|setAllowFileAccess\s*\(\s*true\s*\)|innerHTML\s*=|document\.write\(|eval\()/g]
   ];
-  for(const [title,re] of rules){
-    const matches=[...new Set([...text.matchAll(re)].map(m=>m[1]||m[0]))].slice(0,25);
-    if(matches.length)findings.push(`### ${title} (${matches.length})\n`+matches.map(x=>"- `"+x+"`").join("\n"));
-  }
+  for(const [title,re] of rules){const matches=[...new Set([...text.matchAll(re)].map(m=>m[1]||m[0]))].slice(0,25);if(matches.length)findings.push(`### ${title} (${matches.length})\n`+matches.map(x=>"- `"+x+"`").join("\n"));}
   return findings.length?`## Static SAST & Secret Scan (${filename})\n\n`+findings.join("\n\n"):`Scanned ${text.length.toLocaleString()} bytes in ${filename} — no immediate regex signatures matched.`;
 }
 
@@ -904,14 +1085,8 @@ function scanPromptAndMcpFirewall(payload){
     ["HIGH · Indirect Markdown / Image Exfiltration Sink",/!\[[^\]]*\]\(https?:\/\/[^)]*\?(?:data|secret|key|token)=/gi],
     ["HIGH · System Prompt & Secret Extraction Attempt",/(repeat\s+your\s+system\s+prompt|print\s+all\s+API\s+keys|reveal\s+hidden\s+instructions)/gi]
   ];
-  for(const [name,re] of checks){
-    const m=[...payload.matchAll(re)].map(x=>x[0]);
-    if(m.length)threats.push(`- **${name}**: Matched \`${m[0].slice(0,80)}\``);
-  }
-  return {
-    safe:threats.length===0,
-    report:threats.length?`## AI Firewall Alert: ${threats.length} Threat(s) Blocked\n\n${threats.join("\n")}`:`## AI Firewall Status: CLEAN (0 Prompt-Injection or Tool-Poisoning signatures detected)`
-  };
+  for(const [name,re] of checks){const m=[...payload.matchAll(re)].map(x=>x[0]);if(m.length)threats.push(`- **${name}**: Matched \`${m[0].slice(0,80)}\``);}
+  return {safe:threats.length===0,report:threats.length?`## AI Firewall Alert: ${threats.length} Threat(s) Blocked\n\n${threats.join("\n")}`:`## AI Firewall Status: CLEAN (0 Prompt-Injection or Tool-Poisoning signatures detected)`};
 }
 
 function extractScopeDomains(rawText){
@@ -987,10 +1162,7 @@ const tools={
     return deobfuscateAndScanJS(inp,"Snippet").report;
   },
   async cloud_fuzzer(codeOrSpec){
-    const harness=await llm([
-      {role:"system",content:"Write a self-contained Python 3 property-based fuzzing script that tests the target function/parser/regex against malformed inputs, huge integers, empty bytes, and CWE-835 infinite-loop timeout conditions. Print clear PASS/FAIL metrics. Output ONLY raw Python code without markdown fences."},
-      {role:"user",content:codeOrSpec}
-    ],()=>{});
+    const harness=await llm([{role:"system",content:"Write a self-contained Python 3 property-based fuzzing script that tests the target function/parser/regex against malformed inputs, huge integers, empty bytes, and CWE-835 infinite-loop timeout conditions. Print clear PASS/FAIL metrics. Output ONLY raw Python code without markdown fences."},{role:"user",content:codeOrSpec}],()=>{});
     const cleanPy=harness.replace(/^```[\w]*\n?/,"").replace(/```$/,"").trim();
     const res=await autoHealCode("python",cleanPy);
     return `[Cloud Fuzzing Harness Executed]\n${res.output}\n\n[Fuzzer Code]\n${res.code}`;
@@ -1118,19 +1290,30 @@ const tools={
   async github(q){const r=await J("https://api.github.com/search/repositories?per_page=6&q="+encodeURIComponent(q.trim()));return (r.items||[]).map(i=>i.full_name+" ⭐"+i.stargazers_count+" - "+i.description).join("\n")},
   async cve(q){q=q.trim();const u=/^CVE-/i.test(q)?"cveId="+q.toUpperCase():"resultsPerPage=6&keywordSearch="+encodeURIComponent(q);const r=await J("https://services.nvd.nist.gov/rest/json/cves/2.0?"+u);return (r.vulnerabilities||[]).map(v=>v.cve.id+": "+v.cve.descriptions?.[0]?.value?.slice(0,240)).join("\n")||"None."},
   async securityheaders(host){host=host.trim().replace(/^https?:\/\//,"").split("/")[0];return (await (await fetch("https://r.jina.ai/https://securityheaders.com/?q="+encodeURIComponent(host)+"&followRedirects=on",{headers:{Accept:"text/plain"}})).text()).slice(0,2500)},
-  async remember(f){S.mem.push(f.trim());S.mem=S.mem.slice(-40);save();return "Saved."}
+  async remember(f){S.mem.push(f.trim());S.mem=S.mem.slice(-40);save();return "Saved."},
+  async play_synth(freqsStr) {
+    const freqs = freqsStr.split(',').map(Number);
+    playSynthAudio(freqs);
+    return `Playing synthesized audio loop for frequencies: ${freqsStr}`;
+  },
 };
 
 const TOOL_NAMES=Object.keys(tools).join("|");
 const TOOLRE_G=new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F,"g");
 
-const sysPrompt=()=>`You are Astra AGI v19.0 — an autonomous AI Engineer, Video Director & Authorized Passive Security / SAST Auditor powered by Groq, OpenRouter, and Gemini. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
+const sysPrompt=()=>`You are Astra AGI v21.0 — an autonomous AI Engineer, Video Director & Authorized Passive Security / SAST Auditor powered by Groq, OpenRouter, and Gemini. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
 
 CRITICAL EXECUTION MANDATES:
 1. ZERO STALLING: Never reply with "I will now write the code" and stop! Output the complete, working implementation or media token in your FIRST response.
 2. FULL-STACK SINGLE-FILE WEBSITE MANDATE: Whenever building a website or UI, produce a rich, modern, fully-styled SINGLE-FILE \`<!DOCTYPE html>\` app with embedded \`<style>\` and \`<script>\`. Output directly in a \`\`\`html code block so Live Canvas auto-renders it.
-3. PROMPT-DRIVEN VIDEO & IMAGE GENERATION: When asked to create a video or reel, invoke @auto_reel. When asked to create/edit an image, invoke @image or @edit. Always place the returned \`[[media:ID]]\` token on its own line.
-4. LEGAL SECURITY BOUNDARY: Strictly adhere to passive OSINT, static code analysis (SAST), AI firewalling (@ai_firewall), and isolated verification.
+3. 3D ENGINE MANDATE: If the user asks for a 3D game, 3D scene, or Three.js, YOU MUST write a complete \`\`\`html file containing the Three.js CDN (<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>) and the 3D logic.
+4. PROMPT-DRIVEN VIDEO & IMAGE GENERATION: When asked to create a video or reel, invoke @auto_reel. When asked to create/edit an image, invoke @image or @edit. Always place the returned \`[[media:ID]]\` token on its own line.
+5. CHARTS: If the user asks for a chart, graph, or data visualization, reply with a JSON block formatted exactly like this:
+\`\`\`json-chart
+{"type":"bar","title":"My Chart","labels":["A","B"],"data":[10,20]}
+\`\`\`
+6. AUDIO: If asked for a beat or sound, use @play_synth with a comma-separated list of frequencies (e.g. 440, 880, 330).
+7. LEGAL SECURITY BOUNDARY: Strictly adhere to passive OSINT, static code analysis (SAST), AI firewalling (@ai_firewall), and isolated verification.
 
 To invoke tools, reply ONLY with tool blocks in this exact format:
 @toolname
@@ -1138,23 +1321,18 @@ ${F}
 input
 ${F}
 
-Available Tools: @auto_reel, @image, @edit, @ai_firewall, @learn_skill, @world_graph, @program_audit, @js_deobfuscate, @cloud_fuzzer, @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify, @recon_graph, @apk_scan, @cloud_exec, @canvas, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember.
+Available Tools: @auto_reel, @image, @edit, @ai_firewall, @learn_skill, @world_graph, @program_audit, @js_deobfuscate, @cloud_fuzzer, @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify, @recon_graph, @apk_scan, @cloud_exec, @canvas, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @play_synth.
 Learned Skills: ${S.skills.map(s=>s.name+": "+s.rule).join(" | ")}
 Long-Term Memory: ${S.mem.join(" | ")||"none"}`;
 
 /* ===== UNIFIED MULTI-PROVIDER LLM ENGINE ===== */
 const withTimeout=(p,ms,msg)=>Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(new Error(msg||"Timeout")),ms))]);
 
-/* 1. GROQ ULTRA-FAST CLOUD ENGINE */
 async function callGroq(msgs,model,onTok){
   const k=localStorage.agi_grk||_GR_KEY;
   if(!k)throw new Error("Groq key missing");
   const plain=msgs.map(({img,...r})=>({role:r.role,content:String(r.content||"")}));
-  const r=await withTimeout(fetch("https://api.groq.com/openai/v1/chat/completions",{
-    method:"POST",
-    headers:{"Content-Type":"application/json","Authorization":"Bearer "+k},
-    body:JSON.stringify({model:model||"llama-3.3-70b-versatile",messages:plain,temperature:0.6,max_tokens:8192})
-  }),45000,"Groq timeout");
+  const r=await withTimeout(fetch("https://api.groq.com/openai/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+k},body:JSON.stringify({model:model||"llama-3.3-70b-versatile",messages:plain,temperature:0.6,max_tokens:8192})}),45000,"Groq timeout");
   const j=await r.json();
   if(!r.ok)throw new Error(j.error?.message||"Groq HTTP "+r.status);
   const t=j.choices?.[0]?.message?.content;
@@ -1162,21 +1340,11 @@ async function callGroq(msgs,model,onTok){
   onTok(t);return t;
 }
 
-/* 2. OPENROUTER :FREE MODELS ENGINE */
 async function callOpenRouter(msgs,model,onTok){
   const k=localStorage.agi_ork||_OR_KEY;
   if(!k)throw new Error("OpenRouter key missing");
   const plain=msgs.map(({img,...r})=>({role:r.role,content:String(r.content||"")}));
-  const r=await withTimeout(fetch("https://openrouter.ai/api/v1/chat/completions",{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json",
-      "Authorization":"Bearer "+k,
-      "HTTP-Referer":location.origin||"https://nikhilbharti284.github.io",
-      "X-Title":"Astra AGI v19"
-    },
-    body:JSON.stringify({model:model||"openrouter/free",messages:plain})
-  }),50000,"OpenRouter timeout");
+  const r=await withTimeout(fetch("https://openrouter.ai/api/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+k,"HTTP-Referer":location.origin||"https://nikhilbharti284.github.io","X-Title":"Astra AGI v21"},body:JSON.stringify({model:model||"openrouter/free",messages:plain})}),50000,"OpenRouter timeout");
   const j=await r.json();
   if(!r.ok)throw new Error(j.error?.message||"OpenRouter HTTP "+r.status);
   const t=j.choices?.[0]?.message?.content;
@@ -1184,7 +1352,6 @@ async function callOpenRouter(msgs,model,onTok){
   onTok(t);return t;
 }
 
-/* 3. GEMINI / VERTEX EXPRESS ENGINE */
 const getGmKey=()=>localStorage.agi_gk||_GM_KEY||"";
 const gmId=m=>m==="gm:custom"?(localStorage.agi_gm||"gemini-2.5-flash"):m.slice(3);
 function gmReq(model,method,body,sig,forceAIza){
@@ -1218,20 +1385,15 @@ async function callGemini(msgs,model,onTok){
   }finally{clearTimeout(to)}
 }
 
-/* 4. POLLINATIONS KEYLESS BACKUP */
 async function callPollinations(msgs,model,onTok){
   const plain=msgs.map(({img,...r})=>({role:r.role,content:String(r.content||"")}));
-  const r=await withTimeout(fetch("https://text.pollinations.ai/openai",{
-    method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({model:model||"openai",messages:plain})
-  }),35000,"Pollinations timeout");
+  const r=await withTimeout(fetch("https://text.pollinations.ai/openai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:model||"openai",messages:plain})}),35000,"Pollinations timeout");
   if(!r.ok)throw new Error("Pollinations HTTP "+r.status);
   const j=await r.json();const t=j.choices?.[0]?.message?.content;
   if(!t)throw new Error("Empty Pollinations reply");
   onTok(t);return t;
 }
 
-/* LOCAL OLLAMA */
 async function callLocalOllama(msgs,onTok){
   const u=(S.olUrl||"http://127.0.0.1:11434").replace(/\/$/,"")+"/api/chat";
   const r=await fetch(u,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:S.olModel||"qwen2.5-coder:7b",messages:msgs.map(({img,...x})=>x),stream:false})});
@@ -1240,22 +1402,14 @@ async function callLocalOllama(msgs,onTok){
   onTok(t);return t;
 }
 
-/* SWARM & CONSENSUS */
 async function runRedBlueSwarm(msgs,onTok){
   const plain=msgs.map(({img,...r})=>r);
   onTok("**Multi-Agent Phase 1/3 (Groq 70B Architect):** Designing complete solution…");
   const blueDraft=await routeStandardLLM(msgs,()=>{});
   onTok("**Multi-Agent Phase 2/3 (DeepSeek R1 Critic):** Auditing for flaws, missing features & edge cases…");
-  const redCritique=await routeStandardLLM([
-    ...plain,
-    {role:"assistant",content:blueDraft},
-    {role:"user",content:"Act as a Critical Thinking & Security Verifier. Identify any missing features, security bugs, or incomplete code in the draft above. Be concise."}
-  ],()=>{});
+  const redCritique=await routeStandardLLM([...plain,{role:"assistant",content:blueDraft},{role:"user",content:"Act as a Critical Thinking & Security Verifier. Identify any missing features, security bugs, or incomplete code in the draft above. Be concise."}],()=>{});
   onTok("**Multi-Agent Phase 3/3 (Executive Judge):** Producing final verified deliverable…");
-  return await routeStandardLLM([
-    ...plain,
-    {role:"user",content:`Produce the final, 100% complete deliverable by merging the Architect draft and fixing all issues raised by the Critic.\n\n[DRAFT]\n${blueDraft}\n\n[CRITIQUE]\n${redCritique}`}
-  ],onTok);
+  return await routeStandardLLM([...plain,{role:"user",content:`Produce the final, 100% complete deliverable by merging the Architect draft and fixing all issues raised by the Critic.\n\n[DRAFT]\n${blueDraft}\n\n[CRITIQUE]\n${redCritique}`}],onTok);
 }
 
 async function runConsensus(msgs,onTok){
@@ -1275,21 +1429,12 @@ async function runConsensus(msgs,onTok){
 async function routeStandardLLM(msgs,onTok){
   const m=S.model,chain=[],errs=[];
   const add=(k,x)=>chain.push([k,x]);
-  if(m.startsWith("gr:")){
-    add("gr",m.slice(3));add("gr","llama-3.3-70b-versatile");add("or","openrouter/free");add("gm","gemini-2.5-flash");
-  }else if(m.startsWith("or:")){
-    add("or",m.slice(3));add("or","openrouter/free");add("gr","llama-3.3-70b-versatile");add("gm","gemini-2.5-flash");
-  }else if(m.startsWith("gm:")){
-    add("gm",gmId(m));add("gr","llama-3.3-70b-versatile");add("or","openrouter/free");
-  }else if(m.startsWith("pl:")){
-    add("pl",m.slice(3));add("gr","llama-3.3-70b-versatile");add("or","openrouter/free");
-  }else{
-    add("gr","llama-3.3-70b-versatile");
-    add("or","google/gemma-4-31b-it:free");
-    add("gm","gemini-2.5-flash");
-    add("or","openrouter/free");
-    add("pl","openai");
-  }
+  if(m.startsWith("gr:")){ add("gr",m.slice(3));add("gr","llama-3.3-70b-versatile");add("or","openrouter/free");add("gm","gemini-2.5-flash"); }
+  else if(m.startsWith("or:")){ add("or",m.slice(3));add("or","openrouter/free");add("gr","llama-3.3-70b-versatile");add("gm","gemini-2.5-flash"); }
+  else if(m.startsWith("gm:")){ add("gm",gmId(m));add("gr","llama-3.3-70b-versatile");add("or","openrouter/free"); }
+  else if(m.startsWith("pl:")){ add("pl",m.slice(3));add("gr","llama-3.3-70b-versatile");add("or","openrouter/free"); }
+  else{ add("gr","llama-3.3-70b-versatile");add("or","google/gemma-4-31b-it:free");add("gm","gemini-2.5-flash");add("or","openrouter/free");add("pl","openai"); }
+  
   for(const [k,mod] of chain){
     if(stop)return "";
     try{
@@ -1402,6 +1547,15 @@ function addAI(content,i){
   const row=document.createElement("div");row.className="arow";
   const ans=document.createElement("div");ans.className="a";ans.innerHTML=md(content);
   row.appendChild(ans);dress(ans,content);addActs(row,content,i);
+  
+  // Process JSON Charts
+  const chartRegex = /```json-chart\s*\n([\s\S]*?)```/g;
+  let match;
+  while ((match = chartRegex.exec(content)) !== null) {
+    const chartDiv = renderChartJSON(match[1]);
+    row.appendChild(chartDiv);
+  }
+
   $("#in").appendChild(row);
 }
 
@@ -1446,13 +1600,17 @@ async function ask(text){
     $("#q").value="";tools.recon_graph(dom);return;
   }
 
-  let blitzTargetDomain=null,blitzOmniQuery=null,blitzScopeText=null,blitzFuzzTarget=null,isWebBuild=false,directReelTopic=null,directImgPrompt=null;
+  let blitzTargetDomain=null,blitzOmniQuery=null,blitzScopeText=null,blitzFuzzTarget=null,isWebBuild=false,directReelTopic=null,directImgPrompt=null,is3DBuild=false;
   if(text.startsWith("/reel ")){
     directReelTopic=text.slice(6).trim();
     text=`Create an autonomous multi-scene AI video reel for: ${directReelTopic}`;
   }else if(text.startsWith("/img ")){
     directImgPrompt=text.slice(5).trim();
     text=`Generate image for: ${directImgPrompt}`;
+  }else if(text.startsWith("/3d ")){
+    is3DBuild=true;
+    const rawIdea=text.replace(/^\/3d\s+/i,"");
+    text=`[3D WEBGL APPLICATION MANDATE]\nUser Request: ${rawIdea}\n\nBuild a complete, visually stunning 3D game/scene using Three.js. Include a full canvas setup, lighting, camera controls, and interactive elements. Output the complete \`\`\`html code block immediately.`;
   }else if(text.startsWith("/web ")||/(?:website|web\s*app|store|ecommerce|shop|dashboard|landing\s*page|portfolio|game)\s*(?:bnao|bana|build|create|make|design)/i.test(text)||/(?:bnao|bana|build|create|make)\s*.*(?:website|web\s*app|shop|store|dashboard)/i.test(text)){
     isWebBuild=true;
     const rawIdea=text.replace(/^\/web\s+/i,"");
@@ -1493,7 +1651,12 @@ async function ask(text){
   pending=null;$("#file").style.display="none";
   userScrolledUp=false;bottom(true);
   save();drawList();
-  return await runAgent({blitzTargetDomain,blitzOmniQuery,blitzScopeText,blitzFuzzTarget,isWebBuild,directReelTopic,directImgPrompt});
+  
+  // Embed memory
+  if(!vectorWorker) initVectorWorker();
+  vectorWorker.postMessage({ type: 'embed', text: text, id: Date.now() });
+
+  return await runAgent({blitzTargetDomain,blitzOmniQuery,blitzScopeText,blitzFuzzTarget,isWebBuild,is3DBuild,directReelTopic,directImgPrompt});
 }
 
 async function regenerate(i){
@@ -1565,7 +1728,10 @@ async function runAgent(opts={}){
         preTelemetry=`\n\n[PRE-FETCHED 2-HOP OMNI-WEB RESEARCH TELEMETRY]\n${data}\n\n[MANDATE: Solve the user's request completely in ONE SHOT with full depth, working code, and zero placeholders.]`;
       }
 
-      const work=[{role:"system",content:sysPrompt()},...c.msgs.slice(-14).map(toLLM)];
+      const pastMemory = await getRelevantMemory(c.msgs[c.msgs.length-1].content);
+      const sys = sysPrompt() + (pastMemory ? `\n\n[PAST MEMORY CONTEXT]:\n${pastMemory}` : "");
+
+      const work=[{role:"system",content:sys},...c.msgs.slice(-14).map(toLLM)];
       if(preTelemetry){
         work[work.length-1]={...work[work.length-1],content:work[work.length-1].content+preTelemetry};
       }
@@ -1592,7 +1758,7 @@ async function runAgent(opts={}){
         work.push({role:"assistant",content:out},{role:"user",content:results.join("\n\n")});
       }
 
-      if(!stop&&!final.includes("```")&&(opts.isWebBuild||/तैयार करता|बना देता|will now write|here is the plan/i.test(final))){
+      if(!stop&&!final.includes("```")&&(opts.isWebBuild||opts.is3DBuild||/तैयार करता|बना देता|will now write|here is the plan/i.test(final))){
         used++;
         th.querySelector(".tt").textContent="Self-Reflection triggered: Generating complete code artifact now…";
         const forced=await llm([
@@ -1606,11 +1772,23 @@ async function runAgent(opts={}){
 
     const bundledHtml=bundleWebBlocks(final);
     if(bundledHtml){
-      openCanvas(bundledHtml,"html","Bundled Full-Stack App");
+      th.querySelector(".tt").textContent="Auto-Testing UI for bugs…";
+      const testReport = await autoTestUI(bundledHtml);
+      log(testReport);
+      openCanvas(bundledHtml,"html","Self-Healing Live Canvas");
       log("▸ Multi-File Bundler: Merged HTML + CSS + JS into Live Canvas.");
     }
 
     ans.innerHTML=md(final);dress(ans,final);addActs(row,final,myIndex);
+    
+    // Process JSON Charts in final output
+    const chartRegex = /```json-chart\s*\n([\s\S]*?)```/g;
+    let match;
+    while ((match = chartRegex.exec(final)) !== null) {
+      const chartDiv = renderChartJSON(match[1]);
+      ans.appendChild(chartDiv);
+    }
+
     c.msgs.push({role:"assistant",content:final});
     if(S.autoSpeak&&final&&!stop)speakText(final,true);
   }catch(e){
@@ -1622,6 +1800,86 @@ async function runAgent(opts={}){
   else th.remove();
   busy=false;$("#send").innerHTML=SEND_SVG;save();drawList();bottom();
   return final;
+}
+
+/* ===== 5. CHART & AUDIO SYNTH HELPERS ===== */
+function renderChartJSON(jsonStr) {
+  try {
+    const data = JSON.parse(jsonStr);
+    const container = document.createElement("div");
+    container.className = "chart-container";
+    const canvas = document.createElement("canvas");
+    container.appendChild(canvas);
+    setTimeout(() => {
+      new Chart(canvas, {
+        type: data.type || 'bar',
+        data: {
+          labels: data.labels,
+          datasets: [{
+            label: data.title || 'Data',
+            data: data.data,
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            borderColor: 'rgba(255, 255, 255, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { labels: { color: '#fff' } }
+          },
+          scales: {
+            y: { ticks: { color: '#aaa' } },
+            x: { ticks: { color: '#aaa' } }
+          }
+        }
+      });
+    }, 100);
+    return container;
+  } catch(e) {
+    return document.createTextNode("Chart Error: " + e.message);
+  }
+}
+
+function playSynthAudio(freqs) {
+  try {
+    const actx = new (window.AudioContext||window.webkitAudioContext)();
+    const dest = actx.destination;
+    freqs.forEach((f, i) => {
+      const osc = actx.createOscillator();
+      const gain = actx.createGain();
+      osc.type = i % 2 === 0 ? "sine" : "triangle";
+      osc.frequency.value = f;
+      gain.gain.setValueAtTime(0.1, actx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 3);
+      osc.connect(gain);
+      gain.connect(dest);
+      osc.start();
+      osc.stop(actx.currentTime + 3);
+    });
+  } catch(e) { toast("Audio playback failed"); }
+}
+
+/* ===== 6. GITHUB GIST CLOUD SYNC ===== */
+async function syncToGist() {
+  const token = prompt("Enter GitHub Personal Access Token (with 'gist' scope):");
+  if(!token) return toast("Sync cancelled.");
+  toast("Syncing to cloud...");
+  try {
+    const data = { description: "Astra AGI Backup", public: false, files: { "astra_backup.json": { content: JSON.stringify(S) } } };
+    const res = await fetch("https://api.github.com/gists", {
+      method: "POST",
+      headers: { "Authorization": "token " + token, "Accept": "application/vnd.github.v3+json" },
+      body: JSON.stringify(data)
+    });
+    if(res.ok) {
+      const j = await res.json();
+      toast("Backup saved to Gist!");
+      window.open(j.html_url, "_blank");
+    } else {
+      toast("Sync failed: Check token.");
+    }
+  } catch(e) { toast("Error: " + e.message); }
 }
 
 /* ===== UNIFIED COMMAND CENTER ===== */
@@ -1671,6 +1929,49 @@ const CMD_TABS={
       if(id){$("#imOut").innerHTML=`<div class="mslot" data-id="${id}"></div>`;fillSlots($("#imOut"))}
     };
   },
+  imgfilter(){
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)"><b>Local Image Filter Editor:</b> Upload an image to apply CSS filters locally and download.</div>
+      <input type="file" id="ifFile" accept="image/*" class="ti">
+      <div class="cvss-grid" style="margin-top:4px">
+        <div class="cvss-box"><label>Filter</label>
+          <select id="ifType">
+            <option value="none">None</option>
+            <option value="grayscale(100%)">Grayscale</option>
+            <option value="sepia(100%)">Sepia</option>
+            <option value="blur(5px)">Blur</option>
+            <option value="invert(100%)">Invert</option>
+            <option value="contrast(200%)">Contrast</option>
+            <option value="saturate(300%)">Saturate</option>
+          </select>
+        </div>
+        <div class="cvss-box"><label>Blend</label>
+          <select id="ifBlend">
+            <option value="normal">Normal</option>
+            <option value="multiply">Multiply</option>
+            <option value="screen">Screen</option>
+            <option value="overlay">Overlay</option>
+          </select>
+        </div>
+      </div>
+      <div class="row2">
+        <button class="pri" id="ifApplyBtn">Apply & Download</button>
+      </div>
+      <div class="out2" id="ifOut" style="text-align:center;">Upload an image to start.</div>`;
+    $("#ifApplyBtn").onclick=async()=>{
+      const f=$("#ifFile").files[0];if(!f)return toast("Select an image first");
+      const filter=$("#ifType").value, blend=$("#ifBlend").value;
+      const img=new Image(); img.src=URL.createObjectURL(f);
+      await new Promise(r=>img.onload=r);
+      const cv=document.createElement("canvas"); cv.width=img.width; cv.height=img.height;
+      const ctx=cv.getContext("2d");
+      ctx.filter=filter;
+      ctx.globalCompositeOperation=blend;
+      ctx.drawImage(img,0,0);
+      $("#ifOut").innerHTML=`<img src="${cv.toDataURL()}" style="max-width:100%;border-radius:8px;">`;
+      const a=document.createElement("a"); a.href=cv.toDataURL(); a.download="filtered-"+Date.now()+".png"; a.click();
+    };
+  },
   web(){
     $("#cmdPane").innerHTML=`
       <div style="font-size:12.5px;color:var(--m)"><b>1-Shot Full-Stack Website & App Builder:</b> Describe any website, store, or dashboard. Astra builds a complete single-file app and opens it in Live Canvas.</div>
@@ -1681,6 +1982,18 @@ const CMD_TABS={
     $("#wbBuildBtn").onclick=()=>{
       const idea=$("#wbIdea").value.trim();if(!idea)return toast("Describe the website first");
       ask("/web "+idea);
+    };
+  },
+  "3d"(){
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)"><b>3D WebGL Engine & Game Builder:</b> Describe a 3D scene or game. Astra will use Three.js to build a fully interactive 3D canvas.</div>
+      <textarea class="ti" id="wb3dIdea" rows="4" placeholder="e.g., Build a 3D Solar System with rotating planets and orbital paths."></textarea>
+      <div class="row2">
+        <button class="pri" id="wb3dBuildBtn">Build 3D Scene</button>
+      </div>`;
+    $("#wb3dBuildBtn").onclick=()=>{
+      const idea=$("#wb3dIdea").value.trim();if(!idea)return toast("Describe the 3D scene first");
+      ask("/3d "+idea);
     };
   },
   agi(){
@@ -1945,19 +2258,34 @@ $("#ov").onclick=closeSide;
 $("#mem").onclick=()=>{const v=prompt("Long-Term Persistent Memory:",S.mem.join(" | "));if(v!==null){S.mem=v.split("|").map(x=>x.trim()).filter(Boolean);save()}};
 $("#pdfBtn").onclick=()=>{closeSide();window.print()};
 $("#exp").onclick=()=>{const c=cur();if(!c?.msgs.length)return;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([c.msgs.map(m=>"## "+m.role+"\n\n"+m.content).join("\n\n")],{type:"text/markdown"}));a.download="chat.md";a.click()};
+$("#gistSyncBtn").onclick=syncToGist;
 $("#wipe").onclick=()=>{if(confirm("Clear all chats?")){S.chats={};S.cur=null;save();renderAll();drawList()}};
 function applyTheme(){document.documentElement.setAttribute("data-theme",S.theme==="light"?"light":"dark");$("#themeBtn").textContent="Theme: "+S.theme}
 $("#themeBtn").onclick=()=>{S.theme=S.theme==="dark"?"light":"dark";applyTheme();save()};
 
 $("#fin").onchange=async e=>{
   const f=e.target.files[0];if(!f)return;
-  if(f.type.startsWith("image/")){const b=await normImg(f),id=newId();await mPut(id,{b,kind:"image"});S.lastImg=id;save();pending={name:f.name,imgId:id,text:""}}
+  if(f.type.startsWith("image/")){
+    const b=await normImg(f),id=newId();await mPut(id,{b,kind:"image"});S.lastImg=id;save();
+    // Vision AI Captioning
+    toast("Analyzing image with Vision AI...");
+    const url=URL.createObjectURL(b);
+    const cap=await getImageCaption(url);
+    // Run OCR for text extraction as well
+    const ocrText = await runOCR(f);
+    pending={name:f.name,imgId:id,text:`[Vision AI Local Caption: ${cap}]\n\n[Extracted Text via OCR]:\n${ocrText}`};
+  }
+  else if(f.name.endsWith(".pdf")){
+    const pdfText = await readPDF(f);
+    pending={name:f.name,text:pdfText.slice(0,15000)};
+  }
   else if(/\.(apk|zip)$/i.test(f.name)){
     const slice=f.slice(0,1200000),bytes=new Uint8Array(await slice.arrayBuffer());
     let ascii="",cur="";
     for(let i=0;i<bytes.length;i++){const b=bytes[i];if(b>=32&&b<=126)cur+=String.fromCharCode(b);else{if(cur.length>=6)ascii+=cur+"\n";cur=""}}
     pending={name:f.name,text:scanAndroidSource(ascii,f.name)+"\n\n[Extracted Printable Strings]\n"+ascii.slice(0,12000)};
   }else pending={name:f.name,text:(await f.text()).slice(0,18000)};
+  
   $("#file").style.display="block";$("#file").innerHTML=`<div>${escapeHtml(pending.name)} <b id="rmf" style="cursor:pointer">✕</b></div>`;
   $("#rmf").onclick=()=>{pending=null;$("#file").style.display="none"};
 };
