@@ -1524,7 +1524,6 @@ const tools = {
 const TOOL_NAMES = Object.keys(tools).join("|");
 const TOOLRE_G = new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F, "g");
 
-// FIX: Escaped </script> inside the string literal so the browser doesn't terminate the script block prematurely
 const sysPrompt = ()=>`You are Astra AGI v22.0 — an autonomous AI Engineer, Video Director & Authorized Passive Security / SAST Auditor. Today is ${new Date().toDateString()}. Match user's language (English, Hindi, Hinglish).
 
 CRITICAL MANDATES:
@@ -2650,4 +2649,4 @@ else { hello(); drawList(); }
 if("serviceWorker" in navigator) window.addEventListener("load", ()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body>
-          </html>
+  </html>
