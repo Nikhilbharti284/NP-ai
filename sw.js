@@ -1,23 +1,23 @@
 /* ============================================================================
- * Astra X v15.0 — AGI Ecosystem Monochrome Service Worker (sw.js)
+ * Astra AGI v17.0 — Video/Image Director & Cognitive OS Service Worker (sw.js)
  * ============================================================================ */
 
-const CACHE_VERSION = "astra-agi-v15.0";
+const CACHE_VERSION = "astra-agi-v17.0";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const CDN_CACHE = `${CACHE_VERSION}-cdn`;
 
 const APP_SHELL = ["./", "./index.html", "./manifest.json"];
 
 const CDN_ASSETS = [
-  "https://js.puter.com/v2/",
-  "https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css",
-  "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css",
-  "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"
+  "[https://js.puter.com/v2/](https://js.puter.com/v2/)",
+  "[https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js](https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js)",
+  "[https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js](https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js)",
+  "[https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css](https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css)",
+  "[https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js](https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js)",
+  "[https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js](https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js)",
+  "[https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css](https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css)",
+  "[https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js](https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js)",
+  "[https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js](https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js)"
 ];
 
 const BYPASS_HOSTS = [
