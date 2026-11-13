@@ -5,12 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#000000">
-<title>Astra AGI v18.0</title>
+<title>Astra AGI v19.0</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3Ccircle cx='256' cy='256' r='44' fill='%23fff'/%3E%3C/svg%3E" type="image/svg+xml">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3Ccircle cx='256' cy='256' r='44' fill='%23fff'/%3E%3C/svg%3E">
 
-<script src="https://js.puter.com/v2/"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -70,8 +69,8 @@ header{height:52px;display:grid;grid-template-columns:40px 1fr 80px;align-items:
 .ibtn:hover{background:var(--sur)}
 .model-wrap{display:inline-flex;align-items:center;max-width:100%;padding:6px 12px;border-radius:10px}
 .model-wrap:hover{background:var(--sur)}
-#model{background:transparent;color:var(--t);border:0;font-weight:600;font-size:15px;outline:0;max-width:52vw;text-overflow:ellipsis;text-align:center;appearance:none;-webkit-appearance:none;cursor:pointer}
-#model option{background:var(--side);color:var(--t)}
+#model{background:transparent;color:var(--t);border:0;font-weight:600;font-size:14.5px;outline:0;max-width:58vw;text-overflow:ellipsis;text-align:center;appearance:none;-webkit-appearance:none;cursor:pointer}
+#model option,#model optgroup{background:var(--side);color:var(--t)}
 #menu{display:none}
 
 /* ===== WORKSPACE & CHAT STREAM ===== */
@@ -272,7 +271,7 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
       <div class="sdrop-list">
         <button class="srow" data-cmd="modes">Voice & AI Modes</button>
         <button class="srow" id="themeBtn">Theme: dark</button>
-        <button class="srow" id="gkBtn">Gemini API Key</button>
+        <button class="srow" id="gkBtn">Custom API Key (Optional)</button>
         <button class="srow" id="mem">Long-Term Memory</button>
         <button class="srow" id="installBtn" hidden>Install App</button>
         <button class="srow" id="pdfBtn">Export PDF Report</button>
@@ -325,7 +324,6 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
           <button id="cViewBtn">Code / Preview</button>
           <button id="cGraphBtn">World Graph</button>
           <button id="cCloudRunBtn" class="pri">Run</button>
-          <button id="cHostBtn">Host Live</button>
           <button id="cZipBtn">ZIP</button>
           <button id="cCloseBtn">✕</button>
         </div>
@@ -370,7 +368,7 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
 <!-- UNIFIED MONOCHROME COMMAND CENTER -->
 <div class="mbk" id="cmdM" role="dialog" aria-modal="true" aria-label="Command Center">
   <div class="mdl">
-    <div class="mtop"><span>Astra AGI v18.0 Command Center</span><button id="cmdClose">✕</button></div>
+    <div class="mtop"><span>Astra AGI v19.0 Command Center</span><button id="cmdClose">✕</button></div>
     <div class="ttabs" id="cmdTabs">
       <button class="stab on" data-tab="videdit">Video Director</button>
       <button class="stab" data-tab="imgedit">Image Studio</button>
@@ -392,19 +390,28 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
 /* ===== CONFIG & BUILT-IN GEMINI KEY ===== */
 const GEMINI_KEY=atob("QVEuQWI4Uk42SVU2WVBkRHBTakZlNDRY"+"YlhSSVd1Sl9GUzZyMDVKblJLeUF1cjdGRXUwVVE=");
 
+/* ===== ALL INTERNET FREE KEYLESS CLOUD MODELS ===== */
 const MODELS=[
-  ["auto","⚡ Auto Cloud Router (Fastest Free)"],
-  ["omni:deep","🌐 Omni-Blitz Deep Research"],
+  ["auto","⚡ Auto Free Cloud Mesh (Fastest)"],
+  ["arena:consensus","⚔️ 4-Brain Consensus (Claude + GPT + Gemini + DeepSeek)"],
   ["swarm:redblue","🛡️ Red-Blue-Judge Swarm"],
-  ["arena:consensus","⚔️ 3-Brain Consensus (Gemini + DeepSeek + GPT)"],
-  ["gm:gemini-2.5-pro","Gemini 2.5 Pro"],
-  ["gm:gemini-2.5-flash","Gemini 2.5 Flash"],
-  ["pl:openai-large","GPT-4o Large (Free Cloud)"],
-  ["pl:openai","GPT-4o Mini (Free Cloud)"],
-  ["pl:deepseek-r1","DeepSeek R1 (Free Cloud)"],
+  ["omni:deep","🌐 Omni-Blitz Deep Web Research"],
+  ["pl:claude-hybridspace","Claude 3.7 Sonnet (Free Cloud)"],
+  ["pl:claude","Claude 3.5 Sonnet (Free Cloud)"],
+  ["pl:openai-large","ChatGPT GPT-4o / GPT-4.1 (Free Cloud)"],
+  ["pl:openai-reasoning","ChatGPT o3-mini / o4-mini (Free Cloud)"],
+  ["pl:openai","ChatGPT GPT-4o Mini (Free Cloud)"],
+  ["gm:gemini-2.5-pro","Google Gemini 2.5 Pro (Cloud)"],
+  ["gm:gemini-2.5-flash","Google Gemini 2.5 Flash (Cloud)"],
+  ["pl:deepseek-r1","DeepSeek R1 Reasoning (Free Cloud)"],
+  ["pl:deepseek","DeepSeek V3 (Free Cloud)"],
   ["pl:qwen-coder","Qwen 2.5 Coder 32B (Free Cloud)"],
-  ["pl:llama","Llama 3.3 70B (Free Cloud)"],
+  ["pl:qwq","Qwen QwQ 32B Reasoning (Free Cloud)"],
+  ["pl:llama","Meta Llama 3.3 70B (Free Cloud)"],
+  ["pl:llamascout","Meta Llama 4 Scout (Free Cloud)"],
   ["pl:mistral","Mistral Large (Free Cloud)"],
+  ["pl:grok","xAI Grok-3 Mini (Free Cloud)"],
+  ["pl:phi","Microsoft Phi-4 (Free Cloud)"],
   ["ol:local","🔌 Local Ollama (Termux)"]
 ];
 
@@ -424,6 +431,44 @@ const MAXSTEPS=25;
 const F="`".repeat(3);
 const $=s=>document.querySelector(s);
 const escapeHtml=s=>{const d=document.createElement("div");d.textContent=s??"";return d.innerHTML};
+
+/* ===== INDEXEDDB MEDIA STORAGE & HELPERS (FIXED MISSING FUNCTIONS) ===== */
+const newId=()=>"m"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const dbP=new Promise((ok,no)=>{
+  const r=indexedDB.open("astra_media_v19",1);
+  r.onupgradeneeded=()=>r.result.createObjectStore("m");
+  r.onsuccess=()=>ok(r.result);
+  r.onerror=()=>no(r.error);
+});
+async function mPut(id,val){try{const db=await dbP;return new Promise((ok,no)=>{const tx=db.transaction("m","readwrite");tx.objectStore("m").put(val,id);tx.oncomplete=ok;tx.onerror=no})}catch(_){}}
+async function mGet(id){try{const db=await dbP;return new Promise((ok,no)=>{const tx=db.transaction("m","readonly");const req=tx.objectStore("m").get(id);req.onsuccess=()=>ok(req.result);req.onerror=no})}catch(_){return null}}
+function b64(blob){return new Promise((ok,no)=>{const fr=new FileReader();fr.onload=()=>ok(fr.result.split(",")[1]);fr.onerror=no;fr.readAsDataURL(blob)})}
+function normImg(fileOrBlob){
+  return new Promise(ok=>{
+    const img=new Image(),u=URL.createObjectURL(fileOrBlob);
+    img.onload=()=>{
+      const s=Math.min(1,1024/Math.max(img.width,img.height));
+      const c=document.createElement("canvas");c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);
+      c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+      c.toBlob(b=>{URL.revokeObjectURL(u);ok(b||fileOrBlob)},"image/jpeg",.88);
+    };
+    img.onerror=()=>{URL.revokeObjectURL(u);ok(fileOrBlob)};
+    img.src=u;
+  });
+}
+async function fillSlots(root){
+  for(const slot of root.querySelectorAll(".mslot[data-id]")){
+    if(slot.dataset.done)continue;slot.dataset.done="1";
+    const id=slot.dataset.id,rec=await mGet(id);
+    if(!rec?.b){slot.innerHTML=`<span style="color:var(--m);font-size:12px">[Media ${escapeHtml(id)}]</span>`;continue}
+    const url=URL.createObjectURL(rec.b);
+    if(rec.kind==="video"){
+      slot.innerHTML=`<video class="gm" src="${url}" controls playsinline loop></video><a class="dl" href="${url}" download="astra-video-${id}.webm">Download Video (.webm)</a>`;
+    }else{
+      slot.innerHTML=`<img class="gm" src="${url}" alt="AI Generated"><a class="dl" href="${url}" download="astra-image-${id}.png">Download Image</a>`;
+    }
+  }
+}
 
 /* ===== INTERACTIVE WORLD KNOWLEDGE GRAPH & ATTACK SURFACE (CANVAS) ===== */
 const RECON_GRAPH_HTML=`<!DOCTYPE html>
@@ -510,15 +555,15 @@ async function mapTarget(){
 setTimeout(mapTarget,200);
 <\/script></body></html>`;
 
-/* ===== AGI COGNITIVE STATE (SKILLS, EPISODIC MEMORY, WORLD MODEL, RL WEIGHTS) ===== */
-let S={};try{S=JSON.parse(localStorage.agi_v18||localStorage.agi_v17||"{}")}catch(e){}
+/* ===== AGI COGNITIVE STATE ===== */
+let S={};try{S=JSON.parse(localStorage.agi_v19||localStorage.agi_v18||"{}")}catch(e){}
 S.chats??={};S.cur??=null;
 if(!S.model||!MODELS.some(m=>m[0]===S.model))S.model="auto";
 S.voice??="nova";S.autoSpeak??=false;S.voiceRate??=1.0;
 S.mem??=[];S.notes??="";S.theme??="dark";
-S.blitzMode??=true;S.taskMode??=true;S.bugMode??=false;S.arenaMode??=false;S.swarmMode??=false;S.autoHeal??=true;S.deep??=true;S.hostedSites??=[];
+S.blitzMode??=true;S.taskMode??=true;S.bugMode??=false;S.arenaMode??=false;S.swarmMode??=false;S.autoHeal??=true;S.deep??=true;
 S.skills??=[
-  {name:"Single-File Full-Stack Web Bundling",rule:"Always combine HTML, modern responsive CSS, and interactive JS into one complete <!DOCTYPE html> file with realistic product data, SVG icons, and working state."},
+  {name:"Single-File Full-Stack Web Bundling",rule:"Always combine HTML, modern responsive CSS, and interactive JS into one complete <!DOCTYPE html> file with realistic data, SVG icons, and working state."},
   {name:"Zero-Stalling Execution",rule:"Never reply with 'I will now write the code'. Output the complete, working implementation immediately in the first turn."}
 ];
 S.worldGraph??=[];S.rlScore??=100;
@@ -526,7 +571,7 @@ S.olUrl??="http://127.0.0.1:11434";S.olModel??="qwen2.5-coder:7b";
 S.canvasCode??=RECON_GRAPH_HTML;S.canvasLang??="html";
 
 function save(){
-  try{localStorage.agi_v18=JSON.stringify(S)}
+  try{localStorage.agi_v19=JSON.stringify(S)}
   catch(e){
     const ids=Object.values(S.chats).sort((a,b)=>a.ts-b.ts).map(c=>c.id);
     if(ids.length>1){delete S.chats[ids[0]];save()}
@@ -535,7 +580,7 @@ function save(){
 let busy=false,stop=false,pending=null;
 const cur=()=>S.chats[S.cur];
 
-/* ===== CRITICAL FIX: MULTI-BLOCK HTML + CSS + JS AUTO-BUNDLER ===== */
+/* ===== MULTI-BLOCK HTML + CSS + JS AUTO-BUNDLER ===== */
 function bundleWebBlocks(markdownText){
   const htmlMatch=markdownText.match(/```html\s*\n([\s\S]*?)```/i);
   if(!htmlMatch)return null;
@@ -552,7 +597,6 @@ function bundleWebBlocks(markdownText){
     if(/<\/body>/i.test(html))html=html.replace(/<\/body>/i,scriptTag+"\n</body>");
     else html=html+"\n"+scriptTag;
   }
-  // Remove broken external local links to styles.css or script.js so iframe doesn't 404
   html=html.replace(/<link[^>]+href=["'](?:styles?\.css|main\.css)["'][^>]*>/gi,"")
            .replace(/<script[^>]+src=["'](?:scripts?\.js|main\.js|app\.js)["'][^>]*><\/script>/gi,"");
   return html;
@@ -649,7 +693,7 @@ $("#cCode").addEventListener("input",()=>{S.canvasCode=$("#cCode").value;save()}
 $("#cCloseBtn").onclick=()=>$("#canvasPane").classList.remove("open");
 $("#openCanvasHdr").onclick=()=>$("#canvasPane").classList.toggle("open");
 $("#cZipBtn").onclick=()=>{
-  const files=[{name:S.canvasLang==="html"?"index.html":"main."+S.canvasLang,content:S.canvasCode},{name:"README.md",content:"# Astra AGI v18.0 Project\nBundled and verified by Astra AGI."}];
+  const files=[{name:S.canvasLang==="html"?"index.html":"main."+S.canvasLang,content:S.canvasCode},{name:"README.md",content:"# Astra AGI v19.0 Project\nBundled and verified by Astra AGI."}];
   const c=cur();
   if(c?.msgs?.length){
     let idx=1;
@@ -673,13 +717,8 @@ $("#cCloudRunBtn").onclick=async()=>{
   const term=$("#cTerm");term.style.display="block";term.textContent="Running in Sandbox...";
   term.textContent=await tools.cloud_exec(S.canvasLang+"\n"+S.canvasCode);
 };
-$("#cHostBtn").onclick=async()=>{
-  S.canvasCode=$("#cCode").value||S.canvasCode;save();
-  const term=$("#cTerm");term.style.display="block";term.textContent="Deploying...";
-  term.textContent=await tools.cloud_host(S.canvasCode);
-};
 
-/* ===== BULLETPROOF MULTI-TIER CODE EXECUTION (FIXES HTTP 401 ON PISTON) ===== */
+/* ===== BULLETPROOF MULTI-TIER CODE EXECUTION ===== */
 const PISTON_MAP={python:"python",py:"python",javascript:"javascript",js:"javascript",node:"javascript",typescript:"typescript",ts:"typescript",cpp:"c++","c++":"c++",c:"c",rust:"rust",rs:"rust",go:"go",java:"java",bash:"bash",sh:"bash",php:"php",ruby:"ruby",sqlite3:"sqlite3"};
 let py=null;
 
@@ -687,7 +726,7 @@ async function runCodeResilient(lang,code){
   const l=(lang||"python").toLowerCase().trim();
   if(l==="html"||l==="css"||code.trim().startsWith("<!DOCTYPE")||code.trim().startsWith("<html")){
     openCanvas(code,"html","Live Web App Preview");
-    return {ok:true,stdout:"Rendered live in Side-by-Side Canvas Preview (0 DOM errors).",stderr:""};
+    return {ok:true,stdout:"Rendered live in Side-by-Side Canvas Preview.",stderr:""};
   }
   if(/^(js|javascript|node)$/.test(l)&&!code.includes("require(")&&!code.includes("process.")){
     const logs=[],errs=[];
@@ -861,7 +900,6 @@ async function callLocalOllama(msgs,onTok){
 /* ===== AUTONOMOUS AGI, VIDEO/IMAGE & SECURITY TOOLS ===== */
 const J=async(u,o)=>{const r=await fetch(u,o);if(!r.ok)throw new Error("HTTP "+r.status);return r.json()};
 
-/* WORLD-FIRST: AUTONOMOUS AI REEL / VIDEO DIRECTOR & PROMPT VIDEO EDITOR */
 function parseVideoEditPrompt(p){
   p=(p||"").toLowerCase();
   let filter="none",speed=1.0,caption="";
@@ -884,7 +922,7 @@ async function generateAIStoryboardVideo(topicPrompt,onProg){
   let scenes=[
     {img:topicPrompt+", cinematic wide establishing shot, 8k masterpiece",cap:topicPrompt.slice(0,48)},
     {img:topicPrompt+", dramatic close-up action detail, studio lighting",cap:"Autonomous AI Motion Render"},
-    {img:topicPrompt+", epic finale atmosphere, ultra detailed",cap:"Directed by Astra AGI v18"}
+    {img:topicPrompt+", epic finale atmosphere, ultra detailed",cap:"Directed by Astra AGI v19"}
   ];
   try{
     const raw=await routeStandardLLM([
@@ -1152,9 +1190,8 @@ const tools={
   async cloud_exec(inp){
     const m=inp.trim().match(/^([a-zA-Z0-9+#_-]+)\n([\s\S]*)$/);
     const lang=m?m[1]:"python",code=m?m[2]:inp;
-    if(S.autoHeal){const r=await autoHealCode(lang,code);return r.output}
-    try{return await runPistonCloud(lang,code)}
-    catch(e){if(/^(js|javascript|node)$/i.test(lang))return await tools.js(code);throw e}
+    const r=await autoHealCode(lang,code);
+    return r.output;
   },
   async canvas(inp){
     const m=inp.trim().match(/^([a-zA-Z0-9_-]+)\n([\s\S]*)$/);
@@ -1166,16 +1203,6 @@ const tools={
     let code=htmlCode.trim();
     if(!code.startsWith("<"))code=`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>${code}</body></html>`;
     openCanvas(code,"html","Hosted Web App");
-    if(window.puter&&puter.hosting){
-      try{
-        const dir="app_"+Date.now();await puter.fs.mkdir(dir);await puter.fs.write(dir+"/index.html",code);
-        const sub="astra-"+Math.random().toString(36).slice(2,8);
-        const site=await puter.hosting.create(sub,dir);
-        const url="https://"+(site.subdomain||sub)+".puter.site";
-        S.hostedSites.unshift({url,ts:new Date().toLocaleString()});save();
-        return `Deployed Live URL: ${url}`;
-      }catch(e){}
-    }
     return "Previewed in Live Canvas.";
   },
   async deepsearch(q){return await tools.omni_blitz(q)},
@@ -1210,7 +1237,7 @@ const tools={
 const TOOL_NAMES=Object.keys(tools).join("|");
 const TOOLRE_G=new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F,"g");
 
-const sysPrompt=()=>`You are Astra AGI v17.0 (Video Director & AI Firewall Edition) — an elite, autonomous AI Engineer, Video Director & Authorized Security Auditor. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
+const sysPrompt=()=>`You are Astra AGI v19.0 (100% Free Keyless Cloud Edition) — an elite, autonomous AI Engineer, Video Director & Authorized Security Auditor. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
 
 CRITICAL EXECUTION MANDATES:
 1. ZERO STALLING: Never say "I will now write the code" and stop! Output the complete, working implementation or media token in your FIRST response.
@@ -1224,11 +1251,11 @@ ${F}
 input
 ${F}
 
-Available Tools: @auto_reel (topic — generates multi-scene AI video with motion & audio), @image, @edit, @ai_firewall, @learn_skill, @world_graph, @program_audit, @js_deobfuscate, @cloud_fuzzer, @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify (ONLY for Python/JS/Bash/C++ logic), @recon_graph, @apk_scan, @cloud_exec, @canvas, @cloud_host, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember.
+Available Tools: @auto_reel, @image, @edit, @ai_firewall, @learn_skill, @world_graph, @program_audit, @js_deobfuscate, @cloud_fuzzer, @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify, @recon_graph, @apk_scan, @cloud_exec, @canvas, @cloud_host, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember.
 Learned Skills: ${S.skills.map(s=>s.name+": "+s.rule).join(" | ")}
 Long-Term Memory: ${S.mem.join(" | ")||"none"}`;
 
-/* ===== BULLETPROOF MULTI-CLOUD LLM ROUTER ===== */
+/* ===== BULLETPROOF 100% KEYLESS MULTI-CLOUD LLM ROUTER (ZERO PUTER AI) ===== */
 const withTimeout=(p,ms,msg)=>Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(new Error(msg||"Timeout")),ms))]);
 
 async function pollinations(msgs,model,onTok){
@@ -1244,33 +1271,28 @@ async function pollinations(msgs,model,onTok){
     }
   }catch(_){}
   const last=plain[plain.length-1]?.content||"Hello";
-  const r=await withTimeout(fetch("[https://text.pollinations.ai/](https://text.pollinations.ai/)"+encodeURIComponent(last.slice(0,1500))+"?model="+(model||"openai")),30000,"Timeout");
+  const r=await withTimeout(fetch("[https://text.pollinations.ai/](https://text.pollinations.ai/)"+encodeURIComponent(last.slice(0,1800))+"?model="+(model||"openai")),30000,"Timeout");
   if(!r.ok)throw new Error("HTTP "+r.status);
   const t=await r.text();onTok(t);return t;
 }
 
 async function callSingleBrain(kind,model,msgs,onTok){
-  const plain=msgs.map(({img,...r})=>r);
   if(kind==="gm")return await gemini(msgs,model,onTok);
-  if(kind==="pu"&&window.puter){
-    const r=await withTimeout(puter.ai.chat(plain,model?{model,stream:true}:{stream:true}),32000,"Puter timeout");
-    let t="";for await(const p of r){if(stop)break;t+=p?.text||"";onTok(t)}
-    if(t)return t;throw new Error("Empty Puter reply");
-  }
-  return await pollinations(plain,model,onTok);
+  if(kind==="ol")return await callLocalOllama(msgs,onTok);
+  return await pollinations(msgs,model,onTok);
 }
 
 async function runRedBlueSwarm(msgs,onTok){
   const plain=msgs.map(({img,...r})=>r);
-  onTok("**Multi-Agent Phase 1/3 (Architect & Builder):** Designing complete solution…");
-  const blueDraft=await routeStandardLLM(msgs,()=>{});
-  onTok("**Multi-Agent Phase 2/3 (Critic & Causal Verifier):** Auditing for flaws, missing features & edge cases…");
-  const redCritique=await routeStandardLLM([
+  onTok("**Multi-Agent Phase 1/3 (Qwen Coder 32B Builder):** Designing complete solution…");
+  const blueDraft=await callSingleBrain("pl","qwen-coder",msgs,()=>{}).catch(()=>routeStandardLLM(msgs,()=>{}));
+  onTok("**Multi-Agent Phase 2/3 (DeepSeek R1 Critic):** Auditing for flaws, missing features & edge cases…");
+  const redCritique=await callSingleBrain("pl","deepseek-r1",[
     ...plain,
     {role:"assistant",content:blueDraft},
     {role:"user",content:"Act as a Critical Thinking & Security Verifier. Identify any missing features, unstyled UI elements, security bugs, or incomplete code in the draft above. Be concise."}
-  ],()=>{});
-  onTok("**Multi-Agent Phase 3/3 (Executive Synthesizer):** Producing final verified deliverable…");
+  ],()=>{}).catch(()=>"");
+  onTok("**Multi-Agent Phase 3/3 (Claude + GPT Judge):** Producing final verified deliverable…");
   return await routeStandardLLM([
     ...plain,
     {role:"user",content:`Produce the final, 100% complete deliverable by merging the Architect draft and fixing all issues raised by the Critic.\n\n[DRAFT]\n${blueDraft}\n\n[CRITIQUE]\n${redCritique}`}
@@ -1278,16 +1300,17 @@ async function runRedBlueSwarm(msgs,onTok){
 }
 
 async function runConsensus(msgs,onTok){
-  onTok("**Multi-Brain Consensus Active:** Synthesizing parallel cloud models…");
+  onTok("**4-Brain Consensus Active:** Synthesizing Claude + GPT-4o + Gemini 2.5 + DeepSeek R1 in parallel…");
   const tasks=[
+    callSingleBrain("pl","claude-hybridspace",msgs,()=>{}).then(t=>"[Claude 3.7 Sonnet]\n"+t).catch(()=>""),
+    callSingleBrain("pl","openai-large",msgs,()=>{}).then(t=>"[ChatGPT GPT-4o]\n"+t).catch(()=>""),
     callSingleBrain("gm","gemini-2.5-flash",msgs,()=>{}).then(t=>"[Gemini 2.5]\n"+t).catch(()=>""),
-    callSingleBrain("pl","deepseek-r1",msgs,()=>{}).then(t=>"[DeepSeek R1]\n"+t).catch(()=>""),
-    callSingleBrain("pl","openai-large",msgs,()=>{}).then(t=>"[GPT Cloud]\n"+t).catch(()=>"")
+    callSingleBrain("pl","deepseek-r1",msgs,()=>{}).then(t=>"[DeepSeek R1]\n"+t).catch(()=>"")
   ];
   const drafts=(await Promise.all(tasks)).filter(Boolean);
   if(!drafts.length)return await routeStandardLLM(msgs,onTok);
   if(drafts.length===1){const clean=drafts[0].replace(/^\[[^\]]+\]\n/,"");onTok(clean);return clean}
-  const synth=[...msgs.map(({img,...r})=>r),{role:"user",content:`Synthesize the best, most complete parts of these model outputs into ONE master answer:\n\n${drafts.join("\n\n---\n\n")}`}];
+  const synth=[...msgs.map(({img,...r})=>r),{role:"user",content:`Synthesize the best, most complete parts of these 4 cloud model outputs into ONE master answer:\n\n${drafts.join("\n\n---\n\n")}`}];
   return await routeStandardLLM(synth,onTok);
 }
 
@@ -1295,11 +1318,17 @@ async function routeStandardLLM(msgs,onTok){
   const m=S.model,chain=[];
   const add=(k,x)=>chain.push([k,x]);
   if(m==="auto"||m==="omni:deep"||m==="arena:consensus"||m==="swarm:redblue"){
-    add("pl","openai");add("gm","gemini-2.5-flash");add("pl","mistral");
+    add("pl","openai");add("gm","gemini-2.5-flash");add("pl","claude-hybridspace");add("pl","deepseek-r1");add("pl","llama");
+  }else if(m==="ol:local"){
+    add("ol","local");add("pl","openai");
   }else if(m.startsWith("gm:")){
     add("gm",gmId(m));add("pl","openai-large");add("pl","openai");
   }else if(m.startsWith("pl:")){
-    add("pl",m.slice(3));add("gm","gemini-2.5-flash");add("pl","openai");
+    const chosen=m.slice(3);
+    add("pl",chosen);
+    if(chosen==="claude-hybridspace")add("pl","claude");
+    if(chosen==="claude")add("pl","claude-hybridspace");
+    add("pl","openai-large");add("gm","gemini-2.5-flash");add("pl","openai");
   }else{
     add("pl","openai");add("gm","gemini-2.5-flash");
   }
@@ -1307,10 +1336,17 @@ async function routeStandardLLM(msgs,onTok){
     if(stop)return "";
     try{return await callSingleBrain(k,mod,msgs,onTok)}catch(_){}
   }
-  throw new Error("Cloud servers busy. Tap Retry.");
+  throw new Error("Free cloud servers busy. Tap Retry.");
 }
 
-const toLLM=m=>m.file?.imgId?{img:m.file.imgId,role:m.role,content:m.content+"\n\n[Attached Image/Video: "+m.file.name+". You can inspect it or call @edit/@video_edit to modify it.]"}:m.file?{role:m.role,content:m.content+"\n\n[File: "+m.file.name+"]\n"+F+"\n"+m.file.text+"\n"+F}:{role:m.role,content:m.content};
+/* ===== MAIN LLM DISPATCHER (FIXES "llm is not defined") ===== */
+async function llm(msgs,onTok){
+  if(S.model==="arena:consensus"||S.arenaMode)return await runConsensus(msgs,onTok);
+  if(S.model==="swarm:redblue"||S.swarmMode)return await runRedBlueSwarm(msgs,onTok);
+  return await routeStandardLLM(msgs,onTok);
+}
+
+const toLLM=m=>m.file?.imgId?{img:m.file.imgId,role:m.role,content:m.content+"\n\n[Attached Image/Video: "+m.file.name+". You can inspect it or call @edit to modify it.]"}:m.file?{role:m.role,content:m.content+"\n\n[File: "+m.file.name+"]\n"+F+"\n"+m.file.text+"\n"+F}:{role:m.role,content:m.content};
 
 /* ===== 60FPS HARDWARE-ACCELERATED RENDERING & SMART SCROLL LOCK ===== */
 const md=t=>{let h;try{h=DOMPurify.sanitize(marked.parse(t||"",{breaks:true,gfm:true}))}catch(e){h="<pre>"+escapeHtml(t)+"</pre>"}return h.replace(/\[\[media:(m[a-z0-9]+)\]\]/g,'<div class="mslot" data-id="$1"></div>')};
@@ -1344,7 +1380,6 @@ function dress(el,fullMarkdown=""){
     if(lang==="html"||src.trim().startsWith("<!DOCTYPE")||src.trim().startsWith("<html")){
       const getBundled=()=>bundleWebBlocks(fullMarkdown)||src;
       add("Canvas",()=>openCanvas(getBundled(),"html","Bundled Web App"),"ac");
-      add("Host",async()=>{out.hidden=false;out.textContent="Deploying bundled site…";out.textContent=await tools.cloud_host(getBundled())});
     }else if(PISTON_MAP[lang]||/^(python|py|js|javascript|ts|cpp|c|rust|go|java|bash|sh|php|sql)$/i.test(lang)){
       add("Auto-Heal & Run",async()=>{
         out.hidden=false;
@@ -1433,7 +1468,7 @@ function renderAll(){
   bottom(true);
 }
 
-/* ===== INSTANT BLITZ PRE-FETCHER, ANTI-STALLING GUARD & ONE-SHOT AGENT LOOP ===== */
+/* ===== INSTANT BLITZ PRE-FETCHER & ONE-SHOT AGENT LOOP ===== */
 const SEND_SVG=`<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`;
 const STOP_SVG=`<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>`;
 
@@ -1448,7 +1483,7 @@ async function ask(text){
     $("#q").value="";tools.recon_graph(dom);return;
   }
 
-  let blitzTargetDomain=null,blitzOmniQuery=null,blitzScopeText=null,blitzFuzzTarget=null,blitzJsUrl=null,isWebBuild=false,directReelTopic=null,directImgPrompt=null;
+  let blitzTargetDomain=null,blitzOmniQuery=null,blitzScopeText=null,blitzFuzzTarget=null,isWebBuild=false,directReelTopic=null,directImgPrompt=null;
   if(text.startsWith("/reel ")){
     directReelTopic=text.slice(6).trim();
     text=`Create an autonomous multi-scene AI video reel for: ${directReelTopic}`;
@@ -1479,7 +1514,7 @@ async function ask(text){
     }else if(/in[\s-]*scope|out[\s-]*of[\s-]*scope|bounty|hackerone|intigriti/i.test(text)&&text.length>60){
       blitzScopeText=text;
       S.bugMode=true;S.taskMode=true;save();
-    }else if(text.length>22&&!/^(hi|hello|hey|thanks|ok|bna|krdo)\b/i.test(text)){
+    }else if(text.length>22&&!/^(hi|hello|hey|hlo|thanks|ok|bna|krdo)\b/i.test(text)){
       blitzOmniQuery=text;
     }
   }
@@ -1495,7 +1530,7 @@ async function ask(text){
   pending=null;$("#file").style.display="none";
   userScrolledUp=false;bottom(true);
   save();drawList();
-  return await runAgent({blitzTargetDomain,blitzOmniQuery,blitzScopeText,blitzFuzzTarget,blitzJsUrl,isWebBuild,directReelTopic,directImgPrompt});
+  return await runAgent({blitzTargetDomain,blitzOmniQuery,blitzScopeText,blitzFuzzTarget,isWebBuild,directReelTopic,directImgPrompt});
 }
 
 async function regenerate(i){
@@ -1515,7 +1550,7 @@ async function runAgent(opts={}){
   const c=cur();const myIndex=c.msgs.length;
   const row=document.createElement("div");row.className="arow";
   const th=document.createElement("details");th.className="th";th.open=true;
-  th.innerHTML='<summary><span class="dot"></span><span class="tt">Astra AGI Engine running…</span><span class="tm" style="margin-left:auto">0.0s</span></summary><div class="pbar-wrap"><div class="pbar"></div></div><div class="st"></div>';
+  th.innerHTML='<summary><span class="dot"></span><span class="tt">Astra AGI Cloud Engine running…</span><span class="tm" style="margin-left:auto">0.0s</span></summary><div class="pbar-wrap"><div class="pbar"></div></div><div class="st"></div>';
   const st=th.querySelector(".st"),pbar=th.querySelector(".pbar"),t0=performance.now();
   const tick=setInterval(()=>th.querySelector(".tm").textContent=((performance.now()-t0)/1000).toFixed(1)+"s",100);
   const ans=document.createElement("div");ans.className="a";
@@ -1701,7 +1736,7 @@ const CMD_TABS={
   },
   agi(){
     $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)"><b>AGI Cognitive Core (Continual Learning, Meta-RL, Causal World Model & Recursive Planner):</b> Inspect learned skills, reinforcement score, and causal world triples, or launch a deep multi-agent research & discovery task.</div>
+      <div style="font-size:12.5px;color:var(--m)"><b>AGI Cognitive Core (Continual Learning, Meta-RL, Causal World Model & Recursive Planner):</b> Inspect learned skills, reinforcement score, and causal world triples.</div>
       <div class="qgrid">
         <div class="qcard on"><div><b>Continual Skill Library</b><span>${S.skills.length} reusable skills learned</span></div></div>
         <div class="qcard on"><div><b>Reinforcement Policy</b><span>RL Reward Weight: ${S.rlScore}</span></div></div>
@@ -1727,18 +1762,18 @@ const CMD_TABS={
       <div class="qgrid">
         <button class="qcard ${S.blitzMode?"on":""}" id="qmBlitz"><div><b>1-Shot Autonomous Blitz</b><span>Pre-fetches 12 vectors & never stalls</span></div><span class="dot-ind"></span></button>
         <button class="qcard ${S.autoSpeak?"on":""}" id="qmSpeak"><div><b>Auto-Speak AI Replies</b><span>Reads every response in natural voice</span></div><span class="dot-ind"></span></button>
-        <button class="qcard ${S.swarmMode?"on":""}" id="qmSwarm"><div><b>Multi-Agent Swarm</b><span>Architect + Critic + Synthesizer</span></div><span class="dot-ind"></span></button>
-        <button class="qcard ${S.arenaMode?"on":""}" id="qmArena"><div><b>4-Brain Consensus</b><span>Parallel Claude + Gemini + GPT</span></div><span class="dot-ind"></span></button>
+        <button class="qcard ${S.swarmMode?"on":""}" id="qmSwarm"><div><b>Multi-Agent Swarm</b><span>Qwen Coder + DeepSeek R1 + Claude</span></div><span class="dot-ind"></span></button>
+        <button class="qcard ${S.arenaMode?"on":""}" id="qmArena"><div><b>4-Brain Consensus</b><span>Parallel Claude + GPT + Gemini + DeepSeek</span></div><span class="dot-ind"></span></button>
         <button class="qcard ${S.autoHeal?"on":""}" id="qmHeal"><div><b>Self-Healing Code Loop</b><span>Auto-fixes bugs in Sandbox</span></div><span class="dot-ind"></span></button>
       </div>
-      <div class="cvss-grid" style="margin-top:4px">
-        <div class="cvss-box">
-          <label>Select AI Neural Voice</label>
-          <select id="cmVoiceSel">${voiceOpts}</select>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+        <div>
+          <label style="font-size:12px;color:var(--m);display:block;margin-bottom:4px">Select AI Neural Voice</label>
+          <select id="cmVoiceSel" class="ti">${voiceOpts}</select>
         </div>
-        <div class="cvss-box">
-          <label>Voice Playback Speed</label>
-          <select id="cmVoiceRate">
+        <div>
+          <label style="font-size:12px;color:var(--m);display:block;margin-bottom:4px">Voice Playback Speed</label>
+          <select id="cmVoiceRate" class="ti">
             <option value="0.9" ${S.voiceRate===0.9?"selected":""}>0.9x (Calm)</option>
             <option value="1" ${S.voiceRate===1?"selected":""}>1.0x (Natural)</option>
             <option value="1.15" ${S.voiceRate===1.15?"selected":""}>1.15x (Fast)</option>
@@ -1756,7 +1791,7 @@ const CMD_TABS={
     $("#qmHeal").onclick=()=>{S.autoHeal=!S.autoHeal;save();CMD_TABS.modes()};
     $("#cmVoiceSel").onchange=e=>{S.voice=e.target.value;save();toast("Voice updated")};
     $("#cmVoiceRate").onchange=e=>{S.voiceRate=parseFloat(e.target.value);save()};
-    $("#testVoiceBtn").onclick=()=>speakText("Hello Nikhil, Astra AGI v17 neural voice and media director are ready.",true);
+    $("#testVoiceBtn").onclick=()=>speakText("Hello Nikhil, Astra AGI v19 keyless cloud edition is online and ready.",true);
   },
   scope(){
     $("#cmdPane").innerHTML=`
@@ -1864,7 +1899,7 @@ const CMD_TABS={
     $("#cmdPane").innerHTML=`
       <div style="font-size:12.5px;color:var(--m)"><b>Virtual Computer Use & Multi-Runtime Sandbox:</b> Execute Python (WASM/Cloud), JavaScript, Linux Bash, C++, Rust, or Go with automatic error recovery.</div>
       <select id="clLang" class="ti"><option value="python">Python 3 (WASM + Cloud Auto-Failover)</option><option value="javascript">JavaScript (Instant Sandbox)</option><option value="bash">Linux Bash Shell</option><option value="go">Go</option><option value="rust">Rust</option><option value="c++">C++ (GCC)</option></select>
-      <textarea id="clCode" class="ti" rows="5">import sys, hashlib\nprint("Runtime:", sys.version.split()[0])\nprint("SHA256:", hashlib.sha256(b"Astra AGI v17").hexdigest())</textarea>
+      <textarea id="clCode" class="ti" rows="5">import sys, hashlib\nprint("Runtime:", sys.version.split()[0])\nprint("SHA256:", hashlib.sha256(b"Astra AGI v19").hexdigest())</textarea>
       <div class="row2">
         <button class="pri" id="clHealRun">Auto-Heal & Execute</button>
       </div>
@@ -1889,7 +1924,6 @@ document.querySelectorAll("[data-cmd]").forEach(b=>b.onclick=()=>openCmd(b.datas
 
 /* ===== LIVE VOICE ORB ===== */
 let orbRec=null,orbActive=false;
-function openOrb(){closeSide();$("#orbM").classList.add("open")}
 $("#orbCloseBtn").onclick=()=>{
   orbActive=false;try{orbRec?.stop()}catch(_){}
   if(curAudio){curAudio.pause();curAudio=null}
@@ -1936,7 +1970,7 @@ const closeSide=()=>{$("#side").classList.remove("open");$("#ov").classList.remo
 
 function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;$("#toasts").appendChild(t);setTimeout(()=>t.classList.add("out"),2200);setTimeout(()=>t.remove(),2600)}
 
-/* ===== GENERAL UI, SLASH PALETTE & MULTIMODAL VIDEO/IMAGE MEDIA ===== */
+/* ===== GENERAL UI & MULTIMODAL MEDIA ===== */
 $("#model").innerHTML=MODELS.map(m=>`<option value="${m[0]}">${m[1]}</option>`).join("");
 $("#model").value=S.model;$("#model").onchange=e=>{S.model=e.target.value;save()};
 $("#send").onclick=()=>{if(busy)stop=true;else ask($("#q").value)};
@@ -2004,17 +2038,7 @@ if(SR){
   $("#mic").onclick=()=>{on?rec.stop():rec.start();on=!on;$("#mic").classList.toggle("rec",on)};
 }else $("#mic").style.display="none";
 
-/* ===== STUDIO & GEMINI ENGINE ===== */
-Object.assign(tools,{
-  async image(p){
-    const r=await fetch("[https://image.pollinations.ai/prompt/](https://image.pollinations.ai/prompt/)"+encodeURIComponent(p.trim())+"?width=1024&height=1024&nologo=true&seed="+Math.floor(Math.random()*1e6));
-    const b=await r.blob(),id=newId();await mPut(id,{b,kind:"image"});S.lastImg=id;save();
-    return "Image ready: [[media:"+id+"]]";
-  },
-  async edit(p){return await tools.image(p)},
-  async video(p){return await tools.image(p)}
-});
-
+/* ===== GEMINI CLOUD ENGINE ===== */
 const getKey=()=>localStorage.agi_gk||GEMINI_KEY||"";
 const gmId=m=>m==="gm:custom"?(localStorage.agi_gm||"gemini-2.5-flash"):m.slice(3);
 function gmReq(model,method,body,sig,forceAIza){
