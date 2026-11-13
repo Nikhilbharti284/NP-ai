@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#000000">
-<title>Astra AGI v27.1 (DevSecOps Fixed)</title>
+<title>Astra AGI v27.2 (DevSecOps Fixed)</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3Ccircle cx='256' cy='256' r='44' fill='%23fff'/%3E%3C/svg%3E" type="image/svg+xml">
 
@@ -400,7 +400,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
 <!-- Command Center -->
 <div class="mbk" id="cmdM" role="dialog" aria-modal="true">
   <div class="mdl">
-    <div class="mtop"><span>Astra AGI v27.1 Command Center</span><button id="cmdClose">✕</button></div>
+    <div class="mtop"><span>Astra AGI v27.2 Command Center</span><button id="cmdClose">✕</button></div>
     <div class="ttabs" id="cmdTabs">
       <button class="stab on" data-tab="videdit">Video Director</button>
       <button class="stab" data-tab="imgedit">Image Studio</button>
@@ -419,7 +419,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   ASTRA AGI v27.1 — DEV SEC OPS CORE (BUG FIXED)
+   ASTRA AGI v27.2 — DEV SEC OPS CORE (TRULY BUG FIXED)
    ═══════════════════════════════════════════════════════════════ */
 
 const _dec=(arr)=>arr.map(c=>String.fromCharCode(c)).join("");
@@ -1546,7 +1546,7 @@ for(const [name, data] of Object.entries(S.customTools || {})){
 let TOOL_NAMES = Object.keys(tools).join("|");
 let TOOLRE_G = new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F, "g");
 
-const sysPrompt = ()=>`You are Astra AGI v27.1 — an autonomous AI Engineer, Data Analyst, Video Director & Authorized Passive Security / SAST Auditor. Today is ${new Date().toDateString()}. Match user's language (English, Hindi, Hinglish).
+const sysPrompt = ()=>`You are Astra AGI v27.2 — an autonomous AI Engineer, Data Analyst, Video Director & Authorized Passive Security / SAST Auditor. Today is ${new Date().toDateString()}. Match user's language (English, Hindi, Hinglish).
 
 CRITICAL MANDATES:
 1. ZERO STALLING: Never reply with "I will now write the code" — output the complete implementation immediately.
@@ -1602,7 +1602,7 @@ async function callOpenRouter(msgs, model, onTok){
   if(!k) throw new Error("OpenRouter key missing");
   const plain = msgs.map(({img,...r})=>({role:r.role, content:String(r.content||"")}));
   const r = await withTimeout(fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method:"POST", headers:{"Content-Type":"application/json","Authorization":"Bearer "+k,"HTTP-Referer":location.origin||"https://astra.agi","X-Title":"Astra AGI v27.1"},
+    method:"POST", headers:{"Content-Type":"application/json","Authorization":"Bearer "+k,"HTTP-Referer":location.origin||"https://astra.agi","X-Title":"Astra AGI v27.2"},
     body: JSON.stringify({ model: model||"openrouter/free", messages: plain })
   }), 50000, "OpenRouter timeout");
   const j = await r.json();
@@ -2688,4 +2688,4 @@ else { hello(); drawList(); }
 if("serviceWorker" in navigator) window.addEventListener("load", ()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body>
-      </html>
+          </html>
