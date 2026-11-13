@@ -16,12 +16,13 @@ const CDN_ASSETS = [
 ];
 
 const BYPASS_HOSTS = [
-  "127.0.0.1", "localhost", "generativelanguage.googleapis.com",
-  "aiplatform.googleapis.com", "pollinations.ai", "text.pollinations.ai",
-  "image.pollinations.ai", "emkc.org", "r.jina.ai", "wikipedia.org",
-  "algolia.com", "reddit.com", "archive.org", "arxiv.org", "dns.google",
-  "crt.sh", "rdap.org", "shodan.io", "urlscan.io", "api.github.com",
-  "stackexchange.com", "nist.gov", "securityheaders.com"
+  "127.0.0.1", "localhost", "api.groq.com", "openrouter.ai",
+  "generativelanguage.googleapis.com", "aiplatform.googleapis.com",
+  "pollinations.ai", "text.pollinations.ai", "image.pollinations.ai",
+  "emkc.org", "r.jina.ai", "wikipedia.org", "algolia.com", "reddit.com",
+  "archive.org", "arxiv.org", "dns.google", "crt.sh", "rdap.org",
+  "shodan.io", "urlscan.io", "api.github.com", "stackexchange.com",
+  "nist.gov", "securityheaders.com"
 ];
 
 self.addEventListener("install", (e) => {
