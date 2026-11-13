@@ -152,7 +152,7 @@ footer{padding:6px 12px calc(12px + env(safe-area-inset-bottom,0px));flex-shrink
 #file div{display:inline-flex;align-items:center;gap:8px;background:var(--sur);border:1px solid var(--b);border-radius:10px;padding:5px 10px;font-size:12.5px}
 #boxWrap{max-width:720px;margin:0 auto;position:relative}
 
-#slashMenu{display:none;position:absolute;bottom:56px;left:0;right:0;max-width:420px;background:var(--side);border:1px solid var(--b);border-radius:14px;padding:6px;box-shadow:0 12px 36px rgba(0,0,0,.5);z-index:50;flex-direction:column;gap:2px}
+#slashMenu{display:none;position:absolute;bottom:56px;left:0;right:0;max-width:440px;background:var(--side);border:1px solid var(--b);border-radius:14px;padding:6px;box-shadow:0 12px 36px rgba(0,0,0,.5);z-index:50;flex-direction:column;gap:2px}
 #slashMenu.open{display:flex}
 .sl-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:9px;font-size:13px;text-align:left}
 .sl-item:hover{background:var(--sur)}
@@ -175,7 +175,7 @@ footer{padding:6px 12px calc(12px + env(safe-area-inset-bottom,0px));flex-shrink
 .mbk{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:60;align-items:flex-end;justify-content:center;padding:0}
 @media(min-width:640px){.mbk{align-items:center;padding:16px}}
 .mbk.open{display:flex}
-.mdl{background:var(--side);border:1px solid var(--b);border-radius:20px 20px 0 0;width:100%;max-width:720px;max-height:86dvh;display:flex;flex-direction:column;overflow:hidden}
+.mdl{background:var(--side);border:1px solid var(--b);border-radius:20px 20px 0 0;width:100%;max-width:740px;max-height:86dvh;display:flex;flex-direction:column;overflow:hidden}
 @media(min-width:640px){.mdl{border-radius:16px;max-height:84dvh}}
 .mtop{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--b);font-size:15px;font-weight:600}
 .ttabs{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid var(--b);flex-shrink:0}
@@ -233,6 +233,11 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
 .toast.out{opacity:0}
 .mslot{margin:8px 0}.gm{max-width:100%;border-radius:12px;display:block}
 
+@media print{
+  #side,header,footer,#canvasPane,#jumpBtn,.acts,details.th{display:none!important}
+  body,#main,#workspace,#chat{height:auto!important;overflow:visible!important;background:#fff!important;color:#000!important}
+  .cb pre{max-height:none!important;overflow:visible!important;background:#f4f4f4!important;color:#000!important}
+}
 @media(max-width:900px){#canvasPane{position:fixed;inset:0;width:100%;border-left:0}}
 @media(max-width:768px){#side{position:fixed;top:0;bottom:0;left:0;transform:translateX(-100%)}#side.open{transform:none}#menu{display:flex}}
 </style>
@@ -263,28 +268,32 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
 
   <div class="sfoot">
     <details class="sdrop">
-      <summary><span>Tools & Security Suite</span><span>▾</span></summary>
+      <summary><span>Security & Cloud Suite</span><span>▾</span></summary>
       <div class="sdrop-list">
         <button class="srow" data-cmd="scope">Program Scope Parser</button>
         <button class="srow" data-cmd="bug">12-Vector Domain Blitz</button>
+        <button class="srow" data-cmd="jslab">JS De-obfuscator & GraphQL</button>
+        <button class="srow" data-cmd="fuzzer">Cloud Fuzzer & Auto-Patcher</button>
+        <button class="srow" data-cmd="apk">APK, JADX & Frida Generator</button>
+        <button class="srow" data-cmd="jwt">JWT Auditor & Secret Tester</button>
         <button class="srow" data-cmd="http">HTTP / CORS & Takeover Lab</button>
         <button class="srow" data-cmd="cloud">Cloud Linux (Bash/Python)</button>
+        <button class="srow" data-cmd="cvss">CVSS, Nuclei & GHSA Builder</button>
         <button class="srow" data-cmd="batch">Multi-Target Batch Queue</button>
-        <button class="srow" data-cmd="apk">APK & JADX Static Scanner</button>
-        <button class="srow" data-cmd="cvss">CVSS 3.1 Report Builder</button>
         <button class="srow" id="osintDashBtn">Attack Surface Graph</button>
         <button class="srow" data-cmd="notes">Scratchpad Notes</button>
       </div>
     </details>
 
     <details class="sdrop">
-      <summary><span>Settings & Voice</span><span>▾</span></summary>
+      <summary><span>Settings & Export</span><span>▾</span></summary>
       <div class="sdrop-list">
         <button class="srow" data-cmd="modes">Voice & AI Modes</button>
         <button class="srow" id="themeBtn">Theme: dark</button>
         <button class="srow" id="gkBtn">Gemini API Key</button>
         <button class="srow" id="mem">Persistent Memory</button>
         <button class="srow" id="installBtn" hidden>Install App</button>
+        <button class="srow" id="pdfBtn">Export PDF Report</button>
         <button class="srow" id="exp">Export Markdown (.md)</button>
         <button class="srow" id="bak">Backup (.json)</button>
         <button class="srow" id="rst">Restore Backup</button>
@@ -354,9 +363,10 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
       <div id="slashMenu">
         <button class="sl-item" data-sl="/scope"><code>/scope</code><span>Paste Bug Bounty Program Scope</span></button>
         <button class="sl-item" data-sl="/audit "><code>/audit [domain]</code><span>12-Vector Instant Domain Audit</span></button>
+        <button class="sl-item" data-sl="/fuzz "><code>/fuzz [target]</code><span>Cloud Fuzzer & CWE-835 DoS Tester</span></button>
+        <button class="sl-item" data-sl="/js "><code>/js [url]</code><span>De-obfuscate JS & Extract GraphQL/APIs</span></button>
         <button class="sl-item" data-sl="/omni "><code>/omni [goal]</code><span>2-Hop Deep Web Crawler</span></button>
         <button class="sl-item" data-sl="/bash "><code>/bash [task]</code><span>Cloud Linux Container</span></button>
-        <button class="sl-item" data-sl="/graph "><code>/graph [domain]</code><span>Attack Surface Graph</span></button>
       </div>
       <div id="box">
         <button class="cbtn" id="cmdBtn" title="Tools, Files & Voice" aria-label="Open Tools">
@@ -383,11 +393,14 @@ textarea.ti{resize:vertical;min-height:85px;font-family:ui-monospace,Menlo,monos
       <button class="stab on" data-tab="modes">Modes & Voice</button>
       <button class="stab" data-tab="scope">Program Scope</button>
       <button class="stab" data-tab="bug">Domain Audit</button>
+      <button class="stab" data-tab="jslab">JS & GraphQL</button>
+      <button class="stab" data-tab="fuzzer">Fuzz & Patch</button>
+      <button class="stab" data-tab="apk">APK & Frida</button>
+      <button class="stab" data-tab="jwt">JWT & Auth</button>
       <button class="stab" data-tab="http">HTTP & Takeover</button>
       <button class="stab" data-tab="cloud">Cloud Linux</button>
+      <button class="stab" data-tab="cvss">CVSS, Nuclei & GHSA</button>
       <button class="stab" data-tab="batch">Batch Queue</button>
-      <button class="stab" data-tab="apk">APK / JADX</button>
-      <button class="stab" data-tab="cvss">CVSS 3.1</button>
       <button class="stab" data-tab="notes">Notes</button>
     </div>
     <div class="tpane" id="cmdPane"></div>
@@ -517,7 +530,7 @@ setTimeout(mapTarget,200);
 <\/script></body></html>`;
 
 /* ===== STATE ===== */
-let S={};try{S=JSON.parse(localStorage.agi_v13||localStorage.agi_v12||"{}")}catch(e){}
+let S={};try{S=JSON.parse(localStorage.agi_v14||localStorage.agi_v13||"{}")}catch(e){}
 S.chats??={};S.cur??=null;
 if(!S.model||!MODELS.some(m=>m[0]===S.model))S.model="auto";
 S.voice??="nova";S.autoSpeak??=false;S.voiceRate??=1.0;
@@ -526,7 +539,7 @@ S.olUrl??="http://127.0.0.1:11434";S.olModel??="qwen2.5-coder:7b";
 S.canvasCode??=RECON_GRAPH_HTML;S.canvasLang??="html";
 
 function save(){
-  try{localStorage.agi_v13=JSON.stringify(S)}
+  try{localStorage.agi_v14=JSON.stringify(S)}
   catch(e){
     const ids=Object.values(S.chats).sort((a,b)=>a.ts-b.ts).map(c=>c.id);
     if(ids.length>1){delete S.chats[ids[0]];save()}
@@ -626,13 +639,13 @@ $("#cCode").addEventListener("input",()=>{S.canvasCode=$("#cCode").value;save()}
 $("#cCloseBtn").onclick=()=>$("#canvasPane").classList.remove("open");
 $("#openCanvasHdr").onclick=()=>$("#canvasPane").classList.toggle("open");
 $("#cZipBtn").onclick=()=>{
-  const files=[{name:S.canvasLang==="html"?"index.html":"main."+S.canvasLang,content:S.canvasCode},{name:"README.md",content:"# Astra Carbon X Project\nGenerated and verified by Astra Carbon X v13.0."}];
+  const files=[{name:S.canvasLang==="html"?"index.html":"main."+S.canvasLang,content:S.canvasCode},{name:"README.md",content:"# Astra Carbon X Project\nGenerated and verified by Astra Carbon X v14.0."}];
   const c=cur();
   if(c?.msgs?.length){
     let idx=1;
     c.msgs.forEach(m=>{
       for(const match of (m.content||"").matchAll(/```(\w+)\n([\s\S]*?)```/g)){
-        const ext=({python:"py",javascript:"js",html:"html",css:"css",sh:"sh",bash:"sh",rust:"rs",go:"go",cpp:"cpp"})[match[1].toLowerCase()]||"txt";
+        const ext=({python:"py",javascript:"js",html:"html",css:"css",sh:"sh",bash:"sh",rust:"rs",go:"go",cpp:"cpp",yaml:"yaml",yml:"yml"})[match[1].toLowerCase()]||"txt";
         files.push({name:`snippet_${idx++}.${ext}`,content:match[2]});
       }
     });
@@ -691,6 +704,30 @@ async function autoHealCode(lang,code,onUpdate){
   }
 }
 
+/* ===== JS DE-OBFUSCATOR, SOURCE MAP & GRAPHQL / API EXTRACTOR ===== */
+function deobfuscateAndScanJS(rawCode,sourceName="Bundle"){
+  // 1. Decode hex (\x41) and unicode (\u0041) escapes
+  let decoded=rawCode.replace(/\\x([0-9A-Fa-f]{2})/g,(_,h)=>String.fromCharCode(parseInt(h,16)))
+                     .replace(/\\u([0-9A-Fa-f]{4})/g,(_,u)=>String.fromCharCode(parseInt(u,16)));
+  // 2. Basic beautification for minified 1-liners
+  const beautified=decoded.replace(/;(?=\S)/g,";\n").replace(/\{(?=\S)/g,"{\n").replace(/\}(?=\S)/g,"}\n");
+  const out=[];
+  const extract=(title,re)=>{
+    const m=[...new Set([...decoded.matchAll(re)].map(x=>x[1]||x[0]))].slice(0,30);
+    if(m.length)out.push(`### ${title} (${m.length})\n`+m.map(x=>"- `"+x+"`").join("\n"));
+  };
+  extract("REST API & Admin Routes",/["'](\/(?:api|v[1-5]|admin|internal|auth|graphql|oauth|user|account|webhook)[a-zA-Z0-9_\/.-]*)["']/g);
+  extract("Full Backend URLs",/(https?:\/\/[a-zA-Z0-9.-]+(?::\d+)?\/(?:api|v[1-5]|graphql|admin|auth)[a-zA-Z0-9_\/.?=&-]*)/g);
+  extract("GraphQL Queries & Mutations",/\b(query|mutation|subscription)\s+([A-Za-z0-9_]+)\s*[({]/g);
+  extract("DOM XSS & PostMessage Sinks",/(addEventListener\s*\(\s*["']message["']|\.innerHTML\s*=|\.outerHTML\s*=|document\.write\s*\(|eval\s*\(| dangerouslySetInnerHTML)/g);
+  extract("Hardcoded Secrets & Cloud Keys",/(AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z\-_]{35}|sk-[a-zA-Z0-9]{20,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,})/g);
+  extract("SourceMap References",/\/\/[#@]\s*sourceMappingURL=([^\s]+)/g);
+  return {
+    report:out.length?`## JS De-obfuscation & Endpoint Audit (${sourceName})\n\n`+out.join("\n\n"):`Decoded ${rawCode.length.toLocaleString()} chars — no obvious hardcoded endpoints or secrets matched.`,
+    beautified:beautified.slice(0,25000)
+  };
+}
+
 /* ===== STATIC APK / JADX / JS SECRET SCANNER ===== */
 function scanAndroidSource(text,filename="source"){
   const findings=[];
@@ -708,6 +745,33 @@ function scanAndroidSource(text,filename="source"){
     if(matches.length)findings.push(`### ${title} (${matches.length})\n`+matches.map(x=>"- `"+x+"`").join("\n"));
   }
   return findings.length?`## Static SAST & Secret Scan (${filename})\n\n`+findings.join("\n\n"):`Scanned ${text.length.toLocaleString()} bytes in ${filename} — no immediate regex signatures matched.`;
+}
+
+/* ===== JWT SECURITY AUDITOR & WEAK SECRET TESTER ===== */
+async function auditJWT(token){
+  const parts=token.trim().split(".");
+  if(parts.length<2)return "Invalid JWT format (expected header.payload.signature)";
+  const dec=s=>JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,"+").replace(/_/g,"/"))))),hdr=dec(parts[0]),pay=dec(parts[1]);
+  const issues=[];
+  if(!hdr.alg||/^none$/i.test(hdr.alg))issues.push("[CRITICAL] Algorithm is 'none' — signature verification bypass possible.");
+  if(/^HS(256|384|512)$/i.test(hdr.alg))issues.push(`[INFO] Symmetric HMAC (${hdr.alg}) used — testing common weak secrets via WebCrypto...`);
+  if(!pay.exp)issues.push("[MEDIUM] Token has no expiration ('exp') claim — token never expires.");
+  else if(pay.exp*1000<Date.now())issues.push(`[INFO] Token expired at ${new Date(pay.exp*1000).toISOString()}.`);
+  // Test common weak HMAC secrets client-side
+  const commonSecrets=["secret","password","123456","admin","jwt_secret","key","supersecret","changeme","test","default","development"];
+  let cracked=null;
+  if(/^HS256$/i.test(hdr.alg)&&parts[2]){
+    const enc=new TextEncoder(),msg=enc.encode(parts[0]+"."+parts[1]);
+    for(const sec of commonSecrets){
+      const key=await crypto.subtle.importKey("raw",enc.encode(sec),{name:"HMAC",hash:"SHA-256"},false,["sign"]);
+      const sig=new Uint8Array(await crypto.subtle.sign("HMAC",key,msg));
+      const b64url=btoa(String.fromCharCode(...sig)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+      if(b64url===parts[2]){cracked=sec;break}
+    }
+  }
+  if(cracked)issues.push(`[CRITICAL] Weak HMAC Secret Cracked: "${cracked}"`);
+  else if(/^HS256$/i.test(hdr.alg))issues.push("[OK] Signature did not match top default weak secrets.");
+  return `HEADER:\n${JSON.stringify(hdr,null,2)}\n\nPAYLOAD:\n${JSON.stringify(pay,null,2)}\n\nSECURITY AUDIT:\n`+issues.join("\n");
 }
 
 /* ===== BUG BOUNTY PROGRAM SCOPE PARSER ===== */
@@ -758,6 +822,24 @@ async function callLocalOllama(msgs,onTok){
 /* ===== AUTONOMOUS BLITZ TOOLS ===== */
 const J=async(u,o)=>{const r=await fetch(u,o);if(!r.ok)throw new Error("HTTP "+r.status);return r.json()};
 const tools={
+  async js_deobfuscate(inp){
+    inp=inp.trim();
+    if(/^https?:\/\//i.test(inp)||/^[a-z0-9.-]+\.[a-z]{2,}\//i.test(inp)){
+      const u=/^https?:\/\//i.test(inp)?inp:"https://"+inp;
+      const txt=await (await fetch("https://r.jina.ai/"+u,{headers:{Accept:"text/plain"}})).text();
+      return deobfuscateAndScanJS(txt,u).report;
+    }
+    return deobfuscateAndScanJS(inp,"Snippet").report;
+  },
+  async cloud_fuzzer(codeOrSpec){
+    const harness=await routeStandardLLM([
+      {role:"system",content:"Write a self-contained Python 3 property-based fuzzing & boundary-testing script that tests the user's target function/parser/regex against malformed inputs, huge integers, empty bytes, deep nesting, and CWE-835 infinite-loop timeout conditions (using signal/time). Print clear PASS/FAIL metrics and any discovered crash/hang inputs. Output ONLY raw Python code without markdown fences."},
+      {role:"user",content:codeOrSpec}
+    ],()=>{});
+    const cleanPy=harness.replace(/^```[\w]*\n?/,"").replace(/```$/,"").trim();
+    const res=await autoHealCode("python",cleanPy);
+    return `[Cloud Fuzzing Harness Executed]\n${res.output}\n\n[Fuzzer Code]\n${res.code}`;
+  },
   async takeover_check(domain){
     return await checkSubdomainTakeover(domain.trim().replace(/^https?:\/\//,"").split("/")[0]);
   },
@@ -810,7 +892,7 @@ const tools={
       tools.securityheaders(target).then(r=>"[7. HTTP Security Headers Analysis]\n"+r.slice(0,1600)).catch(()=>""),
       tools.wayback(target).then(r=>"[8. Wayback Machine Historical Endpoints]\n"+r.slice(0,1800)).catch(()=>""),
       tools.urlscan(target).then(r=>"[9. URLScan.io Passive Intel]\n"+r.slice(0,1400)).catch(()=>""),
-      fetch("https://r.jina.ai/https://"+target,{headers:{Accept:"text/plain"}}).then(r=>r.text()).then(t=>"[10. Main Target Page & JS Scan]\n"+scanAndroidSource(t,target)+"\n\n[Page Snippet]\n"+t.slice(0,1400)).catch(()=>""),
+      fetch("https://r.jina.ai/https://"+target,{headers:{Accept:"text/plain"}}).then(r=>r.text()).then(t=>"[10. Main Target Page & JS Endpoint Scan]\n"+deobfuscateAndScanJS(t,target).report+"\n\n[Page Snippet]\n"+t.slice(0,1400)).catch(()=>""),
       checkSubdomainTakeover(target).then(r=>"[11. Subdomain CNAME & Takeover Check]\n"+r).catch(()=>"")
     ];
     const base=(await Promise.all(tasks)).filter(Boolean).join("\n\n");
@@ -839,11 +921,7 @@ const tools={
     return `Interactive Attack Surface Graph for ${d} launched in Live Canvas.`;
   },
   async bughunt(target){return await tools.domain_blitz(target)},
-  async js_secrets(url){
-    url=url.trim();if(!/^https?:\/\//i.test(url))url="https://"+url;
-    const txt=await (await fetch("https://r.jina.ai/"+url,{headers:{Accept:"text/plain"}})).text();
-    return scanAndroidSource(txt,url);
-  },
+  async js_secrets(url){return await tools.js_deobfuscate(url)},
   async cloud_exec(inp){
     const m=inp.trim().match(/^([a-zA-Z0-9+#_-]+)\n([\s\S]*)$/);
     const lang=m?m[1]:"python",code=m?m[2]:inp;
@@ -906,13 +984,13 @@ const tools={
 const TOOL_NAMES=Object.keys(tools).join("|")+"|image|edit|video";
 const TOOLRE_G=new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F,"g");
 
-const sysPrompt=()=>`You are Astra Carbon X v13.0 — an elite, autonomous AI Engineer, Omni-Research Harvester & Authorized Passive Bug Bounty / SAST Auditor. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
+const sysPrompt=()=>`You are Astra Carbon X v14.0 — an elite, autonomous AI Engineer, Omni-Research Harvester & Authorized Passive Bug Bounty / SAST Auditor. Today is ${new Date().toDateString()}. Match the user's language (English, Hindi, or Hinglish) naturally.
 
 STRICT ONE-SHOT EXECUTION MANDATE:
-1. Do not ask the user for confirmation ("Should I proceed?", "Would you like me to..."). Execute all analysis, cloud scripts, and passive recon in one shot and deliver the complete, finished output immediately.
+1. Do not ask the user for confirmation ("Should I proceed?", "Would you like me to..."). Execute all analysis, cloud scripts, fuzzing harnesses, and passive recon in one shot and deliver the complete, finished output immediately.
 2. Never output truncated code or placeholders ("// TODO").
-3. When given Bug Bounty Program instructions or scope, parse the in-scope assets, respect all out-of-scope exclusions, analyze the 12-vector passive recon telemetry, and produce a comprehensive HackerOne / Intigriti vulnerability & security posture report (with Severity, CVSS v3.1 vector, CWE ID, Evidence, and Remediation Patch).
-4. Strictly adhere to legal, passive OSINT, static code analysis (SAST), and isolated cloud container verification (@bash_sandbox, @auto_verify); never perform active exploitation against external live targets.
+3. When given Bug Bounty Program instructions, domains, or source code, analyze all 12 passive recon vectors, JS endpoints, and SAST patterns, and produce a comprehensive HackerOne / Intigriti / GHSA report (with Severity, CVSS v3.1 vector, CWE ID, Evidence, Unified Diff Patch, and Nuclei YAML template if relevant).
+4. Strictly adhere to legal, passive OSINT, static code analysis (SAST), and isolated cloud container verification (@bash_sandbox, @cloud_fuzzer, @auto_verify); never perform active exploitation against external live targets.
 
 To invoke tools, reply ONLY with tool blocks in this exact format:
 @toolname
@@ -920,7 +998,7 @@ ${F}
 input
 ${F}
 
-Available Tools: @program_audit, @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify (first line: language, next lines: code), @recon_graph, @js_secrets, @apk_scan, @cloud_exec, @canvas, @cloud_host, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @image.
+Available Tools: @program_audit, @js_deobfuscate (url or JS snippet), @cloud_fuzzer (target code/parser to fuzz in cloud), @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify (first line: language, next lines: code), @recon_graph, @js_secrets, @apk_scan, @cloud_exec, @canvas, @cloud_host, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @image.
 Memory: ${S.mem.join(" | ")||"none"} | Notes: ${(S.notes||"").slice(0,300)||"none"}`;
 
 /* ===== BULLETPROOF MULTI-CLOUD LLM ROUTER ===== */
@@ -1055,6 +1133,7 @@ function dress(el){
         if(r.code!==pre.innerText){code.textContent=r.code;if(window.hljs)try{hljs.highlightElement(code)}catch(_){}}
         out.textContent=r.output;
       },"ac");
+      add("Fuzz & Patch",()=>ask(`/fuzz ${F}${lang}\n${pre.innerText}\n${F}`));
       add("Canvas",()=>openCanvas(pre.innerText,lang||"python","Code Editor"));
     }
     add("Copy",b=>{navigator.clipboard.writeText(pre.innerText);b.textContent="Copied";setTimeout(()=>b.textContent="Copy",1200)});
@@ -1114,16 +1193,16 @@ function hello(){
     </div>
     <h1>What can I help you build or audit?</h1>
     <div class="chips">
-      <button id="hcScope"><b>Program Scope Parser</b><span>Paste HackerOne/Intigriti rules for 1-shot audit</span></button>
-      <button id="hcAudit"><b>12-Vector Domain Blitz</b><span>DNS, Subdomains, Takeover, JS Secrets & CVEs</span></button>
-      <button id="hcLinux"><b>Cloud Linux Sandbox</b><span>Run Bash, Python & 30+ languages in cloud</span></button>
-      <button id="hcOmni"><b>Omni-Web Deep Solver</b><span>Crawls 7 networks + full pages automatically</span></button>
+      <button id="hcScope"><b>Program Scope & Domain Blitz</b><span>12-Vector Passive Recon, Takeover & JS Audit</span></button>
+      <button id="hcFuzz"><b>Cloud Fuzzer & Auto-Patcher</b><span>Hunt CWE-835 loops, edge-cases & generate diffs</span></button>
+      <button id="hcJs"><b>JS De-obfuscator & GraphQL</b><span>Extract hidden API routes, tokens & DOM sinks</span></button>
+      <button id="hcApk"><b>APK, JADX & Frida Builder</b><span>Scan Manifests & generate Frida/ADB hooks</span></button>
     </div>
   </div>`;
   $("#hcScope").onclick=()=>openCmd("scope");
-  $("#hcAudit").onclick=()=>openCmd("bug");
-  $("#hcLinux").onclick=()=>openCmd("cloud");
-  $("#hcOmni").onclick=()=>{$("#q").value="/omni ";$("#q").focus();$("#q").dispatchEvent(new Event("input"))};
+  $("#hcFuzz").onclick=()=>openCmd("fuzzer");
+  $("#hcJs").onclick=()=>openCmd("jslab");
+  $("#hcApk").onclick=()=>openCmd("apk");
 }
 
 function renderAll(){
@@ -1149,11 +1228,19 @@ async function ask(text){
     $("#q").value="";tools.recon_graph(dom);return;
   }
 
-  let blitzTargetDomain=null,blitzOmniQuery=null,blitzScopeText=null;
+  let blitzTargetDomain=null,blitzOmniQuery=null,blitzScopeText=null,blitzFuzzTarget=null,blitzJsUrl=null;
   if(text.startsWith("/audit ")){
     blitzTargetDomain=text.slice(7).trim().replace(/^https?:\/\//,"").split("/")[0];
     S.bugMode=true;S.taskMode=true;save();
     text=`Perform a complete 12-Vector Passive Security & Bug Bounty Audit on ${blitzTargetDomain}`;
+  }else if(text.startsWith("/fuzz ")){
+    blitzFuzzTarget=text.slice(6).trim();
+    S.bugMode=true;S.autoHeal=true;save();
+    text=`Fuzz this target in the cloud container (@cloud_fuzzer), identify any CWE-835 infinite loops, crashes, or logic bugs, and provide a hardened unified diff patch:\n\n${blitzFuzzTarget}`;
+  }else if(text.startsWith("/js ")){
+    blitzJsUrl=text.slice(4).trim();
+    S.bugMode=true;save();
+    text=`De-obfuscate and audit this JavaScript bundle/URL for hidden API endpoints, GraphQL queries, DOM XSS sinks, and secrets: ${blitzJsUrl}`;
   }else if(text.startsWith("/omni ")){
     blitzOmniQuery=text.slice(6).trim();
     S.taskMode=true;save();
@@ -1186,7 +1273,7 @@ async function ask(text){
   pending=null;$("#file").style.display="none";
   userScrolledUp=false;bottom(true);
   save();drawList();
-  return await runAgent({blitzTargetDomain,blitzOmniQuery,blitzScopeText});
+  return await runAgent({blitzTargetDomain,blitzOmniQuery,blitzScopeText,blitzFuzzTarget,blitzJsUrl});
 }
 
 async function regenerate(i){
@@ -1236,6 +1323,16 @@ async function runAgent(opts={}){
       tools.recon_graph(opts.blitzTargetDomain);
       const data=await tools.domain_blitz(opts.blitzTargetDomain,msg=>{th.querySelector(".tt").textContent=msg;log("▸ "+msg)});
       preTelemetry=`\n\n[PRE-FETCHED 12-VECTOR PASSIVE RECON TELEMETRY FOR ${opts.blitzTargetDomain}]\n${data}\n\n[MANDATE: Analyze all 12 vectors above immediately and produce a complete HackerOne / Intigriti Security Assessment & Bug Bounty Report with CVSS v3.1 scores, CWE IDs, exposed endpoints/subdomains, CNAME takeover checks, header misconfigurations, Shodan CVE analysis, and exact remediation patches in ONE SHOT.]`;
+    }else if(opts.blitzJsUrl){
+      used+=2;pbar.style.width="50%";
+      th.querySelector(".tt").textContent="De-obfuscating JS & extracting endpoints…";
+      const data=await tools.js_deobfuscate(opts.blitzJsUrl);
+      preTelemetry=`\n\n[PRE-FETCHED JS DE-OBFUSCATION & ENDPOINT TELEMETRY]\n${data}`;
+    }else if(opts.blitzFuzzTarget){
+      used+=3;pbar.style.width="55%";
+      th.querySelector(".tt").textContent="Running Cloud Fuzzing Harness…";
+      const data=await tools.cloud_fuzzer(opts.blitzFuzzTarget);
+      preTelemetry=`\n\n[PRE-FETCHED CLOUD FUZZER TELEMETRY]\n${data}\n\n[MANDATE: Provide root-cause analysis, CWE ID, CVSS score, and a clean unified diff patch fixing any discovered issues.]`;
     }else if(opts.blitzOmniQuery&&S.blitzMode){
       used+=7;pbar.style.width="45%";
       const data=await tools.omni_blitz(opts.blitzOmniQuery,msg=>{th.querySelector(".tt").textContent=msg;log("▸ "+msg)});
@@ -1376,6 +1473,114 @@ const CMD_TABS={
       $("#cmdM").classList.remove("open");tools.recon_graph(t);
     };
   },
+  jslab(){
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)"><b>JavaScript Bundle De-obfuscator & GraphQL / Endpoint Extractor:</b> Enter a live <code>.js</code> URL or paste minified/obfuscated JS code to decode hex/unicode escapes, beautify formatting, and extract hidden API routes, GraphQL queries, postMessage listeners, and cloud keys.</div>
+      <input class="ti" id="jsUrl" placeholder="JS Bundle or Webpage URL (e.g. https://example.com/app.min.js)">
+      <textarea class="ti" id="jsRaw" rows="5" placeholder="Or paste minified / obfuscated JavaScript code here..."></textarea>
+      <div class="row2">
+        <button class="pri" id="jsScanBtn">De-obfuscate & Extract Endpoints</button>
+        <button id="jsCanvasBtn">Open Beautified JS in Canvas</button>
+        <button id="jsAiBtn">Deep AI DOM-XSS & Logic Audit</button>
+      </div>
+      <div class="out2" id="jsOut">Ready.</div>`;
+    $("#jsScanBtn").onclick=async()=>{
+      const u=$("#jsUrl").value.trim(),raw=$("#jsRaw").value.trim();
+      if(!u&&!raw)return toast("Enter a URL or paste JS code");
+      $("#jsOut").textContent="Decoding & scanning JS bundle...";
+      if(u&&!raw){
+        const target=/^https?:\/\//i.test(u)?u:"https://"+u;
+        const fetched=await (await fetch("https://r.jina.ai/"+target,{headers:{Accept:"text/plain"}})).text().catch(()=>"");
+        const res=deobfuscateAndScanJS(fetched,target);
+        $("#jsRaw").value=res.beautified;
+        $("#jsOut").textContent=res.report;
+      }else{
+        const res=deobfuscateAndScanJS(raw,"Pasted JS");
+        $("#jsRaw").value=res.beautified;
+        $("#jsOut").textContent=res.report;
+      }
+    };
+    $("#jsCanvasBtn").onclick=()=>{
+      const raw=$("#jsRaw").value.trim();if(!raw)return toast("Paste or fetch JS first");
+      const res=deobfuscateAndScanJS(raw);
+      $("#cmdM").classList.remove("open");
+      openCanvas(res.beautified,"javascript","De-obfuscated JS");
+    };
+    $("#jsAiBtn").onclick=()=>{
+      const u=$("#jsUrl").value.trim(),raw=$("#jsRaw").value.trim();
+      if(u&&!raw){ask("/js "+u);return}
+      if(!raw)return toast("Paste JS code first");
+      const res=deobfuscateAndScanJS(raw);
+      ask(`[JS DE-OBFUSCATION & DOM-XSS AUDIT]\nExtracted Telemetry:\n${res.report}\n\nCode Snippet:\n${F}javascript\n${res.beautified.slice(0,12000)}\n${F}\n\nAudit this JavaScript for DOM XSS, insecure postMessage handlers, prototype pollution, IDOR API calls, and hardcoded credentials.`);
+    };
+  },
+  fuzzer(){
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)"><b>Autonomous Cloud Fuzzer & Differential Patch Generator:</b> Paste any C/C++, Python, JS, Rust, or Go function/parser. Astra generates a property-based fuzzing harness, runs it in the remote Cloud Linux Sandbox to hunt for CWE-835 infinite loops, crashes, and boundary bugs, and outputs a hardened <code>git diff</code> patch.</div>
+      <textarea class="ti" id="fzCode" rows="6" placeholder="Paste target function, parser, regex, or algorithm to fuzz in the cloud..."></textarea>
+      <div class="row2">
+        <button class="pri" id="fzRunBtn">Launch Cloud Fuzzer & Generate Patch</button>
+      </div>`;
+    $("#fzRunBtn").onclick=()=>{
+      const c=$("#fzCode").value.trim();if(!c)return toast("Paste code or describe a parser to fuzz");
+      ask("/fuzz "+c);
+    };
+  },
+  apk(){
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)"><b>Static APK / JADX Scanner + Frida & ADB PoC Generator:</b> Upload or paste <code>AndroidManifest.xml</code> or JADX Java/Kotlin code to detect exported components, deep-links, and secrets, and auto-generate Frida hook scripts & ADB test commands.</div>
+      <input type="file" id="apkFile" accept=".xml,.java,.kt,.smali,.txt,.json,.apk,.zip" class="ti">
+      <textarea class="ti" id="apkIn" rows="4" placeholder="Paste AndroidManifest.xml / JADX Java source code here..."></textarea>
+      <div class="row2">
+        <button class="pri" id="apkScanBtn">Instant Static Scan</button>
+        <button id="apkFridaBtn">Generate Frida Hook & ADB PoCs</button>
+        <button id="apkAiBtn">Full AI SAST Audit</button>
+      </div>
+      <div class="out2" id="apkOut">Ready.</div>`;
+    $("#apkFile").onchange=async e=>{
+      const f=e.target.files[0];if(!f)return;
+      $("#apkOut").textContent=`Scanning ${f.name}...`;
+      const slice=f.slice(0,1500000),bytes=new Uint8Array(await slice.arrayBuffer());
+      let ascii="",cur="";
+      for(let i=0;i<bytes.length;i++){const b=bytes[i];if(b>=32&&b<=126)cur+=String.fromCharCode(b);else{if(cur.length>=6)ascii+=cur+"\n";cur=""}}
+      if(cur.length>=6)ascii+=cur;
+      $("#apkIn").value=ascii.slice(0,25000);
+      $("#apkOut").textContent=scanAndroidSource(ascii,f.name);
+    };
+    $("#apkScanBtn").onclick=()=>{
+      const txt=$("#apkIn").value.trim();if(!txt)return toast("Paste Manifest/JADX code first");
+      $("#apkOut").textContent=scanAndroidSource(txt,"Pasted Source");
+    };
+    $("#apkFridaBtn").onclick=()=>{
+      const txt=$("#apkIn").value.trim();if(!txt)return toast("Paste Manifest or JADX class code first");
+      ask(`Based on this Android Manifest / JADX source code:\n1. Generate exact \`adb shell am start\` / \`am broadcast\` commands to test all exported activities, deep-links (\`android:scheme\`), and receivers.\n2. Write a ready-to-use **Frida JavaScript Hook Script** (\`Java.perform(...)\`) to hook the sensitive methods, log decrypted strings/keys, and bypass client-side checks in an authorized test environment:\n\n${F}\n${txt.slice(0,12000)}\n${F}`);
+    };
+    $("#apkAiBtn").onclick=()=>{
+      const txt=$("#apkIn").value.trim();if(!txt)return toast("Paste Manifest/JADX code first");
+      const preScan=scanAndroidSource(txt,"Target APK");
+      S.bugMode=true;save();
+      ask(`[ANDROID APK & JADX SAST AUDIT]\nStatic Findings:\n${preScan}\n\nSource:\n${F}\n${txt.slice(0,12000)}\n${F}\n\nAnalyze all exported components, intent filters, WebView settings, and hardcoded keys, and provide complete remediation patches.`);
+    };
+  },
+  jwt(){
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)"><b>JWT Security Auditor & HMAC Weak Secret Tester:</b> Paste a JWT token to inspect claims, check for <code>alg: none</code> / missing expiration flaws, and test against default weak HMAC secrets using client-side WebCrypto.</div>
+      <textarea class="ti" id="jwIn" rows="3" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."></textarea>
+      <div class="row2">
+        <button class="pri" id="jwAuditBtn">Audit JWT & Test Weak Secrets</button>
+        <button id="jwAiBtn">Deep AI Auth Bypass Analysis</button>
+      </div>
+      <div class="out2" id="jwOut">Paste a JWT above.</div>`;
+    $("#jwAuditBtn").onclick=async()=>{
+      const t=$("#jwIn").value.trim();if(!t)return toast("Paste a JWT token first");
+      try{$("#jwOut").textContent=await auditJWT(t)}catch(e){$("#jwOut").textContent="Error: "+e.message}
+    };
+    $("#jwAiBtn").onclick=async()=>{
+      const t=$("#jwIn").value.trim();if(!t)return toast("Paste a JWT token first");
+      const rep=await auditJWT(t).catch(()=>t);
+      ask(`Analyze this JWT token and its audit telemetry for authentication/authorization weaknesses (IDOR, privilege escalation via role claims, algorithm confusion, key injection) and provide remediation steps:\n\n${F}\n${rep}\n${F}`);
+    };
+  },
   http(){
     $("#cmdPane").innerHTML=`
       <div style="font-size:12.5px;color:var(--m)"><b>Subdomain Takeover, CORS & HTTP cURL Lab:</b> Check subdomain CNAME records for dangling cloud services or convert raw HTTP requests into Python/cURL verification scripts.</div>
@@ -1399,7 +1604,7 @@ const CMD_TABS={
   cloud(){
     $("#cmdPane").innerHTML=`
       <select id="clLang" class="ti"><option value="bash">Linux Bash Shell (Cloud Container)</option><option value="python">Python 3 (Self-Healing Cloud)</option><option value="javascript">Node.js</option><option value="go">Go</option><option value="rust">Rust</option><option value="c++">C++ (GCC)</option></select>
-      <textarea id="clCode" class="ti" rows="5">uname -a\npython3 -c "import ssl, hashlib; print(ssl.OPENSSL_VERSION, hashlib.sha256(b'Astra v13').hexdigest())"</textarea>
+      <textarea id="clCode" class="ti" rows="5">uname -a\npython3 -c "import ssl, hashlib; print(ssl.OPENSSL_VERSION, hashlib.sha256(b'Astra v14').hexdigest())"</textarea>
       <div class="row2">
         <button class="pri" id="clHealRun">Auto-Heal & Execute in Cloud</button>
         <button id="clHostApp">Deploy Canvas HTML to Cloud</button>
@@ -1416,56 +1621,6 @@ const CMD_TABS={
       if(u){S.olUrl=u.trim();const m=prompt("Local Model Name:",S.olModel);if(m)S.olModel=m.trim();S.model="ol:local";$("#model").value="ol:local";save();toast("Switched to Local Ollama")}
     };
   },
-  batch(){
-    $("#cmdPane").innerHTML=`
-      <div style="font-size:12.5px;color:var(--m)"><b>Multi-Target Autonomous Batch Queue:</b> Enter multiple domains or tasks (one per line) to run sequentially on autopilot.</div>
-      <textarea class="ti" id="bqList" rows="5" placeholder="example.com\niana.org\nWrite and verify a Python port-banner parser in the cloud"></textarea>
-      <div class="row2">
-        <button class="pri" id="bqStartBtn">Run Entire Batch Queue</button>
-      </div>`;
-    $("#bqStartBtn").onclick=async()=>{
-      const items=$("#bqList").value.split("\n").map(x=>x.trim()).filter(Boolean);
-      if(!items.length)return toast("Enter at least one domain or task");
-      $("#cmdM").classList.remove("open");
-      for(let i=0;i<items.length;i++){
-        if(stop)break;
-        const item=items[i];
-        const isDom=/^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$/.test(item);
-        await ask(isDom?`/audit ${item}`:`[Batch Task ${i+1}/${items.length}] ${item}`);
-      }
-      toast("Batch Queue Completed");
-    };
-  },
-  apk(){
-    $("#cmdPane").innerHTML=`
-      <input type="file" id="apkFile" accept=".xml,.java,.kt,.smali,.txt,.json,.apk,.zip" class="ti">
-      <textarea class="ti" id="apkIn" rows="4" placeholder="Paste AndroidManifest.xml / JADX Java source code here..."></textarea>
-      <div class="row2">
-        <button class="pri" id="apkScanBtn">Instant Static Scan</button>
-        <button id="apkAiBtn">Deep 1-Shot AI SAST Audit</button>
-      </div>
-      <div class="out2" id="apkOut">Ready.</div>`;
-    $("#apkFile").onchange=async e=>{
-      const f=e.target.files[0];if(!f)return;
-      $("#apkOut").textContent=`Scanning ${f.name}...`;
-      const slice=f.slice(0,1500000),bytes=new Uint8Array(await slice.arrayBuffer());
-      let ascii="",cur="";
-      for(let i=0;i<bytes.length;i++){const b=bytes[i];if(b>=32&&b<=126)cur+=String.fromCharCode(b);else{if(cur.length>=6)ascii+=cur+"\n";cur=""}}
-      if(cur.length>=6)ascii+=cur;
-      $("#apkIn").value=ascii.slice(0,25000);
-      $("#apkOut").textContent=scanAndroidSource(ascii,f.name);
-    };
-    $("#apkScanBtn").onclick=()=>{
-      const txt=$("#apkIn").value.trim();if(!txt)return toast("Paste Manifest/JADX code first");
-      $("#apkOut").textContent=scanAndroidSource(txt,"Pasted Source");
-    };
-    $("#apkAiBtn").onclick=()=>{
-      const txt=$("#apkIn").value.trim();if(!txt)return toast("Paste Manifest/JADX code first");
-      const preScan=scanAndroidSource(txt,"Target APK");
-      S.bugMode=true;save();
-      ask(`[ANDROID APK & JADX SAST AUDIT]\nStatic Findings:\n${preScan}\n\nSource:\n${F}\n${txt.slice(0,12000)}\n${F}\n\nAnalyze all exported components, intent filters, WebView settings, and hardcoded keys, and provide complete remediation patches.`);
-    };
-  },
   cvss(){
     $("#cmdPane").innerHTML=`
       <div class="cvss-grid">
@@ -1476,10 +1631,12 @@ const CMD_TABS={
         <div class="cvss-box"><label>Confidentiality (C)</label><select id="cvC"><option value="H:0.56">High (H)</option><option value="L:0.22">Low (L)</option><option value="N:0">None (N)</option></select></div>
         <div class="cvss-box"><label>Integrity / Availability (I/A)</label><select id="cvIA"><option value="H:0.56">High (H)</option><option value="L:0.22">Low (L)</option><option value="N:0">None (N)</option></select></div>
       </div>
-      <input class="ti" id="cvTitle" placeholder="Finding Title & Component">
+      <input class="ti" id="cvTitle" placeholder="Finding Title & CWE (e.g. CWE-835 Infinite Loop DoS or IDOR on /api/v1/user)">
       <div class="out2" id="cvOut">CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H — Score: 9.8 (CRITICAL)</div>
       <div class="row2">
-        <button class="pri" id="cvGenBtn">Draft Full Vulnerability Report</button>
+        <button class="pri" id="cvGenBtn">HackerOne / Intigriti Report</button>
+        <button id="cvGhsaBtn">GitHub Advisory (GHSA)</button>
+        <button id="cvNucleiBtn">Generate Nuclei YAML</button>
         <button id="cvCopyBtn">Copy Vector</button>
       </div>`;
     const calc=()=>{
@@ -1500,6 +1657,36 @@ const CMD_TABS={
       const {vec,score,sev}=calc();
       const title=$("#cvTitle").value.trim()||"Security Vulnerability Finding";
       ask(`Write a complete HackerOne / Intigriti Bug Bounty Report for:\n- **Title:** ${title}\n- **Severity:** ${sev} (${score})\n- **Vector:** \`${vec}\`\n\nInclude: Summary, CWE ID, Affected Component, Verification Steps, Impact, and Remediation Patch.`);
+    };
+    $("#cvGhsaBtn").onclick=()=>{
+      const {vec,score,sev}=calc();
+      const title=$("#cvTitle").value.trim()||"Open-Source Vulnerability";
+      ask(`Write a complete **GitHub Security Advisory (GHSA)** submission for:\n- **Title:** ${title}\n- **Severity:** ${sev} (${score}) — \`${vec}\`\n\nInclude: Ecosystem, Affected Versions, Patched Versions, CWE classification, Minimal Reproducible PoC, Impact, and Unified Diff Patch.`);
+    };
+    $("#cvNucleiBtn").onclick=()=>{
+      const {vec,score,sev}=calc();
+      const title=$("#cvTitle").value.trim()||"Custom Vulnerability Check";
+      ask(`Write a valid, production-ready **ProjectDiscovery Nuclei YAML Template** (\`.yaml\`) to safely detect:\n- **Finding:** ${title}\n- **Severity:** ${sev.toLowerCase()} (CVSS ${score}, \`${vec}\`)\n\nInclude proper \`id\`, \`info\`, \`http\` matchers, and extractors.`);
+    };
+  },
+  batch(){
+    $("#cmdPane").innerHTML=`
+      <div style="font-size:12.5px;color:var(--m)"><b>Multi-Target Autonomous Batch Queue:</b> Enter multiple domains or tasks (one per line) to run sequentially on autopilot.</div>
+      <textarea class="ti" id="bqList" rows="5" placeholder="example.com\niana.org\nWrite and verify a Python port-banner parser in the cloud"></textarea>
+      <div class="row2">
+        <button class="pri" id="bqStartBtn">Run Entire Batch Queue</button>
+      </div>`;
+    $("#bqStartBtn").onclick=async()=>{
+      const items=$("#bqList").value.split("\n").map(x=>x.trim()).filter(Boolean);
+      if(!items.length)return toast("Enter at least one domain or task");
+      $("#cmdM").classList.remove("open");
+      for(let i=0;i<items.length;i++){
+        if(stop)break;
+        const item=items[i];
+        const isDom=/^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$/.test(item);
+        await ask(isDom?`/audit ${item}`:`[Batch Task ${i+1}/${items.length}] ${item}`);
+      }
+      toast("Batch Queue Completed");
     };
   },
   notes(){
@@ -1607,6 +1794,7 @@ $("#new").onclick=$("#new2").onclick=()=>!busy&&newChat();
 $("#menu").onclick=()=>{$("#side").classList.add("open");$("#ov").classList.add("open")};
 $("#ov").onclick=closeSide;
 $("#mem").onclick=()=>{const v=prompt("Persistent Memory:",S.mem.join(" | "));if(v!==null){S.mem=v.split("|").map(x=>x.trim()).filter(Boolean);save()}};
+$("#pdfBtn").onclick=()=>{closeSide();window.print()};
 $("#exp").onclick=()=>{const c=cur();if(!c?.msgs.length)return;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([c.msgs.map(m=>"## "+m.role+"\n\n"+m.content).join("\n\n")],{type:"text/markdown"}));a.download="chat.md";a.click()};
 $("#wipe").onclick=()=>{if(confirm("Clear all chats?")){S.chats={};S.cur=null;save();renderAll();drawList()}};
 function applyTheme(){document.documentElement.setAttribute("data-theme",S.theme==="light"?"light":"dark");$("#themeBtn").textContent="Theme: "+S.theme}
