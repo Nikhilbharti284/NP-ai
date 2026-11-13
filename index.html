@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#000000">
-<title>Astra AGI v22.0 (Enhanced UI)</title>
+<title>Astra AGI v26.0 (Omni-Tools)</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23000'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%23fff' stroke-width='36'/%3E%3Ccircle cx='256' cy='256' r='44' fill='%23fff'/%3E%3C/svg%3E" type="image/svg+xml">
 
@@ -13,13 +13,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <style>
 :root{--bg:#000;--side:#0a0a0a;--sur:#161616;--hov:#262626;--b:#262626;--t:#ececec;--m:#8e8e93;--inv-bg:#fff;--inv-t:#000;--accent:#3b82f6;--ok:#22c55e;--warn:#eab308;--err:#ef4444}
@@ -403,7 +400,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
 <!-- Command Center -->
 <div class="mbk" id="cmdM" role="dialog" aria-modal="true">
   <div class="mdl">
-    <div class="mtop"><span>Astra AGI v22.0 Command Center</span><button id="cmdClose">✕</button></div>
+    <div class="mtop"><span>Astra AGI v26.0 Command Center</span><button id="cmdClose">✕</button></div>
     <div class="ttabs" id="cmdTabs">
       <button class="stab on" data-tab="videdit">Video Director</button>
       <button class="stab" data-tab="imgedit">Image Studio</button>
@@ -422,7 +419,7 @@ textarea.ti{resize:vertical;min-height:80px;font-family:ui-monospace,Menlo,monos
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   ASTRA AGI v22.0 — CORRECTED & ENHANCED
+   ASTRA AGI v26.0 — FULLY PATCHED & CLOUD FIRST
    ═══════════════════════════════════════════════════════════════ */
 
 const _dec=(arr)=>arr.map(c=>String.fromCharCode(c)).join("");
@@ -468,162 +465,87 @@ const $=s=>document.querySelector(s);
 const escapeHtml=s=>{const d=document.createElement("div");d.textContent=s??"";return d.innerHTML};
 
 /* ═══════════════════════════════════════════════════════════════
-   INDEXEDDB PROMISE WRAPPER
+   CLOUD MEMORY & SAFE SANDBOX
    ═══════════════════════════════════════════════════════════════ */
-function idbReady(request){
-  return new Promise((resolve,reject)=>{
-    if(request.readyState === "done") return resolve(request.result);
-    request.onsuccess = ()=>resolve(request.result);
-    request.onerror = ()=>reject(request.error);
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   VECTOR MEMORY
-   ═══════════════════════════════════════════════════════════════ */
-let vectorWorker = null;
-let vectorReady = false;
-let vectorQueue = [];
-const vdbReq = indexedDB.open("AstraVectorDB", 1);
-vdbReq.onupgradeneeded = (e) => e.target.result.createObjectStore("vectors", { keyPath: "id" });
-const vdbPromise = idbReady(vdbReq);
-
-function initVectorWorker(){
-  if(vectorWorker) return;
-  const code = `
-    import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1';
-    env.allowLocalModels = false;
-    let extractor = null;
-    async function init(){
-      extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
-      postMessage({ type: 'ready' });
-    }
-    init();
-    self.onmessage = async (e) => {
-      if(e.data.type === 'embed'){
-        try{
-          const out = await extractor(e.data.text, { pooling: 'mean', normalize: true });
-          postMessage({ type: 'embedding', vector: Array.from(out.data), id: e.data.id, text: e.data.text });
-        }catch(err){ postMessage({ type: 'error', error: err.message }); }
-      }
-    };
-  `;
-  const blob = new Blob([code], {type:'application/javascript'});
-  vectorWorker = new Worker(URL.createObjectURL(blob), { type: 'module' });
-  vectorWorker.onmessage = async (e) => {
-    if(e.data.type === 'ready'){ vectorReady = true; vectorQueue.forEach(m=>vectorWorker.postMessage(m)); vectorQueue = []; }
-    else if(e.data.type === 'embedding'){
-      const db = await vdbPromise;
-      const tx = db.transaction("vectors", "readwrite");
-      tx.objectStore("vectors").put({ id: e.data.id, vector: e.data.vector, text: e.data.text, ts: Date.now() });
-    }
-  };
-  vectorWorker.onerror = (err) => console.warn("Vector worker error:", err.message);
-}
-
-function embedText(text, id){
-  if(!vectorWorker) initVectorWorker();
-  const msg = { type: 'embed', text: String(text).slice(0, 2000), id: id || Date.now()+Math.random() };
-  if(!vectorReady){ vectorQueue.push(msg); }
-  else { vectorWorker.postMessage(msg); }
-}
-
-function cosineSim(a, b){
-  let dot = 0, na = 0, nb = 0;
-  for(let i=0;i<a.length;i++){ dot += a[i]*b[i]; na += a[i]*a[i]; nb += b[i]*b[i]; }
-  return dot / (Math.sqrt(na)*Math.sqrt(nb) + 1e-9);
-}
-
 async function queryMemory(text, topK = 5){
-  try{
-    if(!vectorWorker) return "";
-    const emb = await new Promise((resolve)=>{
-      const id = "q" + Date.now() + Math.random();
-      const handler = (e)=>{
-        if(e.data.type === 'embedding' && e.data.id === id){
-          vectorWorker.removeEventListener('message', handler);
-          resolve(e.data.vector);
-        }
-      };
-      vectorWorker.addEventListener('message', handler);
-      if(!vectorReady){ vectorQueue.push({ type: 'embed', text, id }); }
-      else { vectorWorker.postMessage({ type: 'embed', text, id }); }
-      setTimeout(()=>{ vectorWorker.removeEventListener('message', handler); resolve(null); }, 8000);
-    });
-    if(!emb) return "";
-    const db = await vdbPromise;
-    const tx = db.transaction("vectors", "readonly");
-    const all = await new Promise(res=>{
-      const r = tx.objectStore("vectors").getAll();
-      r.onsuccess = ()=>res(r.result);
-      r.onerror = ()=>res([]);
-    });
-    const scored = all.map(v=>({ text: v.text, score: cosineSim(emb, v.vector) })).sort((a,b)=>b.score-a.score).slice(0, topK);
-    return scored.filter(s=>s.score > 0.25).map(s=>s.text).join("\n---\n");
-  }catch(e){ return ""; }
+  if(!S.mem || !S.mem.length) return "";
+  const words = text.toLowerCase().split(/\s+/).filter(w=>w.length > 3);
+  const scored = S.mem.map(m => {
+    const mText = String(m).toLowerCase();
+    let score = 0;
+    words.forEach(w => { if(mText.includes(w)) score++; });
+    return { text: m, score };
+  }).filter(m => m.score > 0).sort((a,b)=>b.score-a.score).slice(0, topK);
+  return scored.map(s=>s.text).join("\n---\n");
 }
 
 async function clearMemory(){
-  const db = await vdbPromise;
-  const tx = db.transaction("vectors", "readwrite");
-  tx.objectStore("vectors").clear();
+  S.mem = [];
+  save();
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   PYTHON WORKER
-   ═══════════════════════════════════════════════════════════════ */
-let pyWorker = null;
-let pyReady = false;
-let pyQueue = [];
-
-function initPyWorker(){
-  if(pyWorker) return;
-  const code = `
-    importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js');
-    let pyodideReady = false, pyodide = null, stdout = "", stderr = "";
-    async function init(){
-      pyodide = await loadPyodide({ stdout:(t)=>{stdout+=t+"\\n"}, stderr:(t)=>{stderr+=t+"\\n"} });
-      pyodideReady = true;
-      postMessage({ type: 'ready' });
-    }
-    init();
-    self.onmessage = async (e) => {
-      if(e.data.type === 'run'){
-        if(!pyodideReady){ postMessage({ type: 'not_ready', id: e.data.id }); return; }
-        stdout = ""; stderr = "";
-        try{
-          await pyodide.loadPackagesFromImports(e.data.code);
-          await pyodide.runPythonAsync(e.data.code);
-          postMessage({ type:'result', id: e.data.id, stdout, stderr, error: null });
-        }catch(err){ postMessage({ type:'result', id: e.data.id, stdout, stderr, error: err.message }); }
-      }
-    };
-  `;
-  pyWorker = new Worker(URL.createObjectURL(new Blob([code], {type:'application/javascript'})));
-  pyWorker.onmessage = (e)=>{
-    if(e.data.type === 'ready'){
-      pyReady = true;
-      pyQueue.forEach(m=>pyWorker.postMessage(m)); pyQueue = [];
-    }
-    const cb = pyCallbacks[e.data.id];
-    if(cb){ cb(e.data); delete pyCallbacks[e.data.id]; }
-  };
-}
-
-const pyCallbacks = {};
-async function runPythonWorker(code){
-  return new Promise((resolve)=>{
-    if(!pyWorker) initPyWorker();
-    const id = "py" + Date.now() + Math.random();
-    pyCallbacks[id] = (data)=>{ resolve({ error: data.error, stdout: data.stdout, stderr: data.stderr }); };
-    const msg = { type:'run', code, id };
-    if(!pyReady) pyQueue.push(msg); else pyWorker.postMessage(msg);
-    setTimeout(()=>{ if(pyCallbacks[id]){ delete pyCallbacks[id]; resolve({error:"Python worker timeout", stdout:"", stderr:""}); } }, 60000);
+function runSafeJS(code) {
+  return new Promise((resolve) => {
+    const workerCode = `
+      self.onmessage = function(e) {
+        let logs = [];
+        const customConsole = {
+          log: (...a) => logs.push(a.map(x => typeof x === "object" ? JSON.stringify(x) : String(x)).join(" ")),
+          error: (...a) => logs.push("ERR: " + a.join(" ")),
+          warn: (...a) => logs.push("WARN: " + a.join(" "))
+        };
+        try {
+          const fn = new Function("console", e.data);
+          fn(customConsole);
+          self.postMessage({ ok: true, output: logs.join("\\n") || "(Executed)" });
+        } catch (err) {
+          self.postMessage({ ok: false, output: logs.join("\\n") + "\\n" + err.message });
+        }
+      };
+    `;
+    const blob = new Blob([workerCode], { type: 'application/javascript' });
+    const worker = new Worker(URL.createObjectURL(blob));
+    worker.onmessage = (e) => { resolve(e.data); worker.terminate(); };
+    worker.postMessage(code);
+    setTimeout(() => { worker.terminate(); resolve({ ok: false, output: "Timeout (Infinite loop prevented)" }); }, 5000);
   });
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   VISION WORKER
+   DYNAMIC LOADERS (Lazy Loading)
+   ═══════════════════════════════════════════════════════════════ */
+async function loadMermaid() {
+  if(window.mermaid) return;
+  await new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js";
+    script.onload = resolve;
+    document.head.appendChild(script);
+  });
+}
+
+async function loadKaTeX() {
+  if(window.katex) return;
+  await new Promise((resolve) => {
+    const link = document.createElement('link');
+    link.rel = "stylesheet";
+    link.href = "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css";
+    document.head.appendChild(link);
+    
+    const script = document.createElement('script');
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js";
+    script.onload = () => {
+      const renderScript = document.createElement('script');
+      renderScript.src = "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js";
+      renderScript.onload = resolve;
+      document.head.appendChild(renderScript);
+    };
+    document.head.appendChild(script);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VISION & OCR
    ═══════════════════════════════════════════════════════════════ */
 let visionWorker = null, visionReady = false;
 function initVisionWorker(){
@@ -657,7 +579,6 @@ function getImageCaption(imgUrl){
   });
 }
 
-/* OCR & PDF */
 async function runOCR(file){
   toast("Running Local OCR...");
   const worker = await Tesseract.createWorker('eng+hin');
@@ -764,7 +685,7 @@ function setAgentState(s){ agentState = s; const el = $("#agentState"); if(el) e
    STATE
    ═══════════════════════════════════════════════════════════════ */
 let S = {};
-try{ S = JSON.parse(localStorage.agi_v22 || localStorage.agi_v21 || "{}"); }catch(e){}
+try{ S = JSON.parse(localStorage.agi_v26 || localStorage.agi_v25 || "{}"); }catch(e){}
 S.chats ??= {};
 S.cur ??= null;
 if(!S.model || !MODELS.some(m=>m[0]===S.model)) S.model = "auto";
@@ -780,8 +701,8 @@ S.bugMode ??= false;
 S.arenaMode ??= false;
 S.swarmMode ??= false;
 S.autoHeal ??= true;
-S.autoPlan ??= true;     // NEW: auto decompose
-S.autoReflect ??= true;  // NEW: self-critique
+S.autoPlan ??= true;
+S.autoReflect ??= true;
 S.skills ??= [];
 S.worldGraph ??= [];
 S.rlScore ??= 100;
@@ -789,11 +710,11 @@ S.olUrl ??= "http://127.0.0.1:11434";
 S.olModel ??= "qwen2.5-coder:7b";
 S.canvasCode ??= "";
 S.canvasLang ??= "html";
-S.artifacts ??= [];      // NEW
-S.tokenUsage ??= { prompt: 0, completion: 0 };
+S.artifacts ??= [];
+S.customTools ??= {};
 
 function save(){
-  try{ localStorage.agi_v22 = JSON.stringify(S); }
+  try{ localStorage.agi_v26 = JSON.stringify(S); }
   catch(e){
     const ids = Object.values(S.chats).sort((a,b)=>a.ts-b.ts).map(c=>c.id);
     if(ids.length > 1){ delete S.chats[ids[0]]; save(); }
@@ -960,7 +881,7 @@ async function generateAIStoryboardVideo(topicPrompt, onProg){
   let scenes = [
     { img: topicPrompt+", cinematic wide establishing shot, 8k masterpiece", cap: topicPrompt.slice(0,48) },
     { img: topicPrompt+", dramatic close-up action detail, studio lighting", cap: "Autonomous AI Motion Render" },
-    { img: topicPrompt+", epic finale atmosphere, ultra detailed", cap: "Directed by Astra AGI v22" }
+    { img: topicPrompt+", epic finale atmosphere, ultra detailed", cap: "Directed by Astra AGI v26" }
   ];
   try{
     const raw = await llm([
@@ -1129,7 +1050,7 @@ $("#openCanvasHdr").onclick = ()=>$("#canvasPane").classList.toggle("open");
 $("#cZipBtn").onclick = ()=>{
   const files = [
     { name: S.canvasLang === "html" ? "index.html" : "main."+S.canvasLang, content: S.canvasCode },
-    { name: "README.md", content: "# Astra AGI Project\nBundled by Astra AGI v22." }
+    { name: "README.md", content: "# Astra AGI Project\nBundled by Astra AGI v26." }
   ];
   const blob = makeZip(files), a = document.createElement("a");
   a.href = URL.createObjectURL(blob); a.download = "astra-project-"+Date.now()+".zip"; a.click();
@@ -1142,7 +1063,7 @@ $("#cCloudRunBtn").onclick = async ()=>{
     $("#cFrame").srcdoc = S.canvasCode;
     return toast("Live Preview Updated");
   }
-  const term = $("#cTerm"); term.style.display = "block"; term.textContent = "Running…";
+  const term = $("#cTerm"); term.style.display = "block"; term.textContent = "Running on Cloud…";
   const r = await runCodeResilient(S.canvasLang, S.canvasCode);
   term.textContent = r.stdout || (r.stderr ? "STDERR:\n"+r.stderr : "(Done)");
 };
@@ -1155,20 +1076,13 @@ async function runCodeResilient(lang, code){
     openCanvas(code, "html", "Live Web App Preview");
     return { ok:true, stdout:"Rendered live in Canvas.", stderr:"" };
   }
-  if(/^(js|javascript|node)$/.test(l) && !code.includes("require(") && !code.includes("process.")){
-    const logs=[], errs=[];
-    const customConsole = {
-      log:(...a)=>logs.push(a.map(x=>typeof x==="object"?JSON.stringify(x):String(x)).join(" ")),
-      error:(...a)=>errs.push(a.join(" ")),
-      warn:(...a)=>logs.push("WARN: "+a.join(" "))
-    };
-    try{
-      const fn = new Function("console", `"use strict"; return (async () => { ${code} })();`);
-      const res = await fn(customConsole);
-      if(res !== undefined) logs.push(typeof res==="object"?JSON.stringify(res,null,2):String(res));
-      return { ok:!errs.length, stdout:logs.join("\n")||"(Executed cleanly)", stderr:errs.join("\n") };
-    }catch(e){ return { ok:false, stdout:logs.join("\n"), stderr:e.message }; }
+  
+  // Safe JS Sandbox
+  if(/^(js|javascript)$/.test(l)){
+    return await runSafeJS(code);
   }
+
+  // Cloud Execution (Piston API)
   try{
     const r = await fetch("https://emkc.org/api/v2/piston/execute",{
       method:"POST", headers:{"Content-Type":"application/json"},
@@ -1177,13 +1091,11 @@ async function runCodeResilient(lang, code){
     if(r.ok){
       const d = await r.json();
       const err = (d.compile?.stderr||"") + (d.run?.stderr||"");
-      return { ok: !err.trim(), stdout: d.run?.stdout||"", stderr: err };
+      return { ok: !err.trim(), stdout: d.run?.stdout||"(Executed on Cloud)", stderr: err };
     }
   }catch(_){}
-  if(/^(py|python|python3)$/.test(l)){
-    const res = await runPythonWorker(code);
-    return { ok: !res.error, stdout: res.stdout || "(Executed cleanly)", stderr: res.error || res.stderr || "" };
-  }
+
+  // Fallback simulation
   const sim = await llm([{role:"system",content:`Trace the following ${l} code and output exact stdout. If bug, prefix with STDERR:`},{role:"user",content:code}], ()=>{});
   const hasErr = sim.includes("STDERR:");
   return { ok: !hasErr, stdout: hasErr?"":sim, stderr: hasErr?sim:"" };
@@ -1347,12 +1259,12 @@ const tools = {
     ], ()=>{});
     const cleanPy = harness.replace(/^```[\w]*\n?/,"").replace(/```$/,"").trim();
     const res = await autoHealCode("python", cleanPy);
-    return `[Fuzzer executed]\n${res.output}\n\n[Fuzzer code]\n${res.code}`;
+    return `[Fuzzer executed on Cloud]\n${res.output}\n\n[Fuzzer code]\n${res.code}`;
   },
   async takeover_check(domain){ return await checkSubdomainTakeover(domain.trim().replace(/^https?:\/\//,"").split("/")[0]); },
   async bash_sandbox(script){
     const d = await runCodeResilient("bash", script);
-    return d.stdout || (d.stderr ? "STDERR:\n"+d.stderr : "(Executed)");
+    return d.stdout || (d.stderr ? "STDERR:\n"+d.stderr : "(Executed on Cloud)");
   },
   async program_audit(scopeText, onProg){
     const { inScope, outScope } = extractScopeDomains(scopeText);
@@ -1480,55 +1392,113 @@ const tools = {
     playSynthAudio(freqs);
     return `Playing synth: ${freqsStr}`;
   },
+  async create_tool(inp){
+    const match = inp.match(/^([a-zA-Z0-9_]+)\s*\n([\s\S]*?)```(?:javascript|js)?\s*\n([\s\S]*?)```/);
+    if(!match) return "ERROR: Format must be `tool_name\nDescription\n```js\nasync function code```\n";
+    const [,name,desc,code] = match;
+    try{
+      const fn = new Function(`return (${code.trim()})`)();
+      tools[name] = fn;
+      S.customTools[name] = { desc: desc.trim(), code: code.trim() };
+      save();
+      const newNames = Object.keys(tools).join("|");
+      TOOLRE_G = new RegExp("@("+newNames+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F, "g");
+      return `SUCCESS: Tool @${name} registered!`;
+    }catch(e){ return `ERROR compiling tool: ${e.message}`; }
+  },
+  async github_user(username){
+    username = username.trim();
+    try{
+      const u = await J(`https://api.github.com/users/${username}`);
+      const repos = await J(`https://api.github.com/users/${username}/repos?sort=stars&per_page=5`);
+      return `GitHub User: ${u.login}\nName: ${u.name || 'N/A'}\nBio: ${u.bio || 'N/A'}\nFollowers: ${u.followers}\nPublic Repos: ${u.public_repos}\n\nTop Repos:\n${repos.map(r=>`- ${r.name} (⭐${r.stargazers_count}): ${r.description||''}`).join('\n')}`;
+    }catch(e){ return "GitHub user not found."; }
+  },
+  async upload_cloud(blob){
+    try{
+      const formData = new FormData();
+      formData.append("file", blob);
+      const r = await fetch("https://tmpfiles.org/api/v1/upload", { method: "POST", body: formData });
+      const d = await r.json();
+      const url = d.data.url.replace("tmpfiles.org/", "tmpfiles.org/dl/");
+      return `Cloud URL: ${url}`;
+    }catch(e){ return "Upload failed."; }
+  },
+  async get_weather(city){
+    try {
+      const geo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`).then(r=>r.json());
+      if(!geo.results || !geo.results.length) return "City not found.";
+      const { latitude, longitude, name, country } = geo.results[0];
+      
+      const weather = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,weather_code,wind_speed_10m&timezone=auto`).then(r=>r.json());
+      
+      const c = weather.current;
+      return `Weather in ${name}, ${country}:\nTemp: ${c.temperature_2m}°C (Feels like ${c.apparent_temperature}°C)\nHumidity: ${c.relative_humidity_2m}%\nWind: ${c.wind_speed_10m} km/h\nPrecipitation: ${c.precipitation} mm\nCode: ${c.weather_code}`;
+    } catch(e) { return "Weather API error."; }
+  },
+  async get_currency(from, to){
+    try {
+      const [f, t] = from.toUpperCase().split(" ");
+      const res = await fetch(`https://api.frankfurter.app/latest?from=${f}&to=${t}`).then(r=>r.json());
+      if(res.rates && res.rates[t]) {
+        return `1 ${f} = ${res.rates[t]} ${t} (Date: ${res.date})`;
+      }
+      return "Currency pair not found.";
+    } catch(e) { return "Currency API error."; }
+  },
 
-  /* ── AGI TOOLS ── */
-  async summarize(inp){
-    return await llm([{role:"system",content:"Summarize this text in clear bullet points. Max 200 words."},{role:"user",content:inp}], ()=>{});
+  /* ── NEW TOOLS v26.0 ── */
+  async get_crypto_price(coin){
+    try {
+      const ids = coin.toLowerCase().replace(' ', '-');
+      const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd,inr`);
+      const d = await r.json();
+      if (d[ids]) {
+        return `1 ${coin.toUpperCase()} = $${d[ids].usd} USD | ₹${d[ids].inr} INR`;
+      }
+      return "Coin not found. Use standard IDs like 'bitcoin', 'ethereum', 'solana'.";
+    } catch(e) { return "Crypto API error."; }
   },
-  async translate(inp){
-    const m = inp.match(/^(\w{2})\n([\s\S]+)$/);
-    const lang = m ? m[1] : "en", text = m ? m[2] : inp;
-    return await llm([{role:"system",content:`Translate to language code "${lang}". Output translation only.`},{role:"user",content:text}], ()=>{});
+  async search_books(query){
+    try {
+      const r = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=5`);
+      const d = await r.json();
+      if (!d.docs.length) return "No books found.";
+      return d.docs.map(b => `- **${b.title}** by ${b.author_name ? b.author_name.join(', ') : 'Unknown'}`).join('\n');
+    } catch(e) { return "Book API error."; }
   },
-  async code_review(inp){
-    return await llm([{role:"system",content:"Perform a thorough code review: bugs, security issues, style, performance. Output structured markdown."},{role:"user",content:inp}], ()=>{});
+  async get_ip_info(ip){
+    try {
+      const r = await fetch(`https://ipapi.co/${ip.trim()}/json/`);
+      const d = await r.json();
+      if (d.error) return d.reason;
+      return `IP: ${d.ip}\nCity: ${d.city}\nRegion: ${d.region}\nCountry: ${d.country_name}\nISP: ${d.org}`;
+    } catch(e) { return "IP API error."; }
   },
-  async unit_test_gen(inp){
-    const m = inp.match(/^(\w+)\n([\s\S]+)$/);
-    const lang = m ? m[1] : "python", code = m ? m[2] : inp;
-    return await llm([{role:"system",content:`Generate comprehensive unit tests in ${lang}. Output ONLY raw test code.`},{role:"user",content:code}], ()=>{});
+  async generate_qr(text){
+    return `![QR Code](https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(text)})`;
   },
-  async sql_builder(inp){
-    return await llm([{role:"system",content:"Convert the natural language request into a SQL query. Output ONLY the SQL, nothing else."},{role:"user",content:inp}], ()=>{});
-  },
-  async regex_builder(inp){
-    return await llm([{role:"system",content:"Write a regex for the described pattern. Output ONLY the regex on line 1, then a brief explanation on line 2+."},{role:"user",content:inp}], ()=>{});
-  },
-  async diff(inp){
-    const parts = inp.split(/\n===\n/);
-    if(parts.length < 2) return "Provide two blocks separated by === on its own line.";
-    const [a,b] = parts;
-    const al = a.split("\n"), bl = b.split("\n");
-    let out = "```diff\n";
-    const max = Math.max(al.length, bl.length);
-    for(let i=0; i<max; i++){
-      if(al[i] !== bl[i]){
-        if(al[i] !== undefined) out += "- "+al[i]+"\n";
-        if(bl[i] !== undefined) out += "+ "+bl[i]+"\n";
-      } else out += "  "+al[i]+"\n";
-    }
-    return out+"```";
+  async nasa_apod(){
+    try {
+      const r = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY`);
+      const d = await r.json();
+      return `**${d.title}** (${d.date})\n\n${d.explanation}\n\n![NASA APOD](${d.url})`;
+    } catch(e) { return "NASA API error."; }
   }
 };
 
-const TOOL_NAMES = Object.keys(tools).join("|");
-const TOOLRE_G = new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F, "g");
+for(const [name, data] of Object.entries(S.customTools || {})){
+  try{ tools[name] = new Function(`return (${data.code})`)(); }catch(e){}
+}
 
-const sysPrompt = ()=>`You are Astra AGI v22.0 — an autonomous AI Engineer, Video Director & Authorized Passive Security / SAST Auditor. Today is ${new Date().toDateString()}. Match user's language (English, Hindi, Hinglish).
+let TOOL_NAMES = Object.keys(tools).join("|");
+let TOOLRE_G = new RegExp("@("+TOOL_NAMES+")[ \\t]*\\n"+F+"[a-z]*\\n([\\s\\S]*?)"+F, "g");
+
+const sysPrompt = ()=>`You are Astra AGI v26.0 — an autonomous AI Engineer, Data Analyst, Video Director & Authorized Passive Security / SAST Auditor. Today is ${new Date().toDateString()}. Match user's language (English, Hindi, Hinglish).
 
 CRITICAL MANDATES:
 1. ZERO STALLING: Never reply with "I will now write the code" — output the complete implementation immediately.
-2. FULL-STACK SINGLE-FILE: When building websites, produce a single \`<!DOCTYPE html>\` with embedded <style> and <script>. Output in \`\`\`html.
+2. FULL-STACK SINGLE-FILE & TAILWIND: When building websites, ALWAYS use Tailwind CSS via CDN (<script src="https://cdn.tailwindcss.com"></script>) for beautiful, modern, responsive UI. Output a single \`<!DOCTYPE html>\` file.
 3. 3D ENGINE: For 3D requests use Three.js CDN (<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>).
 4. VIDEO/IMAGE: Use @auto_reel for video, @image for images. Place [[media:ID]] on its own line.
 5. CHARTS: For data viz use:
@@ -1537,6 +1507,13 @@ CRITICAL MANDATES:
 \`\`\`
 6. AUDIO: @play_synth with comma-separated freqs.
 7. LEGAL BOUNDARY: Only passive OSINT + static SAST.
+8. SELF-EVOLUTION: You can create NEW tools for yourself using @create_tool!
+   Format:
+   tool_name
+   What this tool does
+   \`\`\`javascript
+   async function(input) { return "output"; }
+   \`\`\`
 
 To invoke tools:
 @toolname
@@ -1544,7 +1521,7 @@ ${F}
 input
 ${F}
 
-Available Tools: @auto_reel, @image, @edit, @ai_firewall, @learn_skill, @world_graph, @program_audit, @js_deobfuscate, @cloud_fuzzer, @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify, @recon_graph, @apk_scan, @cloud_exec, @canvas, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @play_synth, @summarize, @translate, @code_review, @unit_test_gen, @sql_builder, @regex_builder, @diff.
+Available Tools: @auto_reel, @image, @edit, @ai_firewall, @learn_skill, @world_graph, @program_audit, @js_deobfuscate, @cloud_fuzzer, @takeover_check, @bash_sandbox, @omni_blitz, @domain_blitz, @auto_verify, @recon_graph, @apk_scan, @cloud_exec, @canvas, @websearch, @fetch, @arxiv, @wayback, @python, @js, @dns, @subdomains, @whois, @ip, @urlscan, @github, @cve, @securityheaders, @remember, @play_synth, @create_tool, @github_user, @upload_cloud, @get_weather, @get_currency, @get_crypto_price, @search_books, @get_ip_info, @generate_qr, @nasa_apod.
 Learned Skills: ${S.skills.map(s=>s.name+": "+s.rule).join(" | ")||"none"}
 Memory: ${S.mem.join(" | ")||"none"}`;
 
@@ -1573,7 +1550,7 @@ async function callOpenRouter(msgs, model, onTok){
   if(!k) throw new Error("OpenRouter key missing");
   const plain = msgs.map(({img,...r})=>({role:r.role, content:String(r.content||"")}));
   const r = await withTimeout(fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method:"POST", headers:{"Content-Type":"application/json","Authorization":"Bearer "+k,"HTTP-Referer":location.origin||"https://astra.agi","X-Title":"Astra AGI v22"},
+    method:"POST", headers:{"Content-Type":"application/json","Authorization":"Bearer "+k,"HTTP-Referer":location.origin||"https://astra.agi","X-Title":"Astra AGI v26"},
     body: JSON.stringify({ model: model||"openrouter/free", messages: plain })
   }), 50000, "OpenRouter timeout");
   const j = await r.json();
@@ -1731,53 +1708,65 @@ const bottom = (force=false)=>{ if(force || !userScrolledUp) chatEl.scrollTop = 
 $("#jumpBtn").onclick = ()=>{ userScrolledUp = false; bottom(true); };
 
 function dress(el, fullMarkdown=""){
-  el.querySelectorAll("pre").forEach(pre=>{
-    if(pre.parentElement.classList.contains("cb")) return;
-    const code = pre.querySelector("code");
-    const lang = (((code?.className||"").match(/language-([\w+#-]+)/)||[])[1]||"").toLowerCase();
-    const src = pre.innerText;
-    if(lang === "mermaid" && window.mermaid){
-      const d = document.createElement("div"); d.className = "mm"; pre.replaceWith(d);
-      mermaid.render("m"+Math.random().toString(36).slice(2), src).then(r=>d.innerHTML = r.svg).catch(()=>d.textContent = src);
-      return;
-    }
-    if(code && window.hljs) try{ hljs.highlightElement(code); }catch(e){}
-    const lines = src.split("\n").length;
-    const w = document.createElement("div"); w.className = "cb"+(lines>14?" collapsed":"");
-    const bar = document.createElement("div"); bar.className = "cbar";
-    const lbl = document.createElement("span"); lbl.className = "clang";
-    lbl.textContent = (lang||"code")+" · "+lines+" lines";
-    bar.appendChild(lbl);
-    const out = document.createElement("div"); out.className = "ro"; out.hidden = true;
-    const add = (l,f,cls="")=>{ const b = document.createElement("button"); b.className = "cp "+(cls||""); b.textContent = l; b.onclick = ()=>f(b); bar.appendChild(b); };
+  const processDress = () => {
+    el.querySelectorAll("pre").forEach(pre=>{
+      if(pre.parentElement.classList.contains("cb")) return;
+      const code = pre.querySelector("code");
+      const lang = (((code?.className||"").match(/language-([\w+#-]+)/)||[])[1]||"").toLowerCase();
+      const src = pre.innerText;
+      if(lang === "mermaid" && window.mermaid){
+        const d = document.createElement("div"); d.className = "mm"; pre.replaceWith(d);
+        mermaid.render("m"+Math.random().toString(36).slice(2), src).then(r=>d.innerHTML = r.svg).catch(()=>d.textContent = src);
+        return;
+      }
+      if(code && window.hljs) try{ hljs.highlightElement(code); }catch(e){}
+      const lines = src.split("\n").length;
+      const w = document.createElement("div"); w.className = "cb"+(lines>14?" collapsed":"");
+      const bar = document.createElement("div"); bar.className = "cbar";
+      const lbl = document.createElement("span"); lbl.className = "clang";
+      lbl.textContent = (lang||"code")+" · "+lines+" lines";
+      bar.appendChild(lbl);
+      const out = document.createElement("div"); out.className = "ro"; out.hidden = true;
+      const add = (l,f,cls="")=>{ const b = document.createElement("button"); b.className = "cp "+(cls||""); b.textContent = l; b.onclick = ()=>f(b); bar.appendChild(b); };
 
-    if(lang === "html" || src.trim().startsWith("<!DOCTYPE") || src.trim().startsWith("<html")){
-      const getBundled = ()=>bundleWebBlocks(fullMarkdown) || src;
-      add("Canvas", ()=>openCanvas(getBundled(), "html", "Bundled Web App"), "ac");
-    }else if(PISTON_MAP[lang] || /^(python|py|js|javascript|ts|cpp|c|rust|go|java|bash|sh|php|sql)$/i.test(lang)){
-      add("Auto-Heal & Run", async ()=>{
-        out.hidden = false;
-        const r = await autoHealCode(lang||"python", pre.innerText, msg=>{ out.textContent = msg; });
-        if(r.code !== pre.innerText){
-          code.textContent = r.code;
-          if(window.hljs) try{ hljs.highlightElement(code); }catch(_){}
-        }
-        out.textContent = r.output;
-      }, "ac");
-      add("Fuzz & Patch", ()=>ask(`/fuzz ${F}${lang}\n${pre.innerText}\n${F}`));
-      add("Canvas", ()=>openCanvas(pre.innerText, lang||"python", "Code Editor"));
-    }
-    add("Copy", b=>{ navigator.clipboard.writeText(pre.innerText); b.textContent = "Copied"; setTimeout(()=>b.textContent = "Copy", 1200); });
-    const exp = document.createElement("button"); exp.className = "cb-exp";
-    exp.textContent = `Show all ${lines} lines`;
-    exp.onclick = ()=>{
-      w.classList.toggle("collapsed");
-      exp.textContent = w.classList.contains("collapsed") ? `Show all ${lines} lines` : "Collapse code";
-    };
-    pre.replaceWith(w); w.append(bar, pre, exp, out);
-  });
-  fillSlots(el);
-  if(window.renderMathInElement) try{ renderMathInElement(el, { delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}], throwOnError:false }); }catch(e){}
+      if(lang === "html" || src.trim().startsWith("<!DOCTYPE") || src.trim().startsWith("<html")){
+        const getBundled = ()=>bundleWebBlocks(fullMarkdown) || src;
+        add("Canvas", ()=>openCanvas(getBundled(), "html", "Bundled Web App"), "ac");
+      }else if(PISTON_MAP[lang] || /^(python|py|js|javascript|ts|cpp|c|rust|go|java|bash|sh|php|sql)$/i.test(lang)){
+        add("Auto-Heal & Run", async ()=>{
+          out.hidden = false;
+          const r = await autoHealCode(lang||"python", pre.innerText, msg=>{ out.textContent = msg; });
+          if(r.code !== pre.innerText){
+            code.textContent = r.code;
+            if(window.hljs) try{ hljs.highlightElement(code); }catch(_){}
+          }
+          out.textContent = r.output;
+        }, "ac");
+        add("Fuzz & Patch", ()=>ask(`/fuzz ${F}${lang}\n${pre.innerText}\n${F}`));
+        add("Canvas", ()=>openCanvas(pre.innerText, lang||"python", "Code Editor"));
+      }
+      add("Copy", b=>{ navigator.clipboard.writeText(pre.innerText); b.textContent = "Copied"; setTimeout(()=>b.textContent = "Copy", 1200); });
+      const exp = document.createElement("button"); exp.className = "cb-exp";
+      exp.textContent = `Show all ${lines} lines`;
+      exp.onclick = ()=>{
+        w.classList.toggle("collapsed");
+        exp.textContent = w.classList.contains("collapsed") ? `Show all ${lines} lines` : "Collapse code";
+      };
+      pre.replaceWith(w); w.append(bar, pre, exp, out);
+    });
+    fillSlots(el);
+    if(window.renderMathInElement) try{ renderMathInElement(el, { delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}], throwOnError:false }); }catch(e){}
+  };
+
+  const promises = [];
+  if(fullMarkdown.includes("```mermaid")) promises.push(loadMermaid());
+  if(fullMarkdown.includes("$$") || fullMarkdown.includes("\\(")) promises.push(loadKaTeX());
+
+  if(promises.length) {
+    Promise.all(promises).then(processDress);
+  } else {
+    processDress();
+  }
 }
 
 function forkChat(idx){
@@ -1890,7 +1879,7 @@ async function ask(text){
   }else if(text.startsWith("/web ") || /(?:website|web\s*app|store|shop|dashboard|landing\s*page)\s*(?:bnao|bana|build|create|make)/i.test(text)){
     isWebBuild = true;
     const raw = text.replace(/^\/web\s+/i,"");
-    text = `[FULL-STACK SINGLE-FILE WEB APP]\n${raw}\n\nBuild a complete responsive SINGLE-FILE \`<!DOCTYPE html>\` with embedded <style> and <script>. Include navbar, hero, cards, search, cart/modal, toasts. Output \`\`\`html immediately.`;
+    text = `[FULL-STACK SINGLE-FILE WEB APP]\n${raw}\n\nBuild a complete responsive SINGLE-FILE \`<!DOCTYPE html>\` with embedded <style> and <script>. Use Tailwind CSS CDN. Include navbar, hero, cards, search, cart/modal, toasts. Output \`\`\`html immediately.`;
   }else if(text.startsWith("/audit ")){
     blitzTargetDomain = text.slice(7).trim().replace(/^https?:\/\//,"").split("/")[0];
     S.bugMode = true; S.taskMode = true; save();
@@ -2039,7 +2028,7 @@ async function runAgent(opts = {}){
       }else if(opts.blitzFuzzTarget){
         setAgentState("fuzzing");
         used += 3; pbar.style.width = "55%";
-        th.querySelector(".tt").textContent = "Running Fuzzer…";
+        th.querySelector(".tt").textContent = "Running Fuzzer on Cloud…";
         const data = await tools.cloud_fuzzer(opts.blitzFuzzTarget);
         preTelemetry = `\n\n[FUZZER]\n${data}\n\n[MANDATE: Root-cause, CWE, CVSS, hardened diff.]`;
       }else if(opts.blitzOmniQuery && S.blitzMode && !opts.isWebBuild){
@@ -2272,7 +2261,7 @@ const CMD_TABS = {
         <button class="qcard ${S.autoPlan?'on':''}" id="qAutoPlan"><div><b>Auto-Plan</b><span>Decompose complex tasks</span></div><span class="dot-ind"></span></button>
         <button class="qcard ${S.autoReflect?'on':''}" id="qAutoReflect"><div><b>Auto-Reflect</b><span>Self-critique & improve</span></div><span class="dot-ind"></span></button>
       </div>
-      <div class="out2">SKILLS (${S.skills.length}):\n${S.skills.map((s,i)=>`${i+1}. [${s.name}] ${s.rule}`).join("\n")||"(none)"}\n\nWORLD GRAPH (${S.worldGraph.length}):\n${S.worldGraph.join("\n")||"(empty)"}</div>`;
+      <div class="out2">SKILLS (${S.skills.length}):\n${S.skills.map((s,i)=>`${i+1}. [${s.name}] ${s.rule}`).join("\n")||"(none)"}\n\nCUSTOM TOOLS (${Object.keys(S.customTools||{}).length}):\n${Object.keys(S.customTools||{}).join("\n")||"(none)"}</div>`;
     $("#qAutoPlan").onclick = ()=>{ S.autoPlan = !S.autoPlan; save(); CMD_TABS.agi(); };
     $("#qAutoReflect").onclick = ()=>{ S.autoReflect = !S.autoReflect; save(); CMD_TABS.agi(); };
   },
@@ -2567,10 +2556,7 @@ $("#memDashBtn").onclick = async ()=>{
   $("#cmdM").classList.add("open");
   $("#cmdTabs").querySelectorAll(".stab").forEach(b=>b.classList.remove("on"));
   try{
-    const db = await vdbPromise;
-    const tx = db.transaction("vectors", "readonly");
-    const all = await new Promise(res=>{ const r = tx.objectStore("vectors").getAll(); r.onsuccess = ()=>res(r.result); r.onerror = ()=>res([]); });
-    $("#memList").textContent = `Total: ${all.length} vectors\n\n` + all.slice(-20).map((v,i)=>`${i+1}. ${String(v.text).slice(0,120)}`).join("\n");
+    $("#memList").textContent = `Total: ${S.mem.length} memories\n\n` + S.mem.slice(-20).join("\n");
   }catch(e){ $("#memList").textContent = "Error: "+e.message; }
   $("#memClearBtn").onclick = async ()=>{ await clearMemory(); $("#memList").textContent = "Cleared."; toast("Memory cleared"); };
 };
@@ -2606,6 +2592,9 @@ $("#fin").onchange = async e=>{
   }else if(f.name.endsWith(".pdf")){
     const pdfText = await readPDF(f);
     pending = { name:f.name, text: pdfText.slice(0, 15000) };
+  }else if(f.name.endsWith(".csv")){
+    const csvText = await f.text();
+    pending = { name:f.name, text: `[CSV DATA]\n${csvText.slice(0, 15000)}` };
   }else if(/\.(apk|zip)$/i.test(f.name)){
     const slice = f.slice(0, 1200000), bytes = new Uint8Array(await slice.arrayBuffer());
     let ascii = "", cur = "";
@@ -2649,4 +2638,4 @@ else { hello(); drawList(); }
 if("serviceWorker" in navigator) window.addEventListener("load", ()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body>
-  </html>
+        </html>
