@@ -561,7 +561,7 @@ function initVisionWorker(){
         try{ const out = await captioner(e.data.image); postMessage({ type:'result', caption: out[0].generated_text }); }
         catch(err){ postMessage({ type:'error', error: err.message }); }
       }
-    };
+    }
   `;
   visionWorker = new Worker(URL.createObjectURL(new Blob([code], {type:'application/javascript'})), { type: 'module' });
   visionWorker.onmessage = (e)=>{ if(e.data.type === 'ready') visionReady = true; };
@@ -1498,7 +1498,7 @@ const sysPrompt = ()=>`You are Astra AGI v26.0 — an autonomous AI Engineer, Da
 
 CRITICAL MANDATES:
 1. ZERO STALLING: Never reply with "I will now write the code" — output the complete implementation immediately.
-2. FULL-STACK SINGLE-FILE & TAILWIND: When building websites, ALWAYS use Tailwind CSS via CDN (<script src="https://cdn.tailwindcss.com"></script>) for beautiful, modern, responsive UI. Output a single \`<!DOCTYPE html>\` file.
+2. FULL-STACK SINGLE-FILE & TAILWIND: When building websites, ALWAYS use Tailwind CSS via CDN (<script src="https://cdn.tailwindcss.com"><\/script>) for beautiful, modern, responsive UI. Output a single \`<!DOCTYPE html>\` file.
 3. 3D ENGINE: For 3D requests use Three.js CDN (<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>).
 4. VIDEO/IMAGE: Use @auto_reel for video, @image for images. Place [[media:ID]] on its own line.
 5. CHARTS: For data viz use:
@@ -2638,4 +2638,4 @@ else { hello(); drawList(); }
 if("serviceWorker" in navigator) window.addEventListener("load", ()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body>
-        </html>
+  </html>
