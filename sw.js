@@ -1,7 +1,3 @@
-/* ============================================================================
- * Astra AGI v17.0 — Video/Image Director & Cognitive OS Service Worker (sw.js)
- * ============================================================================ */
-
 const CACHE_VERSION = "astra-agi-v17.0";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const CDN_CACHE = `${CACHE_VERSION}-cdn`;
